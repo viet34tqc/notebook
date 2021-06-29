@@ -1,0 +1,187 @@
+Redux:
+
+Core terms
+- Store
+	A global object that store the state
+	Created by using function createStore()
+		- Input: reducer
+		- Output: state object that has 3 API
+			- store.dispatch: dispatch an action
+			- store.subscribe
+			- store.getState	
+- Action
+	An object that has two properties
+		- Type
+		- Payload
+	You can think of an action as an event that describes something.
+- Action creator:
+	What: Function that return an action object
+	`
+		const increment = () => {
+		  return {
+		    type: 'counter/increment'
+		  }
+		}
+	`
+	Why: 
+		- Writting action object is repetitive, tedious and error-prone.
+		- Useful when dispatch the same action in multiple place
+- Dispatch:
+	- Store API. The only way to update the state is to call `store.dispatch()`.
+		- Input: an action object
+		- Output: void
+	- Store dispatches an action to return the new state.
+	- You can think of dispatching actions as "triggering event".
+	`store.dispatch( increment() )
+- Reducer:
+	A function that canculate new state based on previouse state and aciton
+		- Input: global state object and action
+		- Ouput: new state
+		- Signature: (state, action) => newState
+	You can think of an reducer as an event listener which handles an event based on the received action (event) type.
+	Reducer must not do any asynchronous logic, cause other side effects
+	Reducer must not mutate the state, only copy the current state then makes changes to that copy.
+
+Redux application data flow:
+	- Initial setup:
+		- A Redux store is created using a **root** reducer function.
+		- The store calls the root reducer once, saves the return value as its **initial state**
+		- All the UI components that has access to the current state of the store use that data to render
+	- Updates:
+		- Some events happens, like user clicking a button
+		- Redux dispatches an action to the store
+		- Store run the reducer function again with the **previous state** and the **current aciton**, and saves the
+		return value as the new state
+		- Store notifies all the components that are subscribed about the update
+		- Each components check if **the part of the state they need have changed**, if so it re-render to update the UI.
+
+Some Notes:
+- Reducer must not do any asynchronous logic, cause other side effects
+- Reducer must not mutate the state, only copy the current state then makes changes to that copy.
+- Reducer must not calculate random values, because it makes the results unpredictable
+
+Redux toolkit:
+Terms
+- Slice: a slice is a collection of Redux reducer and actions for a single features
+
+- configureStore:
+	Function to create store
+	- Input: object
+		- reducer: object(**root reducer**)
+			feature_1_name: reducer_of_feature_1
+			feature_2_name: reducer_of_feature_2
+	- Output: store that is global state object
+	`
+	store = configureStore({
+		reducer: {
+	    	counter: counterReducer,
+	  	},
+	});
+	`
+	We will have a **counter** property of state object and **couterReducer** function to be in charge of that property.
+
+- createSlice: 
+	Function to create reducer
+		- Input: object
+			- name: name of the slice
+			- initialState: initial state object
+			- reducers: object that includes reducers functions.
+				reducer_function_name: (state, action) => newState
+	- name and action_name will be used to generate the action type like this: {type: name/reducer_function_name}
+	- todoSlice.actions.reducer_function_name is an action creator that returns action object ({type: "name/reducer_function_name"})
+	If we pass payload as the argument, it will return as {type: "name/reducer_function_name", payload }
+- Flow:
+	- Create a Redux store with configureStore
+		configureStore accepts a reducer function as a named argument
+		configureStore automatically sets up the store with good default settings
+	- Provide the Redux store to the React application components
+		- Put a React-Redux <Provider> component around your <App />
+		- Pass the Redux store as <Provider store={store}>
+		- Create a Redux "slice" reducer with createSlice
+	- Call createSlice with a string name, an initial state, and named reducer functions
+		- Reducer functions may "mutate" the state using Immer
+		- Export default the generated slice reducer and export action creators
+	- Use the React-Redux useSelector/useDispatch hooks in React components
+		- Read data from the store with the useSelector hook
+		- Get the dispatch function with the useDispatch hook, and dispatch actions as needed
+
+Redux Middleware:
+	What: 
+		Is the middle thing between UI and the store that usually connects to API, receive data then dispatch that data to the store
+		UI => dispatch(data) => middleware => dispatch(new data) => store
+	Why:
+		Reducers are supposed to be pure. They don't change anything outside its scope, or do any API calls. If you want to work with any APIs, you will need a middleware.
+	Where:
+		Normal flow:
+			1. An event occurs
+			2. An action is dispatched
+			3. Reducer creates a new state from the change prescribed by the action
+			4. New state is passed into the React app via props
+		With middleware:
+			1. An event occurs
+			2. An action is dispatched
+			**3. Middleware receives the action**
+			4. Reducer creates a new state from the change prescribed by the action
+			5. New state is passed into the React app via props
+Thunk:
+	What:
+		Is a function that wraps an expression to delay its evaluation
+			let x = 1 + 2;
+			let foo = () => 1 + 2; // foo delayed the calculation, foo is a thunk.
+		Not normal function, is a function that returned by another function
+
+Redux thunk:
+	- Is a Redux Middleware that looks at every actions, if it's a function, call that function.
+	- Delay the dispatch of an action of dispatch only if a certain condition is met
+	- Action creators now return a **function** instead of an object. That **Inner function** is a thunk:
+		- Input: 
+			- dispatch: to dispatch the new action if they need
+			- getState: to access the current state.
+		- Output: void.
+createAsyncThunk:
+	When we make an API call, its progress can be in one of 4 states: 
+		- idle: The request hasn't started yet
+		- loading: The request is in progress
+		- succeeded: The request succeeded, and we now have the data we need
+		- failed: The request failed, and there's probably an error message
+	createAsyncThunk will automatically dispatch those 'idle/loading/succeeded/failed'. It means, after dispatch 'loading', it will continue dispatch 'succeeded' ( fullfilled ) status if success, or 'failed' (rejected) if failure
+
+	Input:
+		prefix for aciton types: 'posts/fetchPosts' will be prefix of action types: 'posts/fetchPosts/pending'
+		callback function: make API calls
+			Input: none
+			Output: 
+				- Promise with data or Promise with Error
+				- Extract data from API response and return that.
+
+	When we dispatch an asynchronous action that created by createAsyncThunk above
+		Run async_action_name.pending reducer
+        If success, run async_action_name.fullfilled reducer
+        Else if failure, run async_action_name.reject reducer
+
+    These reducers are extraReducers:
+    	[ async_action_name.pending ]: ( state, action ) => {
+            state.status = 'loading';
+        },
+        [ async_action_name.fullfilled ]: ( state, action ) => {
+            state.status = 'succeeded';
+            state.posts = state.posts.concat( action.payload );
+        },
+
+    createSelector:
+    	const selectItems = state => state.items
+		const selectItemId = (state, itemId) => itemId
+
+		const selectItemById = createSelector(
+		  [selectItems, selectItemId],
+		  (items, itemId) => items[itemId]
+		)
+
+React Redux
+- useDispatch():
+	Output: return dispatch function
+- useSelector():
+	Input: (state) => value_from_state
+	Ouput: value_from_state
+
+	Will re-run every time an action is dispatched, that might cause the component re-render
