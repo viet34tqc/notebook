@@ -39,7 +39,10 @@ Core terms
 		- Ouput: new state
 		- Signature: (state, action) => newState
 	You can think of an reducer as an event listener which handles an event based on the received action (event) type.
-	Reducer must not do any asynchronous logic, cause other side effects
+	Reducer must not do any asynchronous logic, cause other side effects. Side effects is any changes that is outside the functions:
+		- Making AJAX HTTP request
+		- Generating random number or unique random IDs
+		- Logging a value to console
 	Reducer must not mutate the state, only copy the current state then makes changes to that copy.
 
 Redux application data flow:
@@ -90,6 +93,21 @@ Terms
 	- name and action_name will be used to generate the action type like this: {type: name/reducer_function_name}
 	- todoSlice.actions.reducer_function_name is an action creator that returns action object ({type: "name/reducer_function_name"})
 	If we pass payload as the argument, it will return as {type: "name/reducer_function_name", payload }
+	- prepare callback:
+		You can write your reducer function like this:
+			```javascript
+			reducer_function: {
+				reducer(state, action) { return state },
+				prepare( args ) { return { payload: {args} } }
+			}
+			```
+		Why:
+			- Do some 'preparation' logic like generating unique ID
+			- pass in multiple parameters
+		How:
+			- call the action creator (reducer_funciton above)
+			- prepare function called with whatever parameters were passed in and return the payload
+			- The payload is passed in the action in the 'reducer' function.
 - Flow:
 	- Create a Redux store with configureStore
 		configureStore accepts a reducer function as a named argument
@@ -107,20 +125,20 @@ Terms
 
 Redux Middleware:
 	What: 
-		Is the middle thing between UI and the store that usually connects to API, receive data then dispatch that data to the store
-		UI => dispatch(data) => middleware => dispatch(new data) => store
+		Is the middle thing between UI and the store that usually connects to API, receive data then dispatch the real action to the store
+		UI => dispatch() => middleware => dispatch(storeAction) => run the reducer
 	Why:
 		Reducers are supposed to be pure. They don't change anything outside its scope, or do any API calls. If you want to work with any APIs, you will need a middleware.
 	Where:
 		Normal flow:
 			1. An event occurs
-			2. An action is dispatched
+			2. Dispatch is called with normal action
 			3. Reducer creates a new state from the change prescribed by the action
 			4. New state is passed into the React app via props
 		With middleware:
 			1. An event occurs
-			2. An action is dispatched
-			**3. Middleware receives the action**
+			2. Dispatch is called with normal action object, function, or some other value
+			**3. Middleware receives the action, do something like setTimeout or other async logic**
 			4. Reducer creates a new state from the change prescribed by the action
 			5. New state is passed into the React app via props
 Thunk:
@@ -144,15 +162,22 @@ createAsyncThunk:
 		- loading: The request is in progress
 		- succeeded: The request succeeded, and we now have the data we need
 		- failed: The request failed, and there's probably an error message
-	createAsyncThunk will automatically dispatch those 'idle/loading/succeeded/failed'. It means, after dispatch 'loading', it will continue dispatch 'succeeded' ( fullfilled ) status if success, or 'failed' (rejected) if failure
+	createAsyncThunk will automatically create action types and action creators for the 'loading/succeeded/failed' status.
+	Then it automatically dispatch those actions based on the resulting Promise. It means, after dispatch 'loading', it will continue dispatch 'succeeded' ( fullfilled ) status if success, or 'failed' (rejected) if failure
 
 	Input:
 		prefix for aciton types: 'posts/fetchPosts' will be prefix of action types: 'posts/fetchPosts/pending'
-		callback function: make API calls
-			Input: none
+		payload creator: make API calls
+			Input: the params that passed in the action creator when we dispatch it:
+				```dispatch(addTodo(text))``` => text will be the param of payload creator
 			Output: 
-				- Promise with data or Promise with Error
-				- Extract data from API response and return that.
+				- Promise with data or Promise with Error (async always return Promise)
+	Output: action creators and their types:
+		- fetchPosts.pending: todos/fetchPosts/pending
+		- fetchPosts.fulfilled: todos/fetchPosts/fulfilled
+		- fetchPosts.rejected: todos/fetchPosts/rejected
+
+	If success, createAsyncThunk will extract data from API response and pass that data returned from the payload creator into payload
 
 	When we dispatch an asynchronous action that created by createAsyncThunk above
 		Run async_action_name.pending reducer
@@ -168,20 +193,51 @@ createAsyncThunk:
             state.posts = state.posts.concat( action.payload );
         },
 
-    createSelector:
-    	const selectItems = state => state.items
-		const selectItemId = (state, itemId) => itemId
+createSelector:
+	- Selector:
+		- What:
+			- is any function that accepts the Redux store state (or part of the state) as an argument, and returns data that is based on that state.
+			- Name convention: prefix with **select** word, then combine with the description of value being selected: selectTodoById, selectFilteredTodos
+		- Where:
+			- use as useSelector argument: `const todos = useSelector( selectFilteredTodos )`
+	```javascript
+	// Input selectors (selector: the function passed to useSelector)
+	const selectItems = state => state.items
+	const selectItemId = (state, itemId) => itemId
+	// Output selector will take the result from **all** the input selectors as arguments
+	// And return final result value
+	// The final result will be cached for the next time
+	const selectItemById = createSelector(
+	  [selectItems, selectItemId],
+	  (items, itemId) => items[itemId]
+	)
 
-		const selectItemById = createSelector(
-		  [selectItems, selectItemId],
-		  (items, itemId) => items[itemId]
-		)
+	//Then this selector is passed into useSelector
+	const itemIds = useSelector( selectItemById )
+	```
+
+	Why:
+	- Normal selector like: `state => state.todos` always return the new reference that will make the component that use the useSelector to be re-rendered
+	Notes:
+		createSelector only helpful when derive additional values from original data. If you are just looking up or returning existing data, you can keep the selector as plain function
 
 React Redux
 - useDispatch():
 	Output: return dispatch function
-- useSelector():
-	Input: (state) => value_from_state
-	Ouput: value_from_state
+- useSelector(): read data from store
+	Input: a **selector function**: (state) => value_from_state
+		- Input: store state
+		- Output: value based on the state.
+	Ouput: the returned value from the selector above
 
-	Will re-run every time an action is dispatched, that might cause the component re-render
+	useSelector subscribes to the store, and re-runs the selector after **every** action is dispatched
+
+	If the value returned by the selector changes from the last time it runs, useSelector will force the component to re-render with the new data
+	**Note**: if the value returned by the selector is a new reference, the component is re-render too
+		// Bad: always returning a new reference
+		const selectTodoDescriptions = state => {
+		  // This creates a new array reference!
+		  return state.todos.map(todo => todo.text)
+		}
+- Provider:
+	Put <Provider store={store}> around <App> component so that other components can talk to the store
