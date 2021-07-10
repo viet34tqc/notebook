@@ -8,7 +8,7 @@ Core terms
 		- Output: state object that has 3 API
 			- store.dispatch: dispatch an action
 			- store.subscribe
-			- store.getState	
+			- store.getState
 - Action
 	An object that has two properties
 		- Type
@@ -23,7 +23,7 @@ Core terms
 		  }
 		}
 	`
-	Why: 
+	Why:
 		- Writting action object is repetitive, tedious and error-prone.
 		- Useful when dispatch the same action in multiple place
 - Dispatch:
@@ -83,7 +83,7 @@ Terms
 	`
 	We will have a **counter** property of state object and **couterReducer** function to be in charge of that property.
 
-- createSlice: 
+- createSlice:
 	Function to create reducer
 		- Input: object
 			- name: name of the slice
@@ -124,7 +124,7 @@ Terms
 		- Get the dispatch function with the useDispatch hook, and dispatch actions as needed
 
 Redux Middleware:
-	What: 
+	What:
 		Is the middle thing between UI and the store that usually connects to API, receive data then dispatch the real action to the store
 		UI => dispatch() => middleware => dispatch(storeAction) => run the reducer
 	Why:
@@ -152,12 +152,12 @@ Redux thunk:
 	- Is a Redux Middleware that looks at every actions, if it's a function, call that function.
 	- Delay the dispatch of an action of dispatch only if a certain condition is met
 	- Action creators now return a **function** instead of an object. That **Inner function** is a thunk:
-		- Input: 
+		- Input:
 			- dispatch: to dispatch the new action if they need
 			- getState: to access the current state.
 		- Output: void.
 createAsyncThunk:
-	When we make an API call, its progress can be in one of 4 states: 
+	When we make an API call, its progress can be in one of 4 states:
 		- idle: The request hasn't started yet
 		- loading: The request is in progress
 		- succeeded: The request succeeded, and we now have the data we need
@@ -170,7 +170,7 @@ createAsyncThunk:
 		payload creator: make API calls
 			Input: the params that passed in the action creator when we dispatch it:
 				```dispatch(addTodo(text))``` => text will be the param of payload creator
-			Output: 
+			Output:
 				- Promise with data or Promise with Error (async always return Promise)
 	Output: action creators and their types:
 		- fetchPosts.pending: todos/fetchPosts/pending

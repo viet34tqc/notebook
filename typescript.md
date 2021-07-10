@@ -85,8 +85,17 @@ Tuple:
 	const tupleFunction = (name: string, age: number): [string, number] => [name, age]
 
 Generic:
-	Sign: <>
+	Why:
+	Let's say you have a function like this:
+	```javascript
+	const makeArr = (x: number) => [x]
+	```
+	But what if we didn't know if we wanted to passed in the number here, maybe say we wanted to pass in string or boolean. What will you do?
+	At first, you might want to change the type Number to any. However, this is basically going to remove all of your type safety and TS becomes useless.
+	This is where Generic comes in. You can use generic like this:
+	```javascript
 	const makeArr = <T>(x: T) => [x]
+	```
 	T can be set manually or automatically
 	Manually
 		makeArr<string>('3')
@@ -101,7 +110,8 @@ Generic:
 		    ...obj,
 		    fullname: 'abc'
 		})
-		const n3 = genericObject({firstName: 'viet', lastName: 'nguyen', age: 30})
+		const args = {firstName: 'viet', lastName: 'nguyen', age: 30} // args must have firstName and lastName
+		const n3 = genericObject(args) // Now T has the type of args
 
 	Generic Interface
 		interface Resource<T> {
@@ -113,3 +123,6 @@ Generic:
 		    uid: 1,
 		    data: 'viet'
 		}
+
+##@types/* packages and \*.d.ts files
+Contains type definitions for libraries originally written in vanilla javascript

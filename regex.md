@@ -15,7 +15,7 @@ flags: Decides the number of of result.
 Patterns
 	- Literal pattern: /word/ // exact matches
 	- Wildcard pattern: /./ // match everything
-	- character classes: /[aeiou]/ match only the character inside [], like a | e | i | o | u
+	- character classes: /[aeiou]/ match only the character inside [], like a | e | i | o | u. When it finds a match, return that match immediately
 	- grouping: (aeiou) match the whole pattern inside parentheses, can be use with | 
 		/P(engu|umpk)in/g return Penguin or Pumpkin 
 	- range of character: /[a-e]/
@@ -35,8 +35,7 @@ Character:
 	- \S: match all non-space
 	- ?: 
 		- after a character: optional, previous elem is optional
-		- after * or +: lazy match, gives the smallest match possible, if meet a condition, return as a match immediately. It constrast with greedy match, 
-		which gives the largest match possible, it will search ultil it cannot match.
+		- after * or +: lazy match, gives the smallest match possible, if meet a condition, return as a match immediately. It constrast with greedy match, which gives the largest match possible, it will search ultil it cannot match.
 	- +: match one or more patterns. Search from the start until it doesn't match, return one match. Then continue to search to the end if has g flag.
 		Normally, without +, JS don't wait ultil it doesn't match, it return the match immediately
 	- *: match zero or more 

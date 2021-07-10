@@ -21,7 +21,7 @@ const TextField = ({ handleChange }: InputProps) => {}
 Component Hooks:
 - useRef: always to set the initial value for the useRef hook
 	const TextField: React.FC<InputProps> = ({handleChange}) => {
-		const inputRef = useRef(null);
+		const inputRef = useRef<HTMLInputElement | null>(null);
 		const divRef = useRef(null);
 		return (
 			<div ref={divRef}>
