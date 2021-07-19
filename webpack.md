@@ -4,7 +4,6 @@
 
 - npm init -y
 - yarn add -D webpack webpack-cli
-- create
 
 ## Configure
 

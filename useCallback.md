@@ -1,5 +1,20 @@
 #How to use useCallback hook
 
+## Referential equality
+If you are new to Javascript, it wont take long before you learn why this is the case:
+```javascript
+true === true // true
+false === false // true
+1 === 1 // true
+'a' === 'a' // true
+{} === {} // false
+[] === [] // false
+() => {} === () => {} // false
+const z = {}
+z === z // true
+```
+So, when you define an object in a React function component, it is not going to be referentially equal to the last time that same object was defined (even if it has all the same properties with all the same values).
+
 ## Why we need to use useCallback
 When we are in need of handling an event, we often create another function inside React funciton components. Let's say we need to handle a click event:
 ```javascript
@@ -50,6 +65,25 @@ function Parent() {
 onItemClick is memorized by `useCallback`. As long as the `term` is the same, `useCallback` returns the same function
 When Parent component re-renders, `onItemClick` remains the same and don't break the memoization of `BigList`
 
+There is another example you can consider here:
+```javascript
+const CountButton = React.memo(function CountButton({onClick, count}) {
+  return <button onClick={onClick}>{count}</button>
+})
+function DualCounter() {
+  const [count1, setCount1] = React.useState(0)
+  const increment1 = React.useCallback(() => setCount1(c => c + 1), [])
+  const [count2, setCount2] = React.useState(0)
+  const increment2 = React.useCallback(() => setCount2(c => c + 1), [])
+  return (
+    <>
+      <CountButton count={count1} onClick={increment1} />
+      <CountButton count={count2} onClick={increment2} />
+    </>
+  )
+}
+```
+
 ## Bad use case
 Let's look at another example
 ```javascript
@@ -74,4 +108,9 @@ In this case, `MyChild` component is light and its re-rendering doesn't create p
 - You have to allocate additional memory for the dep, as well as calling the `useCallback` function
 
 ## Summary
-Any optimization add complexity. Any optimization added too early is a risk because the optimized code may change many times. The appropriate use case of `useCallback` is to memorize the callbak functions that are supplied to memoized heavy child component.
+Any optimization add complexity. Any optimization added too early is a risk because the optimized code may change many times. The appropriate use case of `useCallback` is to memorize the callback functions that are supplied to memoized heavy child component.
+
+Last words, MOST OF THE TIME YOU SHOULD NOT BOTHER OPTIMIZING UNNECESSARY RERENDERS.
+
+## Reference
+<https://kentcdodds.com/blog/usememo-and-usecallback>
