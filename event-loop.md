@@ -22,7 +22,7 @@ Event loop
 					- add callback function to the **queue**
 					- remove setTimeout
 					- Run another statement
-				- The event loop checks the **queue** for any pending statements, add statement to the stack and run
+				- The event loop checks if the callstack is empty and checks the **queue** for any pending statements, add those statement to the stack and run
 		- Queue:
 			- When the call stack is empty, event loop checks the queue for pending statements, starting from oldest messages
 			- Once it find ones, it add it to the stack

@@ -63,8 +63,8 @@ Fortunately, all those problem can be solved by React Query:
 
 ## React Query and global state managers
 There is a huge difference between these two
-- React Query is ***server-state*** library, responsible for managing asynchronous operation between you and server
-- On the other hand, Redux, MobX, Zustand, etc. are ***client-state*** libraries that can be used to store asynchronous data, albeit inefficiently when compared to a tool like React Query
+- React Query is **server-state** library, responsible for managing asynchronous operation between you and server
+- On the other hand, Redux, MobX, Zustand, etc. are **client-state** libraries that can be used to store asynchronous data, albeit inefficiently when compared to a tool like React Query
 
 React Query replaces all the boilerplate code used to manage cache data in your client-state with just a few line of code.
 
