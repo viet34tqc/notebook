@@ -89,3 +89,36 @@ is the same as
 a + b;`
 
 - [] is a truthy value.
+
+## 6/8
+
+- Ôn lại getter và setter
+- Number.isNaN() và isNan()
+
+## 7/8
+
+- `import *`: import tất cả các exported values, kể cả default và named, * sẽ có dạng object
+- `Object.seal()` và `Object.freeze()`
+- How browser works
+- Hoisting
+- var, let const
+
+## 8/8
+
+- `Promise.all` runs all the passed promises in parallel. If one promise fail, `Promise.all` rejects **immediately** with the value of rejected promises
+- `Object.fromEntries` turns 2d array into an object.
+```javascript
+const arr = [['name', 'Lydia'], ['age', 22]]
+Object.fromEntries( arr ) // {name: Lydia, age: 22}
+```
+- Key in object is string. If it's not string, it is converted to string
+```javascript
+const animals = {};
+let dog = { emoji: '🐶' }
+let cat = { emoji: '🐈' }
+
+animals[dog] = { ...dog, name: "Mara" }
+animals[cat] = { ...cat, name: "Sara" }
+
+console.log(animals[dog]) // animals[dog] and animals[cat] are all converted to animals['object Object']
+```

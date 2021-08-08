@@ -20,8 +20,8 @@
     - Support multiple device types
     ```html
     https://example.com/news/koala-rampage
-	https://m.example.com/news/koala-rampage
-	https://amp.example.com/news/koala-rampage
+  	https://m.example.com/news/koala-rampage
+  	https://amp.example.com/news/koala-rampage
     ```
   - Specify canonical URL for duplicate URLs
   ```html

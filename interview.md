@@ -57,6 +57,29 @@ Ví dụ event scroll với 1 event listener .on('scroll') và hàm f, trong đi
 
 ## getter, setter trong javascript. Có ưu điểm gì so với hàm bình thường
 
+```javascript
+const config = {
+  languages: [],
+  get language() {
+    return this.languages
+  },
+  set language(lang) {
+    return this.languages.push(lang);
+  },
+};
+
+// Set the languages
+config.language = 'VN';
+// Get the languages
+console.log( config.language ) // ['VN']
+```
+
+`Setter` doesn't hold any value, their purpose is to modify the properties. If your object doesn't have getter function and you call the setter function, it returns undefined
+
+## Number.isNaN() và isNan()
+`Number.isNaN(value)` check if the `value` is numeric and not a number.
+`isNaN(value)` check if the `value` is not a number
+
 ## Animation có những thuộc tính gì
 
 ## Hiểu thế nào về responsive web design
@@ -104,6 +127,29 @@ https://example.com/app2
 
 ### Ưu nhược điểm của Server Side Rendering vs Client Side Rendering vs Pre Rendering vs Dynamic Rendering
 <https://viblo.asia/p/so-sanh-server-side-rendering-vs-client-side-rendering-vs-pre-rendering-vs-dynamic-rendering-LzD5dWoOljY>
+
+### Rendering a web page
+
+<ol>
+  <li>You type an URL into address bar in your preferred browser.</li>
+  <li>The browser **parses the URL** to find the protocol, host, port and path.</li>
+  <li>It forms a HTTP request</li>
+  <li>To reach the host, it first needs to translate the human readable host into an IP number, and it does this by doing a DNS lookup on the host</li>
+  <li>Then a socket needs to be opened from the user's computer to that IP number, on the port specified (most often port 80)</li>
+  <li>When a connection is open, the HTTP request is sent to the host</li>
+  <li>The host forwards the request to the web server (most often Apache) configured to listen on the specified port
+  The server inspects the request (most often only the path), and launches the server plugin needed to handle the request (corresponding to the server language you use, PHP, Java, .NET, Python?)</li>
+  <li>The plugin gets access to the full request, and starts to prepare a HTTP response.</li>
+  <li>To construct the response, a database is (most likely) accessed.</li>
+  Data from the database, together with other information the plugin decides to add, is combined into HTML.</li>
+  <li>The plugin combines that data with some meta data (in the form of HTTP headers), and sends the HTTP response back to the browser.</li>
+  <li>The browser receives the response, and parses the HTML in the response</li>
+  <li>A DOM tree is built with HTML</li>
+  <li>New requests are made to the server for each new resource that is found in the HTML source (typically images, style sheets, and JavaScript files). Go back to step 3 and repeat for each resource.</li>
+  <li>Stylesheets are parsed, and the rendering information in each gets attached to the matching node in the DOM tree</li>
+  <li>Javascript is parsed and executed, and DOM nodes are moved and style information is updated accordingly</li>
+  <li>The browser renders the page on the screen according to the DOM tree and the style information for each node</li>
+</ol>
 
 ### Closure
 <https://dmitripavlutin.com/simple-explanation-of-javascript-closures/>
@@ -165,9 +211,98 @@ Object.defineProperty(obj, 'flameWarTopic', {
 - Nếu `reject` thì `await` throw 1 error.
 - Nếu `resolve` thì `await` trả về kết quả resolve
 
-## onChange và onInput khi sử dụng cho input
+### onChange và onInput khi sử dụng cho input
+
 `onChange` chỉ chạy khi mà user ra khỏi (`blur`) input đó
 `onInput` không chỉ chạy như `onChange` mà còn chạy khi gõ ('keystroke') hoặc paste
+
+### import and export
+
+Khi import mà dùng `*`, thì chúng ta import hết tất cả các giá trị được export, bao gồm cả default và named.
+`*` sẽ là 1 object chứa hết các giá trị trên
+
+```javascript
+// info.js
+export const name = 'Lydia';
+export const age = 21;
+export default 'I love JavaScript';
+
+// index.js
+import * as info from './info';
+console.log(info);
+
+{
+  default: "I love JavaScript",
+  name: "Lydia",
+  age: 21
+}
+```
+
+### Các chỉ số cần quan tâm khi optimize speed:
+
+- Time to first byte (TTFB): the time it takes the browsers to start receiving a data (images, fonts, js, css...) after requesting data from server: HTTP request time + Process request time + HTTP response time.
+- Critical Rendering Path: is the sequences of steps of: convert the HTML, CSS, and JavaScript into pixels on the screen.
+- DOMContentLoaded: the time for loading HTML before starting to load the content
+- Load: when all the resources are loaded ( resources are parsed and get acknowledged off before DOMContentLoaded)
+- First Contentful Paint(FCP): the moment when the first element from the DOM appears in the users' browser.
+- Speed Index: shows how quickly the contents of a page are visibly populated.
+- Time To (fully) Interactive(TTI): the amount of time it takes for the page to be fully interactive.
+- First Input Delay (FID): the time from when a user first interacts with a page to the time when the browser is actually able to respond to that interaction.
+- Total Blocking Time: total amount of time between First Contentful Paint (FCP) and Time to Interactive (TTI) where the main thread was blocked for long enough to prevent input responsiveness.
+- Largest Contentful Paint (2.5s): the time when the largest content element in the viewport becomes visible. It can be used to determine when the main content of the page has finished rendering on the screen.
+
+### Obtimize speed:
+
+<https://towardsdev.com/website-performance-optimization-267b28b877df>
+- TTFB: <https://searchfacts.com/reduce-ttfb/>
+  - Fast web hosting
+  - Keep the server close to users
+  - Caching (the server wont need to build the page by fetching from database)
+  - Fast DNS provider: reduce the DNS lookup times
+  - CDN for static files (images, CSS, JS files)
+- Font: reduce webfont
+- Image: optimize and lazy load
+- Caching:
+  - Browser caching
+  - Page caching
+- Gzip compression: compresses Web pages, CSS, and JavaScript at the server level before sending them over to the browser. On the user side, a browser unzips the files and presents the contents.
+- Reduce redirect: because they can create additional HTTP request
+
+### Critical Rending Path
+
+The critical rendering path includes the Document Object Model (DOM), CSS Object Model (CSSOM), Render tree, Layout, and Paint.
+The document object model is created as the HTML is parsed. The HTML may request JavaScript, which may, in turn, alter the DOM. The HTML includes or makes requests for styles, which in turn builds the CSS object model. The browser engine combines the two to create the Render Tree. Layout determines the size and location of everything on the page. Once the layout is determined, pixels are painted to the screen.
+Optimizing the critical render path improves render performance. Performance tips include:
+- Minimizing the number of critical resources by deferring their download ( defer attribute), marking them as async (async attribute), or eliminating them altogether.
+- Optimizing the number of requests required along with the file size of each request.
+- Optimizing the order in which critical resources are loaded by prioritizing the downloading critical assets, shorten the critical path length.
+
+### var and let, const
+
+- Blocked scope
+`var` is blocked scope only when it is declared inside a function
+`let` and `const` blocked scope every where
+- Creation phase
+This is the very first phase when JS setting up memory for the data. No code is executed at this point.
+Variable declared with `let` and `const` are stored `uninitialized`
+Variable declared with `var` are stored with the default value of `undefined`
+
+Then if we try to access the variables before its declaration:
+When variable declared with `var`, it returns `undefined`
+When variable declared with `let` and `const`, it returns `ReferenceError`
+
+### Hoisting
+
+It's the process that stores functions and variables in the memory before executing any code (creation phase);
+- Functions are stored with the entire function. That's why you can invoke them before the line we declare them
+- Variables is different.
+  - Variables with the `var` keyword are stored with the value of `undefined`
+  - Variables with the `let` and `const` keyword are stored `uninitialized`. If we try to access them before declare them, it will return `ReferenceError`
+
+### Object.freeze() và Object.seal()
+
+`Object.freeze()` không cho phép thêm, sửa, xóa properties. Tuy nhiên, `Object.freeze()` chỉ shallowly freeze, nếu properties là 1 object khác thì vẫn có thể sửa được
+`Object.seal()` không cho phép thêm, xóa, nhưng vẫn cho sửa existing properties
 
 ## useMemo và useCallback. Có thể chuyển từ useMemo sang useCallback được không
 <https://kentcdodds.com/blog/usememo-and-usecallback>
