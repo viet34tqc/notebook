@@ -1,5 +1,8 @@
 # Event loop
 
+## References
+
+<https://dmitripavlutin.com/javascript-promises-settimeout/>
 
 ## Synchronous and Asynchronous
 
@@ -25,11 +28,12 @@ Javascript can only execute one statement at a time. In order to do that, Javasc
 				- add callback function to the **web API**
 				- remove setTimeout
 				- Run other statements until the end of the script
-	- Web API: in the web API, the timer runs for a period of time that equals to the second arguments. Then the callback function is passed to the **queue**. This is the time for the event loop to its only task: **connect the queue with the call stack**.
+	- Web API: is the place that the async operations (fetch requests, promises, timers) callbacks are waiting to complete. The timer runs for a period of time that equals to the second arguments. Then the callback function is passed to the **queue**. This is the time for the event loop to do its only task: **connect the queue with the call stack**.
 	- Queue:
+		- FIFO
 		- When the call stack is empty, event loop checks the queue for pending statements, starting from oldest messages
-		- Once it find ones, it add it to the stack
+		- Once it find ones, it adds it to the stack
 		- Queue has two types:
-			- message queue or task queue or macrotasks queue: handle setTimeout, lower priority
-			- job queue or microtasks queue: handles promises, higher priority
+			- message queue or task queue or macrotasks: handle setTimeout, lower priority
+			- job queue or microtasks: handles promises callbacks (`then` callbacks), higher priority
 

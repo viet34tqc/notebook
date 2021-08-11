@@ -125,9 +125,6 @@ Khác origin:
 http://example.com/app1
 https://example.com/app2
 
-### Ưu nhược điểm của Server Side Rendering vs Client Side Rendering vs Pre Rendering vs Dynamic Rendering
-<https://viblo.asia/p/so-sanh-server-side-rendering-vs-client-side-rendering-vs-pre-rendering-vs-dynamic-rendering-LzD5dWoOljY>
-
 ### Rendering a web page
 
 <ol>

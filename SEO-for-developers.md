@@ -1,5 +1,35 @@
 # SEO for Developers
 
+## What is SEO
+
+General goal is that when someone clicks on a link of your site on SERP, they should engage with it as long as possible. There are some metrics that need to be awared
+
+### Click-through rate (CTR)
+
+This defines how likely a user click on your link displayed on SERP. The higher CTR the better, that means you have a relevent title and description.
+
+### Bounce rate
+
+If a user click on your site and click back immediately, that's a bounce. The higher bounce rate is, the less likely your site is to rank well.
+
+### Dwell Time
+
+If a user stay on the page, Google will keep track of the dwell time, which is the amount of time they spend there before clicking back to SERP. The longer the better
+
+### Outbound Link
+
+It signal what your content is about. It's really good for your SEO if you use your outbound links to other really good sites that are related to the content of your page.
+
+## Rules
+
+- Create good content
+- Using sematic HTML: `article`, `heading`, `img` with `alt` text, `title`
+- Using `meta` tag
+- Using Schema for your article, review... Google can read your schema data from the page and format it properly on SERP.
+- Get your HTML loaded fast
+
+## Inbound and Outbound links
+
 ## Terms
 
 - Sitemap: a file where you provide information about pages, videos and other files and the relationships between them
