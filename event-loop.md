@@ -22,18 +22,23 @@ Javascript can only execute one statement at a time. In order to do that, Javasc
 			- statement run
 			- remove that statement from the stack
 			- Add another statement and so on...
-			- If setTimeout exists:
-				- add setTimeout to the stack
-				- run setTimeout
+			- If `setTimeout` exists:
+				- add `setTimeout` to the stack
+				- run `setTimeout`
 				- add callback function to the **web API**
-				- remove setTimeout
+				- remove `setTimeout`
 				- Run other statements until the end of the script
-	- Web API: is the place that the async operations (fetch requests, promises, timers) callbacks are waiting to complete. The timer runs for a period of time that equals to the second arguments. Then the callback function is passed to the **queue**. This is the time for the event loop to do its only task: **connect the queue with the call stack**.
+	- Web API:
+		- What: is the place that the async operations (promises, `setTimeout`, `setInterval`) callbacks are waiting to complete.
+		- How:
+		  - For `setTimeout` and `setInterval` callbacks, the timer runs for a period of time that equals to the second arguments then the callback functions is passed to the **queue**.
+		  - Promises callbacks are passed immediately to the **queue**.
+  		  - This is the time for the event loop to do its only task: **connect the queue with the call stack**.
 	- Queue:
 		- FIFO
 		- When the call stack is empty, event loop checks the queue for pending statements, starting from oldest messages
 		- Once it find ones, it adds it to the stack
 		- Queue has two types:
-			- message queue or task queue or macrotasks: handle setTimeout, lower priority
-			- job queue or microtasks: handles promises callbacks (`then` callbacks), higher priority
+			- message queue or task queue or **macrotask queue**: handle `setTimeout`, `setInterval`, lower priority
+			- job queue or **microtask queue**: handles promises callbacks (`then` callbacks), higher priority
 

@@ -40,6 +40,11 @@ Mỗi khi render 1 component nào đó, props object của component đó sẽ �
 **Event handler** là 1 đoạn code, 1 hàm được chạy khi event xảy ra
 **Event handler** còn được gọi là ***event listener***
 
+## Màn bình thường và màn retina
+
+Màn thường: 1 CSS pixel tương đương 1 điểm ảnh vật lý
+Màn retina: 1 CSS pixel tương đương 4 điểm ảnh vật lý
+
 ## Debounce và throttle
 
 - Debounce: gọi 1 hàm nào đó sau 1 khoảng delay. VD: Có 1 input. Input này có 1 event handler cho sự kiện onChange. Nếu áp dụng debounce, event handler này sẽ chỉ chạy khi:
@@ -170,6 +175,10 @@ function outerFunc() {
 const myInnerFunc = outerFunc();
 myInnerFunc();
 ```
+
+### Scope chain
+
+Có 3 loại scope: `global scope`, `local scope` (function) và `block scope` (scope nằm giữa {}). Khi một biến không được tìm thấy trong `local scope`, JS sẽ tìm biến đó ở các outer scope cho đến scope ngoài cùng là `global scope`.
 
 ### for-in and for-of
 `for-in`:

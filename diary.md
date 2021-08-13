@@ -122,3 +122,8 @@ animals[cat] = { ...cat, name: "Sara" }
 
 console.log(animals[dog]) // animals[dog] and animals[cat] are all converted to animals['object Object']
 ```
+
+## 13/8
+
+`JSON.stringify` has a second parameter which is a function. It will be useful when you want to transform a value of a property
+(<https://getfrontend.tips/transform-values-from-a-json-representation.html>)
