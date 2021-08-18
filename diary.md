@@ -127,3 +127,15 @@ console.log(animals[dog]) // animals[dog] and animals[cat] are all converted to 
 
 `JSON.stringify` has a second parameter which is a function. It will be useful when you want to transform a value of a property
 (<https://getfrontend.tips/transform-values-from-a-json-representation.html>)
+
+## 16/8
+
+- Create a download link <https://getfrontend.tips/create-a-download-link.html>
+- Ignore items from array destructuring <https://getfrontend.tips/ignore-items-from-array-destructuring.html>
+- Create objects with dynamic key: <https://getfrontend.tips/create-an-object-with-dynamic-keys.html>
+- Datalist Element: <https://getfrontend.tips/create-an-autocomplete-list-with-the-datalist-element.html>
+- Prefix classname with 'js': <https://getfrontend.tips/prefix-class-name-with-js-to-manipulate-with-javascript.html>
+- Remove a property from an object using spread operator: <https://getfrontend.tips/remove-a-property-from-an-object.html>
+- Use underscore to represent a number: <https://getfrontend.tips/use-underscores-to-represent-a-number.html>
+- <https://getfrontend.tips/wrap-arrow-function-body-in-parentheses.html>
+- Modify character of string: <https://getfrontend.tips/get-characters-of-a-string.html>

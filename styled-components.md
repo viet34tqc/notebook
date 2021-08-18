@@ -6,16 +6,18 @@
 <https://www.joshwcomeau.com/css/css-variables-for-react-devs/>
 
 ## Import styled components as object
+
 - Each component has a folder, including a js file for the component layout and a js file for the styles
 - In the component:
+
 ```javascript
 import * as S from './styles';
-<S.Headline>{title}</S.Headline>
+<S.Headline>{title}</S.Headline>;
 ```
 
 ## Using CSS variables instead of using props
 
-```javascript
+```JSX
 function Backdrop({ opacity, color, children }) {
   return (
     <Wrapper opacity={opacity} color={color}>
@@ -28,11 +30,12 @@ const Wrapper = styled.div`
   background-color: ${p => p.color};
 `;
 ```
+
 This code above works fine. However, when the props change, styled-components will need to re-generate the class and re-inject it into the document's `head`
 
 Here is another way to solve the problem, using CSS variables
 
-```javascript
+```JSX
 function Backdrop({ opacity, color, children }) {
   return (
     <Wrapper
@@ -54,15 +57,17 @@ const Wrapper = styled.div`
 ## Modify the CSS of a component when it's inside other components using Single source of styles
 
 Let's say you have a component `TextLink` like this:
+
 ```javascript
 const TextLink = styled.a`
-  color: var(--color-primary);
-  font-weight: var(--font-weight-medium);
+ color: var(--color-primary);
+ font-weight: var(--font-weight-medium);
 `;
 ```
 
 And you want to apply different styles when it's inside other component.
-```javascript
+
+```JSX
 // Aside.js
 const Aside = ({ children }) => {
   return (
@@ -84,26 +89,28 @@ const Wrapper = styled.aside`
 The problem with this approach is that we style the `TextLink` in different location, that could make our CSS to be harder to manage.
 Here is the better way to do it
 
-```javascript
+```JSX
 // Aside.js
-const Aside = ({ children }) => { /* Omitted for brevity */ }
+const Aside = ({ children }) => {
+ /* Omitted for brevity */
+};
 // Export this wrapper
 export const Wrapper = styled.aside`
-  /* styles */
+ /* styles */
 `;
 export default Aside;
 ```
 
-```javascript
+```JSX
 // TextLink.js
-import { Wrapper as AsideWrapper } from '../Aside'
+import { Wrapper as AsideWrapper } from '../Aside';
 const TextLink = styled.a`
-  color: var(--color-primary);
-  font-weight: var(--font-weight-medium);
-  ${AsideWrapper} & {
-    color: var(--color-text);
-    font-weight: var(--font-weight-bold);
-  }
+ color: var(--color-primary);
+ font-weight: var(--font-weight-medium);
+ ${AsideWrapper} & {
+  color: var(--color-text);
+  font-weight: var(--font-weight-bold);
+ }
 `;
 ```
 
@@ -114,7 +121,7 @@ However this one still have a problem. You can easily bloat your `TextLink` comp
 // About.js
 import TextLink from '../TextLink';
 const AboutTextLink = styled(TextLink)`
-  font-family: 'Spooky Font', cursive;
+ font-family: 'Spooky Font', cursive;
 `;
 ```
 
@@ -122,7 +129,7 @@ const AboutTextLink = styled(TextLink)`
 
 This is really handy if the tags depend on circumstance:
 
-```javascript
+```JSX
 // `level` is a number from 1 to 6, mapping to h1-h6
 function Heading({ level, children }) {
   const tag = `h${level}`;
@@ -139,22 +146,20 @@ const Wrapper = styled.h2`
 `;
 ```
 
-```javascript
+```JSX
 function LinkButton({ href, children, ...delegated }) {
-  const tag = typeof href === 'string'
-    ? 'a'
-    : 'button';
-  return (
-    <Wrapper as={tag} href={href} {...delegated}>
-      {children}
-    </Wrapper>
-  );
+ const tag = typeof href === 'string' ? 'a' : 'button';
+ return (
+  <Wrapper as={tag} href={href} {...delegated}>
+   {children}
+  </Wrapper>
+ );
 }
 ```
 
 ## Global styles
 
-```javascript
+```JSX
 import { createGlobalStyle } from 'styled-components';
 // Create a `GlobalStyles` component.
 // I usually already have this, to include a CSS
@@ -167,25 +172,25 @@ const GlobalStyles = createGlobalStyle`
     --color-primary: rebeccapurple;
     --buttonPadding: 10px;
     @media(min-width: 768px) {
-    	--buttonPadding: 20px;
+     --buttonPadding: 20px;
     }
   }
 `;
 const App = ({ children }) => {
-  return (
-    <>
-      <GlobalStyles />
-      {children}
-    </>
-  );
+ return (
+  <>
+   <GlobalStyles />
+   {children}
+  </>
+ );
 };
 ```
 
 and you can use this in your component
 
-```javascript
+```JSX
 const Button = styled.button`
-  background: var(--color-primary);
+ background: var(--color-primary);
 `;
 ```
 
@@ -193,8 +198,8 @@ If you'd like, you can store all the value in a file `constants.js`
 
 ```javascript
 const COLORS = {
-  text: 'black',
-  background: 'white',
-  primary: 'rebeccapurple',
+ text: 'black',
+ background: 'white',
+ primary: 'rebeccapurple',
 };
 ```

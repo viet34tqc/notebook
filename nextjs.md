@@ -43,7 +43,12 @@ const {id} = router.query
 
 ### getStaticProps
 
-Allows us to fetch data before component renders, and we will pass that data as a prop to the component
+Allows us to fetch data from external API before component renders, and we will pass that data as a prop to the component.
+Take a note that you shouldn't fetch data from NextJS's API route.
+
+When a page with `getStaticProps` is pre-rendered at build time, in addition to the page HTML file, Next.js generates a JSON file holding the result of running `getStaticProps`.
+
+When you navigate to a page that's pre-rendered using `getStaticProps`, Next.js fetches this JSON file (pre-computed at build time) and uses it as the props for the page component. This means that client-side page transitions will not call getStaticProps as only the exported JSON is used.
 
 ```javascript
 export const getStaticProps = async ( { params } ) => {

@@ -53,6 +53,11 @@ Màn retina: 1 CSS pixel tương đương 4 điểm ảnh vật lý
 - Throttle: đảm bảo 1 hàm chỉ chạy 1 lần trong 1 khoảng thời gian (vd: 10s).
 Ví dụ event scroll với 1 event listener .on('scroll') và hàm f, trong điều kiện bình thường hàm f sẽ được gọi 1000 lần trong 10 giây nếu ta scroll liên tục và không có can thiệp gì. Nếu ta sử dụng throttle, cho phép event listener kích hoạt mỗi 100 mili giây, thì hàm f sẽ chỉ được gọi 100 lần là nhiều nhất trong vòng 10 giây bạn scroll
 
+## Object.assign() and Object.create()
+
+`Object.assign(target, source)` copy enumerable properties from `source` to `target` object.
+`Object.create(source)` create a new object using the `source` as prototype
+
 ## So sánh display: flex và display: grid
 
 - Grid: hiển thị layout theo 2 chiều
@@ -82,6 +87,7 @@ console.log( config.language ) // ['VN']
 `Setter` doesn't hold any value, their purpose is to modify the properties. If your object doesn't have getter function and you call the setter function, it returns undefined
 
 ## Number.isNaN() và isNan()
+
 `Number.isNaN(value)` check if the `value` is numeric and not a number.
 `isNaN(value)` check if the `value` is not a number
 
@@ -175,6 +181,56 @@ function outerFunc() {
 const myInnerFunc = outerFunc();
 myInnerFunc();
 ```
+
+### Primitive và Reference type
+
+<https://daveceddia.com/javascript-references/>
+Khi khai báo 1 biến, giá trị của biến đấy được bỏ vào trong 1 cái box, và biến trỏ vào box đó.
+
+Primitive type: string, number, boolean, undefined, null, Symbol
+Reference type: object, array, Map, Set
+
+Primitive type là immutable. Ta chỉ có thể gán lại biến đấy sang 1 giá trị khác (1 box khác)
+Reference type là mutable. Nếu ta copy biến đấy sang 1 biến khác, 2 biến đấy sẽ trỏ vào cùng 1 box chứ 2 biến không trỏ lẫn sang nhau. Và nếu 1 trong 2 biến mutate (ví dụ như là thay đổi giá trị của property) thì biến còn lại cũng thay đổi theo (vì vẫn chung 1 box)
+
+Notes:
+- Các giá trị dạng reference là riêng biệt:
+Mỗi khi ta khai báo 1 hàm hoặc 1 object, `() => {}` hoặc `{}` thì 1 box mới được tạo ra
+```js
+const a = () => {}
+const b = () => {}
+console.log( a === b ) // return false.
+```
+- Mutation không mong muốn
+```javascript
+function minimum(array) {
+  array.sort();
+  return array[0]
+}
+
+const items = [7, 1, 9, 4];
+const min = minimum(items);
+console.log(min) // 1
+console.log(items) // [1,4,7,9]
+```
+
+### useState rules
+
+Only call Hooks at the top level. You shouldn't call `useState` in loop, conditions
+Only call Hooks inside React function components
+
+`useState` doens't merge objects when the state is updated. It replaces them.
+
+When there is an update action (ex: click event).
+- The update state function (setState) isn't called immediately. It's moved to a queue
+- Then a re-render of the component is scheduled.
+- The event handler is wrap into a batch, when the batch finishs, the re-render begins
+- All scheduled re-renders run
+  - `useState` is called
+  - `setState` is invoked and save the final result in the hook's state
+  - `useState` returns the updated value
+
+If you update the state hook to the same value as the current state, there will be no re-render to be scheduled.
 
 ### Scope chain
 

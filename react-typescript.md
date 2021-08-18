@@ -1,46 +1,30 @@
-React Typescript
+# React Typescript
 
-- Setup: Use create-react-app with --template typescript
-- Component Props
+
+## Component Props
+
 You can declare Component props with an interface like this:
-interface Person {
-	firstName: string;
-	lastName: string;
-}
+```typescript
 interface InputProps {
 	text: string; // this prop is required and its type is string
 	fn?: () => string; // this prop with ? is optional and its type is a function that returns a string
 	person?: Person; // You can also create another interface and set it as the type of the prop.
 	handleChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
 }
-And use it in two ways
-const TextField: React.FC<InputProps> = () => {}
-or 
-const TextField = ({ handleChange }: InputProps) => {}
+```
+And use it like this:
+```typescript
+const TextField = ({ text, handleChange }: InputProps) => {}
+```
 
-Component Hooks:
-- useRef: always to set the initial value for the useRef hook
-	const TextField: React.FC<InputProps> = ({handleChange}) => {
-		const inputRef = useRef<HTMLInputElement | null>(null);
-		const divRef = useRef(null);
-		return (
-			<div ref={divRef}>
-				<input type="text" ref={inputRef} onChange={handleChange} />
-			</div>
-		);
-	};
-	Otherwise, there will be an error alert:
+## Component Hooks:
 
-- useState:
-	You can set the type of the state in the '<>' sign, '|' means or.
-	const [count, setCount] = useState<number | null>(null); // The type of the 'count' state is either number or null
+### useRef
 
-	If you use another type, like: useState('5'), it will raise an error.
-
-Let's say I want to use the onChange method of input and take it as a prop
+Always to set the initial value for the useRef hook. Otherwise, there will be an error alert.
+```javascript
 const TextField: React.FC<InputProps> = ({handleChange}) => {
-	const [count, setCount] = useState<number | null>(null);
-	const inputRef = useRef(null);
+	const inputRef = useRef<HTMLInputElement | null>(null);
 	const divRef = useRef(null);
 	return (
 		<div ref={divRef}>
@@ -48,34 +32,16 @@ const TextField: React.FC<InputProps> = ({handleChange}) => {
 		</div>
 	);
 };
-And add that handleChange prop:
-interface InputProps {
-	text: string;
-	fn?: () => string;
-	person?: Person;
-	handleChange?: () => void;
-}
+```
 
-It's ok. However, when you declare handleChange in the parent component, and using the event object, there will be a problem.
+### useState:
+You can set the type of the state in the `<>` sign
+```typescript
+const [count, setCount] = useState<number | null>(null); // The type of the 'count' state is either number or null
+```
+If you use another type, like: `useState('5')`, it will raise an error.
 
-function App() {
-	const handleChange = (e): void => {
-		console.log(e);
-	};
-
-	return (
-		<div className="App">
-			<TextField text="Hello" handleChange={handleChange} />
-			<ReducerExample />
-		</div>
-	);
-}
-
-That's because we have declared the wrong type for the handleChange prop in TextField. Let's get back to the onChange in the TextField component. Hover on the text 'onChange', and you will get the full definition of the onChange's handle:
-
-Look for the first colon, you will see that the type of the onChange is: . Copy it and paste into the handleChange's type declaration and into the parent component. The error message will be gone.
-
-useReducer
+### useReducer
 
 	Lets look at this example
 
@@ -143,3 +109,33 @@ Context:
 
 	const ProgressContextProvider = ({ children }: ProgressContextProviderProps) => {
 
+## Event
+Let's say I want to use the `onChange` method of input and take it as a prop
+```typescript
+const TextField = ({handleChange}: InputProps) => {
+	const [count, setCount] = useState<number | null>(null);
+	const inputRef = useRef(null);
+	return (
+		<div>
+			<input type="text" ref={inputRef} onChange={handleChange} />
+		</div>
+	);
+};
+```
+The type of `handleChange` needs match up with React's type definitions. In our case, we need to use React's `ChangeEvent`
+```typescript
+
+function App() {
+	const handleChange = (e: ChangeEvent<HTMLInputElement) => {
+		console.log(e);
+	};
+
+	return (
+		<div className="App">
+			<TextField text="Hello" handleChange={handleChange} />
+		</div>
+	);
+}
+```
+
+If there is no matching type definition, you can use `SyntheticEvent`
