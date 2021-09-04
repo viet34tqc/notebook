@@ -6,9 +6,19 @@
 - Create pure components. Immutable data can determine if changes have been made, which helps to determine when a component require re-rerendering.
 If you mutate the data directly, the components might not re-render that could lead to bugs.
 
+## `useState` and `useReducer`
+
+- Use `useState` whenever
+  - you manage a JS primitive or simple array
+  - simple state modification
+- Use `useReducer`
+  - whenever you manage an object or complex array
+  - complext state modification
+  - whenever you use multiple `setState` call
+
 ## How React rendered UI
 
-Problem: DOM manipulation is slow. Let 's you have a list of items. If you want to modify that item you need to select that item and re-render it and re-paint the UI. Therefore, the more UI components you have, the more expensive the DOM updates could be, since they would need to be re-rendered for every DOM update.
+Problem: DOM manipulation is slow. Let's assume that you have a list of items. When you want to modify that item, you need to select that item and re-render it and re-paint the UI. Therefore, the more UI components you have, the more expensive the DOM updates could be, since they would need to be re-rendered for every DOM update.
 
 To address this problem, React use virtual DOM. A virtual DOM is a representation of DOM object and synced with the real DOM.
 
@@ -33,6 +43,12 @@ Khi 1 component bất kì có props key, khi key này bị thay đổi thì comp
 
 <https://kentcdodds.com/blog/optimize-react-re-renders>
 Mỗi khi render 1 component nào đó, props object của component đó sẽ được làm mới hoàn toàn, kể cả khi property của prop objects đó không đổi
+
+## React Portal
+
+Cho phép render 1 component vào 1 DOM node nằm ngoài root.
+Trong 1 App react thông thường, toàn bộ UI (components) sẽ được render trong 1 the div với id là root `<div id="root"><div>`
+Giả sử ta muốn tạo 1 cái modal và thẻ div bọc lấy modal này nằm ngoài root. Và vì thẻ div này nằm ngoài root, ta không thể tạo component và render bình thường được mà phải dùng React Portal.
 
 ## Event, Event handler, Event listener
 
@@ -100,10 +116,11 @@ console.log( config.language ) // ['VN']
 ## Event loop
 
 ## Map trong javascript
-- Gần giống như object
+
+- Gần giống như object, khác ở chỗ key có thể là bất cứ type nào, kể cả object
 - Cú pháp:
 ```javascript
-const map = new Map();
+const map = new Map([iterable]); // iterable is optional, such as new Map([[a,1], [b,2]])
 ```
 - Set property
 ```javascript
@@ -120,7 +137,7 @@ for( let [key, value] of map )
 
 ## CORS
 Là cơ chế của server cho phép các origin khác (origin = scheme(protocol) + domain + port) ngoài chính nó gửi request.
-Cùng origin:
+Cùng origin: cùng scheme, domain và port
 - Cùng scheme và cùng domain
 
 http://example.com/app1/index.html
@@ -371,13 +388,58 @@ It's the process that stores functions and variables in the memory before execut
 `useCallback` thường được dùng cho các event handler và event handler này là 1 prop của 1 child component và child component này dùng `React.memo`.
 Mục đích dùng `React.memo` là child component không bị re-render khi parent component re-render. Tuy nhiên, nếu props của child component bị thay đổi thì nó vẫn bị render lại. Props đấy ở đây có thể là 1 event handler. Vì thế việc dùng `useCallback` ở đây là để child component hoàn toàn không bị re-render khi parent component re-render
 
+Chuyển đổi giữa `useMemo` và `useCallback`
+`useCallback(fn, deps)` tương đương với `useMemo(() => fn, deps)`.
+
 ## CSS
 
 ### counter
 
 ### fr in grid
 
-### clamp()
+### min, max, clamp()
+
+<https://moderncss.dev/practical-uses-of-css-math-functions-calc-clamp-min-max/>
+<https://ishadeed.com/article/css-min-max-clamp/>
+- `min(value1, value2)`: thiết lập giá trị max cho selector (giống max-width). Nó sẽ chọn ra giá trị nhỏ nhất giữa value 1 và value 2 tùy theo viewport width. Thứ tự value không quan trọng. VD:
+```css
+width: min(80ch, 100% - 2rem) // Ở màn hình nhỏ hơn thì 100% - 2rem < 80ch nên width = 100% - 2rem nhưng ở màn hình lớn hơn khi mà 100% - 2rem > 80ch thì width = 80ch;
+```
+  CSS trên sẽ tương đương với
+```css
+  width: 100% - 2rem;
+  max-width: 80ch
+```
+- `max(value, value)`: ngược lại với min(), thiết lập giá trị nhỏ nhất cho selector (giống min-width) . VD: disable zoom trên safari khi focus vào input
+```CSS
+input {
+  font-size: max(16px, 1rem);
+}
+```
+- clamp(min, value, max): thứ tự các giá trị cũng không quan trọng. Thường dùng để làm responsive cho font-size. VD:
+```CSS
+p {
+  font-size: clamp(2rem, 5vw, 5rem)
+}
+```
+Nếu chỉ dùng 5vw thì font-size sẽ bị fix theo vw và trên mobile có thể bị bé. Khi dùng `clamp`, giá trị min của font-size sẽ luôn là 2rem
+Cần chú ý là khi zoom thì font size sẽ không bị thay đổi vì nó phụ thuộc vào vw. Có thể sửa lại dùng rem vì rem thay đổi theo zoom
+=> có thể thay đổi thành:
+```CSS
+p {
+  font-size: clamp(2rem, 1rem + 2vw, 5rem);
+}
+```
+Chỉnh padding cho section hero:
+```CSS
+.hero {
+  padding: clamp(2rem, 15vmax, 15rem) 1rem;
+}
+```
+
+### Create text on image with an overlay
+
+Set z-index for the container
 
 ### flex-shrink và flex-grow
 Mặc định flex-grow: 0; flex-shrink: 1;

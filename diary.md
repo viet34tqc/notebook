@@ -139,3 +139,28 @@ console.log(animals[dog]) // animals[dog] and animals[cat] are all converted to 
 - Use underscore to represent a number: <https://getfrontend.tips/use-underscores-to-represent-a-number.html>
 - <https://getfrontend.tips/wrap-arrow-function-body-in-parentheses.html>
 - Modify character of string: <https://getfrontend.tips/get-characters-of-a-string.html>
+
+## 18/8
+
+- Center child element: `display:grid; place-items: center;`
+
+## 31/8
+
+- :focus-within
+- :where selecter hoạt động giống :is nhưng specificity bằng 0: <https://css-tricks.com/using-the-specificity-of-where-as-a-css-reset/>>
+- min, max, clamp: <https://moderncss.dev/practical-uses-of-css-math-functions-calc-clamp-min-max/>
+  - min(value1, value2): thiết lập giá trị max cho selector (giống max-width). Nó sẽ chọn ra giá trị nhỏ nhất giữa value 1 và value 2 tùy theo kích cỡ màn hình. VD:
+  ```css
+	width: min(80ch, 100% - 2rem) // Ở màn hình nhỏ hơn thì 100% - 2rem < 80ch nên width = 100% - 2rem nhưng ở màn hình lớn hơn khi mà 100% - 2rem > 80ch thì width = 80ch;
+  ```
+  sẽ tương đương với
+  ```css
+  	width: 100% - 2rem;
+  	max-width: 80ch
+  ```
+  - max(value, value): ngược lại với min(), thiết lập giá trị nhỏ nhất cho selector (giống min-width) . VD: disable zoom trên safari khi focus vào input
+	```CSS
+	input {
+	  font-size: max(16px, 1rem);
+	}
+	```
