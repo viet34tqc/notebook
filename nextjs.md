@@ -10,7 +10,7 @@
 
 ## Page Routing
 
-If you are using create-react-app and you are in need of building routes for your app, then you will need to install third-party package like **react-router-dom**. With NextJS, that installation isn't  necessary anymore because NextJS support routing by default.
+If you are using create-react-app and you are in need of building routes for your app, then you will need to install third-party package like **react-router-dom**. With NextJS, that installation isn't necessary anymore because NextJS support routing by default.
 
 For navigating between pages, NextJS provides you a component named `Link`:
 
@@ -18,6 +18,7 @@ For navigating between pages, NextJS provides you a component named `Link`:
 import Link from 'next/link';
 <Link href='about'>About</Link>
 ```
+
 Needless to say, you can still use HTML `a` tag and it works. However, when you click on the link using `a` tag, your page will be refreshed.
 
 ## Use cases
@@ -87,7 +88,7 @@ const Country = ({ country }) => {};
 
 Let's say you have a bunch of single posts. These posts is fetched from an API and you need to create routes for them at build time (`next build`). This is done in `getStaticPath` function
 
-```javascript
+```js
 export const getStaticPaths = async () => {
 	const res = await fetch('https://restcountries.eu/rest/v2/all');
 	const countries = await res.json();
@@ -113,9 +114,11 @@ Hydration: App is hydrated, React components are initialized and App becomes int
 If you are trying to visit a react application that has a really large bundle on a slow connection, you might see a flash of white on the page
 
 Pros:
+
 - Great for UX
 
 Cons:
+
 - Not good for SEO because Google bot cannot crawl any data at first load because it can only sees a div
 
 ### Static-site generation (Pre-rendering using NextJS)
