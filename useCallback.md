@@ -1,6 +1,7 @@
-#How to use useCallback hook
+# How to use useCallback hook
 
 ## Referential equality
+
 If you are new to Javascript, it wont take long before you learn why this is the case:
 ```javascript
 true === true // true
@@ -16,6 +17,7 @@ z === z // true
 So, when you define an object in a React function component, it is not going to be referentially equal to the last time that same object was defined (even if it has all the same properties with all the same values).
 
 ## Why we need to use useCallback
+
 When we are in need of handling an event, we often create another function inside React funciton components. Let's say we need to handle a click event:
 ```javascript
 function MyComponent() {
@@ -27,7 +29,7 @@ function MyComponent() {
   // ...
 }
 ```
-handleClick is a different function on every rendering of MyComponent.
+`handleClick` is a different function on every rendering of MyComponent.
 
 Normally, the creation of this function on each rendering is not a problem. However, in some cases, you need to maintain that function between renderings:
 - When the function is a dependancy of other hook, e.g `useEffect(..., [callback])`

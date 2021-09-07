@@ -30,6 +30,10 @@ Once virtual DOM has updated, React compares the entire virtual DOM with a virtu
 By comparing, React knows exactly which virtual DOM **object** (component) has changed. If there are a lot of updates, React can batch them (collect the updates) for efficency.
 Then real DOM is updated (this process is commit)
 
+## React bailing out of updating states
+
+<https://stackoverflow.com/questions/58208727/why-react-needs-another-render-to-bail-out-state-updates>
+Nếu giá trị state không thay đổi khi setState thì component sẽ render thêm 1 lần nữa. Đến lần setState thứ 3 thì nó dừng hẳn không re-render tiếp.
 
 ## Why list item need a unique `key`
 
@@ -80,6 +84,10 @@ Ví dụ event scroll với 1 event listener .on('scroll') và hàm f, trong đi
 - Flex: hiển thị layout theo 1 chiều
 
 ## Kiến thức bảo mật tối thiểu ở frontend
+
+## Khi nào dùng '==' thay vì '==='
+
+Chỉ dùng khi compare `null` và `undefined`
 
 ## getter, setter trong javascript. Có ưu điểm gì so với hàm bình thường
 
@@ -153,6 +161,8 @@ Khác origin:
 http://example.com/app1
 https://example.com/app2
 
+Để server có thể cho phép client gửi cross-origin request, server đó phải set giá trị cho 1 header có tên là `Access-Control-Allow-Origin` và giá trị đó là origin của client.
+
 ### Rendering a web page
 
 <ol>
@@ -202,10 +212,14 @@ myInnerFunc();
 ### Primitive và Reference type
 
 <https://daveceddia.com/javascript-references/>
+<https://www.youtube.com/watch?v=RLBqJpK1hro>
 Khi khai báo 1 biến, giá trị của biến đấy được bỏ vào trong 1 cái box, và biến trỏ vào box đó.
 
 Primitive type: string, number, boolean, undefined, null, Symbol
 Reference type: object, array, Map, Set
+
+Primitive lưu giá trị
+Reference lưu địa chỉ chứa giá trị
 
 Primitive type là immutable. Ta chỉ có thể gán lại biến đấy sang 1 giá trị khác (1 box khác)
 Reference type là mutable. Nếu ta copy biến đấy sang 1 biến khác, 2 biến đấy sẽ trỏ vào cùng 1 box chứ 2 biến không trỏ lẫn sang nhau. Và nếu 1 trong 2 biến mutate (ví dụ như là thay đổi giá trị của property) thì biến còn lại cũng thay đổi theo (vì vẫn chung 1 box)
@@ -218,7 +232,7 @@ const a = () => {}
 const b = () => {}
 console.log( a === b ) // return false.
 ```
-- Mutation không mong muốn
+- Truyền tham số dạng reference có thể xảy ra Mutation không mong muốn
 ```javascript
 function minimum(array) {
   array.sort();
@@ -226,7 +240,7 @@ function minimum(array) {
 }
 
 const items = [7, 1, 9, 4];
-const min = minimum(items);
+const min = minimum(items); // Khi truyền items vào dưới dạng tham số, hàm sẽ copy tham số sang 1 biết khác: const array = items. Array thay đổi thì items cũng thay đổi vì khi này cả array và items cùng trỏ tới 1 box hay là cùng trỏ tới 1 địa chỉ chứa giá trị
 console.log(min) // 1
 console.log(items) // [1,4,7,9]
 ```

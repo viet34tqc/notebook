@@ -162,17 +162,18 @@ What:
 - Normal flow:
 
 1. An event occurs
-2. Dispatch is called with normal action
+2. Dispatch an action
 3. Reducer creates a new state from the change prescribed by the action
 4. New state is passed into the React app via props
 
 - With middleware:
 
 1. An event occurs
-2. Dispatch is called with normal action object, function, or some other value
-   **3. Middleware receives the action, do something like setTimeout or other async logic**
-3. Reducer creates a new state from the change prescribed by the action
-4. New state is passed into the React app via props
+2. Dispatch an action
+3. **Redux notifies all the middleware that there is a new action.**
+4. **Middlewares receives the action, do something side-effect like setTimeout or other async logic, then dispatch another action**
+5. Reducer creates a new state from the change prescribed by the action
+6. New state is passed into the React app via props
 
 ### Thunk
 
