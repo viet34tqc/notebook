@@ -1,9 +1,11 @@
 # Typescript
 
 ## Installation
+
 npm i -g typescript
 
 ## Command
+
 tsc -w: watch mode. Requires `tsconfig.json` file. It can Work without any configuration.
 If you don't config the input files in `tsconfig.json`, Typescript automatically finds all the ts file in all folder, then compile `ts` files to `js` files in the same folder.
 
@@ -29,6 +31,7 @@ function rect( width: number = 10, height: number )
 ```
 
 ## Explicit Types
+
 Declare the type of variables first:
 ```typescript
 let names: string = 'viet'; // String
@@ -56,6 +59,7 @@ Convention: Start with uppercase
 
 
 ## Class:
+
 ```typescript
 class Employee {
     public name: string
@@ -89,6 +93,7 @@ console.log( viet.getAge );
 ```
 
 ## Interface:
+
 ```typescript
 interface Person {
     name: string
@@ -102,11 +107,42 @@ const viet: Person = {
 }
 ```
 
+Difference between `interface` and `type`:
+`type` cannot be re-opened to add new properties
+`interface` is always extendable.
+
+```TS
+interface Window {
+  title: string
+}
+
+interface Window {
+  ts: TypeScriptAPI
+}
+
+const src = 'const a = "Hello World"';
+window.ts.transpileModule(src, {});
+
+type Window = {
+  title: string
+}
+
+type Window = {
+  ts: TypeScriptAPI
+}
+
+ // Error: Duplicate identifier 'Window'.
+```
+
+
 ## Tuple:
 
-Fixed type
+Defined fixed types in an array
+
+```ts
 const tuple: [string, number] = ['viet', 30];
 const tupleFunction = (name: string, age: number): [string, number] => [name, age]
+```
 
 ## Generic:
 
@@ -133,6 +169,7 @@ T can be set manually or automatically
 ```
 
 ### Generic extends
+
 The type can be restricted to a certain class family or interface, using the extends keyword:
 ```typescript
 const genericObject = <T extends {firstName: string, lastName: string}>( obj: T) => ({
@@ -158,6 +195,7 @@ const resourceOne: Resource<string> = {
 ```
 
 ## Enums
+
 Enums are one great way to define named constant
 ```typescript
 enum Order {
@@ -187,5 +225,6 @@ enum Order {
 ```
 Then you can access the constant like property of Object: `Order.First`, `Order.Second`
 
-##@types/* packages and \*.d.ts files
+## @types/* packages and .d.ts files
+
 Contains type definitions for libraries originally written in vanilla javascript

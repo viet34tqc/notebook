@@ -43,73 +43,56 @@ If you use another type, like: `useState('5')`, it will raise an error.
 
 ### useReducer
 
-	Lets look at this example
+```TS
 
-	import React, { useReducer } from 'react';
+import React, { useReducer } from 'react';
 
-	type Actions =
-		| { type: 'add'; text: string }
-		| {
-				type: 'remove';
-				idx: number;
-		  };
+type Actions =
+	| { type: 'add'; text: string }
+	| {
+			type: 'remove';
+			idx: number;
+	  };
 
-	interface Todo {
-		text: string;
-		complete: boolean;
+interface Todo {
+	text: string;
+	complete: boolean;
+}
+
+type State = Todo[];
+
+const TodoReducer = (state: State, action: Actions) => {
+	switch (action.type) {
+		case 'add':
+			return [...state, { text: action.text, complete: false }];
+		case 'remove':
+			return state.filter((_, i) => action.idx !== i);
+		default:
+			return state;
 	}
+};
 
-	type State = Todo[];
+export const ReducerExample: React.FC = () => {
+	const [todos, dispatch] = useReducer(TodoReducer, []);
 
-	const TodoReducer = (state: State, action: Actions) => {
-		switch (action.type) {
-			case 'add':
-				return [...state, { text: action.text, complete: false }];
-			case 'remove':
-				return state.filter((_, i) => action.idx !== i);
-			default:
-				return state;
-		}
-	};
+	return (
+		<div>
+			{JSON.stringify(todos)}
+			<button
+				onClick={() => {
+					dispatch({ type: 'add', text: '...' });
+				}}
+			>
+				+
+			</button>
+		</div>
+	);
+};
 
-	export const ReducerExample: React.FC = () => {
-		const [todos, dispatch] = useReducer(TodoReducer, []);
-
-		return (
-			<div>
-				{JSON.stringify(todos)}
-				<button
-					onClick={() => {
-						dispatch({ type: 'add', text: '...' });
-					}}
-				>
-					+
-				</button>
-			</div>
-		);
-	};
-
-Context:
-	Declare Context Provider Props
-	Declare interface Context default
-	Declare default Context data
-
-	interface ProgressContextProviderProps {
-	    children: ReactNode
-	}
-	interface ProgressContextDefault {
-		lastTime: string
-		status: string
-	}
-	const progressDefaultData = {
-		lastTime: '30/5/2021',
-		status: 'In Progress',
-	};
-	export const ProgressContext = createContext<ProgressContextDefault>(progressDefaultData);
-
-	const ProgressContextProvider = ({ children }: ProgressContextProviderProps) => {
+```
 
 ## Event
+
 Let's say I want to use the `onChange` method of input and take it as a prop
 ```typescript
 const TextField = ({handleChange}: InputProps) => {
