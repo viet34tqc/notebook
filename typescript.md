@@ -7,30 +7,9 @@ npm i -g typescript
 ## Command
 
 tsc -w: watch mode. Requires `tsconfig.json` file. It can Work without any configuration.
-If you don't config the input files in `tsconfig.json`, Typescript automatically finds all the ts file in all folder, then compile `ts` files to `js` files in the same folder.
+If you don't set the input files in `tsconfig.json`, Typescript will automatically find all the ts file in all folder, then compile `ts` files to `js` files in the same folder.
 
-## Functions
-
-- Types for function arguments: using ':'
-```typescript
-function rect( width: number, height: number )
-```
-- A or B: using '|', ex: `string|number`
-- Optional argument: using '?', ex: function rect( width?: number, height: number )
-```typescript
-function rect( width: number = 10, height: number )
-```
-- Type of result:
-```javascript
-	function square( side: number ) : number
-```
-- Function signature
-```typescript
-	let greet: ( a: string, b: number ) => void // function signature
-	greet = (name: string, age: number ) => console.log(`${name}`)
-```
-
-## Explicit Types
+## Explicit declartion
 
 Declare the type of variables first:
 ```typescript
@@ -45,20 +24,158 @@ let person = {
 let age: any // whatever types
 ```
 
-## Type alias:
-Create a type base on existing types.
-Convention: Start with uppercase
+## Implicit declaration
+
+With common primitive types(string, number, boolean), we can simply omit the type annotation
+```ts
+let name = 'viet'
+let age = 3
+```
+
+## Read-only type
+
+If you want to make your object and your array be read-only, you add the `as const` after the declaration
+
+```ts
+const student = {
+    name: 'bob',
+    age: 20
+} as const
+const studentList = ['bob', 'joe', 'doe'] as const
+```
+
+## Union type
+
+Create a type based on two or more other type. Use `|`
+
+```ts
+function printId(id: number | string) {
+  console.log("Your ID is: " + id);
+}
+```
+
+## Intersection type
+
+Create a type based on two or more interface. Use `&`
+
+```ts
+interface Student {
+    name: string;
+    age: number;
+    year: number
+}
+
+interface Engineer {
+    name: string;
+    age: number;
+}
+
+type Person = Studen & Engineer;
+```
+
+## Type alias
+
+Name a type
+Name convention: PascalCase
 ```typescript
-	type StringOrNumber = string | number;
-	type Student = {
-		name: string;
-		id: StringOrNumber;
-	}
-	function( id: StringOrNumber, name: string ): void {}
+type StringOrNumber = string | number; // Union type
+type Student = {
+	name: string;
+	id: StringOrNumber;
+}
+function( id: StringOrNumber, name: string ): void {}
 ```
 
 
-## Class:
+## Interface
+
+Name an object type
+Name convention: PascalCase
+
+```typescript
+interface Person {
+    name: string
+    age: number
+    speak?: (lang: string) => void
+}
+
+const viet: Person = {
+    name: 'viet',
+    age: 30
+}
+```
+
+Difference between `interface` and `type`:
+`type` cannot be re-opened to add new properties
+`interface` is always extendable.
+
+```TS
+interface Student {
+  name: string
+}
+
+interface Student {
+  age: number
+}
+
+const student: Student = {
+    name: 'Bob',
+    age: 20
+}
+
+type Window = {
+  title: string
+}
+
+type Window = {
+  ts: TypeScriptAPI
+}
+
+ // Error: Duplicate identifier 'Window'.
+```
+
+## Using Type or Interface
+
+Use Interface until you need Types, ex: Union type
+
+## Declare array with Type and Interface
+
+```ts
+
+// Without Generic
+interface List {
+    [index: number]: Number
+}
+type List1 = Number[]
+
+// With Generic
+interface List<T> {
+    [index: number]: T
+}
+
+type List1<T> = T[]
+
+const a: List1<number> = [1,2,3]
+```
+
+## Functions
+
+- Define type for arguments: using ':'
+```typescript
+function rect( width: number, height: number )
+```
+
+- Define type of return, default is `void`:
+```ts
+    function square( side: number ) : number
+```
+- Function signature
+```typescript
+    let greet: ( a: string, b: number ) => void // function signature
+    greet = (name: string, age: number ) => console.log(`${name}`)
+```
+
+## Class
 
 ```typescript
 class Employee {
@@ -92,50 +209,51 @@ viet.setAge = 32
 console.log( viet.getAge );
 ```
 
-## Interface:
+## Enum
 
-```typescript
-interface Person {
-    name: string
-    age: number
-    speak?: (lang: string) => void
-}
+A collection of values that have the same category
+Easier to maintain and get the value
+Name convention: PascalCase
 
-const viet: Person = {
-    name: 'viet',
-    age: 30
-}
-```
+2 types: number enum and string enum
 
-Difference between `interface` and `type`:
-`type` cannot be re-opened to add new properties
-`interface` is always extendable.
+### Number enum
 
 ```TS
-interface Window {
-  title: string
+enum Status {
+    PENDING,         // 0, default is number 0
+    IN_PROGRESS,     // 1
+    DONE,            // 2
+    CANCELLED,       // 3
 }
 
-interface Window {
-  ts: TypeScriptAPI
+enum Status {
+    PENDING = 2,
+    IN_PROGRESS,
+    DONE,
+    CANCELLED,
 }
 
-const src = 'const a = "Hello World"';
-window.ts.transpileModule(src, {});
+// Get the value
 
-type Window = {
-  title: string
-}
-
-type Window = {
-  ts: TypeScriptAPI
-}
-
- // Error: Duplicate identifier 'Window'.
+console.log(Status['PENDING'])
+console.log(Status.PENDING)
 ```
 
+### String enum
 
-## Tuple:
+```TS
+enum Type {
+    JSON: 'string',
+    HTML: 'html'
+}
+```
+
+### When to use enum
+
+- Static data, not the data from API response. Use **union type** for data from API response.
+
+## Tuple
 
 Defined fixed types in an array
 
@@ -144,19 +262,22 @@ const tuple: [string, number] = ['viet', 30];
 const tupleFunction = (name: string, age: number): [string, number] => [name, age]
 ```
 
-## Generic:
+## Generic
+
+Why:
+Enable types, interface to be used as a parameter => help to reuse the same code for different type of inputs
 
 Let's say you have a function like this:
-```javascript
+```ts
 const makeArr = (x: number) => [x]
 ```
 But what if we didn't know if we wanted to passed in the number here, maybe say we wanted to pass in string or boolean. What will you do?
 At first, you might want to change the type Number to any. However, this is basically going to remove all of your type safety and TS type functionality becomes useless.
 This is where Generic comes in. You can use generic like this:
-```javascript
+```ts
 const makeArr = <T>(x: T) => [x]
 ```
-T can be set manually or automatically
+T is shorthand for 'Types' and can be set manually or automatically
 - Manually
 ```typescript
 	makeArr<string>('3')
@@ -224,6 +345,13 @@ enum Order {
 }
 ```
 Then you can access the constant like property of Object: `Order.First`, `Order.Second`
+
+## Utility Types
+
+- `Partial<Type>`: a type that has all props of `Type` to optional
+- `Required<Type>`: a type that has  all props of `Type` to required
+- `Pick<Type, Keys>`: a type by picking a set of `Keys` from Types
+- `Omit<Type, Keys>`: a type by omitting a set of `Keys` from Types
 
 ## @types/* packages and .d.ts files
 

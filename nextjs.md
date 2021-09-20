@@ -59,10 +59,10 @@ const { id } = router.query;
 
 ### getStaticProps
 
-Allows us to fetch data from external API before component renders, and we will pass that data as a prop to the component.
+Allows us to fetch data from external API before component renders and pass that data as a prop to the component on build.
 Take a note that you shouldn't fetch data from NextJS's API route.
 
-When a page with `getStaticProps` is pre-rendered at build time, in addition to the page HTML file, Next.js generates a JSON file holding the result of running `getStaticProps`.
+When a page with `getStaticProps` is pre-rendered at build time, in addition to the page HTML file, Next.js generates a JSON file holding the results of running `getStaticProps`.
 
 When you navigate to a page that's pre-rendered using `getStaticProps`, Next.js fetches this JSON file (pre-computed at build time) and uses it as the props for the page component. This means that client-side page transitions will not call getStaticProps as only the exported JSON is used.
 
@@ -85,6 +85,8 @@ const Country = ({ country }) => {};
 ```
 
 ## getStaticPath
+
+This function create pre-rendered HTML pages depending on the path you return.
 
 Let's say you have a bunch of single posts. These posts is fetched from an API and you need to create routes for them at build time (`next build`). This is done in `getStaticPath` function
 
@@ -115,11 +117,13 @@ If you are trying to visit a react application that has a really large bundle on
 
 Pros:
 
-- Great for UX
+- Good for UX => used a lot in web application
+- Lower server usage
 
 Cons:
 
 - Not good for SEO because Google bot cannot crawl any data at first load because it can only sees a div
+- High Initial load time.
 
 ### Static-site generation (Pre-rendering using NextJS)
 
@@ -150,9 +154,10 @@ Pros:
 
 - This method is really good for SEO because bots get fully rendered HTML and they can easily interpret the content on the page.
 - The data is always fresh
-  Const:
-- Slower.
-- Redundant data fetching
+
+Const:
+- Slower
+- Redundant data fetching (if not cache)
 
 ### Incremental Static Regeneration
 

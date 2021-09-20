@@ -35,11 +35,13 @@ Generator object có 3 methods
 ### Generator function
 
 Generator function chỉ được thực thi (executed) thông qua generator object.
-Generator object sẽ thực thi generator function thông qua 3 method ở trên
-Việc thực thi này sẽ bị `pause` hoặc stop khi gặp từ khóa `yeild` hoặc `return`
-Mỗi lần thực thi, generator object sẽ trả 1 object có dạng `{value: yeild_value, done: false}`.
-	- Giá trị `done` sẽ là `true` khi gặp `return` hoặc `throw()`.
-	- Nếu giá trị `done` là `true` rồi mà generator object thực thi tiếp thì nó trả về `{value: undefined, done: true}`
+
+- Generator function sẽ chạy khi generator object gọi `next()`;
+- Generator function sẽ bị `pause` hoặc stop khi gặp từ khóa `yeild` hoặc `return`
+- Generator function sẽ chạy tiếp khi `next()` được gọi
+- Mỗi lần gọi `next()`, generator object sẽ trả 1 object có dạng `{value: yeild_value, done: false}`.
+  - Giá trị `done` sẽ là `true` khi gặp `return` hoặc `throw()`.
+  - Nếu giá trị `done` là `true` rồi mà generator object thực thi tiếp thì nó trả về `{value: undefined, done: true}`
 
 ## Generator object interation
 

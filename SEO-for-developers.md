@@ -32,7 +32,7 @@ If a user stay on the page, Google will keep track of the dwell time, which is t
 
 ### Outbound Link
 
-It signal what your content is about. It's really good for your SEO if you use your outbound links to other really good sites that are related to the content of your page.
+It signals what your content is about. It's really good for your SEO if you use your outbound links to other really good sites that are related to the content of your page.
 
 ## On-page techniques
 
@@ -43,7 +43,7 @@ It signal what your content is about. It's really good for your SEO if you use y
 - Apply `alt` text for images
 - Optimize speed
   - Optimize images
-  - Minify and compress assest
+  - Minify and compress assets
 - URL: needs to explain what the website is about, easy to understand. The shorter the better.
 
 ## Rules

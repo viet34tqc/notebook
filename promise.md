@@ -45,6 +45,14 @@ Access the rejection error from promise
 ### `finally()`
 Called when everything above is done
 
+### `Promise.all` and `Promise.race`
+
+Both take an array of promises
+`Promise.all` return a single Promise that resolves an array of result of input promises. If one of the input promises fails, it will jump to the `catch` block
+`Promise.all` doesn't run the input promises in parallel. It depends on your CPU.
+
+`Promise.race` return the first resolved or reject promise
+
 ## Async/Await
 
 ### Async

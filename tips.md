@@ -20,8 +20,6 @@
 ## Organizing CSS
 
 ```CSS
-/* display stuff */
-
 /* positioning */
 
 /* box-model */

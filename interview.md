@@ -1,9 +1,36 @@
 # Interview
 
+## Why React
+
+- Easy to start
+- Component-based
+  - consistent
+  - Easy to maintain and scale
+- Virtual DOM
+  - Updating DOM using vanilla JS is slow, especially when your DOM is big
+  - Any changes are reflected to virtual DOM
+  - React compares the previous and the current state of the virtual DOM
+  - Those updates are applied to real DOM
+
+## Redux and React Context
+
+<https://blog.isquaredsoftware.com/2021/01/context-redux-differences/>
+
+React Context doesn't manage any state at all. When we use Context, we manage the state via React hooks `useState`and `useReducer`. The only purpose of React Context is to avoid **prop-drilling**
+
+Context + `useReducer` relies on passing *the current state value via Context*. React-Redux passes *the current Redux store* instance via Context.
+When `useReducer` produces a new state value, *all* components that are subscribed to that context will be re-rendered => lead to perfomance issue
+React Redux, components can't subscribe to specific state and only re-render when those values change.
+
+Context + `useReducer` doesn't not have middleware to do side-effect
+React + Redux have middleware support using Redux Thunk
+
+if you get past 2-3 state-related contexts in an application, you're re-inventing a weaker version of React-Redux and should just switch to using Redux.
+
 ## Why react use immutability?
 
-- Avoiding direct data mutation lets us keep previous versions of the state, and reuse them later
-- Create pure components. Immutable data can determine if changes have been made, which helps to determine when a component require re-rerendering.
+- Keep previous versions of the state, and reuse them later
+- Create pure components. Immutable data can determine if changes have been made, which helps to *determine when a component require re-rerendering*.
 If you mutate the data directly, the components might not re-render that could lead to bugs.
 
 ## `useState` and `useReducer`
@@ -13,7 +40,7 @@ If you mutate the data directly, the components might not re-render that could l
   - simple state modification
 - Use `useReducer`
   - whenever you manage an object or complex array
-  - complext state modification
+  - complex state modification
   - whenever you use multiple `setState` call
 
 ## How React rendered UI
@@ -120,8 +147,6 @@ console.log( config.language ) // ['VN']
 ## Hiểu thế nào về responsive web design
 
 Đó là việc 1 website có thể hiển thị và tương tác (UI và UX) tốt trên tất cả các trình duyệt và các cỡ màn hình
-
-## Event loop
 
 ## Map trong javascript
 
@@ -284,17 +309,23 @@ Object.defineProperty(obj, 'flameWarTopic', {
 
 `for-of`:
 - interate over **value** of iterable objects.
-- can be used with built-in `String`, `Array`, array-like objects (e.g., arguments or `NodeList`), `TypedArray`, `Map`, Set
+- can be used with built-in `String`, `Array`, array-like objects (e.g., arguments or `NodeList`), `TypedArray`, `Map`, `Set`
 - cannot be used with simple Object
 
 ## Hiểu gì về async, await, promise, so sánh
 
 `Promise`:
 - Là 1 object bọc lấy kết quả trả về của 1 asynchonous function.
-- Has 3 trạng thái:
+- Có 3 trạng thái:
   - pending: trạng thái mặc định khi mới tạo Promise.
   - fulfilled: trạng thái khi asynchonous function bên trong resolve,
   - rejected: trạng thái khi asynchonous function bên trong resolve,
+
+**Converting a setTimeout into a promisified `delay` function**
+```ts
+const delay = (ms: number) => new Promise( res => setTimeout(res, ms))
+const delay = (ms: number) => new Promise( res => setTimeout(res, ms, 'some value')) // If you want to send some value
+```
 
 `async function` khi được call trả về 1 `Promise`. `Promise` này sẽ được `resolve` với 1 giá trị `value`. Giá trị `value` này chính là giá trị được `return` từ `async function`
 
@@ -398,6 +429,7 @@ It's the process that stores functions and variables in the memory before execut
 `Object.seal()` không cho phép thêm, xóa, nhưng vẫn cho sửa existing properties
 
 ## useMemo và useCallback. Có thể chuyển từ useMemo sang useCallback được không
+
 <https://kentcdodds.com/blog/usememo-and-usecallback>
 `useCallback` thường được dùng cho các event handler và event handler này là 1 prop của 1 child component và child component này dùng `React.memo`.
 Mục đích dùng `React.memo` là child component không bị re-render khi parent component re-render. Tuy nhiên, nếu props của child component bị thay đổi thì nó vẫn bị render lại. Props đấy ở đây có thể là 1 event handler. Vì thế việc dùng `useCallback` ở đây là để child component hoàn toàn không bị re-render khi parent component re-render
@@ -455,7 +487,10 @@ Chỉnh padding cho section hero:
 
 Set z-index for the container
 
+Using `background-blend-mode`: <https://www.smashingmagazine.com/2021/09/reducing-need-pseudo-elements/>
+
 ### flex-shrink và flex-grow
+
 Mặc định flex-grow: 0; flex-shrink: 1;
 Dùng để tính width của flex items
 

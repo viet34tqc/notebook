@@ -1,5 +1,7 @@
 # Webpack
 
+<https://viblo.asia/p/webpack-danh-cho-nguoi-moi-bat-dau-bJzKmo4Ol9N>
+
 ## Init
 
 - npm init -y
@@ -24,13 +26,25 @@ module.exports = {
 };
 ```
 
+Must have:
+`entry`: can be multiple entry
+`output`: only one output
+`loader`: By default, Webpack can only understand JS file. `loader` helps webpack understand other files.
+  - test: file type
+  - use: loader name, can be array
+`plugins`: optimize bundle, manage assets
+`mode`: 3 modes `development`, `production` and `none`. Default is `production`
+
+
 ## Run
 Run `npx webpack` to start bundle the files in src folder. There would be a file named main.js in the dist folder
 
 ## Watch mode
+
 `npx webpack --watch`
 
 ## Developtment
+
 To check source map of the errors
 `npx webpack --watch --mode development`
 

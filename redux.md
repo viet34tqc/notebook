@@ -102,16 +102,17 @@ Here we have a **counter** property of state object and **couterReducer** functi
 
 ### `createSlice`
 
-Function to create reducer
+A function that automatically generate action creators and action types that correspond to the reducers and state. Internally, it uses `createAction` and `createReducer`.
 
 - Input: object
   - `name`: name of the slice
   - `initialState`: initial state object
   - `reducers`: object that includes reducers functions.
-    `reducer_function_name: (state, action) => newState`
-- `name` and `action_name` will be used to generate the action type like this: `{type: name/reducer_function_name}`
-- `todoSlice.actions.reducer_function_name` is an action creator that returns action object `({type: "name/reducer_function_name"})`
-  If we pass payload as the argument, it will return as `{type: "name/reducer_function_name", payload }`
+    `key: (state, action) => newState`
+- `name` and `key` will be used to generate string action type constant: `name/key`
+- `todoSlice.actions[key]` is the name an action creator that returns action object: `{type: "name/key"}`
+  - If we pass payload as the argument, it will return as `{type: "name/key", payload }`
+  - This action creator has a 'type' property. You can get the type directly without invoking it.
 
 ### Prepare callback
 
@@ -205,8 +206,9 @@ When we make an API call, its progress can be in one of 4 states:
 - loading: The request is in progress
 - succeeded: The request succeeded, and we now have the data we need
 - failed: The request failed, and there's probably an error message
-  `createAsyncThunk` will automatically create action types and action creators for the 'loading/succeeded/failed' status.
-  Then it automatically dispatch those actions based on the resulting Promise. It means, after dispatch 'loading', it will continue dispatch 'succeeded' ( fullfilled ) status if success, or 'failed' (rejected) if failure
+
+`createAsyncThunk` will automatically creates action types and action creators for the 'loading/succeeded/failed' status.
+Then it automatically dispatchs those actions relatively based on the resulting Promise. It means, after dispatching 'loading', it continues dispatching 'succeeded' ( fullfilled ) status if success, or 'failed' (rejected) if failure
 
 Input:
 
@@ -216,7 +218,7 @@ Input:
     `dispatch(addTodo(text)) // text will be the param of payload creator`
   - Output: Promise with data or Promise with Error (async always return Promise)
 
-Output: action creators and their types:
+Output: action creators and their action types:
 
 - fetchPosts.pending: todos/fetchPosts/pending
 - fetchPosts.fulfilled: todos/fetchPosts/fulfilled

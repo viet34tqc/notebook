@@ -58,7 +58,7 @@ const Wrapper = styled.div`
 
 Let's say you have a component `TextLink` like this:
 
-```javascript
+```JSX
 const TextLink = styled.a`
  color: var(--color-primary);
  font-weight: var(--font-weight-medium);
