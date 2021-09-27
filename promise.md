@@ -7,11 +7,13 @@
   - rejected: meaning the asynchronous operation was failed.
 
 ### How to create a promise
+
 ```javascript
   const promise = new Promise( (resolve, reject) => {})
 ```
 
 ### `Promise.resolve(value)` and `Promise.reject(value)`
+
 Both returns a promise. `value` can be a promise or a non-promise.
 `Promise.resolved()` returns a promise with resolved value. If value is a promise, it will be the promise with the resolved value of the passed promise.
 `Promise.reject()` retuns a promise with reject value.
@@ -33,11 +35,13 @@ Promise.rejected('Failed').then(function(value) {
 ```
 
 ### `then()`
+
 Access the fulfilled value from promise
 - Inputs: callback function for success and failure cases of the promise (raraly use, often use catch)
 - Output: another promise
 
 ### `catch()`
+
 Access the rejection error from promise
 - Inputs: error object
 - Optput: another promise
@@ -56,6 +60,7 @@ Both take an array of promises
 ## Async/Await
 
 ### Async
+
 **Syntax**:
 ```javascript
 async function() {
@@ -77,6 +82,7 @@ function foo() {
 ```
 
 ### Await
+
 Can only be used inside `async` function.
 **Syntax**:
 ```javascript

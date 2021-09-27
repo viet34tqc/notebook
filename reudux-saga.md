@@ -40,7 +40,7 @@ Whenever an action is distpatched, saga middleware runs the root saga. In the ro
 Tips:
 
 Run API: using `call`
-Run normal function: using `fork`
+Run normal function: using `fork`, `call`
 Dispatch action: `put`
 Wait for action to be dispatched: `take`, `takeLatest`, `takeEvery`
 

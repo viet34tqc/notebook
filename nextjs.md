@@ -110,9 +110,10 @@ export const getStaticPaths = async () => {
 
 ### Client-side rendering (Plain React.js app)
 
-Initial Load: App is not rendered
-JS Loaded
-Hydration: App is hydrated, React components are initialized and App becomes interactive
+- Initial Load: App is not rendered
+- JS Loaded
+- Hydration: App is hydrated, React components are initialized and App becomes interactive (Hydration is the process of getting your static HTML from server and turning it into dynamic DOM that React can modify)
+
 If you are trying to visit a react application that has a really large bundle on a slow connection, you might see a flash of white on the page
 
 Pros:
@@ -129,9 +130,9 @@ Cons:
 
 The HTML is generated at build-time and is reused for each request. This is the default rendering method of NextJS.
 
-Initial Load: Server serves initial HTML and that's displayed on the initial load which leads to faster TTFB
-JS Loaded
-Hydration: App is hydrated, React components are initialized and App becomes interactive
+- Initial Load: Server serves initial HTML and that's displayed on the initial load which leads to faster TTFB
+- JS Loaded
+- Hydration: App is hydrated, React components are initialized and App becomes interactive
 
 Pros:
 

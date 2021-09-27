@@ -64,6 +64,9 @@ Reducer must not do any asynchronous logic, cause other side effects. Side effec
   Reducer must not mutate the state, only copy the current state then makes changes to that copy.
   Reducer must not calculate random values, because it makes the results unpredictable
 
+**Tips**
+Normally, we have reducers for fetching data, fetching data successfully, fetching data fail. If there is only one data state to update, we can add that data update to the fetching data success. Otherwise, we will have a seperate reducer for updating the data state.
+
 ## Redux application data flow
 
 - Initial setup:
@@ -245,6 +248,8 @@ state.posts = state.posts.concat( action.payload );
 ```
 
 `createSelector`
+
+Get modified data from other selector
 
 Selector:
 

@@ -21,11 +21,11 @@ const TextField = ({ text, handleChange }: InputProps) => {}
 
 ### useRef
 
-Always to set the initial value for the useRef hook. Otherwise, there will be an error alert.
+Always to set the type of the Ref
 ```javascript
 const TextField: React.FC<InputProps> = ({handleChange}) => {
 	const inputRef = useRef<HTMLInputElement | null>(null);
-	const divRef = useRef(null);
+
 	return (
 		<div ref={divRef}>
 			<input type="text" ref={inputRef} onChange={handleChange} />
