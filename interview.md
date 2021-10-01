@@ -53,6 +53,7 @@ React sử dụng sử dụng ReactDOM.render() và dùng jsx (React.createEleme
 
 ## How React update UI
 
+This process is called reconciliation
 Once virtual DOM has updated, React compares the entire virtual DOM with a virtual DOM snapshot that was taken right before the update.
 By comparing, React knows exactly which virtual DOM **object** (component) has changed. If there are a lot of updates, React can batch them (collect the updates) for efficency.
 Then real DOM is updated (this process is commit)
@@ -104,6 +105,21 @@ Ví dụ event scroll với 1 event listener .on('scroll') và hàm f, trong đi
 
 `Object.assign(target, source)` copy enumerable properties from `source` to `target` object.
 `Object.create(source)` create a new object using the `source` as prototype
+
+## CI/CD
+
+<https://www.youtube.com/watch?v=eB0nUzAI7M8>
+
+- Là quá trình thực hiện 1 kịch bản định sẵn 1 cách tự động nhằm đưa sản phẩm liên tục lên production
+  - CI: merge code (VD: merge pull request)
+  - CD: release code (deploy)
+- Bao gồm test, build, deploy
+- Ví dụ với github actions
+  - Tạo 1 workflow (kịch bản): ở đây sẽ là 1 file yml
+  - Trong workflow, ta khai báo các event, event ở đây có thể là khi có 1 commit trên nhánh master, hoặc có 1 pull request trên nhánh master
+  - Khi event này xảy ra, nó sẽ trigger 1 job => job này sẽ bao gồm các bước (steps), ví dụ: cài môi trường, xong rồi chạy các lệnh `npm test`, `npm build`, và `npm deploy`. Tất cả các job sẽ được chạy trên `CI server`
+  - Nếu test và build thành công, thì code sẽ được deploy lên production
+  - Nếu test và build failed, code sẽ không được deploy.
 
 ## So sánh display: flex và display: grid
 
@@ -212,6 +228,7 @@ https://example.com/app2
 </ol>
 
 ### Closure
+
 <https://dmitripavlutin.com/simple-explanation-of-javascript-closures/>
 - Lexical scope của 1 hàm:
   - Là tất cả các outer scope cộng với inner scope của hàm đó.
@@ -438,6 +455,21 @@ Chuyển đổi giữa `useMemo` và `useCallback`
 `useCallback(fn, deps)` tương đương với `useMemo(() => fn, deps)`.
 
 ## CSS
+
+## prefers-color-scheme
+
+Đây là 1 tính năng của CSS `@media` để check xem thiết bị của bạn (máy tính hoặc điện thoại) đang sử dụng dark theme hay light theme
+
+```CSS
+/* Nếu hệ thống đang sử dụng dark theme thì đoạn code CSS trong này sẽ được chạy và ngược lại với light theme */
+@media (prefers-color-scheme: dark) {
+
+}
+```
+
+```JS
+const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; // true if system is using dark theme
+```
 
 ### counter
 

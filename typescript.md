@@ -134,9 +134,27 @@ type Window = {
  // Error: Duplicate identifier 'Window'.
 ```
 
-## Using Type or Interface
+## Never
 
-Use Interface until you need Types, ex: Union type
+Often used for function that doesn't `return`
+
+## Tips
+
+### Using Type or Interface
+
+Use Interface until you need Types, ex: Union type or Intersection
+
+### Null and undefined check
+
+Just use `== null` or `!= null` (**not** `===` and `!==`)
+
+```ts
+function foo(a?: number | null) {
+  if (a == null) return;
+
+  // a is number now.
+}
+```
 
 ## Declare array with Type and Interface
 

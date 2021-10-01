@@ -122,3 +122,8 @@ function App() {
 ```
 
 If there is no matching type definition, you can use `SyntheticEvent`
+
+### Context
+
+<https://kentcdodds.com/blog/how-to-use-react-context-effectively>
+NextJS DJ Events

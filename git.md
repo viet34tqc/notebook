@@ -40,7 +40,9 @@ Let's say, you want to integrate the changes from `branch B` into `branch A`.
 In result, you will have a straight line history for your project. However, rebase has a pitfall: **it rewrites the history**.
 As you can see from the example above, the newest commits on `branch A` has the new parent commit. Their history has changed. So, another developer working on the latest commit on `branch A` might got trouble
 
-Therefore, you should use rebase only for cleaning up your local work - but never to rebase commits that have already been **published**.
+**NOTE**
+Do not use rebase on shared branch on remote repository (ex: *master*)
+You should use rebase only for cleaning up your local work (like your *feature* branch) then merge it into shared team branch
 
 Command:
 ```bash
