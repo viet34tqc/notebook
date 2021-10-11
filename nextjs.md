@@ -110,6 +110,8 @@ export const getStaticPaths = async () => {
 
 ### Client-side rendering (Plain React.js app)
 
+HTML is rendered on client side by using JS
+
 - Initial Load: App is not rendered
 - JS Loaded
 - Hydration: App is hydrated, React components are initialized and App becomes interactive (Hydration is the process of getting your static HTML from server and turning it into dynamic DOM that React can modify)
@@ -124,7 +126,7 @@ Pros:
 Cons:
 
 - Not good for SEO because Google bot cannot crawl any data at first load because it can only sees a div
-- High Initial load time.
+- High Initial load time because of JS bundle, then we need to run that JS, call API to get data...
 
 ### Static-site generation (Pre-rendering using NextJS)
 
@@ -157,7 +159,7 @@ Pros:
 - The data is always fresh
 
 Const:
-- Slower
+- UX is not so good because navigation needs page refresh
 - Redundant data fetching (if not cache)
 
 ### Incremental Static Regeneration

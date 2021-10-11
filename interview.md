@@ -82,6 +82,13 @@ Cho phép render 1 component vào 1 DOM node nằm ngoài root.
 Trong 1 App react thông thường, toàn bộ UI (components) sẽ được render trong 1 the div với id là root `<div id="root"><div>`
 Giả sử ta muốn tạo 1 cái modal và thẻ div bọc lấy modal này nằm ngoài root. Và vì thẻ div này nằm ngoài root, ta không thể tạo component và render bình thường được mà phải dùng React Portal.
 
+## JavaScript Promises: then(f,f) vs then(f).catch(f)
+
+The difference happens when the `success` callback returns a **rejected promise**, like `Promise.reject('Invalid')`:
+
+`then(f,f)`: `error` callback is not invoked
+`then(f).catch(f)`: error callback is invoked
+
 ## Event, Event handler, Event listener
 
 **Event** là 1 hành động, 1 sự kiện nào đó khi user tương tác: click chuột vào 1 phần tử, submit 1 form nào đó
@@ -453,6 +460,14 @@ Mục đích dùng `React.memo` là child component không bị re-render khi pa
 
 Chuyển đổi giữa `useMemo` và `useCallback`
 `useCallback(fn, deps)` tương đương với `useMemo(() => fn, deps)`.
+
+## Check client or server side
+
+```js
+if ( typeof window !== undefined ) {
+  // do something on client side
+}
+```
 
 ## CSS
 
