@@ -89,6 +89,11 @@ The difference happens when the `success` callback returns a **rejected promise*
 `then(f,f)`: `error` callback is not invoked
 `then(f).catch(f)`: error callback is invoked
 
+## Why use semantic HTML
+
+- Better for SEO
+- Better accessibility
+
 ## Event, Event handler, Event listener
 
 **Event** là 1 hành động, 1 sự kiện nào đó khi user tương tác: click chuột vào 1 phần tử, submit 1 form nào đó

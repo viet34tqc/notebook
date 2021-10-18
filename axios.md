@@ -36,6 +36,30 @@ axios
 ```
 DELETE, PUT/PATCH are the same
 
+Using `fetch`:
+```js
+await fetch(API_URL, {
+	method: 'POST',
+	headers: {
+		'Content-Type': 'application/json',
+	},
+	body: JSON.stringify({
+		title: 'New todo',
+		completed: true,
+	}),
+})
+.then(async (res) => {
+	if (!res.ok) {
+		throw Error(res.statusText);
+	}
+	const newTodo = await res.json();
+	// Do something with the response data here
+})
+.catch((error) => {
+	// Do something with the error
+});
+```
+
 ## Interceptors
 Do something with the request before axios sends it to server or do something with the response before it reaches `then`
 Request Interceptors:

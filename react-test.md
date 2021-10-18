@@ -4,7 +4,7 @@
 
 <https://www.smashingmagazine.com/2020/06/practical-guide-testing-react-applications-jest/>
 <https://jestjs.io/docs/tutorial-react>
-<https://www.freecodecamp.org/news/testing-react-hooks/>
+<https://academind.com/tutorials/testing-react-apps>
 
 ## Tools
 
@@ -21,9 +21,9 @@
 
 ### Single tests
 
-Use `it`
+Use `it` or `test`
 
-**NOTE**: after each `it` block, React component is unmounted
+**NOTE**: after each `it` block, rendered React component is unmounted => you need to re-render it in the next test
 ```jsx
 it('description of the test', () => {
 	render(<Counter defaultCount={0} description="My Counter" />); // Render the component with props'value
@@ -70,10 +70,15 @@ describe('Test counter', () => {
 
 Use `screen` to query element
 
-- `getByText`: query element by the inner text
-- `getByRole`: query element by HTML tag
+- `getByText`: query element by the inner text: `screen.getByText('/confirm/i)`
+- `getByRole`: query element by HTML tag: `screen.getByRole('button', {name: /confirm/i})`
 - `getByLabelText`: query input by label
-- `findByText`: use with `await`
+- `findByText`: use with asynchronous test.
+
+Recap:
+If you want to select an element that is rendered after an asynchronous operation, use the `findBy*` or `findByAll*` variants.
+
+If you want to assert that some element should not be in the DOM, use `queryBy*` or `queryByAll*` variants. Otherwise use `getBy*` and `getByAll*` variants.
 
 ### Event
 
@@ -114,4 +119,88 @@ user.click(
     - `getByLabelText`: query input by label
   - `fireEvent`: trigger Event, for example: click
 
+## Config with TypeScript
 
+### Packages to installed:
+- ts-jest (version 26.4.2: Fix `Jest: a transform must export something`)
+- jest-scss-transform (if you are using SCSS import)
+If you are not using create-react-app (like: NextJS), you need to install these additional packages
+- @testing-library/jest-dom
+- @testing-library/react
+- @testing-library/user-event
+- @types/jest
+
+### Configuration files
+
+- `jest.config.js`
+
+```js
+module.exports = {
+	preset: 'ts-jest',
+	testEnvironment: 'jsdom',
+	globals: {
+		'ts-jest': {
+			tsconfig: './tsconfig.json',
+		},
+	},
+	transform: {
+		'^.+\\.jsx?$': 'babel-jest',
+		'^.+\\.scss$': 'jest-scss-transform',
+	},
+	setupFilesAfterEnv: ['./jest.setup.ts'],
+};
+```
+- `jest.setup.ts`
+
+`import '@testing-library/jest-dom';`
+
+- `babelrc`
+```
+{
+	"presets": ["@babel/preset-env", "@babel/preset-react"]
+}
+```
+
+## Asynchronous test
+
+Using `msw` packages. The requests are sent to `msw` instead of the real server. We need to mock the data to be return on each requests
+
+**NOTE**
+
+- Test with CRA
+When we do asynchonous test using creat-react-app, we need to run `yarn test` which runs `react-scripts test`. The reason is react-scripts will run polyfill for `fetch` (Jest run in NodeJS environment where `fetch` is not available). Otherwise, we might encounter error `ReferenceError: fetch is not defined`
+
+In case we don't use CRA, then we will have to import `fetch` polyfill by ourselves.
+
+- Request matching:
+<https://mswjs.io/docs/basics/request-matching>
+We have to provide exact request URL string, only those request that match that string are mock
+
+For example, we send a GET request to this URL: 'https://example.com/todo'. Then in the request using msw, we need to provide the same URL
+`rest.post('https://example.com/todo', responseResolver)`
+
+## Context test
+
+Before testing, we have to render the context and the component to test that lied inside that context
+
+```jsx
+const value = {
+	todos: [],
+	setTodos: jest.fn(),
+};
+beforeEach(() => {
+		render(
+			<TodoContext.Provider value={value}>
+				<TodoForm />
+			</TodoContext.Provider>
+		);
+	});
+```
+
+In case you are testing a component that **requires re-rendering**, you need to use the parent component of context provider
+```jsx
+<TodoContextProvider>
+	<TodoList />
+</TodoContextProvider>
+```
+If you pass only the context provider, the child component might not be re-rendered

@@ -123,7 +123,19 @@ function App() {
 
 If there is no matching type definition, you can use `SyntheticEvent`
 
-### Context
+## Context
 
 <https://kentcdodds.com/blog/how-to-use-react-context-effectively>
 NextJS DJ Events
+
+## Bugs
+
+- useRef: 'Object is possibly 'null'
+
+```ts
+const inputElem = useRef<HTMLInputElement>(null);
+
+useEffect(() => {
+    inputElem?.current?.focus();
+}, []);
+```

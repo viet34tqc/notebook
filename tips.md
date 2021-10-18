@@ -43,6 +43,10 @@ opacity:0.5;
 
 Khi user login vao, user sẽ nhận dc 1 access token. Sau do khi user vao page dashboard. Thì call thêm 1 api authorize user từ access token đo. Để get các thông tin user. Và cứ mỗi lần f5 lai, sẽ lai call api để authorzie user từ access token đo. Tóm lai cai flow authorize chỉ nhiêu đó thôi. Nên chi viec luu access token vào trong localstorage đủ rui. Còn muon lam thêm phần refesh token thi xai thêm axios interceptor để xu ly.
 
+tạo ra 1 key lưu lại và thêm thời gian hết han của nó lưu lên local rồi khi client tắt trình duyệt hoặc mở lại web ban đầu check token trước, nếu hết hạn check tiếp mã key đc chỉ định nếu key còn hoạt đọng trả về token mới và lưu lại token mới cho người dùng. Còn không cho logout và bắt đăng nhập lại
+
+https://i.imgur.com/TSQZK4E.png
+
 ## Lợi ích của TS
 
 Điều đầu tiên và dễ nhận thấy nhất đó là số lượng bug runtime, những lỗi dạng bị mismatch datatype hay sai property name so với dữ liệu BE trả về hay payload FE gửi lên giảm gần như bằng 0 (tất nhiên là với điều kiện bạn phải viết type đúng và đầy đủ chứ cứ khó tí lại phang "any" thì coi như công cốc).
