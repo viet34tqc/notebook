@@ -73,6 +73,7 @@ Use `screen` to query element
 - `getByText`: query element by the inner text: `screen.getByText('/confirm/i)`
 - `getByRole`: query element by HTML tag: `screen.getByRole('button', {name: /confirm/i})`
 - `getByLabelText`: query input by label
+- `queryBYText`: use with `not.toBeInTheDocument`
 - `findByText`: use with asynchronous test.
 
 Recap:
@@ -161,6 +162,10 @@ module.exports = {
 }
 ```
 
+## Debug test
+
+If you are stuck in the middle of the test and want to know what is rendered during this test, you could use `screen.debug()`
+
 ## Asynchronous test
 
 Using `msw` packages. The requests are sent to `msw` instead of the real server. We need to mock the data to be return on each requests
@@ -204,3 +209,11 @@ In case you are testing a component that **requires re-rendering**, you need to 
 </TodoContextProvider>
 ```
 If you pass only the context provider, the child component might not be re-rendered
+
+### Async rendering component
+
+This is the component that use asynchronous code (fetch) to render. If we want to query any element of this component, we need to use `findBy` and `async/await`. Otherwise, there might be an error like this: `When testing, code that causes React state updates should be wrapped into act(...):`
+
+The reason is the test finishes by the time the component is done with first rendering and it doesn't aware of this re-render
+
+`Can't perform a React state update on an unmounted component.`: This is because we are testing something that make the component re-render after the component render. In this case, we need to use `waitFor`

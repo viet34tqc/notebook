@@ -36,3 +36,9 @@
 - **I wish** I had spent more time learning English
 - **If only** I had spent more time learing English
 - I could have tried harder
+
+## At the same time
+
+- **At the moment** I left home, the phone rang
+- **As/Just as** I left home, the phone rang
+- She will call me as soon as she arrives (at exactly a moment in the future)

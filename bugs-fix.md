@@ -27,6 +27,16 @@ This can be fixed by casting the useContext:
 const {user, error} = useContext(AuthContext) as IAuthContext
 ```
 
+### `useRef`: 'Object is possibly 'null'
+
+```ts
+const inputElem = useRef<HTMLInputElement>(null);
+
+useEffect(() => {
+    inputElem?.current?.focus();
+}, []);
+```
+
 ## NextJS
 
 ### Displaying 'Unhandled Runtime error' screen

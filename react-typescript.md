@@ -21,7 +21,7 @@ const TextField = ({ text, handleChange }: InputProps) => {}
 
 ### useRef
 
-Always to set the type of the Ref
+Always set the type of the Ref
 ```javascript
 const TextField: React.FC<InputProps> = ({handleChange}) => {
 	const inputRef = useRef<HTMLInputElement | null>(null);
@@ -35,6 +35,7 @@ const TextField: React.FC<InputProps> = ({handleChange}) => {
 ```
 
 ### useState:
+
 You can set the type of the state in the `<>` sign
 ```typescript
 const [count, setCount] = useState<number | null>(null); // The type of the 'count' state is either number or null
@@ -127,15 +128,3 @@ If there is no matching type definition, you can use `SyntheticEvent`
 
 <https://kentcdodds.com/blog/how-to-use-react-context-effectively>
 NextJS DJ Events
-
-## Bugs
-
-- useRef: 'Object is possibly 'null'
-
-```ts
-const inputElem = useRef<HTMLInputElement>(null);
-
-useEffect(() => {
-    inputElem?.current?.focus();
-}, []);
-```
