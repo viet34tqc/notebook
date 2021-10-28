@@ -118,21 +118,6 @@ Ví dụ event scroll với 1 event listener .on('scroll') và hàm f, trong đi
 `Object.assign(target, source)` copy enumerable properties from `source` to `target` object.
 `Object.create(source)` create a new object using the `source` as prototype
 
-## CI/CD
-
-<https://www.youtube.com/watch?v=eB0nUzAI7M8>
-
-- Là quá trình thực hiện 1 kịch bản định sẵn 1 cách tự động nhằm đưa sản phẩm liên tục lên production
-  - CI: merge code (VD: merge pull request)
-  - CD: release code (deploy)
-- Bao gồm test, build, deploy
-- Ví dụ với github actions
-  - Tạo 1 workflow (kịch bản): ở đây sẽ là 1 file yml
-  - Trong workflow, ta khai báo các event, event ở đây có thể là khi có 1 commit trên nhánh master, hoặc có 1 pull request trên nhánh master
-  - Khi event này xảy ra, nó sẽ trigger 1 job => job này sẽ bao gồm các bước (steps), ví dụ: cài môi trường, xong rồi chạy các lệnh `npm test`, `npm build`, và `npm deploy`. Tất cả các job sẽ được chạy trên `CI server`
-  - Nếu test và build thành công, thì code sẽ được deploy lên production
-  - Nếu test và build failed, code sẽ không được deploy.
-
 ## So sánh display: flex và display: grid
 
 - Grid: hiển thị layout theo 2 chiều
@@ -140,9 +125,12 @@ Ví dụ event scroll với 1 event listener .on('scroll') và hàm f, trong đi
 
 ## Kiến thức bảo mật tối thiểu ở frontend
 
-## Khi nào dùng '==' thay vì '==='
+## Các cách check null và undefined
 
-Chỉ dùng khi compare `null` và `undefined`
+```js
+let x;
+if ( x == void 0) {}
+```
 
 ## getter, setter trong javascript. Có ưu điểm gì so với hàm bình thường
 

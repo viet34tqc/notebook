@@ -3,6 +3,7 @@
 ## Reference
 
 <https://www.youtube.com/watch?v=pTFZFxd4hOI>
+<https://devdojo.com/bobbyiliev/free-introduction-to-docker-ebook>
 
 ## Tại sao phải sử dụng docker
 

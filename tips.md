@@ -17,6 +17,10 @@
 - <https://getfrontend.tips/wrap-arrow-function-body-in-parentheses.html>
 - Modify character of string: <https://getfrontend.tips/get-characters-of-a-string.html>
 
+## Floating list titles
+
+<https://www.30secondsofcode.org/css/s/floating-list-titles>
+
 ## Organizing CSS
 
 ```CSS

@@ -212,8 +212,10 @@ If you pass only the context provider, the child component might not be re-rende
 
 ### Async rendering component
 
-This is the component that use asynchronous code (fetch) to render. If we want to query any element of this component, we need to use `findBy` and `async/await`. Otherwise, there might be an error like this: `When testing, code that causes React state updates should be wrapped into act(...):`
+This is the component that use asynchronous code (fetch) to render. Normall, we call an API, then update the state. When the state update, the component re-renders.
+So, we need to wait for the API to run and the component to re-render before doing other test. The reason is that the test will have finished by the time the component is done with first rendering and it doesn't aware of this re-render
 
-The reason is the test finishes by the time the component is done with first rendering and it doesn't aware of this re-render
+To query any elements in this component, we need to use `findBy` and `async/await` or `waitFor`. Otherwise, there might be an error like this:
 
-`Can't perform a React state update on an unmounted component.`: This is because we are testing something that make the component re-render after the component render. In this case, we need to use `waitFor`
+`When testing, code that causes React state updates should be wrapped into act(...):`
+`Can't perform a React state update on an unmounted component.`
