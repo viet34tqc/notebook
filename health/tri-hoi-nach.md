@@ -4,8 +4,8 @@
 
 ## Nguyên nhân
 
-Nguyên nhân chính là do vi khuẩn
-Vùng da dưới cánh tay bị khô quá => cơ thể tiết nhiều dầu => tạo điều kiện cho vi khuẩn sinh sôi => hôi nách
+Nguyên nhân chính là do môi trường ở vùng da đó ấm, ẩm, tạo điều kiện vi khuẩn xuất hiện và có nhiều da chết tạo điều kiện cho vi khuẩn sinh sôi
+Lí do bị ẩm: do da khô => cơ thể tiết nhiều dầu
 
 ## Biện pháp
 

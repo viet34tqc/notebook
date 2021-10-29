@@ -42,3 +42,10 @@
 - **At the moment** I left home, the phone rang
 - **As/Just as** I left home, the phone rang
 - She will call me as soon as she arrives (at exactly a moment in the future)
+
+## Conjunction
+
+## The second statement has different meaning with the first one
+
+- Otherwise
+- Whereas with ...,

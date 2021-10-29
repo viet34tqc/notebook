@@ -105,6 +105,13 @@ The difference happens when the `success` callback returns a **rejected promise*
 Màn thường: 1 CSS pixel tương đương 1 điểm ảnh vật lý
 Màn retina: 1 CSS pixel tương đương 4 điểm ảnh vật lý
 
+## Headless website
+
+Headless website is built with separated back-end and frontend. With headless, your frontend (head) is decoupled from the backend (body).
+Your frontend is a JS application that run by browser, and it doesn't need to be hosted on a server. You just need to put your code somewhere browser can download it (Often it's just on CDN)
+Whereas, your backend can be WordPress or NodeJS and hosted on a server.
+If needed, frontend part will communicate to the backend end via API (using REST or GraphQL) to get the data or perform other actions such as sending email
+
 ## Debounce và throttle
 
 - Debounce: gọi 1 hàm nào đó sau 1 khoảng delay. VD: Có 1 input. Input này có 1 event handler cho sự kiện onChange. Nếu áp dụng debounce, event handler này sẽ chỉ chạy khi:
@@ -310,6 +317,7 @@ If you update the state hook to the same value as the current state, there will 
 Có 3 loại scope: `global scope`, `local scope` (function) và `block scope` (scope nằm giữa {}). Khi một biến không được tìm thấy trong `local scope`, JS sẽ tìm biến đó ở các outer scope cho đến scope ngoài cùng là `global scope`.
 
 ### for-in and for-of
+
 `for-in`:
 - iterate over enumerable properties of an object. enumerable properties are the "key" of the property the Object or "index" of the Array.
 If the propery is defined with the `enumerable` false, it is not interated
