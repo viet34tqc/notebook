@@ -371,6 +371,69 @@ Then you can access the constant like property of Object: `Order.First`, `Order.
 - `Pick<Type, Keys>`: a type by picking a set of `Keys` from Types
 - `Omit<Type, Keys>`: a type by omitting a set of `Keys` from Types
 
+## `any` and `unknown`
+
+<https://thewebdev.info/2020/08/12/typescript-any-and-unknown-types/>
+
+### `any`
+
+The `any` type variables lets us assign anything to it
+
+```ts
+let bar: any;
+
+bar = null;
+bar = true;
+bar = {};
+```
+### `unknown`
+
+The `unknown` type is a safer version of `any`
+This is because `any` lets us do anything, but `unknown` has more restrictions.
+Before we can do anything with `unknown` value, we have to make the type known first by using type assertions, equality, type guards
+To add type assertions, we can use the `as` keyword.
+
+```ts
+function func(value: unknown) {
+  return (value as number).toFixed(2);
+}
+```
+
+## Overload functions
+
+<https://thewebdev.info/2020/12/19/how-does-typescript-know-which-types-are-compatible-with-each-otherenums-and-more/>
+Functions overloads, where there’re multiple signatures for a function with the same name, must have arguments that match at least one of the signatures for TypeScript to accept the function call as valid. For example, if we have the following function overload:
+
+```ts
+function fn(a: { b: number, c: string, d: boolean }): number
+function fn(a: { b: number, c: string }): number
+function fn(a: any): number {
+  return a.b;
+};
+```
+
+Then we have to call the fn function by passing in at a number for the first argument and a string for the second argument like we do below:
+
+```ts
+fn({ b: 1, c: 'a' });
+```
+TypeScript will check against each signature to see if the property structure of the object we pass in as the argument matches any of the overloads. If it doesn’t match like if we have the following:
+```ts
+fn({ b: 1 });
+```
+
+Then we get the following error message:
+
+No overload matches this call.
+
+Overload 1 of 2, '(a: { b: number; c: string; d: boolean; })
+
 ## @types/* packages and .d.ts files
 
 Contains type definitions for libraries originally written in vanilla javascript
+
+## ignore the error
+
+You can ignore the typescript error by adding the exclamation mark, if you know that it's safe for sure.
+
+`data.value!`

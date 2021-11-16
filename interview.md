@@ -16,7 +16,7 @@
 
 <https://blog.isquaredsoftware.com/2021/01/context-redux-differences/>
 
-React Context doesn't manage any state at all. When we use Context, we manage the state via React hooks `useState`and `useReducer`. The only purpose of React Context is to avoid **prop-drilling**
+React Context doesn't manage any state at all. When we use Context, we manage the state via React hooks `useState` and `useReducer`. The only purpose of React Context is to avoid **prop-drilling**
 
 Context + `useReducer` relies on passing *the current state value via Context*. React-Redux passes *the current Redux store* instance via Context.
 When `useReducer` produces a new state value, *all* components that are subscribed to that context will be re-rendered => lead to perfomance issue
@@ -32,6 +32,10 @@ if you get past 2-3 state-related contexts in an application, you're re-inventin
 - Keep previous versions of the state, and reuse them later
 - Create pure components. Immutable data can determine if changes have been made, which helps to *determine when a component require re-rerendering*.
 If you mutate the data directly, the components might not re-render that could lead to bugs.
+
+## Why do we need to put side effects in the `useEffect`
+
+With `useEffect`, we can control how the side effects run in the component. Normally, the side effects make the state change. So, if you put them outside the `useEffec` hook, it will lead to infinite re-render of the component.
 
 ## `useState` and `useReducer`
 
@@ -113,6 +117,8 @@ Whereas, your backend can be WordPress or NodeJS and hosted on a server.
 If needed, frontend part will communicate to the backend end via API (using REST or GraphQL) to get the data or perform other actions such as sending email
 
 ## Debounce và throttle
+
+<https://www.youtube.com/watch?v=LZb_Bv81vQs>
 
 - Debounce: gọi 1 hàm nào đó sau 1 khoảng delay. VD: Có 1 input. Input này có 1 event handler cho sự kiện onChange. Nếu áp dụng debounce, event handler này sẽ chỉ chạy khi:
   - Hết thời gian delay

@@ -21,6 +21,39 @@
 
 <https://www.30secondsofcode.org/css/s/floating-list-titles>
 
+## Các vấn đề với web bán hàng
+
+
+Làm lập trình viên, hẳn ai cũng biết tới khái niệm … web bán hàng. Code một trang web bán hàng là cách rất tốt để áp dụng ngôn ngữ/công nghệ mới. Thông qua các chức năng đăng kí, đăng nhập, show sản phẩm, ta học được cách phân quyền, routing, phân trang, xử lý business logic.
+
+Nhiều bạn sinh viên cho rằng code web bán hàn.g là một chuyện đơn giản, phần nhiều chỉ là thêm bớt xóa sửa. Thật vậy chăng? Hãy đọc bài viết này để xem bạn có mắc phải hai sai lầm dưới không nhé nhé.
+
+𝐒𝐚𝐢 𝐥𝐚̂̀𝐦 𝟏 – 𝐊𝐡𝐨̂𝐧𝐠 𝐥𝐮̛𝐮 𝐠𝐢𝐚́ 𝐭𝐢𝐞̂̀𝐧 𝐜𝐮̉𝐚 𝐬𝐚̉𝐧 𝐩𝐡𝐚̂̉𝐦 𝐯𝐚̀𝐨 𝐭𝐫𝐨𝐧𝐠 𝐡𝐨́𝐚 đ𝐨̛𝐧
+Quan hệ giữa Order và Item là many-to-many, do đó ta phải thêm 1 bảng ở giữa để kết nối 2 bảng này. Theo lý thuyết, khi hiển thị hóa đơn, có thể tham chiếu qua bên bảng Item để lấy gi.á của sản phẩm và đem ra hiển thị.
+
+Tuy nhiên theo thực tế, giá tiền của sản phẩm thường thay đổi. Giả sử 10/5, giá một ổ bánh mì là 10k; đến ngày 12/5, giá của một ổ bánh mì là 15k. Khi ta xem chiếu lại hóa đơn ngày 10/5, ta thấy giá ổ bánh mì vẫn là 15k, vì nó tham chiếu tới giá hiện tại trong bảng Item. Ngoài ra, giá còn bị tác động các chương trình khuyến mãi, giảm giá. Nếu chỉ lưu giá sản phẩm thì lúc hiển thị hay xuất báo cáo, thông tin sẽ bị sai lệch.
+
+Vậy ta xử lý như thế nào? Cách đơn giản nhất là thêm 1 column chứa giá sản phẩm trong hóa đơn vào bảng OrderItem. Nhiều khi người ta còn dùng 1 bảng riêng để lưu sự thay đổi về giá cả cho từng sả.n phẩ.m, sau đó dựa theo ngày trên hó.a đơn để tìm giá của sản phẩm trong ngày đó. (Xem database dưới comment)
+
+𝐒𝐚𝐢 𝐥𝐚̂̀𝐦 𝟐 – 𝐋𝐮̛𝐮 𝐠𝐢𝐨̉ 𝐡𝐚̀𝐧𝐠 𝐭𝐫𝐨𝐧𝐠 𝐬𝐞𝐬𝐬𝐢𝐨𝐧
+Khi học về session trong Web, người ta thường dùng web bán hàng làm ví dụ. Mỗi user có 1 session riêng, do đó ta dùng session để lưu giỏ hàng cho mỗi user. Tuy nhiên, cách này chỉ phù hợp với web demo hoặc đồ án trong trường, chứ trong thực tế thì … rất dễ phát sinh vấn đề.
+
+Chúng ta thường không hiểu rõ quá trình mua hàng của người dùng. Nhiều trường hợp người dùng bỏ hàng vào giỏ rồi check out. Đôi khi, người dùng lại bỏ hàng vào giỏ để lưu tạm, dồn vài hôm cho nhiều rồi mua luôn 1 lượt để hưởng khuyến mãi. Nếu lưu giỏ hàng vào session, giỏ hàng sẽ bị biến mất khi session timeout, gây khó chịu cho người dùng.
+
+Hoặc giả sử người dùng sử dụng cả web và app di động để mua hàng, nếu lưu trên session thì khi chuyển qua thiết bị khác, người dùng sẽ không thấy giỏ hàng của mình đâu nữa! 
+
+Cách xử lý
+Cách 1 – Lưu trong local storage: Cách này ko dùng được với trình duyệt cũ (có thể dùng cookie tạm). Cách này làm nhẹ tải server vì dữ liệu được đọc và ghi ở phía client. Nhược điểm là khi đổi device thì không thể xem được giỏ hàng. Bên tiki.vn hồi xưa có vẻ là dùng cách này, còn giờ đã lưu DB rồi.
+
+Cách 2 – Lưu trong database: Với user đã tồn tại, ta lưu giỏ hàng của họ trong DB. Với user không đăng mới, ta lưu 1 chuỗi id ở cookie hay local storage của họ, dùng cookie đó để truy vấn giỏ hàng trên DB. (Tất nhiên, nếu họ đổi trình duyệt hoặc di động thì ... chịu)
+
+Nếu người dùng chỉ cho hàng vào giỏ, sau đó không quay lại website thì DB sẽ có khá nhiều dữ liệu rác. Để giải quyết chuyện này, người ta thường tạo 1 vài task chạy ngầm để xóa dữ liệu rác khỏi DB. (Trên amazon giỏ hàng bị xóa sau 90 ngày). Ngoài ra, để tăng tốc độ lưu, ta có thể dùng một số database NoSQL có tốc độ đọc ghi nhanh để lưu giỏ hàng.
+
+Nopcommerce, một trong số các framework e-commerce nổi tiếng của C# cũng lưu cart vào database (Các bạn nào code PHP thì vào xác nhận xem framework các bạn dùng có lưu cart vào DB không nhé, mình nghĩ là có).
+
+Nếu bạn vẫn chưa tin điều mình nói, hãy thử mua hàng trên Amazon và Ebay xem. Bạn sẽ thấy, sau khi cho hàng vào giỏ, bạn log out ra, sử dụng điện thoại để vào thì giỏ hàng vẫn còn đấy. Điều này chỉ có thể làm được khi giỏ hàng được lưu trong database.
+
+
 ## Organizing CSS
 
 ```CSS

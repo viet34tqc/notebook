@@ -21,7 +21,7 @@
 
 Use to redirect
 	```js
-	const history = `useHistory`()
+	const history = useHistory()
 	history.push( '/' )
 	```
 ### `useParams`

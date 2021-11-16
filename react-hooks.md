@@ -1,5 +1,32 @@
 # React Hooks
 
+## Notes
+
+<https://blog.bitsrc.io/common-react-hooks-mistakes-every-developer-should-avoid-defd47d09d8c>
+
+Hooks should not be called within loops, conditions, or nested function
+Hooks should be used before any early `return` at the top level of the functional component.
+
+## useState
+
+Don't use `useState` when you don't use any `state` in the render phase. If you want to use a variable that preserves its state across renderings without triggering a re-render, use `useRef` instead.
+
+The value of the state will only be updated in the next render. So, this block of code:
+
+```js
+const [count, setCount] = useState(0);
+setCount(count + 1)
+setCount(count + 1)
+setCount(count + 1)
+```
+is the same as
+```js
+const [count, setCount] = useState(0);
+setCount(0 + 1)
+setCount(0 + 1)
+setCount(0 + 1)
+```
+
 ## useRef and fowardRef
 
 ### What are `ref` in React
