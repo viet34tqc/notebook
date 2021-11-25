@@ -133,6 +133,8 @@ If you are not using create-react-app (like: NextJS), you need to install these 
 
 ### Configuration files
 
+If you are using CRA, this configuration file won't work by default and you have to run `react-scripts test -- --config jest.config.js`. However, it's NOT RECOMMEND to have a seperate jest configuration file with CRA. If you need other settings, put it in the `package.json`
+
 - `jest.config.js`
 
 ```js

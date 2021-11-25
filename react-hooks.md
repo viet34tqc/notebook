@@ -27,6 +27,9 @@ setCount(0 + 1)
 setCount(0 + 1)
 ```
 
+**Tips**
+You can pass a function inside `useState`. This function takes current state as the only param and the return the new value based on the current state
+
 ## useRef and fowardRef
 
 ### What are `ref` in React
@@ -68,6 +71,10 @@ The `ref` object will look like the following after React assigned the element.
 
 And now, if we want to focus on an element, just need to call `inputRef.current.focus()}`
 
+**Notes**: React component only re-renders when the state or props changes. When it re-renders, it update the DOM with the new state. React won't update any DOM ultil that component re-renders. Changing `ref` doesn't cause the component to re-render, so the DOM might not be updated. For example:
+```jsx
+<button disabled={count.current === 3}>Button</button>
+```
 
 ### fowardRef
 

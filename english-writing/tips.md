@@ -8,6 +8,10 @@ The same is true for memorizing thing. There's no point memorizing something unl
 So how to practice?
 You have to practice and repeat the same thing many times. If you are talking about a topic, don't talk only once. Don't anwering a question once, repeat your answer again and again.
 
+## Transitions
+
+in addition, moreover, furthermore, another
+
 ## Letter
 
 - Determine this is formal or informal letter. If this is informal you can use more casual words

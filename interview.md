@@ -37,6 +37,13 @@ If you mutate the data directly, the components might not re-render that could l
 
 With `useEffect`, we can control how the side effects run in the component. Normally, the side effects make the state change. So, if you put them outside the `useEffec` hook, it will lead to infinite re-render of the component.
 
+## React re-render
+
+React component only re-renders when the state or props changes. When it re-renders, it update the DOM with the new state. React won't update any DOM ultil that component re-renders. Changing `ref` doesn't cause the component to re-render, so the DOM might not be updated. For example:
+```jsx
+<button disabled={count.current === 3}>Button</button>
+```
+
 ## `useState` and `useReducer`
 
 - Use `useState` whenever
