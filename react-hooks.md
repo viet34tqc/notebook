@@ -30,6 +30,14 @@ setCount(0 + 1)
 **Tips**
 You can pass a function inside `useState`. This function takes current state as the only param and the return the new value based on the current state
 
+## useReducer
+
+Syntax
+```jsx
+const [state, dispatch] = useReducer(reducerFunction, initialState);
+```
+Comparing to `setState`, you can think of `dispatch` as `setState` and the `reducerFunciton` as the callback of that `setState`
+
 ## useRef and fowardRef
 
 ### What are `ref` in React

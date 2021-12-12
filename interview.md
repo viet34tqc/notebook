@@ -56,6 +56,21 @@ React component only re-renders when the state or props changes. When it re-rend
 
 ## How React rendered UI
 
+<https://beta.reactjs.org/learn/render-and-commit>
+3 phases:
+
+- Trigger a render: there are two reasons for a component to render
+  - Calling `ReactDOM.render` to render the root component. This is the initial render
+  - The component's states has been update via event, etc...
+- Render: React calls your components
+  - During the initial render, React will create the DOM nodes for <section>, <h1>, and three <img> tags.
+  - During the re-render, React will calculate which of their properties, if any, have changed since the previous render. It won't do anything with that infomation until the next phase, the commit phase
+- Commit: React commit changes to the DOM
+  - For the initial render, React will use `appendChild` DOM API to put all the DOM nodes it has created on the screen
+  - For re-renders, **React only changes the DOM nodes if there is a difference between renders**. If a component re-renders, it only changes the updated DOMs (that could contains updated data), the other DOMs in that component are still the same
+
+After rendering is done and React updated the DOM, the browser will repaint the screen. 
+
 Problem: DOM manipulation is slow. Let's assume that you have a list of items. When you want to modify that item, you need to select that item and re-render it and re-paint the UI. Therefore, the more UI components you have, the more expensive the DOM updates could be, since they would need to be re-rendered for every DOM update.
 
 To address this problem, React use virtual DOM. A virtual DOM is a representation of DOM object and synced with the real DOM.
@@ -74,10 +89,37 @@ Then real DOM is updated (this process is commit)
 <https://stackoverflow.com/questions/58208727/why-react-needs-another-render-to-bail-out-state-updates>
 Nếu giá trị state không thay đổi khi setState thì component sẽ render thêm 1 lần nữa. Đến lần setState thứ 3 thì nó dừng hẳn không re-render tiếp.
 
+## Preventing errors from unmounted components
+
+<https://www.digitalocean.com/community/tutorials/how-to-handle-async-data-loading-lazy-loading-and-code-splitting-with-react>
+```js
+const [show, toggle] = useReducer(state => !state, true);
+```
+Let's say you have a component which includes 2 buttons. The first one is for fetching the data and update the state. The second one is for unmounting the component. When you click the fetching button, then immediately click the second button, there is a chance that you will encountered an error: `Can't perform a React state update on unmounted component`. That's because your asynchonous request hasn't been resolved yet when the component is unmounted.
+
+To fix the problem you need to either cancel the request inside `useEffect`. Otherwise, you need to ignore the `setState` by using a variable to store the mounted state. The request is still resolved but, it won't make any changes to unmounted component. 
+
+```js
+useEffect(() => {
+    let mounted = true;
+    requestToGetData(name)
+    .then(data => {
+      if(mounted) {
+        setState(data)
+      }
+    });
+    return () => {
+       mounted = false;
+    } 
+}, [name])
+```
+
 ## Why list item need a unique `key`
 
 <https://kentcdodds.com/blog/understanding-reacts-key-prop>
 Để React có thể theo dõi (track) được item nào bị xóa, thêm hay bị sửa. Key của mỗi item phải là duy nhất và không thay đổi. Nếu lấy key là index thì khi thêm, hoặc xóa item, index bị thay đổi => render sai
+
+Ngoài ra, khi sắp xếp, thêm, xóa item, việc render DOM sẽ tốn rất nhiều thời gian. Nếu item có key, React sẽ nhớ được item đó và chỉ việc hiển thị lại item đấy chứ không phải re-render lại từ đầu => tối ưu về mặt thời gian
 
 When the `key` props is changed, React unmount the previous instance, and mount a new one. This means that all state that had existed in the component at the time is completely removed and the component is reinitialized
 Khi 1 component bất kì có props key, khi key này bị thay đổi thì component sẽ bị unmount, state của nó cũng sẽ bị xóa bỏ và React sẽ mount lại 1 component mới
@@ -137,6 +179,10 @@ Ví dụ event scroll với 1 event listener .on('scroll') và hàm f, trong đi
 
 `Object.assign(target, source)` copy enumerable properties from `source` to `target` object.
 `Object.create(source)` create a new object using the `source` as prototype
+
+## Code splitting
+
+Code splitting is the splitting of the code into various of bundles or components which can be loaded on demand or in parallel
 
 ## So sánh display: flex và display: grid
 

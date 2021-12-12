@@ -1,9 +1,11 @@
 # React Query
 
 ## Reference
+
 <https://tsh.io/blog/react-query-tutorial/>
 
 ## Important terms
+
 useQuery
 useMutation
 queryClient
@@ -76,11 +78,13 @@ React Query replaces all the boilerplate code used to manage cache data in your 
 - ***Optimistic Updates***: when you edit or delete an item in a list, you can issue an optimistic update of the list, which will update the data on your local first before send that update to the server.
 
 ## How React Query update the data
+
 Under the hood, it uses the user interactions as the hints to know when to update the data. One of those hints is window refocus event. So when you refocus the browser, it detects that the users has came back, and it's time to update stale data in the background.
 
 ## Hooks
 
 ### useQuery
+
 - Used to fetch the data.
 - Input
   - unique key
@@ -126,6 +130,7 @@ export default function usePosts() {
 	```
 
 ### useMutation
+
 - Used to create/delete/update data
 - Input: function for mutation and options ( which will utilize queryClient)
 - Output:

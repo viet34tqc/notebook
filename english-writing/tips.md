@@ -8,6 +8,14 @@ The same is true for memorizing thing. There's no point memorizing something unl
 So how to practice?
 You have to practice and repeat the same thing many times. If you are talking about a topic, don't talk only once. Don't anwering a question once, repeat your answer again and again.
 
+## Listening
+
+<https://www.youtube.com/watch?v=jzr979gt7-E>
+
+Learn sentence structure => extract new word => practice that structure => imagine how to use that structure in your life => repeat
+
+Source: daily structure conversation, practice what you think you will use in your daily life 
+
 ## Transitions
 
 in addition, moreover, furthermore, another

@@ -432,6 +432,16 @@ Overload 1 of 2, '(a: { b: number; c: string; d: boolean; })
 
 Contains type definitions for libraries originally written in vanilla javascript
 
+`.d.ts` file is where we put all the custom type definitions and ambient type declaration 
+However, they are not available in other files yet. To make our types available, we also have to export them 
+
+```ts
+declare const isDevelopment: boolean // Ambient type
+export type StorageItem = {
+    weight: number
+}
+```
+
 ## ignore the error
 
 You can ignore the typescript error by adding the exclamation mark, if you know that it's safe for sure.

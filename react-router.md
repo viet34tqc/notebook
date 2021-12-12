@@ -1,5 +1,9 @@
 # React Router
 
+## Example
+
+<https://mitanshu.hashnode.dev/react-router-navigate-like-a-pro>
+
 ## Core Components
 
 ```jsx
