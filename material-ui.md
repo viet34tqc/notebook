@@ -11,4 +11,4 @@
 <Grid>
 ```
 - `Typography`: thường sử dụng thuộc tính `variant`, `align`
-- `Button`: variant: outlined, color: primary
+- `Button`: variant: outlined/contained/text, color: primary

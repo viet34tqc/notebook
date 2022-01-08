@@ -21,16 +21,17 @@
 
 ## Hooks
 
-### `useHistory`
+### `useNavigate`
 
 Use to redirect
-	```js
-	const history = useHistory()
-	history.push( '/' )
-	```
+```js
+const history = useNavigate()
+history( '/' )
+```
+
 ### `useParams`
 
-Get params from url, return all the params as properties of an object
+Read URL parameters, return all the params as properties of an object
 ```js
 const {id} = useParams();
 ```

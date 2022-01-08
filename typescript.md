@@ -229,7 +229,7 @@ console.log( viet.getAge );
 
 ## Enum
 
-A collection of values that have the same category
+A collection of constants that have the same category
 Easier to maintain and get the value
 Name convention: PascalCase
 

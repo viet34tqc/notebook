@@ -211,3 +211,11 @@ import { BrowserModule } from '@angular/platform-browser';
 })
 export class AppModule { }
 ```
+
+## Component props
+
+```jsx
+@Input() text: string;
+@Input() color: string;
+@Output() btnClick = new EventEmitter(); // function needs to be Output
+```

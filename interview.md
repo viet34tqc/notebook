@@ -117,7 +117,7 @@ useEffect(() => {
 ## Why list item need a unique `key`
 
 <https://kentcdodds.com/blog/understanding-reacts-key-prop>
-Để React có thể theo dõi (track) được item nào bị xóa, thêm hay bị sửa. Key của mỗi item phải là duy nhất và không thay đổi. Nếu lấy key là index thì khi thêm, hoặc xóa item, index bị thay đổi => render sai
+Key giúp React có thể theo dõi (track) được item nào bị xóa, thêm hay bị sửa. Key của mỗi item phải là duy nhất và không thay đổi. Nếu lấy key là index thì khi thêm, hoặc xóa item, index bị thay đổi => render sai
 
 Ngoài ra, khi sắp xếp, thêm, xóa item, việc render DOM sẽ tốn rất nhiều thời gian. Nếu item có key, React sẽ nhớ được item đó và chỉ việc hiển thị lại item đấy chứ không phải re-render lại từ đầu => tối ưu về mặt thời gian
 
@@ -168,6 +168,7 @@ If needed, frontend part will communicate to the backend end via API (using REST
 ## Debounce và throttle
 
 <https://www.youtube.com/watch?v=LZb_Bv81vQs>
+<https://www.kaidohussar.dev/posts/debounce-vs-throttle>
 
 - Debounce: gọi 1 hàm nào đó sau 1 khoảng delay. VD: Có 1 input. Input này có 1 event handler cho sự kiện onChange. Nếu áp dụng debounce, event handler này sẽ chỉ chạy khi:
   - Hết thời gian delay
@@ -361,13 +362,12 @@ Only call Hooks inside React function components
 `useState` doens't merge objects when the state is updated. It replaces them.
 
 When there is an update action (ex: click event).
-- The update state function (setState) isn't called immediately. It's moved to a queue
-- Then a re-render of the component is scheduled.
-- The event handler is wrap into a batch, when the batch finishs, the re-render begins
-- All scheduled re-renders run
+
+- When you call the `setState`, it might trigger an re-render. However, `setState` doesn't update the state immediately. React waits for all the `setState` in the event handlers to be finished before re-rendering. This is called batching
+- You can pass a value or an updated function to the `setState`. All of them are added to the queue.
+- When all the scheduled re-renders run
   - `useState` is called
-  - `setState` is invoked and save the final result in the hook's state
-  - `useState` returns the updated value
+  - React goes through all the queue, calculates and returns the updated value to `useState`
 
 If you update the state hook to the same value as the current state, there will be no re-render to be scheduled.
 
