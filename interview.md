@@ -1,5 +1,7 @@
 # Interview
 
+<https://itnext.io/frontend-interview-cheatsheet-that-helped-me-to-get-offer-on-amazon-and-linkedin-cba9584e33c7#21a5>
+
 ## Why React
 
 - Easy to start
@@ -124,6 +126,19 @@ Ngoài ra, khi sắp xếp, thêm, xóa item, việc render DOM sẽ tốn rất
 When the `key` props is changed, React unmount the previous instance, and mount a new one. This means that all state that had existed in the component at the time is completely removed and the component is reinitialized
 Khi 1 component bất kì có props key, khi key này bị thay đổi thì component sẽ bị unmount, state của nó cũng sẽ bị xóa bỏ và React sẽ mount lại 1 component mới
 
+## API là gì
+
+<https://www.youtube.com/watch?v=JUvsdFWL7WM>
+
+API là các phương thức (functions, protocols) giúp cho ứng dụng A có thể tương tác với ứng dụng B mà không cần quan tâm ứng dụng B được thực hiện thế nào
+
+VD: 
+- ứng dụng B cung cấp 1 hàm tính tổng cho ứng dụng A.
+- React cung cấp hàm `useState` để ltv sử dụng
+- Backend xây dựng API để Frontend sử dụng để lấy data
+
+Có thể liên tưởng tới UI: user tương tác với giao diện (interface) của ứng dụng mà không cần quan tâm giao diện đấy được thực hiện sao
+
 ## Optimize React re-render
 
 <https://kentcdodds.com/blog/optimize-react-re-renders>
@@ -180,6 +195,10 @@ Ví dụ event scroll với 1 event listener .on('scroll') và hàm f, trong đi
 
 `Object.assign(target, source)` copy enumerable properties from `source` to `target` object.
 `Object.create(source)` create a new object using the `source` as prototype
+
+## `dangerouslySetInnerHTML`
+
+`dangerouslySetInnerHTML` là 1 property của React mà có thể sử dụng cho HTML elements. `dangerouslySetInnerHTML` được dùng để báo cho React biết là content của 1 thẻ HTML là dạng dynamic (lấy từ input) và có thể chứa các thẻ HTML khác như là thẻ `<p>`, `<span>`, `<script>`
 
 ## Code splitting
 
@@ -363,7 +382,7 @@ Only call Hooks inside React function components
 
 When there is an update action (ex: click event).
 
-- When you call the `setState`, it might trigger an re-render. However, `setState` doesn't update the state immediately. React waits for all the `setState` in the event handlers to be finished before re-rendering. This is called batching
+- When you call the `setState`, it might trigger an re-render. However, `setState` doesn't update the state immediately. React waits for all the `setState` in the event handlers to be finished before re-rendering. This is called batching (<https://github.com/reactwg/react-18/discussions/21>)
 - You can pass a value or an updated function to the `setState`. All of them are added to the queue.
 - When all the scheduled re-renders run
   - `useState` is called
@@ -490,6 +509,7 @@ Optimizing the critical render path improves render performance. Performance tip
 - Blocked scope
 `var` is blocked scope only when it is declared inside a function
 `let` and `const` blocked scope every where
+
 - Creation phase
 This is the very first phase when JS setting up memory for the data. No code is executed at this point.
 Variable declared with `let` and `const` are stored `uninitialized`
@@ -569,13 +589,14 @@ input {
   font-size: max(16px, 1rem);
 }
 ```
-- clamp(min, value, max): thứ tự các giá trị cũng không quan trọng. Thường dùng để làm responsive cho font-size. VD:
+- `clamp(min, value, max)`: thứ tự các giá trị cũng không quan trọng. Thường dùng để làm responsive cho font-size.
 ```CSS
 p {
   font-size: clamp(2rem, 5vw, 5rem)
 }
 ```
-Nếu chỉ dùng 5vw thì font-size sẽ bị fix theo vw và trên mobile có thể bị bé. Khi dùng `clamp`, giá trị min của font-size sẽ luôn là 2rem
+`font-size` sẽ được tính theo vw. 5vw là 5% width của view. Nếu `value` nằm giữa `2rem` và `5rem` thì `font-size` là 5vw. Nếu `value` < `2rem` thì trả về `2rem`, nếu > `5rem` thì trả về `5rem`.
+1 lưu ý là nếu chỉ dùng 5vw thì font-size sẽ bị fix theo vw và trên mobile có thể bị bé. Khi dùng `clamp`, giá trị min của font-size sẽ luôn là 2rem
 Cần chú ý là khi zoom thì font size sẽ không bị thay đổi vì nó phụ thuộc vào vw. Có thể sửa lại dùng rem vì rem thay đổi theo zoom
 => có thể thay đổi thành:
 ```CSS

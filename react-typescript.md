@@ -110,7 +110,7 @@ The type of `handleChange` needs match up with React's type definitions. In our 
 ```typescript
 
 function App() {
-	const handleChange = (e: ChangeEvent<HTMLInputElement) => {
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		console.log(e);
 	};
 
@@ -123,6 +123,17 @@ function App() {
 ```
 
 If there is no matching type definition, you can use `SyntheticEvent`
+
+### Form Submit events
+
+```ts
+const handleLogin = (event: FormEvent<HTMLFormElement>) => {
+	event.preventDefault();
+	const formData = new FormData(event.currentTarget);
+	const username = formData.get('username');
+	const password = formData.get('password');
+};
+```
 
 ## Context
 

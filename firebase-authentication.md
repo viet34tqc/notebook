@@ -2,12 +2,14 @@
 
 ## Step 1: Create a Firebase project and Firebase App
 
-## Step 2: Setup Authentication
+## With Google
+
+### Step 2: Setup Authentication
 
 - Go to <i>Authentication -> Get Started -> Enable Google</i>
 <img src="https://i.imgur.com/5CYQLlp.png">
 
-## Step 3: Add Firebase code to your project
+### Step 3: Add Firebase code to your project
 
 - Create a `firebase.ts` in your `root` folder
 - Add these code to `firebase.ts`
@@ -38,3 +40,21 @@ export { auth, provider, storage };
 export default db;
 ```
 - Create a login button
+
+### With email/password
+
+```js
+import { getAuth } from 'firebase/auth';
+export const auth = getAuth(); // No need to create firestore database
+
+// Register
+const user = await createUserWithEmailAndPassword(
+	auth,
+	registerEmail,
+	registerPass
+);
+
+// Logout
+await signOut(auth)
+```
+

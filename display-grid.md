@@ -24,3 +24,4 @@ The difference between `auto-fill` and `auto-fit` is only noticeble when the row
 If you are using `auto-fit`, the content will stretch to fill the entire row width
 Whereas with `auto-fill`, the browser will allow empty columns to occupy space in the row. These empty columns will be allocated a fraction even if they don't have any content
 
+In case you have only one item in the row, `auto-fit` will expend it to fill the container width and it's unexpected.

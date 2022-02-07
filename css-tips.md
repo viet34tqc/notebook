@@ -4,6 +4,7 @@
 
 Set `grid-area: 1/-1` the same for all the child element
 <https://ishadeed.com/article/less-absolute-positioning-modern-css/>
+<https://www.youtube.com/watch?v=sKFW3wek21Q>
 
 ## `z-index` without `position`
 
