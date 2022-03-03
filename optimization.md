@@ -1,12 +1,24 @@
-## Performance optimization
+# Performance optimization
+
+<https://xwp.co/how-to-build-a-rocket-best-practices-for-better-web-performance/>
+
+## Font
+
+- Self-host font
+- Chỉ dùng woff2
+- preload font
 
 ## Icon font và svg
 
-Tốt nhất là dùng svg. Trong trường hợp phải dùng icon font thì phải optimize dùng `icomoon`
+Tốt nhất là dùng svg. Chú ý nếu như 1 svg được sử dụng lặp lại ở quá nhiều chỗ, ví dụ như mũi tên ở list item, thì không nên chèn svg đó vào trong html và dùng svg như là background image. Lí do là vì nhiều svg sẽ làm tăng dung lượng html lên.
+Trong trường hợp phải dùng icon font thì phải optimize dùng `icomoon`
 
-## Lazy load ảnh
+## Ảnh
 
-Chỉ lazy load ảnh ở phía dưới hoặc ảnh không hiện ra khi mới load trang. Ảnh nào hiện ra ngay khi load trang thì không lazy load.
+- Resize image
+- Dùng webp
+- Thêm width và height cho ảnh để cải thiện điểm CLS
+- Chỉ lazy load ảnh ở phía dưới hoặc ảnh không hiện ra khi mới load trang. Ảnh nào hiện ra ngay khi load trang thì không lazy load.
 
 ## Core web vitals
 

@@ -1,5 +1,12 @@
 # Interview questions
 
+## HTML
+
+- preconnect, dns-prefetch
+- Doctype
+- <meta charset="utf-8">
+- <meta name="viewport" content="width=device-...">
+
 ## JS
 
 - What is Promise? How many states?: <https://www.freecodecamp.org/news/top-javascript-concepts-to-know-before-learning-react/>
@@ -12,3 +19,8 @@
 - Why use React over vanilla JS
 - What is state
 - What is state management (context) and the library
+- Virtual DOM
+- What is rendering
+- Implicitly and Explicitly
+- Hooks and what they do
+- What are rules of hook

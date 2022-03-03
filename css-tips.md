@@ -20,3 +20,7 @@ Basically, when the parent element has `display: content`, it is removed from th
 <https://ishadeed.com/article/min-content-size-css-grid/>
 
 If the child element has a slider or something that has exceeds the width of that child, we need to set its width as `minmax(0, 1fr)` instead of `1fr`
+
+## `scroll-snap`
+
+<https://codepen.io/5t3ph/pen/yLzQeGr/652097fa9ce1150aeb5400637ab91b63>

@@ -9,8 +9,10 @@
   - consistent
   - Easy to maintain and scale
 - Virtual DOM
+  - Provide faster update on the DOM
+  - It's copy of the real DOM
   - Updating DOM using vanilla JS is slow, especially when your DOM is big
-  - Any changes are reflected to virtual DOM
+  - Whenever there is an update, like state changes or props, React update the virtual DOM
   - React compares the previous and the current state of the virtual DOM
   - Those updates are applied to real DOM
 
@@ -22,12 +24,20 @@ React Context doesn't manage any state at all. When we use Context, we manage th
 
 Context + `useReducer` relies on passing *the current state value via Context*. React-Redux passes *the current Redux store* instance via Context.
 When `useReducer` produces a new state value, *all* components that are subscribed to that context will be re-rendered => lead to perfomance issue
-React Redux, components can't subscribe to specific state and only re-render when those values change.
+In React Redux, components can't subscribe to specific state and only re-render when those values change.
 
 Context + `useReducer` doesn't not have middleware to do side-effect
 React + Redux have middleware support using Redux Thunk
 
 if you get past 2-3 state-related contexts in an application, you're re-inventing a weaker version of React-Redux and should just switch to using Redux.
+
+## What is state in React
+
+It's a variable which whenever it updates, it will trigger a re-renders of the component.
+
+## What is rendering in React
+
+"Rendering" means that React is calling your component, which is a function
 
 ## Why react use immutability?
 
@@ -611,6 +621,10 @@ Chỉnh padding cho section hero:
 }
 ```
 
+### Build URL with params
+
+<https://www.valentinog.com/blog/url/>
+
 ### Create text on image with an overlay
 
 Set z-index for the container
@@ -624,3 +638,49 @@ Dùng để tính width của flex items
 
 `flex-shrink: 1`: Khi tổng width của các item > parent và flex-shrink = 1 => width của item sẽ bị thu lại
 `flex-grow: 1`: Khi tổng width của item < parent và flex-grow: 1 => width của item sẽ tăng lên để fill hết width của parent
+
+### <!DOCTYPE html>
+
+This is the doctype tag to let the browser know that this is HTML5 page and should be rendered as text/html
+
+### <meta charset="utf-8">
+
+This meta tag tells the browser which character encoding browser to use. UTF-8 is greate because you can use all sorts of symbols and emoji
+
+### <meta name="viewport" content="width=device-width"
+
+`width=device-width` tells the browser to use 100% of the device's width as the viewport => there's no horizontal scrollbar. You can commbine this attribute with `initial-scale` to 1 to let the user zoom arond.
+
+### og meta tags
+
+These og meta tags are used to display information of the post like the title, featured image... when you share them on social networks.
+
+### `text-size-adjust`
+
+If you don't have a responsive mobile website, and you open it on a small screen, so the browser might resize the text to make it bigger so it’s easier to read. The CSS `text-size-adjust` property can either disable this feature with the value none or specify a percentage up to which the browser is allowed to make the text bigger.
+
+### Resource hint: preconnect, dns-prefetch, preload
+
+<https://www.youtube.com/watch?v=6q75MVFLlok>
+<https://blog.dareboost.com/en/2020/05/preload-prefetch-preconnect-resource-hints/>
+
+Trước khi trình duyệt lấy được dữ liệu từ server, nó sẽ phải trải qua 3 bước cơ bản như sau:
+
+- Kết nối tới DNS Server để phân giải tên miền của máy chủ
+- Thiết lập kết nối TCP
+- Mã hóa kết nối bằng giao thức TLS
+
+Trong từng bước trên trình duyệt gửi một phần dữ liệu tới máy chủ, và máy chủ gửi lại một phản hồi. Hành trình này, từ máy chủ gốc đến địa chỉ cần đến và quay ngược trở lại, được gọi là khứ hồi (round trip). Mỗi bước sẽ có 1 hoặc nhiều round trip. Mỗi round trip khi được thực hiện lại có 1 độ trễ nhất định (latency). Qua đây chúng ta thấy rằng việc chờ đợi để thiết lập kết nối trước khi download data mình cần về khá tiêu tốn khá nhiều thời gian và chính điều này sẽ làm giảm tốc độ tải trang web
+
+Mặc định browser sau sẽ parse HTML và CSS để biết mình cần tải data gì và tải chúng theo thứ tự. `preconnect` sẽ nói với browser rằng tôi đang thực sự cần tài nguyên này, hãy thực hiện các bước trên sớm nhất có thể. Và trình duyệt sẽ thực hiện 3 bước trên song song với các kết nối khác trước. Nếu không có `preconnect` thì tài nguyên này có thể phải đợi các kết nối khác xong trước và thực hiện lại từ đầu 3 bước trên.
+`preconnect` thường được sử dụng để tăng tốc độ tải
+
+`dns-prefetch` tương tự như `preconnect` nhưng chỉ thực hiện trước bước kết nối tới DNS Server. `dns-prefetch` có thể dùng chung với `preconnect` như là 1 dạng fallback khi 1 số trình duyệt không hỗ trợ `preconnect`.
+
+`prefetch` báo cho browser biết để download trước 1 tài nguyên nào đó với low priority mà tài nguyên này có thể chưa cần sử dụng ngay. Lấy ví dụ ở 1 trang bán hàng, khả năng cao là khách sẽ đặt hàng và thanh toán trang thanh toán. Vậy nên ở trang chủ, mình có thể prefetch 1 vài script cho trang thanh toán, ví dụ checkout.js và cache script này vào trình duyệt. Khi sang trang thanh toán, script này sẽ được sử dụng ngay mà không cần thiết lập kết nối và down về
+
+`preload` thì gần như là 1 nâng cấp của `preconnect`. Nó yêu cầu browser thiết lập kết nối và download tài nguyên đó càng sớm càng tốt, song song với các tải về HTML và CSS (`preconnect` phải đợi parse HTML và CSS trước). Tuy nhiên, độ ưu tiên của preload vẫn nằm sau các tài nguyên synchronous trong thẻ `head`. Ta có thể dùng `preload` với `async` script hoặc ảnh và web font. Việc dùng `preload` phải cẩn thận vì nó làm đảo lộn độ ưu tiên của browser
+
+<https://web.dev/codelab-preload-web-fonts/#preloading-web-fonts>
+
+Không nên lạm dụng resource hint vì chúng vẫn làm tiêu tốn tài nguyên CPU của cả client và server

@@ -25,3 +25,14 @@ If you are using `auto-fit`, the content will stretch to fill the entire row wid
 Whereas with `auto-fill`, the browser will allow empty columns to occupy space in the row. These empty columns will be allocated a fraction even if they don't have any content
 
 In case you have only one item in the row, `auto-fit` will expend it to fill the container width and it's unexpected.
+
+## `place-content` and `place-items`
+
+<https://www.youtube.com/watch?v=vNwoDkn7AIc>
+
+- `place-content`: 
+  - shorthand for `align-content` and `justify-content`
+  - behaves like `display: flex`
+- `place-items`:
+  - shorthand for `align-items` and `justify-items`
+  - align the content in that grid
