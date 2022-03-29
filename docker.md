@@ -4,6 +4,7 @@
 
 <https://www.youtube.com/watch?v=pTFZFxd4hOI>
 <https://devdojo.com/bobbyiliev/free-introduction-to-docker-ebook>
+<https://www.freecodecamp.org/news/how-to-remove-all-docker-images-a-docker-cleanup-guide/>
 
 ## Tại sao phải sử dụng docker
 
@@ -20,9 +21,11 @@ Về bản chất, *container* giống với *virtual machine* ở chỗ là có
 - Nhẹ hơn, tốn ít tài nguyên hơn
 - Khởi động nhanh hơn
 
+*Container* được tạo ra từ *Docker Image*.
+
 ### Dockerfile
 
-Chứa hướng dẫn setup môi trường và được dùng để build ra *Docker Image*
+Chứa hướng dẫn để setup môi trường và build ra *Docker Image*
 
 ```code
 FROM node:12              // Download node image về

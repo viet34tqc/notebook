@@ -5,6 +5,7 @@
 ## Font
 
 - Self-host font
+- Optimize google font: https://css-tricks.com/how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy/
 - Chỉ dùng woff2
 - preload font
 

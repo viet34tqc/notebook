@@ -6,9 +6,11 @@
 
 ## Important terms
 
-useQuery
-useMutation
-queryClient
+- queries: <https://react-query.tanstack.com/guides/queries>
+- queriesKey: <https://react-query.tanstack.com/guides/query-keys>
+- caching: <https://react-query.tanstack.com/guides/caching>
+- staleTime: The duration until a query transitions from fresh to stale. As long as the query is fresh, data will always be read from the cache only, no network request will happen! If the query is stale (which per default is: instantly), you will still get data from the cache, but a background refetch can happen under certain conditions.
+
 
 ## Why do I need React Query when the browser has built-in fetch API already?
 
@@ -60,11 +62,14 @@ The code above has some problems:
 - Server data is not stored in your app and could be stale. You need to figure out a way for caching and invalidating that data.
 
 Fortunately, all those problem can be solved by React Query:
+
 - Code is simpler, no need to use multiple `useState` anymore
 - Cache the fetched data. When the component is unmounted, eg: when you click on another link, then you come back, the data is already cached and your component don't need to fetch the data again.
 
 ## React Query and global state managers
+
 There is a huge difference between these two
+
 - React Query is **server-state** library, responsible for managing asynchronous operation between you and server
 - On the other hand, Redux, MobX, Zustand, etc. are **client-state** libraries that can be used to store asynchronous data, albeit inefficiently when compared to a tool like React Query
 
@@ -182,3 +187,23 @@ export default function useCreatePost() {
 ### useFetching
 
 Check if React Query is fetching new data
+
+## React Query and React Router
+
+React Router will unmount your component when you navigate away from it
+
+When a component that uses a react-query hook mounts, it will trigger a fetch (because of mounting). However, if you already have data in the cache for this specific key, you will instantly get that data returned as "stale data", and the fetch will happen in the background only.
+
+If you want to avoid the request going out, you can either:
+
+- set refetchOnmount to false so that there will be no refetch when the component mounts
+- set a staleTime on your query
+
+I would suggest setting the staleTime: It will tell react-query for how long the data should be considered "fresh". If you set it to 5 minutes, there will be no background-refetch for 5 minutes - the data will always come from the cache directly. staleTime defaults to 0, so you will always get background refetches.
+
+## React Query and useEffect and useState
+
+Cases: you have a load more button to fetch more posts. The posts here need to be a state because it will change whenever the button load clicks.
+
+First, you have to put `useEffect` and `useState` above the conditional checks (`isLoading` and `isError`).
+Then, The data get from `useQuery` have to be an dependency of `useEffect`. Inside the `useEffect` block, there should be a check for undefined `useQuery` data.

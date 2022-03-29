@@ -40,6 +40,21 @@ Access the fulfilled value from promise
 - Inputs: callback function for success and failure cases of the promise (raraly use, often use catch)
 - Output: another promise
 
+If we put a promise inside then, it will do nothing even if that promise is resolved
+
+```js
+const doSomething = () => Promise.resolve('hello')
+const doSomethingElse = () => Promise.resolve('world')
+
+doSomething().then(doSomethingElse()).then((c) => {console.log('c', c)}) // c return hello
+```
+
+If we the callback return a resolved promise instead of a value, the next then will take that resolved value as the input
+
+```js
+doSomething().then(doSomethingElse).then((d) => {console.log('d', d)}) // d is world
+```
+
 ### `catch()`
 
 Access the rejection error from promise

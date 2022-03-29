@@ -392,7 +392,7 @@ Only call Hooks inside React function components
 
 When there is an update action (ex: click event).
 
-- When you call the `setState`, it might trigger an re-render. However, `setState` doesn't update the state immediately. React waits for all the `setState` in the event handlers to be finished before re-rendering. This is called batching (<https://github.com/reactwg/react-18/discussions/21>)
+- When you call the `setState`, it might trigger an re-render. However, `setState` doesn't update the state immediately. React waits for all the `setState` in the event handlers to be finished before re-rendering. In another way, it groups multiple state updates into a single update. This is called batching (<https://github.com/reactwg/react-18/discussions/21>)
 - You can pass a value or an updated function to the `setState`. All of them are added to the queue.
 - When all the scheduled re-renders run
   - `useState` is called
@@ -477,9 +477,11 @@ console.log(info);
 
 ### Các chỉ số cần quan tâm khi optimize speed:
 
+<https://indepth.dev/posts/1498/101-javascript-critical-rendering-path>
+
 - Time to first byte (TTFB): the time it takes the browsers to start receiving a data (images, fonts, js, css...) after requesting data from server: HTTP request time + Process request time + HTTP response time.
-- Critical Rendering Path: is the sequences of steps of: convert the HTML, CSS, and JavaScript into pixels on the screen.
-- DOMContentLoaded: the time for loading HTML before starting to load the content
+- Critical Rendering Path: <https://indepth.dev/posts/1498/101-javascript-critical-rendering-path> is the sequences of steps of: convert the HTML, CSS, and JavaScript (images are not considered as critical resource) into pixels on the screen
+- DOMContentLoaded: the time for loading HTML before starting to load the content. The event does not wait for images, subframes or even stylesheets to be completely loaded. The only target is for the Document to be loaded
 - Load: when all the resources are loaded ( resources are parsed and get acknowledged off before DOMContentLoaded)
 - First Contentful Paint(FCP): the moment when the first element from the DOM appears in the users' browser.
 - Speed Index: shows how quickly the contents of a page are visibly populated.
@@ -679,7 +681,11 @@ Mặc định browser sau sẽ parse HTML và CSS để biết mình cần tải
 
 `prefetch` báo cho browser biết để download trước 1 tài nguyên nào đó với low priority mà tài nguyên này có thể chưa cần sử dụng ngay. Lấy ví dụ ở 1 trang bán hàng, khả năng cao là khách sẽ đặt hàng và thanh toán trang thanh toán. Vậy nên ở trang chủ, mình có thể prefetch 1 vài script cho trang thanh toán, ví dụ checkout.js và cache script này vào trình duyệt. Khi sang trang thanh toán, script này sẽ được sử dụng ngay mà không cần thiết lập kết nối và down về
 
-`preload` thì gần như là 1 nâng cấp của `preconnect`. Nó yêu cầu browser thiết lập kết nối và download tài nguyên đó càng sớm càng tốt, song song với các tải về HTML và CSS (`preconnect` phải đợi parse HTML và CSS trước). Tuy nhiên, độ ưu tiên của preload vẫn nằm sau các tài nguyên synchronous trong thẻ `head`. Ta có thể dùng `preload` với `async` script hoặc ảnh và web font. Việc dùng `preload` phải cẩn thận vì nó làm đảo lộn độ ưu tiên của browser
+<https://indepth.dev/posts/1498/101-javascript-critical-rendering-path>
+  
+`preload` thì gần như là 1 nâng cấp của `preconnect`. Nó yêu cầu browser thiết lập kết nối và download tài nguyên đó càng sớm càng tốt, song song với các tải về HTML và CSS (`preconnect` phải đợi parse HTML và CSS trước). Tuy nhiên, độ ưu tiên của preload vẫn nằm sau các tài nguyên synchronous trong thẻ `head`. Ta thường dùng `preload` để load các tài nguyên không có trong HTML mà chỉ xuất hiện khi parse JS và CSS (VD: font). Việc dùng `preload` phải cẩn thận vì nó làm đảo lộn độ ưu tiên của browser. Chỉ dùng preload các file *above the fold*
+
+The HTML attribute crossorigin defines how to handle crossorigin requests. Setting the crossorigin attribute (equivalent to crossorigin="anonymous") will switch the request to a CORS request using the same-origin policy. **It is required on the rel="preload" as font requests require same-origin policy.**
 
 <https://web.dev/codelab-preload-web-fonts/#preloading-web-fonts>
 

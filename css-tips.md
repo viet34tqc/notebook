@@ -1,5 +1,7 @@
 # CSS Tips
 
+## DON'T USE SHORTHAND CSS FOR UTILITY CLASS
+
 ## Replace `position: absolute` with `display: grid`
 
 Set `grid-area: 1/-1` the same for all the child element
