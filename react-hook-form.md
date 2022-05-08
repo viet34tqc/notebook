@@ -5,7 +5,7 @@
 We only need to use `handleSubmit` and `register` from `userForm` hook to make your form work with React Hook Form
 
 ```ts
-export interface AddEditFormInput {
+export interface FormValues {
 	name: string;
 	description: string;
 }
@@ -13,11 +13,15 @@ export interface AddEditFormInput {
 const {
 	register,
 	handleSubmit,
-} = useForm<AddEditFormInput>();
+} = useForm<FormValues>();
 
+const onSubmit = (data: FormValues) => console.log(data);
 
-<input {...register('name')} />
-<textarea {...register('description')}></textarea>
+<form onSubmit={handleSubmit(onSubmit)}>
+	<Input registration={register('name')} />
+	<input {...register('name')} />
+	<textarea {...register('description')}></textarea>
+</form>
 ```
 
 In case you need to provide **default value** of the inputs:

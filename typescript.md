@@ -307,6 +307,15 @@ T is shorthand for 'Types' and can be set manually or automatically
 	makeArr('3') // T is string
 ```
 
+### Syntax
+
+```tsx
+const foo = <T, >(x: T) => x;
+function foo<T>(x: T): T {
+    return x;
+}
+```
+
 ### Generic extends
 
 The type can be restricted to a certain class family or interface, using the extends keyword:

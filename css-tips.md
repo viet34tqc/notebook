@@ -8,6 +8,10 @@ Set `grid-area: 1/-1` the same for all the child element
 <https://ishadeed.com/article/less-absolute-positioning-modern-css/>
 <https://www.youtube.com/watch?v=sKFW3wek21Q>
 
+## Animate from `display: none`
+
+<https://www.youtube.com/watch?v=4prVdA7_6u0>
+
 ## `z-index` without `position`
 
 We can use z-index on a grid or flex item. No need to add `position: relative` at all.

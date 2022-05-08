@@ -3,6 +3,7 @@
 ## Reference
 
 <https://tsh.io/blog/react-query-tutorial/>
+<https://www.carlrippon.com/>
 
 ## Important terms
 

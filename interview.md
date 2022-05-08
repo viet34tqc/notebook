@@ -24,7 +24,7 @@ React Context doesn't manage any state at all. When we use Context, we manage th
 
 Context + `useReducer` relies on passing *the current state value via Context*. React-Redux passes *the current Redux store* instance via Context.
 When `useReducer` produces a new state value, *all* components that are subscribed to that context will be re-rendered => lead to perfomance issue
-In React Redux, components can't subscribe to specific state and only re-render when those values change.
+In React Redux, components can subscribe to specific pieces of store state and only re-render when those values change.
 
 Context + `useReducer` doesn't not have middleware to do side-effect
 React + Redux have middleware support using Redux Thunk
@@ -38,6 +38,19 @@ It's a variable which whenever it updates, it will trigger a re-renders of the c
 ## What is rendering in React
 
 "Rendering" means that React is calling your component, which is a function
+
+## How react render components
+
+Components as children props of parent component are not re-rendered
+
+<https://www.zhenghao.io/posts/react-rerender>
+<https://www.developerway.com/posts/components-composition-how-to-get-it-right>
+
+## How to build a good component
+
+- A "good component" is a component that I can easily read and understand what it does from the first glance.
+- A "good component" should have a good self-describing name. Sidebar for a component that renders sidebar is a good name. CreateIssue for a component that handles issue creation is a good name. SidebarController for a component that renders sidebar items specific for 'Issues' page is not a good name (the name indicates that the component is of some generic purpose, not specific to a particular page).
+- A "good component" doesn't do things that are irrelevant to its declared purpose. Topbar component that only renders items in the top bar and controls only topbar behaviour is a good component. Sidebar component, that controls the state of various modal dialogs is not the best component.
 
 ## Why react use immutability?
 
@@ -201,6 +214,18 @@ If needed, frontend part will communicate to the backend end via API (using REST
 - Throttle: đảm bảo 1 hàm chỉ chạy 1 lần trong 1 khoảng thời gian (vd: 10s).
 Ví dụ event scroll với 1 event listener .on('scroll') và hàm f, trong điều kiện bình thường hàm f sẽ được gọi 1000 lần trong 10 giây nếu ta scroll liên tục và không có can thiệp gì. Nếu ta sử dụng throttle, cho phép event listener kích hoạt mỗi 100 mili giây, thì hàm f sẽ chỉ được gọi 100 lần là nhiều nhất trong vòng 10 giây bạn scroll
 
+**Using Lodash debounce**
+<https://www.carlrippon.com/using-lodash-debounce-with-react-and-ts/>
+```jsx
+const debouncedSearch = debounce(async (criteria) => {
+  setCharacters(await search(criteria));
+}, 300);
+
+async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  debouncedSearch(e.target.value);
+}
+```
+
 ## Object.assign() and Object.create()
 
 `Object.assign(target, source)` copy enumerable properties from `source` to `target` object.
@@ -262,7 +287,7 @@ console.log( config.language ) // ['VN']
 
 ## Map trong javascript
 
-- Gần giống như object, khác ở chỗ key có thể là bất cứ type nào, kể cả object
+- Gần giống như object, khác ở chỗ key có thể là bất cứ type nào, kể cả object, function
 - Cú pháp:
 ```javascript
 const map = new Map([iterable]); // iterable is optional, such as new Map([[a,1], [b,2]])
@@ -300,7 +325,7 @@ https://example.com/app2
 
 Để server có thể cho phép client gửi cross-origin request, server đó phải set giá trị cho 1 header có tên là `Access-Control-Allow-Origin` và giá trị đó là origin của client.
 
-### Rendering a web page
+## Rendering a web page
 
 <ol>
   <li>You type an URL into address bar in your preferred browser.</li>
@@ -323,7 +348,7 @@ https://example.com/app2
   <li>The browser renders the page on the screen according to the DOM tree and the style information for each node</li>
 </ol>
 
-### Closure
+## Closure
 
 <https://dmitripavlutin.com/simple-explanation-of-javascript-closures/>
 - Lexical scope của 1 hàm:
@@ -347,7 +372,7 @@ const myInnerFunc = outerFunc();
 myInnerFunc();
 ```
 
-### Primitive và Reference type
+## Primitive và Reference type
 
 <https://daveceddia.com/javascript-references/>
 <https://www.youtube.com/watch?v=RLBqJpK1hro>
@@ -383,7 +408,7 @@ console.log(min) // 1
 console.log(items) // [1,4,7,9]
 ```
 
-### useState rules
+## useState rules
 
 Only call Hooks at the top level. You shouldn't call `useState` in loop, conditions
 Only call Hooks inside React function components
@@ -400,11 +425,11 @@ When there is an update action (ex: click event).
 
 If you update the state hook to the same value as the current state, there will be no re-render to be scheduled.
 
-### Scope chain
+## Scope chain
 
 Có 3 loại scope: `global scope`, `local scope` (function) và `block scope` (scope nằm giữa {}). Khi một biến không được tìm thấy trong `local scope`, JS sẽ tìm biến đó ở các outer scope cho đến scope ngoài cùng là `global scope`.
 
-### for-in and for-of
+## for-in and for-of
 
 `for-in`:
 - iterate over enumerable properties of an object. enumerable properties are the "key" of the property the Object or "index" of the Array.
@@ -448,12 +473,12 @@ const delay = (ms: number) => new Promise( res => setTimeout(res, ms, 'some valu
 - Nếu `reject` thì `await` throw 1 error.
 - Nếu `resolve` thì `await` trả về kết quả resolve
 
-### onChange và onInput khi sử dụng cho input
+## onChange và onInput khi sử dụng cho input
 
 `onChange` chỉ chạy khi mà user ra khỏi (`blur`) input đó
 `onInput` không chỉ chạy như `onChange` mà còn chạy khi gõ ('keystroke') hoặc paste
 
-### import and export
+## import and export
 
 Khi import mà dùng `*`, thì chúng ta import hết tất cả các giá trị được export, bao gồm cả default và named.
 `*` sẽ là 1 object chứa hết các giá trị trên
@@ -475,7 +500,7 @@ console.log(info);
 }
 ```
 
-### Các chỉ số cần quan tâm khi optimize speed:
+## Các chỉ số cần quan tâm khi optimize speed:
 
 <https://indepth.dev/posts/1498/101-javascript-critical-rendering-path>
 
@@ -490,7 +515,7 @@ console.log(info);
 - Total Blocking Time: total amount of time between First Contentful Paint (FCP) and Time to Interactive (TTI) where the main thread was blocked for long enough to prevent input responsiveness.
 - Largest Contentful Paint (2.5s): the time when the largest content element in the viewport becomes visible. It can be used to determine when the main content of the page has finished rendering on the screen.
 
-### Obtimize speed:
+## Obtimize speed:
 
 <https://towardsdev.com/website-performance-optimization-267b28b877df>
 - TTFB: <https://searchfacts.com/reduce-ttfb/>
@@ -507,7 +532,7 @@ console.log(info);
 - Gzip compression: compresses Web pages, CSS, and JavaScript at the server level before sending them over to the browser. On the user side, a browser unzips the files and presents the contents.
 - Reduce redirect: because they can create additional HTTP request
 
-### Critical Rending Path
+## Critical Rending Path
 
 The critical rendering path includes the Document Object Model (DOM), CSS Object Model (CSSOM), Render tree, Layout, and Paint.
 The document object model is created as the HTML is parsed. The HTML may request JavaScript, which may, in turn, alter the DOM. The HTML includes or makes requests for styles, which in turn builds the CSS object model. The browser engine combines the two to create the Render Tree. Layout determines the size and location of everything on the page. Once the layout is determined, pixels are painted to the screen.
@@ -516,7 +541,7 @@ Optimizing the critical render path improves render performance. Performance tip
 - Optimizing the number of requests required along with the file size of each request.
 - Optimizing the order in which critical resources are loaded by prioritizing the downloading critical assets, shorten the critical path length.
 
-### var and let, const
+## var and let, const
 
 - Blocked scope
 `var` is blocked scope only when it is declared inside a function
@@ -531,7 +556,7 @@ Then if we try to access the variables before its declaration:
 When variable declared with `var`, it returns `undefined`
 When variable declared with `let` and `const`, it returns `ReferenceError`
 
-### Hoisting
+## Hoisting
 
 It's the process that stores functions and variables in the memory before executing any code (creation phase);
 - Functions are stored with the entire function. That's why you can invoke them before the line we declare them
@@ -539,7 +564,7 @@ It's the process that stores functions and variables in the memory before execut
   - Variables with the `var` keyword are stored with the value of `undefined`
   - Variables with the `let` and `const` keyword are stored `uninitialized`. If we try to access them before declare them, it will return `ReferenceError`
 
-### Object.freeze() và Object.seal()
+## Object.freeze() và Object.seal()
 
 `Object.freeze()` không cho phép thêm, sửa, xóa properties. Tuy nhiên, `Object.freeze()` chỉ shallowly freeze, nếu properties là 1 object khác thì vẫn có thể sửa được
 `Object.seal()` không cho phép thêm, xóa, nhưng vẫn cho sửa existing properties
@@ -578,11 +603,11 @@ if ( typeof window !== undefined ) {
 const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; // true if system is using dark theme
 ```
 
-### counter
+## counter
 
-### fr in grid
+## fr in grid
 
-### min, max, clamp()
+## min, max, clamp()
 
 <https://moderncss.dev/practical-uses-of-css-math-functions-calc-clamp-min-max/>
 <https://ishadeed.com/article/css-min-max-clamp/>
@@ -623,17 +648,17 @@ Chỉnh padding cho section hero:
 }
 ```
 
-### Build URL with params
+## Build URL with params
 
 <https://www.valentinog.com/blog/url/>
 
-### Create text on image with an overlay
+## Create text on image with an overlay
 
 Set z-index for the container
 
 Using `background-blend-mode`: <https://www.smashingmagazine.com/2021/09/reducing-need-pseudo-elements/>
 
-### flex-shrink và flex-grow
+## flex-shrink và flex-grow
 
 Mặc định flex-grow: 0; flex-shrink: 1;
 Dùng để tính width của flex items
@@ -641,27 +666,27 @@ Dùng để tính width của flex items
 `flex-shrink: 1`: Khi tổng width của các item > parent và flex-shrink = 1 => width của item sẽ bị thu lại
 `flex-grow: 1`: Khi tổng width của item < parent và flex-grow: 1 => width của item sẽ tăng lên để fill hết width của parent
 
-### <!DOCTYPE html>
+## <!DOCTYPE html>
 
 This is the doctype tag to let the browser know that this is HTML5 page and should be rendered as text/html
 
-### <meta charset="utf-8">
+## <meta charset="utf-8">
 
 This meta tag tells the browser which character encoding browser to use. UTF-8 is greate because you can use all sorts of symbols and emoji
 
-### <meta name="viewport" content="width=device-width"
+## <meta name="viewport" content="width=device-width"
 
 `width=device-width` tells the browser to use 100% of the device's width as the viewport => there's no horizontal scrollbar. You can commbine this attribute with `initial-scale` to 1 to let the user zoom arond.
 
-### og meta tags
+## og meta tags
 
 These og meta tags are used to display information of the post like the title, featured image... when you share them on social networks.
 
-### `text-size-adjust`
+## `text-size-adjust`
 
 If you don't have a responsive mobile website, and you open it on a small screen, so the browser might resize the text to make it bigger so it’s easier to read. The CSS `text-size-adjust` property can either disable this feature with the value none or specify a percentage up to which the browser is allowed to make the text bigger.
 
-### Resource hint: preconnect, dns-prefetch, preload
+## Resource hint: preconnect, dns-prefetch, preload
 
 <https://www.youtube.com/watch?v=6q75MVFLlok>
 <https://blog.dareboost.com/en/2020/05/preload-prefetch-preconnect-resource-hints/>
@@ -690,3 +715,9 @@ The HTML attribute crossorigin defines how to handle crossorigin requests. Setti
 <https://web.dev/codelab-preload-web-fonts/#preloading-web-fonts>
 
 Không nên lạm dụng resource hint vì chúng vẫn làm tiêu tốn tài nguyên CPU của cả client và server
+
+## Race conditions
+
+<https://wanago.io/2022/04/11/abort-controller-race-conditions-react>
+A race condition is when your application have a sequence of events and their order is uncontrollable. This might occur with asynchronous
+

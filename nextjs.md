@@ -1,5 +1,7 @@
 # NextJS
 
+<https://tsh.io/blog/ssr-vs-ssg-in-nextjs/>
+
 ## Why NextJS
 
 - Zero-config: no Webpack and Babel
@@ -151,7 +153,7 @@ In NextJS, you can use `next build` to build the app for production. When that h
 
 ### Server-side rendering
 
-The HTML gets generated on every request. This is used when you have a data that needs to be fresh at every request. The server will fetch the data, render the HTML and returns to the user.
+The HTML output of React components gets generated on every request. This is used when you have a data that needs to be fresh at every request. The server will fetch the data, render the HTML and returns to the user.
 
 Pros:
 

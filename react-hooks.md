@@ -11,6 +11,8 @@ Hooks should be used before any early `return` at the top level of the functiona
 
 Don't use `useState` when you don't use any `state` in the render phase. If you want to use a variable that preserves its state across renderings without triggering a re-render, use `useRef` instead.
 
+Ask three questions about each piece of data: Is it passed in from a parent via props? If so, it probably isn’t state. Does it remain unchanged over time? If so, it probably isn’t state. Can you compute it based on any other state or props in your component? If so, it isn’t state.
+
 The value of the state will only be updated in the next render. So, this block of code:
 
 ```js
@@ -28,7 +30,9 @@ setCount(0 + 1)
 ```
 
 **Tips**
-You can pass a function inside `useState`. This function takes current state as the only param and the return the new value based on the current state
+
+- You can pass a function inside `useState`. This function takes current state as the only param and the return the new value based on the current state
+- Whenever a state setter function is only used synchronously in an effect, get rid of the state! <https://tkdodo.eu/blog/dont-over-use-state>
 
 ## useReducer
 
@@ -132,3 +136,10 @@ const Input = forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
 
 Considering a case when you want to pass a ref from Parent component to child component. Default, that ref will be public in the parent component and you can use that ref within any event handler. `useImperativeHandle` will limit the event handler from the parent components 
 that can access the ref
+
+## `useEffect`
+
+<https://tkdodo.eu/blog/simplifying-use-effect>
+
+- One effect do one thing. Use multiple effects if you need.
+- Move that `useEffect` to custom hooks if you can.
