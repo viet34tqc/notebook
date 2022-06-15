@@ -2,6 +2,7 @@
 
 ## Reference
 
+<https://www.robinwieruch.de/git-team-workflow/>
 <https://www.git-tower.com/learn/git/ebook/en/desktop-gui/advanced-topics/rebase/>
 <https://www.atlassian.com/git/tutorials/merging-vs-rebasing>
 <https://dev.to/lydiahallie/cs-visualized-useful-git-commands-37p1>
@@ -56,3 +57,15 @@ Rebase `feature` onto the tip of `master` then merge `feature` into `master`
 ### Interactive rebase
 
 Before we rebase `master` on to `dev`, we might want to modify the commit on `dev` branch first, like `drop` (remove unneeded commit) or `squash` (combine commits)
+
+## Conflict when merge and rebase
+
+<https://www.freecodecamp.org/news/resolve-merge-conflicts-in-git-a-practical-guide/>
+
+When Git cannot perform an auto-merge because changes are in the same region, it indicates the conflicting regions with special characters. The character sequences are like this:
+```
+<<<<<<<
+=======
+>>>>>>>
+```
+Everything between `<<<<<<<` and `=======` are your local changes. These changes are not in the remote repository yet. All the lines between `=======` and `>>>>>>>` are the changes from the remote repository or another branch

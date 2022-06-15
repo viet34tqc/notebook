@@ -2,7 +2,13 @@
 
 <https://itnext.io/frontend-interview-cheatsheet-that-helped-me-to-get-offer-on-amazon-and-linkedin-cba9584e33c7#21a5>
 
+## Coding Interview Project
+
+<https://jantu.hashnode.dev/how-to-implement-infinite-scrolling-with-reactjs>
+
 ## Why React
+
+- Declarative
 
 - Easy to start
 - Component-based
@@ -180,6 +186,28 @@ The difference happens when the `success` callback returns a **rejected promise*
 `then(f,f)`: `error` callback is not invoked
 `then(f).catch(f)`: error callback is invoked
 
+## Rule for `this`
+
+<https://blog.tusharcodes.tech/5-rules-to-master-this-in-javascript>
+
+- If the new keyword is used when calling the function, this inside the function is a all new empty object.
+- If apply, call, or bind is used, this inside the function is the object that is passed in as the argument.
+- If a function is called as a method this is the object that the function is a property of.
+- If a function is invoked as a free function invocation, this is the global object.
+- If it's an arrow function, this value will be the context of its surrounding scope at the time it is created. Arrow function will try to resolve this inside it lexically just like any other variable and ask the Outer function - Do you have a this? And Outer Function will reply YES and gives inner function its own context to this
+
+```js
+function outer() {
+  console.log(this); // { x : 5 }
+  this.x = 10;
+  const inner = () => {
+     console.log(this); // { x : 10 }
+  }
+  inner();
+}
+outer.call({x: 5});
+```
+
 ## Why use semantic HTML
 
 - Better for SEO
@@ -305,7 +333,12 @@ map.get( 'key' );
 for( let [key, value] of map )
 ```
 
+## OOP
+
+<https://kumartul.hashnode.dev/object-oriented-programming-explained-like-never-before>
+
 ## CORS
+
 Là cơ chế của server cho phép các origin khác (origin = scheme(protocol) + domain + port) ngoài chính nó gửi request.
 Cùng origin: cùng scheme, domain và port
 - Cùng scheme và cùng domain
@@ -688,6 +721,7 @@ If you don't have a responsive mobile website, and you open it on a small screen
 
 ## Resource hint: preconnect, dns-prefetch, preload
 
+<https://webpack.js.org/guides/code-splitting/>
 <https://www.youtube.com/watch?v=6q75MVFLlok>
 <https://blog.dareboost.com/en/2020/05/preload-prefetch-preconnect-resource-hints/>
 

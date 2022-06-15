@@ -1,5 +1,7 @@
 ## Promise:
 
+<https://www.youtube.com/watch?v=qW3raOCefms>
+  
 - A promise is an object that encapsulates the result of an asynchronous operation.
 - Has 3 states:
   - pending: initial state, neither fulfilled nor rejected.

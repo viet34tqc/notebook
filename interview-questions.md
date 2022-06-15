@@ -16,6 +16,7 @@
 - What is Dynamic object keys: <https://www.freecodecamp.org/news/top-javascript-concepts-to-know-before-learning-react/>
 - How to Handle Errors in the Fetch API: <https://www.freecodecamp.org/news/top-javascript-concepts-to-know-before-learning-react/>
 - Write bind function: https://blog.bitsrc.io/common-javascript-interview-question-write-your-own-bind-function-fbdabbbea3da
+- JS array method: <https://www.youtube.com/watch?v=BiblrzKMllc>
 
 ## React
 

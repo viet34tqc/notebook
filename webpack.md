@@ -2,6 +2,8 @@
 
 <https://viblo.asia/p/webpack-danh-cho-nguoi-moi-bat-dau-bJzKmo4Ol9N>
 
+Webpack treats every file as the modules. Based on the connection between files (`import` and `export`), it builds a dependency graphs and use it creates a single (or multiple) bundler file
+
 ## Init
 
 - npm init -y
@@ -51,6 +53,7 @@ To check source map of the errors
 ## Code splitting
 
 - Why: to remove duplicated import. If 2 files import the same module, that module will be extract from 2 files
+
 ```javascript
 optimization: {
 	splitChunks: {
@@ -74,6 +77,7 @@ resolve: {
 
 - Why: Preprocess files as you import or load them
 - Structure:
+- 
 ```javascript
 module: {
 	rules: [

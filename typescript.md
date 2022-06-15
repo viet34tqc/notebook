@@ -309,11 +309,23 @@ T is shorthand for 'Types' and can be set manually or automatically
 
 ### Syntax
 
+With function:
 ```tsx
 const foo = <T, >(x: T) => x;
 function foo<T>(x: T): T {
     return x;
 }
+```
+
+With type and interface:
+```tsx  
+type foo<T> = {
+};
+```
+
+With array
+```tsx
+foo<T>[]
 ```
 
 ### Generic extends

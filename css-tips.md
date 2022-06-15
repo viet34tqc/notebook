@@ -1,5 +1,9 @@
 # CSS Tips
 
+## Table border radius and box shadow
+
+Create a div wrapper and apply border radius and box shadow for it
+
 ## DON'T USE SHORTHAND CSS FOR UTILITY CLASS
 
 ## Replace `position: absolute` with `display: grid`
