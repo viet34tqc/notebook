@@ -8,22 +8,21 @@ Firebase provides an easy way to authenticate user. However, when the user is au
 
 ## Firestore concept
 
-Each project can has multiple `collection`. Each collection has `document`. `document` is like a row in database.
+- Each project can has multiple `collection`. 
+- Each collection has `document`, `document` is like a row in database. A `document` can include another `collection`, as `subcollection` (ex: in a user document can have a collection of posts)
+- A reference is a lightweight object that just points to a location in your database, which could be a `collection` or a `document`.
+- Collection references and document references are two distinct types of references and let you perform different operations. For example, you could use a collection reference for querying the documents in the collection, and you could use a document reference to read or write an individual document.
 
-## Step 1: Create a Firebase project and Firebase App
+## Create a Firebase project and Firebase App
 
-## With Google
-
-### Step 2: Setup Authentication
 
 - Go to <i>Authentication -> Get Started -> Enable Google</i>
 <img src="https://i.imgur.com/5CYQLlp.png">
 
-### Step 3: Add Firebase code to your project
-
-- Create a `firebase.ts` in your `root` folder
-- Add these code to `firebase.ts`
-```typescript
+- Add Firebase code to your project
+  - Create a `firebase.ts` in your `root` folder
+  - Add these code to `firebase.ts`
+```js
 import firebase from 'firebase';
 var firebaseConfig = {
 	apiKey: 'AIzaSyDkcFEsxsVzZDLGxymImLcWBFl1ZUvgPWE',
@@ -46,9 +45,10 @@ const db = getFirestore(app); // v8: firebaseApp.firestore();
 export { auth, googleAuthProvider, db };
 ```
 
-### Login and save user to firestore
+## Login with Google and save user to firestore
 
 ```js
+// With google
 const signInWithGoogle = async () => {
 	try {
 		const user = await signInWithPopup(auth, googleAuthProvider);
@@ -63,8 +63,17 @@ const signInWithGoogle = async () => {
 };
 ```
 
+## Login with email/password
 
-### With email/password
+```js
+import { getAuth } from 'firebase/auth';
+export const auth = getAuth(); // No need to create firestore database
+
+await signInWithEmailAndPassword(auth, email, password);
+```
+
+
+## Register With email/password
 
 ```js
 import { getAuth } from 'firebase/auth';
@@ -73,17 +82,22 @@ export const auth = getAuth(); // No need to create firestore database
 // Register
 const user = await createUserWithEmailAndPassword(
 	auth,
-	registerEmail,
-	registerPass
+	email,
+	password
 );
+```
 
-// Logout
+## Logout
+
+```js
 await signOut(auth)
 ```
 
 ## Read data
 
-- Create the reference of the document: use `doc(db, NAME_OF_COLLECTION, ID_OF_DOCUMENT )`. This is like query statement.
+- Create the reference. This is like query statement
+  - Document reference: `doc(db, NAME_OF_COLLECTION, ID_OF_DOCUMENT )` 
+  - Collection reference: `collection(db, NAME_OF_COLLECTION)`
 
 ```js
 const docRef = doc(firestore, 'users', user.uid);
@@ -102,7 +116,7 @@ const q = query(docRef, where('displayName', '==', username), limit(1));
 const userDoc = (await getDocs(q)).docs[0];
 ```
 
-- Get data from reference
+- Get data back from reference
 
 ```js
 docRef.data()
@@ -125,6 +139,3 @@ await addDoc(collection(db, 'usernames'), {
 	uid: user.user.uid,
 });
 ```
-
-
-
