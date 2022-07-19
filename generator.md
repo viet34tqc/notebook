@@ -1,5 +1,7 @@
 # Generator
 
+<https://www.youtube.com/watch?v=gu3FfmgkwUc>
+
 1 hàm bình thường khi được gọi (invoke) sẽ chạy từ đầu tới cuối hàm. Hàm generator thì ngược lại, có thể dừng giữa chừng và chạy tiếp
 
 ## Cú pháp

@@ -1,6 +1,10 @@
 # Redux Saga
 
-Is one of the Redux Middleware
+Is one kind of the Redux Middleware 
+
+## When to use
+
+Use when you need to implement side effect(like: call API) or complex logic
 
 ## Terms
 
@@ -10,21 +14,43 @@ Is one of the Redux Middleware
 
 ### Effects creators
 
-### Tasks
-
-- A function provided by redux-saga that create Effects, like: `takeEvery`, `takeLatest`
+- A function provided by redux-saga that return an Effect, like: `takeEvery`, `takeLatest`
 - Doesn't perform any executions, the saga middleware executes all the Effects
 
-### Saga
+```js
+function* fetchProducts() {
+  // We are not excuting the fetch immediately, instead, `call` creates a description of the effect.
+  const products = yield call(Api.fetch, '/products')
+  // ...
+}
+```
 
-This is a **generator function** that returns **Generator object**. The middleware iterates over the Generator objects and execute all yielded *Effects*. The middleware examines each Effects description and performs the appropriate action
+
+### Tasks
+
+A task is like a process running in background. You create tasks by using the `fork` function
+
+```js
+function* saga() {
+  const task = yield fork(otherSaga, ...args)
+}
+```
+
+### How saga works
+
+Whenever an action is dispatched, the `rootSaga` will be called. `rootSaga` is like the parent of child `saga`. So what's `saga`?
+
+`saga` is a **generator function** that returns **Generator object**. The middleware iterates over `saga` (the generator function) and executes all yielded *Effects* (the result of Effect creator like: `put`, `takeLatest`...). The middleware reads each Effects description and performs the appropriate action (e.g., invoke some asynchronous function, dispatch an action to the store, etc.).
+
+The `sagas` run only one when the action is dispatched the first time. However, effect creators can still wait for that action to run again (i.e: `takeEvery`)
 
 ## Notes
 
 ### Should we manage all the actions in Saga
+
 No, only the action related to side-effect like: requesting APIs...
 
-### Redux Sage doesn't support async function
+### Redux Saga doesn't support async function
 
 ## Basic steps
 
@@ -33,14 +59,63 @@ No, only the action related to side-effect like: requesting APIs...
 - Saga middleware runs root saga. Root saga is a generator function
 
 Whenever an action is distpatched, saga middleware runs the root saga. In the root saga, redux runs all the `yield` commands, which are the
-*saga effects creator*
+*saga effects creators*
 
 ## Popular Effect Creators
 
-Tips:
+<table>
 
-Run API: using `call`
-Run normal function: using `fork`, `call`
+  <tr>
+    <td>takeEvery(pattern, saga, ...args)</td>
+    <td>Chạy saga mỗi lần khi có action pattern được dispatch, dispatch bao nhiêu sẽ chạy bấy nhiêu cái saga</td>
+  </tr>
+  <tr>
+    <td>takeLatest(pattern, saga, ...args)</td>
+    <td>Chạy saga mỗi lần khi có action pattern được dispatch, dispatch bao nhiêu sẽ chạy bấy nhiêu cái saga</td>
+  </tr>
+  <tr>
+    <td>takeLatest(pattern, saga, ...args)</td>
+    <td>Chạy saga, nhưng khi có action pattern mới được dispatch, thì cái saga trước đó sẽ bị cancel</td>
+  </tr>
+  <tr>
+    <td>takeLeading(pattern, saga, ...args)</td>
+    <td>Chạy saga khi action pattern được dispatch, những action tiếp theo sẽ bị cancel cho đến khi saga trước đó chạy xong.</td>
+  </tr>
+  <tr>
+    <td>put(action)</td>
+    <td>Dispatch action từ saga.</td>
+  </tr>
+  <tr>
+    <td>call(fn, ...args)</td>
+    <td>Gọi hàm fn và truyền tham số args vào hàm đó</td>
+  </tr>
+  <tr>
+    <td>all([...effects])</td>
+    <td>Chạy tất cả effects cùng một lúc</td>
+  </tr>
+  <tr>
+    <td>take(pattern) and fork(fn, ...args)</td>
+    <td>Mô hình watcher ... worker, đợi dispatch action pattern thì sẽ thực hiện một cái task nào đó</td>
+  </tr>
+  <tr>
+    <td>throttle(ms, pattern, saga, ...args)</td>
+    <td>Throttle cái action pattern, đảm bảo chỉ chạy saga 1 lần trong khoảng thời gian ms</td>
+  </tr>
+  <tr>
+    <td>debounce(ms, pattern, saga, ...args)</td>
+    <td>Debounce cái action pattern, đảm bảo chỉ chạy saga 1 lần sau khi đã đợi khoảng thời gian ms</td>
+  </tr>
+  <tr>
+    <td>retry(maxTries, delay, fn, ...args)</td>
+    <td>Cố gắng gọi lại hàm fn nếu faield, sau mỗi delay milliseconds, và tối đa chỉ thử maxTries lần.</td>
+  </tr>
+
+</table>
+
+**Tips**:
+
+Run API or async function (for easier testing): using `call`
+Run normal function: using `fork`, `call` (like event handler). `fork` is non-blocking and `call` is blocking
 Dispatch action: `put`
 Wait for action to be dispatched: `take`, `takeLatest`, `takeEvery`
 
@@ -69,7 +144,7 @@ Wait for action to be dispatched: `take`, `takeLatest`, `takeEvery`
 
 ## all
 
-`all(array_of_call)
+`all(array_of_call)`
 
 Run multiple `call` effect (APIs) (like `Promise.all`)
 The APIs are run parallely (**Unlike `Promise.all`** )

@@ -10,6 +10,10 @@
 - Images optimization with `Image`
 - Code splitting and bundling
 
+## How
+
+NextJS renders HTML files with full content in advance that is good for SEO. When user get the content, client-side rendering takes over and makes the website interactive like tradition react app (this process is called hydration)
+
 ## Page Routing
 
 If you are using create-react-app and you are in need of building routes for your app, then you will need to install third-party package like **react-router-dom**. With NextJS, that installation isn't necessary anymore because NextJS support routing by default.
@@ -64,7 +68,7 @@ const { id } = router.query;
 Allows us to fetch data from external API before component renders and pass that data as a prop to the component on build.
 Take a note that you shouldn't fetch data from NextJS's API route.
 
-When a page with `getStaticProps` is pre-rendered at build time, in addition to the page HTML file, Next.js generates a JSON file holding the results of running `getStaticProps`.
+When a page with `getStaticProps` is pre-rendered at build time, in addition to the HTML file, Next.js generates a JSON file holding the results of running `getStaticProps`.
 
 When you navigate to a page that's pre-rendered using `getStaticProps`, Next.js fetches this JSON file (pre-computed at build time) and uses it as the props for the page component. This means that client-side page transitions will not call getStaticProps as only the exported JSON is used.
 
@@ -88,9 +92,9 @@ const Country = ({ country }) => {};
 
 ## getStaticPath
 
-This function create pre-rendered HTML pages depending on the path you return.
+This function helps Next know which dynamic pages to pre-render
 
-Let's say you have a bunch of single posts. These posts is fetched from an API and you need to create routes for them at build time (`next build`). This is done in `getStaticPath` function
+Let's say you have a bunch of single posts. These posts are fetched from an API and Next needs to know their ids in advance. This is done in `getStaticPath` function. It returns the path that contains an array with every route for this dynamic url.
 
 ```js
 export const getStaticPaths = async () => {
@@ -185,3 +189,7 @@ So, if the users visit your site at the first 60 seconds, he will see the static
 
 Then, in the background, NextJS triggers a regeneration of the page by calling `getStaticProps` again. Once the page has been successfully generated, it invalidtes the cache and updates it with the newest version of the page. Now, the next person who comes to the site will see the most updated content
 If the background regeneration fails, the old page will stay unaltered
+
+## Which rendering method to use
+
+<img src="https://i.imgur.com/WnE3o7T.png" />

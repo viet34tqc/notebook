@@ -68,12 +68,67 @@ If you mutate the data directly, the components might not re-render that could l
 
 With `useEffect`, we can control how the side effects run in the component. Normally, the side effects make the state change. So, if you put them outside the `useEffec` hook, it will lead to infinite re-render of the component.
 
+## When react does not re-render
+
+<https://www.zhenghao.io/posts/react-rerender>
+<https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly-complete-guide-to-react-rendering-behavior/>
+
+If a react component returns exact the same element reference in its render output as it did in the last time, React will skip re-rendering that particular child (Explaination: <https://www.developerway.com/posts/react-elements-children-parents>)
+
+- The child component is pass as a prop or children prop
+- The child component is memorized using `useMemo()`
+
+``` jsx 
+// The `props.children` content won't re-render if we update state
+function SomeProvider({children}) {
+  const [counter, setCounter] = useState(0);
+
+  return (
+    <div>
+      <button onClick={() => setCounter(counter + 1)}>Count: {counter}</button>
+      <OtherChildComponent />
+      {children}
+    </div>
+  )
+}
+```
+
+```jsx
+// Only childA re-render, childB, childC not when the parent re-renders
+function Parent({ children, lastChild }) {
+  return (
+    <div className="parent">
+      <ChildA />
+      {children}
+      {lastChild}
+    </div>
+  );
+}
+
+<Parent lastChild={<ChildC />}>
+  <ChildB />
+</Parent>
+
+function ChildA() {
+  return <div className="childA"></div>;
+}
+
+function ChildB() {
+  return <div className="childB"></div>;
+}
+
+function ChildC() {
+  return <div className="childC"></div>;
+}
+```
+
 ## React re-render
 
-React component only re-renders when the state or props changes. When it re-renders, it update the DOM with the new state. React won't update any DOM ultil that component re-renders. Changing `ref` doesn't cause the component to re-render, so the DOM might not be updated. For example:
-```jsx
-<button disabled={count.current === 3}>Button</button>
-```
+<https://www.developerway.com/posts/how-to-write-performant-react-code>
+
+- When props or state have changed
+- When parent component re-renders
+- When a component uses context and the value of its provider changes
 
 ## `useState` and `useReducer`
 
@@ -176,6 +231,7 @@ Mỗi khi render 1 component nào đó, props object của component đó sẽ �
 ## React Portal
 
 Cho phép render 1 component vào 1 DOM node nằm ngoài root.
+Why: để tạo ra các component mà không bị ảnh hưởng bởi style của component cha vì component cha có thể bị overflow hidden 
 Trong 1 App react thông thường, toàn bộ UI (components) sẽ được render trong 1 the div với id là root `<div id="root"><div>`
 Giả sử ta muốn tạo 1 cái modal và thẻ div bọc lấy modal này nằm ngoài root. Và vì thẻ div này nằm ngoài root, ta không thể tạo component và render bình thường được mà phải dùng React Portal.
 
@@ -208,6 +264,10 @@ function outer() {
 outer.call({x: 5});
 ```
 
+## Các cách authentication
+
+<https://viblo.asia/p/cac-phuong-thuc-pho-bien-dung-authentication-naQZRPGP5vx>
+
 ## Why use semantic HTML
 
 - Better for SEO
@@ -230,6 +290,24 @@ Headless website is built with separated back-end and frontend. With headless, y
 Your frontend is a JS application that run by browser, and it doesn't need to be hosted on a server. You just need to put your code somewhere browser can download it (Often it's just on CDN)
 Whereas, your backend can be WordPress or NodeJS and hosted on a server.
 If needed, frontend part will communicate to the backend end via API (using REST or GraphQL) to get the data or perform other actions such as sending email
+
+## Cơ chế làm việc của session và JWT
+
+<https://viblo.asia/p/cach-trien-khai-refreshtoken-va-freshtoken-p1-dung-luu-tat-ca-phien-cua-nguoi-dung-3Q75wN23lWb>
+  
+- Session
+
+Khi client tạo 1 request login tới server, server sẽ tìm trong sổ user coi có hợp lệ không, nếu oke thì lấy các quyền mà user đó có, rồi tạo 1 session lưu ở server và trả về cho client 1 cookie (chứa session id (không trùng lặp)). Với mỗi request, client sẽ cầm theo cookie, server sẽ dựa vào id trong đó để tìm trong sổ session, coi cái nào khớp thì coi có quyền gì mà xử lí, không có thì bắt login lại.
+
+- JWT
+
+Không lưu session, cấp cho người dùng 1 tờ giấy uỷ quyền (token), trên đó có thông tin/quyền user được phép, có chữ kí và ngày hết hạn. Mỗi lần truy cập vào đâu ông bảo vệ không cần tra cứu sổ sách gì cả, cứ nhìn giấy uỷ quyền hợp lệ là cho vô.
+
+Các vấn đế của JWT
+
+- User A authen thành công ➜ server response token ➜ User A bị Man-in-the-middle attack, do User A bất cẩn làm token rơi vào tay hacker ➜ hacker chiếm quyền truy cập account của user A mà server không hề hay biết
+- User A đang truy cập các private API, đột nhiên token expired, màn hình đột ngột bị rediect sang trang login vì server response 403
+- server chưa cài đặt cơ chế hủy token, phía database thì account user A đã bị ban, nhưng token vẫn đang lưu rải rác tại các client (desktop app, mobile app, web, server khác, ...), client vẫn cứ gửi token, server encode payload token thấy vẫn còn hạn sử dụng, phần mã hash chữ ký vẫn hợp lệ ➜ user vẫn author thành công
 
 ## Debounce và throttle
 
@@ -359,6 +437,8 @@ https://example.com/app2
 Để server có thể cho phép client gửi cross-origin request, server đó phải set giá trị cho 1 header có tên là `Access-Control-Allow-Origin` và giá trị đó là origin của client.
 
 ## Rendering a web page
+
+<https://blogs.halodoc.io/how-does-a-browser-actually-work/>
 
 <ol>
   <li>You type an URL into address bar in your preferred browser.</li>
@@ -698,6 +778,12 @@ Dùng để tính width của flex items
 
 `flex-shrink: 1`: Khi tổng width của các item > parent và flex-shrink = 1 => width của item sẽ bị thu lại
 `flex-grow: 1`: Khi tổng width của item < parent và flex-grow: 1 => width của item sẽ tăng lên để fill hết width của parent
+
+## `vmin`, `vmax`
+
+`vmin` and vmax can change whilst the browser window is resized or the orientation of the mobile phone is changed.
+`vmin` is the minimum between the viewport's height or width in percentage depending on which is smaller.
+`vmax` is the maximum between the viewport's height or width in percentage depending on which is bigger.
 
 ## <!DOCTYPE html>
 

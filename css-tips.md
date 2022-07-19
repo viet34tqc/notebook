@@ -6,6 +6,12 @@ Create a div wrapper and apply border radius and box shadow for it
 
 ## DON'T USE SHORTHAND CSS FOR UTILITY CLASS
 
+Because it might prevent overriding CSS
+
+## `:only-child` and `:only-of-type`
+
+<https://www.youtube.com/watch?v=yyPteFyZsCE>
+
 ## Replace `position: absolute` with `display: grid`
 
 Set `grid-area: 1/-1` the same for all the child element
