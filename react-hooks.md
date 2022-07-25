@@ -134,8 +134,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
 `useImperativeHandle`
 <https://www.youtube.com/watch?v=dSzf0nv6QmM>
 
-Considering a case when you want to pass a ref from Parent component to child component. Default, that ref will be public in the parent component and you can use that ref within any event handler. `useImperativeHandle` will limit the event handler from the parent components 
-that can access the ref
+Considering a case when you want to pass a ref from Parent component to child component. Default, that ref will be public and you can use that ref with any event handler in the parent component. `useImperativeHandle` will limit value, state, or function inside a child component to the parent component the ref
 
 ## `useEffect`
 
