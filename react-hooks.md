@@ -88,6 +88,19 @@ And now, if we want to focus on an element, just need to call `inputRef.current.
 <button disabled={count.current === 3}>Button</button>
 ```
 
+**When to use `ref`**
+
+In React, every update is split in two phases:
+
+- During render, React calls your components to figure out what should be on the screen.
+- During commit, React applies changes to the DOM.
+
+In general, you don’t want to access refs during rendering. That goes for refs holding DOM nodes as well. During the first render, the DOM nodes have not yet been created, so ref.current will be null. And during the rendering of updates, the DOM nodes haven’t been updated yet. So it’s too early to read them.
+
+React sets ref.current during the commit. Before updating the DOM, React sets the affected ref.current values to null. After updating the DOM, React immediately sets them to the corresponding DOM nodes.
+
+Usually, you will access refs from event handlers. If you want to do something with a ref, but there is no particular event to do it in, you might need an effect.
+
 ### fowardRef
 
 And now, we want this `HTML input` element to be re-used in other components. So, we create an `Input` component which contains `HTML input` element.

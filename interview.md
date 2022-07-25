@@ -143,6 +143,7 @@ function ChildC() {
 ## How React rendered UI
 
 <https://beta.reactjs.org/learn/render-and-commit>
+
 3 phases:
 
 - Trigger a render: there are two reasons for a component to render
@@ -173,11 +174,13 @@ Then real DOM is updated (this process is commit)
 ## React bailing out of updating states
 
 <https://stackoverflow.com/questions/58208727/why-react-needs-another-render-to-bail-out-state-updates>
+
 Nếu giá trị state không thay đổi khi setState thì component sẽ render thêm 1 lần nữa. Đến lần setState thứ 3 thì nó dừng hẳn không re-render tiếp.
 
 ## Preventing errors from unmounted components
 
 <https://www.digitalocean.com/community/tutorials/how-to-handle-async-data-loading-lazy-loading-and-code-splitting-with-react>
+
 ```js
 const [show, toggle] = useReducer(state => !state, true);
 ```
@@ -200,9 +203,16 @@ useEffect(() => {
 }, [name])
 ```
 
+## React flushSync
+
+<https://beta.reactjs.org/learn/manipulating-the-dom-with-refs#when-react-attaches-the-refs>
+
+Normally, in React, state updates are queued. That means `setState` doesn't update the state immediately. `flushSync` force React to update ('flush') the DOM synchronously.
+
 ## Why list item need a unique `key`
 
 <https://kentcdodds.com/blog/understanding-reacts-key-prop>
+
 Key giúp React có thể theo dõi (track) được item nào bị xóa, thêm hay bị sửa. Key của mỗi item phải là duy nhất và không thay đổi. Nếu lấy key là index thì khi thêm, hoặc xóa item, index bị thay đổi => render sai
 
 Ngoài ra, khi sắp xếp, thêm, xóa item, việc render DOM sẽ tốn rất nhiều thời gian. Nếu item có key, React sẽ nhớ được item đó và chỉ việc hiển thị lại item đấy chứ không phải re-render lại từ đầu => tối ưu về mặt thời gian
