@@ -71,10 +71,6 @@ Whenever an action is distpatched, saga middleware runs the root saga. In the ro
   </tr>
   <tr>
     <td>takeLatest(pattern, saga, ...args)</td>
-    <td>Chạy saga mỗi lần khi có action pattern được dispatch, dispatch bao nhiêu sẽ chạy bấy nhiêu cái saga</td>
-  </tr>
-  <tr>
-    <td>takeLatest(pattern, saga, ...args)</td>
     <td>Chạy saga, nhưng khi có action pattern mới được dispatch, thì cái saga trước đó sẽ bị cancel</td>
   </tr>
   <tr>
@@ -117,7 +113,7 @@ Whenever an action is distpatched, saga middleware runs the root saga. In the ro
 Run API or async function (for easier testing): using `call`
 Run normal function: using `fork`, `call` (like event handler). `fork` is non-blocking and `call` is blocking
 Dispatch action: `put`
-Wait for action to be dispatched: `take`, `takeLatest`, `takeEvery`
+Wait for action to be dispatched: `take`, `takeLatest`, `takeEvery`. Saga will take **action** object as paramater
 
 ## take
 
@@ -158,8 +154,21 @@ Dispatch an action
 
 ### takeEvery
 
+`takeEvery(pattern, callback)`
+
 Run the saga whenever an action is dispatched. For example: you click a button to dispatch an action. You click 3 times, the middleware runs 3 times
 
 ### takeLatest
 
+`takeLatest(pattern, callback)`
+
 Run the latest dispatched action. For example: you click a button to dispatch an action. You click 3 times, the middleware runs only the last action.
+
+Example for login action:
+
+- Create an login action and reducer in authSlice
+- User click login button: user -> dispatch an action, payload is the credentials.
+- redux saga wait for that action and pass that action into callback function
+- In the callback, call API to get the user 
+
+From an example above, you can clearly see that redux saga is the middleware that takes care of async function. The async function here could be an API to get the user from action payload
