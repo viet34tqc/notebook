@@ -531,6 +531,31 @@ console.log(min) // 1
 console.log(items) // [1,4,7,9]
 ```
 
+## Copy object
+
+- Normal copy: point to the same reference. If you change one of them, the other will change as well.
+
+```js
+const a = {x: 0};
+const b = a;
+```
+
+- Shallow copy: using object spread or `Object.assign({}, obj). However, if you modify the nested object property, the other will change as well
+
+```js
+const a = {x: 0, y: {z: 0}};
+const b = Object.assign({}, a); // or b = {...a}
+```
+
+- Deeper copy: this won't change the other object if you modify the nested object property. However, this doesn't work if the original object has property as method
+
+```js
+const a = { x: 0, y: { z: 0 } };
+const b = JSON.parse(JSON.stringify(a)); 
+```
+
+- Use `lodash.cloneDeep`
+
 ## useState rules
 
 Only call Hooks at the top level. You shouldn't call `useState` in loop, conditions
