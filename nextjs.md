@@ -26,6 +26,49 @@ import Link from 'next/link';
 ```
 
 Needless to say, you can still use HTML `a` tag and it works. However, when you click on the link using `a` tag, your page will be refreshed.
+Besides, NextJS will automatically **prefetch** the code for the linked page in the background. By the time you click on the link, the code for the linked page will already loaded in the background, and the page transition will be near-instant.
+
+**Note**:
+
+- If you need to link to an external page outside the Next.js app, just use an <a> tag without Link.
+- If you need to add attributes like, for example, className, add it to the a tag, not to the Link tag
+
+```jsx
+<Link href="/">
+	<a className="foo" target="_blank" rel="noopener noreferrer">
+	Hello World
+	</a>
+</Link>
+```
+
+## Adding third-party scripts
+
+Use `Script` from `next/script`:
+
+```jsx
+export default function FirstPost() {
+  return (
+    <>
+      <Head>
+        <title>First Post</title>
+      </Head>
+      <Script
+        src="https://connect.facebook.net/en_US/sdk.js"
+        strategy="lazyOnload"
+        onLoad={() =>
+          console.log(`script loaded correctly, window.FB has been populated`)
+        }
+      />
+      <h1>First Post</h1>
+      <h2>
+        <Link href="/">
+          <a>Back to home</a>
+        </Link>
+      </h2>
+    </>
+  );
+}
+```
 
 ## Use cases
 
@@ -61,14 +104,16 @@ const router = useRouter();
 const { id } = router.query;
 ```
 
-## Data Fetching
 
-### getStaticProps
+## getStaticProps
 
 Allows us to fetch data from external API before component renders and pass that data as a prop to the component on build.
 Take a note that you shouldn't fetch data from NextJS's API route.
 
-When a page with `getStaticProps` is pre-rendered at build time, in addition to the HTML file, Next.js generates a JSON file holding the results of running `getStaticProps`.
+When a page with `getStaticProps` is pre-rendered at **build time**, in addition to the HTML file, Next.js generates a JSON file holding the results of running `getStaticProps`.
+
+In development, `getStaticPath` runs on every requests
+In production, `getStaticPath` runs only at build time
 
 When you navigate to a page that's pre-rendered using `getStaticProps`, Next.js fetches this JSON file (pre-computed at build time) and uses it as the props for the page component. This means that client-side page transitions will not call getStaticProps as only the exported JSON is used.
 
@@ -92,12 +137,24 @@ const Country = ({ country }) => {};
 
 ## getStaticPath
 
-This function helps Next know which dynamic pages to pre-render
+This function helps NextJS know which dynamic pages to pre-render. For example, if you name your dynamic route as `[id].js`, it returns the array of possible value for the `[id]`
 
 Let's say you have a bunch of single posts. These posts are fetched from an API and Next needs to know their ids in advance. This is done in `getStaticPath` function. It returns the path that contains an array with every route for this dynamic url.
 
+`getStaticPath` is used with `getStaticProps`. Both of them is only run on server-side.
+
+In development, `getStaticPath` runs on every requests
+In production, `getStaticPath` runs only at build time
+
 ```js
+export async function getStaticProps({ params }) {
+  // Fetch necessary data for the blog post using params.id
+}
+
 export const getStaticPaths = async () => {
+	// Return a list of possible value for id
+	// The paths is an array of objects. Each object **must have** `params` property.
+	// The value of `params` property must be an object with `id` key (if you named your dynamic route as [id].js)
 	const res = await fetch('https://restcountries.eu/rest/v2/all');
 	const countries = await res.json();
 
@@ -111,6 +168,19 @@ export const getStaticPaths = async () => {
 	};
 };
 ```
+
+`fallback` property is used when the path is not existed yet (is not returned by `getStaticPaths`). It accepts 3 values: 
+
+- `false`: it returns 404 page
+- `true`: 
+  - The path that has not been generated at build time will not return 404. Instead, NextJS will serve a *fallback version* of the page
+  - In the background, the path is statically generated, **loading state** is shown while generating this path 
+  - Page is rendered with required props after generating 
+  - New path will be cached in CDN (later requests will result in cached page) - crawler Bots may index fallback page (not good for SEO)
+- `blocking`:
+  - The path is switch to server-side rendering. Future requests will serve the static file from the cache.
+  - the path is statically generated **without loading state** (no fallback page) - new path will be cached in CDN (later requests will result in cached page)
+
 
 ## Client-side rendering & Server-side rendering & Static-site generation & Pre-rendering
 
@@ -140,20 +210,31 @@ The HTML is generated at build-time and is reused for each request. This is the 
 
 - Initial Load: Server serves initial HTML and that's displayed on the initial load which leads to faster TTFB
 - JS Loaded
-- Hydration: App is hydrated, React components are initialized and App becomes interactive
+- Hydration: App is hydrated, React components are initialized and App becomes interactive (convert from static HTML to interactive HTML)
 
 Pros:
 
 - This method is really good for SEO because bots get fully rendered HTML and they can easily interpret the content on the page.
 - The data is fetched only one time and cached.
 - Faster TTFB
-  Const:
+
+Const:
+
 - The data can get stale until you regenerate the content.
 
 In NextJS, you can use `next build` to build the app for production. When that happened, HTML is generated and is reused for every request. Two types of static-site generation
 
 - Without data: for pages that can be generated without fetching external data at build time. It's just simple HTML without talking to any APIs.
 - With data: for pages that can only be generated **after fetching** external data at build time. In NextJS, we fetch data in `getStaticProps` function
+
+When to use:
+
+The content of the page doesn't update frequently
+
+- Marketing pages
+- Blog posts
+- E-commerce product listings
+- Help and documentation
 
 ### Server-side rendering
 
@@ -168,7 +249,18 @@ Const:
 - UX is not so good because navigation needs page refresh
 - Redundant data fetching (if not cache)
 
+When to use:
+
+The content of the page updates frequently and it changes on every user request, ex: checkout page, cart page...
+
+- Marketing pages
+- Blog posts
+- E-commerce product listings
+- Help and documentation
+
 ### Incremental Static Regeneration
+
+<https://vercel.com/docs/concepts/next.js/incremental-static-regeneration>
 
 In static-site generation with Data, the data fetching is run at build time. However, you can also make it happen at <i>request time</i> **without having to re-build the entire site**. This is done by using `revalidate` property.
 
