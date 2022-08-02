@@ -92,6 +92,7 @@ axios.interceptors.response.use( response => {
 ```
 
 ## Custom Headers
+
 Let's say you are working with login system that is using JWT for authentication. First, you send a post request to login. If validation is successfull, you get back a token. Then, you need to send that token in the header to access protected routes. Let's do that with axios:
 ```javascript
 const config = {
@@ -115,6 +116,7 @@ axios
 ```
 
 ## Axios Instances
+
 Instances helps you write your request easier
 ```javascript
 const axiosInstance = axios.create({

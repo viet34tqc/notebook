@@ -294,6 +294,11 @@ outer.call({x: 5});
 Màn thường: 1 CSS pixel tương đương 1 điểm ảnh vật lý
 Màn retina: 1 CSS pixel tương đương 4 điểm ảnh vật lý
 
+## CDN là gì
+
+<https://viblo.asia/p/cdn-la-gi-huong-dan-tich-hop-cdn-vao-he-thong-voi-cloudflare-gGJ59rRpKX2>
+CDN (Content Delivery Network) tạm dịch là mạng phân phối nội dung. Đó là một mạng lưới máy chủ (caching server), được bố trí phân tán theo khu vực địa lý, với nhiệm vụ chính là phân phối nội dung tĩnh tới người dùng nhanh nhất có thể.
+
 ## Headless website
 
 Headless website is built with separated back-end and frontend. With headless, your frontend (head) is decoupled from the backend (body).

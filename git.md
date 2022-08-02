@@ -52,6 +52,9 @@ git pull --rebase master
 ```
 
 Git workflow
+
+<https://www.youtube.com/watch?v=vQgcl8VouLU>
+
 Rebase `feature` onto the tip of `master` then merge `feature` into `master`
 
 ### Interactive rebase

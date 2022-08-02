@@ -10,7 +10,7 @@ Use when you need to implement side effect(like: call API) or complex logic
 
 ### Effects
 
-- A plain javascript object contains intructions for saga middleware
+- A plain javascript object contains intructions for saga middleware to perform some operation like: invoke asynchronous function, dispatch an action to the store, etc...
 
 ### Effects creators
 

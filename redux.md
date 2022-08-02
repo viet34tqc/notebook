@@ -1,5 +1,7 @@
 # Redux
 
+Example: <https://blog.logrocket.com/handling-user-authentication-redux-toolkit/>
+
 ## Core terms
 
 Below are the terms that describe the structure of Redux.

@@ -95,6 +95,8 @@ await signOut(auth)
 
 ## Read data
 
+There are 3 steps: create a reference, get the document (returns a `snapshot`, not the real data), read the real data using `docSnapshot.data()`; 
+
 - Create the reference. This is like query statement
   - Document reference: `doc(db, NAME_OF_COLLECTION, ID_OF_DOCUMENT )` 
   - Collection reference: `collection(db, NAME_OF_COLLECTION)`
@@ -106,7 +108,7 @@ const docRef = doc(firestore, 'users', user.uid);
 - Get doc from reference: `getDoc`
 
 ```js
-await getDoc(docRef);
+await getDoc(docRef); // Return a snapshot object, not the real data
 ```
 
 - Get doc from query
@@ -122,9 +124,22 @@ const userDoc = (await getDocs(q)).docs[0];
 docRef.data()
 ```
 
+- Get collection from a document (nested collection)
+
+```js
+const postsRef = collection(userDoc.ref, 'posts');
+const posts = (await getDocs(postsRef)).docs
+```
+
+- Get doc from nested collection
+
+```js
+const postRef = doc(firestore, 'users', user.uid, 'posts', nextSlug);
+```
+
 ## Write data
 
-- Add: `setDoc` (custom document ID) and `addDoc` (automatically generated ID)
+Use `setDoc` (custom document ID) and `addDoc` (automatically generated ID)
 
 ```js
 await setDoc(docRef, {

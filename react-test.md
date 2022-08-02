@@ -73,13 +73,13 @@ Use `screen` to query element
 - `getByText`: query element by the inner text: `screen.getByText('/confirm/i)`
 - `getByRole`: query element by HTML tag: `screen.getByRole('button', {name: /confirm/i})`
 - `getByLabelText`: query input by label
-- `queryBYText`: use with `not.toBeInTheDocument`
+- `queryByText`: Returns the matching node for a query, and return null if no elements match. This is useful for asserting an element that is not present. Throws an error if more than one match is found. Use with `not.toBeInTheDocument`
 - `findByText`: use with asynchronous test.
 
 Recap:
-If you want to select an element that is rendered after an asynchronous operation, use the `findBy*` or `findByAll*` variants.
 
-If you want to assert that some element should not be in the DOM, use `queryBy*` or `queryByAll*` variants. Otherwise use `getBy*` and `getByAll*` variants.
+- If you want to select an element that is rendered after an asynchronous operation, use the `findBy*` or `findByAll*` variants.
+- If you want to assert that some element should not be in the DOM, use `queryBy*` or `queryByAll*` variants. Otherwise use `getBy*` and `getByAll*` variants.
 
 ### Event
 
@@ -123,6 +123,7 @@ user.click(
 ## Config with TypeScript
 
 ### Packages to installed:
+
 - ts-jest (version 26.4.2: Fix `Jest: a transform must export something`)
 - jest-scss-transform (if you are using SCSS import)
 If you are not using create-react-app (like: NextJS), you need to install these additional packages
@@ -175,11 +176,13 @@ Using `msw` packages. The requests are sent to `msw` instead of the real server.
 **NOTE**
 
 - Test with CRA
+
 When we do asynchonous test using creat-react-app, we need to run `yarn test` which runs `react-scripts test`. The reason is react-scripts will run polyfill for `fetch` (Jest run in NodeJS environment where `fetch` is not available). Otherwise, we might encounter error `ReferenceError: fetch is not defined`
 
 In case we don't use CRA, then we will have to import `fetch` polyfill by ourselves.
 
 - Request matching:
+
 <https://mswjs.io/docs/basics/request-matching>
 We have to provide exact request URL string, only those request that match that string are mock
 

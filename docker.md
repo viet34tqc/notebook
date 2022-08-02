@@ -2,6 +2,7 @@
 
 ## Reference
 
+<https://viblo.asia/p/docker-chua-biet-gi-den-biet-dung-phan-1-lich-su-ByEZkWrEZQ0>
 <https://www.youtube.com/watch?v=pTFZFxd4hOI>
 <https://devdojo.com/bobbyiliev/free-introduction-to-docker-ebook>
 <https://www.freecodecamp.org/news/how-to-remove-all-docker-images-a-docker-cleanup-guide/>
@@ -47,7 +48,7 @@ CMD [ "npm", "start" ]    // Khi setup xong thì chạy lệnh
 
 ### Image
 
-Là 1 snapshot (giống file ghost) mà khi run snapshot này sẽ cho ra *Container*, hay nói cách khác là tái tạo lại môi trường
+Là 1 snapshot (giống file ghost) mà khi run snapshot này sẽ cho ra *Container*, hay nói cách khác là tái tạo lại môi trường. Có thể hiểu Docker Image như là class và container như là instance của class đó.
 Có thể push image này lên cloud và người khác có thể pull image này về máy mình và chạy
 
 Tạo 1 file `.dockerignore` để ignore `node_module`
