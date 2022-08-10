@@ -41,6 +41,21 @@ Besides, NextJS will automatically **prefetch** the code for the linked page in 
 </Link>
 ```
 
+## Use next link with 3rd library
+
+`Link` component just render an `a` tag without any styles. Besides, you can not use `Link` with another 3rd library like Material UI or Chakra, which also have `Link` component. In this case, you need to use `NextLink`
+
+```jsx
+import NextLink from 'next/link'
+import { Link as MuiLink } from '@mui/material'
+
+// We have to use passHref to pass `href` to MUILink
+<NextLink href="/" passHref>
+  <MuiLink>Home</MuiLink>
+</NextLink>
+```
+
+
 ## Adding third-party scripts
 
 Use `Script` from `next/script`:

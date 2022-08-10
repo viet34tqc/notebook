@@ -39,7 +39,8 @@ if you get past 2-3 state-related contexts in an application, you're re-inventin
 
 ## What is state in React
 
-It's a variable which whenever it updates, it will trigger a re-renders of the component.
+Information that changes in response to user interactions is called "state".
+In react, it's a variable which whenever it updates, it will trigger a re-renders of the component.
 
 ## What is rendering in React
 
@@ -125,10 +126,20 @@ function ChildC() {
 ## React re-render
 
 <https://www.developerway.com/posts/how-to-write-performant-react-code>
+<https://www.developerway.com/posts/react-re-renders-guide>
 
 - When props or state have changed
-- When parent component re-renders
+- When parent component re-renders, even if the props pass to child component is memorized
 - When a component uses context and the value of its provider changes
+- Component use custom hook and the state of that hook changes or Context's value changes.
+
+How to prevent unnecessary re-renders
+
+- Moving state down: keep the state of the component as close as possible if that state is used in the component only
+- Composition: children as props or component as props
+- `React.memo` without `useMemo`: use when rendering a heavy component that is independent from the parent component's state. Besides using `React.memo` in the child component, we can also create a function use `useMemo` inside parent component that return the heavy component.
+- `React.memo` with `useMemo`: use when the child component use state from parent component as props. 
+- Context value: memorize context value, split value into chunks
 
 ## `useState` and `useReducer`
 
@@ -208,6 +219,10 @@ useEffect(() => {
 <https://beta.reactjs.org/learn/manipulating-the-dom-with-refs#when-react-attaches-the-refs>
 
 Normally, in React, state updates are queued. That means `setState` doesn't update the state immediately. `flushSync` force React to update ('flush') the DOM synchronously.
+
+## Authentication security
+
+<https://blog.openreplay.com/11-authentication-mistakes-and-how-to-fix-them>
 
 ## Why list item need a unique `key`
 
@@ -561,12 +576,13 @@ const b = JSON.parse(JSON.stringify(a));
 
 - Use `lodash.cloneDeep`
 
-## useState rules
+## Rules of hooks
 
-Only call Hooks at the top level. You shouldn't call `useState` in loop, conditions
-Only call Hooks inside React function components
-
-`useState` doens't merge objects when the state is updated. It replaces them.
+- Only call Hooks at the top level. You shouldn't call `useState` in loop, conditions
+- Only call Hooks inside React function components
+- Whenever we have connected useState and useEffect hooks, it’s a good opportunity to extract them into a custom hook:
+- `useState` doens't merge objects when the state is updated. It replaces them.
+- Don't use `async` with callback function in `useEffect`. It can work fine if you have only one `useEffect`. However, if you have multiple `useEffect`, you could run into race conditon.
 
 When there is an update action (ex: click event).
 

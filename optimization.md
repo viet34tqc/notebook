@@ -4,6 +4,18 @@
 
 ## Font
 
+- Modern `@font-face`
+<https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Fonts/Variable_Fonts_Guide>
+```css
+@font-face {
+ font-family: 'MyVariableFontName';
+ src: url('path/to/font/file/myvariablefont.woff2') format('woff2-variations');
+ font-weight: 125 950;
+ font-stretch: 75% 125%;
+ font-style: normal;
+}
+```
+
 - Self-host font
 - Optimize google font: https://css-tricks.com/how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy/
 - Chỉ dùng woff2

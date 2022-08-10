@@ -9,6 +9,7 @@
 ## Tools
 
 - Jest: provides API for testing
+- Jest Preview: preview the HTML without imagining the layout in your head (<https://github.com/nvh95/jest-preview>)
 - @testing-library/react: testing DOM manipulation, provides `render` for rendering a component, `fireEvent` for stimulating an event (such as 'click')
 
 ## Type of testing

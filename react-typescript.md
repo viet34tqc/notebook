@@ -1,6 +1,5 @@
 # React Typescript
 
-
 ## Component Props
 
 You can declare Component props with an interface like this:
@@ -16,6 +15,23 @@ And use it like this:
 ```typescript
 const TextField = ({ text, handleChange }: InputProps) => {}
 ```
+
+Use `PropsWithChildren`
+
+```jsx
+
+import React, { PropsWithChildren } from "react";
+
+type ComponentProps = {
+  someProperty: string;
+};
+
+// ✅
+function Component({ someProperty, children }: PropsWithChildren<ComponentProps>) {
+  // ...
+}
+```
+
 
 ## Component Hooks:
 
