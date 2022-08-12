@@ -2,9 +2,10 @@
 
 ## Reference
 
+<https://www.codecademy.com/learn/learn-react-testing/modules/react-testing-library/cheatsheet>
+
 <https://www.smashingmagazine.com/2020/06/practical-guide-testing-react-applications-jest/>
 <https://jestjs.io/docs/tutorial-react>
-<https://academind.com/tutorials/testing-react-apps>
 
 ## Tools
 
@@ -67,20 +68,30 @@ describe('Test counter', () => {
 
 ## DOM interaction
 
-### Query selector
+### Query selector and assertion function
 
 Use `screen` to query element
 
 - `getByText`: query element by the inner text: `screen.getByText('/confirm/i)`
+- `getAllBy*()[0]`: query the first element
 - `getByRole`: query element by HTML tag: `screen.getByRole('button', {name: /confirm/i})`
 - `getByLabelText`: query input by label
-- `queryByText`: Returns the matching node for a query, and return null if no elements match. This is useful for asserting an element that is not present. Throws an error if more than one match is found. Use with `not.toBeInTheDocument`
+- `queryByText`: Returns the matching node for a query, and return null if no elements match. This is useful for asserting an element that is not present. Throws an error if more than one match is found. Use with `not.toBeInTheDocument`. If the element is disappears asynchronously, we can combine with `waitFor()`
 - `findByText`: use with asynchronous test.
+
+For assertion
+
+- `DomElem.toHaveTextContent('text')`
+- `Input.toHaveValue('value')`
+- `toBeEnabled()`
+- `toBeInTheDocument()`
+- `toBeNull()`
+- `Function.toHaveBeenCalled()`
 
 Recap:
 
 - If you want to select an element that is rendered after an asynchronous operation, use the `findBy*` or `findByAll*` variants.
-- If you want to assert that some element should not be in the DOM, use `queryBy*` or `queryByAll*` variants. Otherwise use `getBy*` and `getByAll*` variants.
+- If you want to assert that an element should not be in the DOM (using `not.toBeInTheDocument` and `toBeNull`, use `queryBy*` or `queryByAll*` variants. Otherwise use `getBy*` and `getByAll*` variants.
 
 ### Event
 
@@ -96,7 +107,46 @@ fireEvent.click(
 user.click(
 	screen.getByRole('button', { name: 'Subtract from Counter' })
 );
+
+userEvent.type(screen.getByRole('input'), 'Oreos are delicious');
 ```
+
+## Examples
+
+### Click a button then remove an element
+
+```	jsx
+render(<App/>);
+
+  const button = screen.getAllByText('×')[0]
+  
+  // TODO: Mimic clicking on the button
+  userEvent.click( button );
+
+  // We grab the thought again. It should be null after we clicked the '×' button using userEvent.
+  const removedThought = screen.queryByText('This is a place for your passing thoughts.')
+  expect(removedThought).toBeNull()
+```
+
+### Wait for an element to be disappeared
+
+```	jsx
+test('should remove header display', async () => {
+  // Render Header
+  render(<Header/>)
+  // Extract button node 
+  const button = screen.getByRole('button');
+  // click button
+  userEvent.click(button);
+ 
+  // Must have `await` before `waitFor`
+  await waitFor(() => {
+    const header = screen.queryByText('Hey Everybody');
+    expect(header).toBeNull()
+  })
+});
+```
+
 
 ## Mock
 
@@ -107,19 +157,6 @@ user.click(
 `jest.spyOn(object, methodName)`: mock a *method of object*
 <https://jestjs.io/docs/jest-object#jestspyonobject-methodname>
 `jest.mock()`: mock a *module*
-
-## Key things to note
-
-- `it` or `test`: pass a function to this method, and the test runner would execute that function as a block of tests.
-- `describe`: This optional method is for grouping any number of it or test statements.
-- `expect`: This is the condition that the test needs to pass. It compares the received parameter to the matcher. It also gives you access to a number of matchers that let you validate different things. You can read more about it in the documentation.
-- If you are using `@testing-library/react`:
-  - `render`: render a React component
-  - `screen` to query element
-    - `getByText`: query element by the inner text
-    - `getByRole`: query element by HTML tag
-    - `getByLabelText`: query input by label
-  - `fireEvent`: trigger Event, for example: click
 
 ## Config with TypeScript
 
