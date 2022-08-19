@@ -8,6 +8,10 @@ Create a div wrapper and apply border radius and box shadow for it
 
 Because it might prevent overriding CSS
 
+## Reorder the element using display grid
+
+Use `grid-template-area` instead of `grid-template-columns`
+
 ## `:only-child` and `:only-of-type`
 
 <https://www.youtube.com/watch?v=yyPteFyZsCE>

@@ -2,6 +2,7 @@
 
 <https://viblo.asia/p/webpack-danh-cho-nguoi-moi-bat-dau-bJzKmo4Ol9N>
 <https://www.youtube.com/watch?v=TOb1c39m64A>
+<https://fullstack.edu.vn/blog/phan-1-tao-du-an-reactjs-voi-webpack-va-babel.html>
 
 Webpack treats every file as the modules. Based on the connection between files (`import` and `export`), it builds a dependency graphs and use it creates a single (or multiple) bundler file
 
@@ -18,7 +19,9 @@ devServer: {
 ```
 From v4.0, hot module replacement is enable by default.
 
-- `@babel/preset-env`: In Babel, a preset is a set of plugins used to support particular language features. @babel/preset-env takes any target environments you've specified and transpile the code to that target.
+- `@babel/core`: convert modern JS to older version
+- `babel-loader`: a loader of webpack, make webpack work with babel
+- `@babel/preset-env`: In Babel, a preset is a set of plugins used to support particular language features. @babel/preset-env takes any target JS versions you've specified and transpile the code to that target.
 
 ```json
 {
@@ -42,6 +45,14 @@ When no targets are specified: Babel will assume you are targeting the oldest br
 Babel recommends setting targets to reduce the output code size.
 
 - `@babel/preset-react`: convert jsx to js.
+```json
+{
+    "presets": [
+        "@babel/preset-env",
+        "@babel/preset-react"
+    ]
+}
+```
 
 ## Init
 
@@ -52,6 +63,7 @@ Babel recommends setting targets to reduce the output code size.
 
 - touch webpack.config.js
 - Basic configure:
+
 ```javascript
 // Require a nodejs module named 'path'
 // 'path' handle the file name, file link
@@ -128,8 +140,9 @@ resolve: {
 
 - Why: Preprocess files as you import or load them
 - Structure:
-- 
-```javascript
+
+```js
+output: {...},
 module: {
 	rules: [
 		{
@@ -142,9 +155,9 @@ module: {
 			},
 		},
 		{
-	        test: /\.css$/i,
-	        use: ['style-loader', 'css-loader', 'sass-loader'],
-      	},
+      test: /\.css$/i,
+      use: ['style-loader', 'css-loader', 'sass-loader'],
+  	},
 	]
 }
 ```
@@ -153,3 +166,21 @@ Some popular loaders:
 - sass, sass-loader: import scss file in js files
 - postcss-loader: add prefix to css using browserlist
 - css-loader and style-loader: import css files in js files
+
+## Plugin
+
+- HtmlWebpackPlugin: generate an production HTML5 file (in `build` folder) for you that includes all your webpack bundles in the body using script tags
+```js
+...
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  ...
+  // Chứa các plugins sẽ cài đặt trong tương lai
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./public/index.html"
+    })
+  ]
+};
+```

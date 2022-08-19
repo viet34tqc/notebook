@@ -45,13 +45,8 @@ In react, it's a variable which whenever it updates, it will trigger a re-render
 ## What is rendering in React
 
 "Rendering" means that React is calling your component, which is a function
-
-## How react render components
-
-Components as children props of parent component are not re-rendered
-
-<https://www.zhenghao.io/posts/react-rerender>
-<https://www.developerway.com/posts/components-composition-how-to-get-it-right>
+Each render is a snapshot, like a photo taken by a camera, that shows what the UI should look like, based on the current application state.
+The point of a re-render is to figure out how a state change should affect the user interface. And so we need to re-render all potentially-affected components, to get an accurate snapshot.
 
 ## How to build a good component
 
@@ -77,7 +72,7 @@ With `useEffect`, we can control how the side effects run in the component. Norm
 If a react component returns exact the same element reference in its render output as it did in the last time, React will skip re-rendering that particular child (Explaination: <https://www.developerway.com/posts/react-elements-children-parents>)
 
 - The child component is pass as a prop or children prop
-- The child component is memorized using `useMemo()`
+- The child component is memorized using `memo()`. That makes the component as pure component
 
 ``` jsx 
 // The `props.children` content won't re-render if we update state
@@ -125,12 +120,15 @@ function ChildC() {
 
 ## React re-render
 
+<https://www.zhenghao.io/posts/react-rerender>
+<https://www.developerway.com/posts/components-composition-how-to-get-it-right>
 <https://www.developerway.com/posts/how-to-write-performant-react-code>
 <https://www.developerway.com/posts/react-re-renders-guide>
+<https://www.joshwcomeau.com/react/why-react-re-renders/>
 
 - When props or state have changed
 - When parent component re-renders, even if the props pass to child component is memorized
-- When a component uses context and the value of its provider changes
+- When a component uses context and the value of its provider changes. Context is sorta like “invisible props”, or maybe "internal props".
 - Component use custom hook and the state of that hook changes or Context's value changes.
 
 How to prevent unnecessary re-renders
@@ -154,6 +152,7 @@ How to prevent unnecessary re-renders
 ## How React rendered UI
 
 <https://beta.reactjs.org/learn/render-and-commit>
+<https://dev.to/teo_garcia/understanding-rendering-in-react-i5i>
 
 3 phases:
 
@@ -213,6 +212,10 @@ useEffect(() => {
     } 
 }, [name])
 ```
+
+## Why we cannot write `if`, `else`... in JSX
+
+It's because `if` is not an expression in JS
 
 ## React flushSync
 
@@ -380,6 +383,15 @@ Code splitting is the splitting of the code into various of bundles or component
 - Grid: hiển thị layout theo 2 chiều
 - Flex: hiển thị layout theo 1 chiều
 
+Khi nào sử dụng `flex`
+
+- Các element con chia dựa theo content của chính các element đó
+
+Khi nào sử dụng `grid`
+
+- Các element được chia đều
+- Parent quản lý vị trí các element con (dùng `grid-template-area`)
+
 ## Kiến thức bảo mật tối thiểu ở frontend
 
 ## Các cách check null và undefined
@@ -440,6 +452,10 @@ map.get( 'key' );
 ```javascript
 for( let [key, value] of map )
 ```
+
+## Else if using operation tenerry
+
+const a = b ? c : d ? e : f
 
 ## OOP
 
