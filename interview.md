@@ -44,9 +44,10 @@ In react, it's a variable which whenever it updates, it will trigger a re-render
 
 ## What is rendering in React
 
-"Rendering" means that React is calling your component, which is a function
-Each render is a snapshot, like a photo taken by a camera, that shows what the UI should look like, based on the current application state.
-The point of a re-render is to figure out how a state change should affect the user interface. And so we need to re-render all potentially-affected components, to get an accurate snapshot.
+- "Rendering" means that React is calling your component, which is a function
+- Each render is a snapshot, like a photo taken by a camera, that shows what the UI should look like, based on the current application state.
+- Each render create their own scope, they work individually.
+- The point of a re-render is to figure out how a state change should affect the user interface. And so we need to re-render all potentially-affected components, to get an accurate snapshot.
 
 ## How to build a good component
 
@@ -663,7 +664,19 @@ const delay = (ms: number) => new Promise( res => setTimeout(res, ms, 'some valu
 `onChange` chỉ chạy khi mà user ra khỏi (`blur`) input đó
 `onInput` không chỉ chạy như `onChange` mà còn chạy khi gõ ('keystroke') hoặc paste
 
-## import and export
+## `import` and `export`
+
+### `export`
+
+- export 1 biến hoặc hàm: `export a`
+- export list: `export {a,b,c}`
+- export default: 
+`export default from './abc.js'`. Nó tương đương `export {default} from './abc.js`
+`export * from './abc.js`
+`export * as abc from './abc.js`
+- export from hay còn gọi là re-export: `export {default as a} from './abc.js'`. Kĩ thuật này được sử dụng để gom các export từ các child component và export lại 1 lần nữa
+
+### `import`
 
 Khi import mà dùng `*`, thì chúng ta import hết tất cả các giá trị được export, bao gồm cả default và named.
 `*` sẽ là 1 object chứa hết các giá trị trên
@@ -688,6 +701,7 @@ console.log(info);
 ## Các chỉ số cần quan tâm khi optimize speed:
 
 <https://indepth.dev/posts/1498/101-javascript-critical-rendering-path>
+<https://web.dev/learn-web-vitals/>
 
 - Time to first byte (TTFB): the time it takes the browsers to start receiving a data (images, fonts, js, css...) after requesting data from server: HTTP request time + Process request time + HTTP response time.
 - Critical Rendering Path: <https://indepth.dev/posts/1498/101-javascript-critical-rendering-path> is the sequences of steps of: convert the HTML, CSS, and JavaScript (images are not considered as critical resource) into pixels on the screen
@@ -697,6 +711,7 @@ console.log(info);
 - Speed Index: shows how quickly the contents of a page are visibly populated.
 - Time To (fully) Interactive(TTI): the amount of time it takes for the page to be fully interactive.
 - First Input Delay (FID): the time from when a user first interacts with a page to the time when the browser is actually able to respond to that interaction.
+- Total blocking time (TTB) = First contentful paint (FCT) + Time to interactive (TTI)
 - Total Blocking Time: total amount of time between First Contentful Paint (FCP) and Time to Interactive (TTI) where the main thread was blocked for long enough to prevent input responsiveness.
 - Largest Contentful Paint (2.5s): the time when the largest content element in the viewport becomes visible. It can be used to determine when the main content of the page has finished rendering on the screen.
 

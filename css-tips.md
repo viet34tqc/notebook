@@ -16,6 +16,11 @@ Use `grid-template-area` instead of `grid-template-columns`
 
 <https://www.youtube.com/watch?v=yyPteFyZsCE>
 
+## Background image opacity
+
+Apply opacity to absolute psuedo element, parent element use isolation: isolate
+<https://www.youtube.com/watch?v=lRPguPbovro>
+
 ## Replace `position: absolute` with `display: grid`
 
 Set `grid-area: 1/-1` the same for all the child element

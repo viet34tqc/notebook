@@ -94,7 +94,7 @@ server {
     server_name test.com;
 
     location / {
-        # If using wordpress: https://thachpham.com/wordpress/wordpress-tutorials/tong-hop-cac-cau-hinh-nginx-cho-wordpress.html
+      # If using wordpress: https://thachpham.com/wordpress/wordpress-tutorials/tong-hop-cac-cau-hinh-nginx-cho-wordpress.html
         # try_files $uri $uri/ /index.php?$args; 
         try_files $uri $uri/ =404;
     }

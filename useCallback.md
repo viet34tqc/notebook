@@ -1,5 +1,7 @@
 # How to use useCallback hook
 
+`useCallback` are often used with `memo`: `useCallback` for `prop`, `memo` for child component to prevent child component from re-rendering. Otherwise, `useCallback` is unnecessary
+
 ## Referential equality
 
 If you are new to Javascript, it wont take long before you learn why this is the case:

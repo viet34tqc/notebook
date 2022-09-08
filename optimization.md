@@ -36,6 +36,8 @@ Trong trường hợp phải dùng icon font thì phải optimize dùng `icomoon
 ## Core web vitals
 
 **CÁI NÀY QUAN TRỌNG**
+TTFB -> FCP -> LCP -> TTI
+- LCP: preload LCP image like hero image 
 
 ### Slider ở đầu website
 

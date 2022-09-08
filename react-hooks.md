@@ -149,9 +149,106 @@ const Input = forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
 
 Considering a case when you want to pass a ref from Parent component to child component. Default, that ref will be public and you can use that ref with any event handler in the parent component. `useImperativeHandle` will limit value, state, or function inside a child component to the parent component the ref
 
+```jsx
+const Video = forwardRef((props, ref) => {
+  const videoRef = useRef();
+  useImperativeHandle(ref, () => ({
+    play() {
+      videoRef.current.play();
+    }
+  }));
+  return <video ref={videoRef} src="https://www.w3schools.com/tags/movie.ogg" />;
+});
+
+export default function App() {
+  const videoRef = useRef(null);
+
+  return (
+    <>
+      <Video ref={videoRef} />
+      <button onClick={() => videoRef.current.play()}>Play</button>
+      <button onClick={() => videoRef.current.pause()}>Pause</button>
+    </>
+  );
+}
+```
+In the example above, the child component (Video) only exposes `play` method to the parent component, not `pause` method.
+
 ## `useEffect`
 
 <https://tkdodo.eu/blog/simplifying-use-effect>
 
 - One effect do one thing. Use multiple effects if you need.
 - Move that `useEffect` to custom hooks if you can.
+
+Explain this code:
+```jsx
+const [count, setCount] = useState(180);
+
+useEffect(() => {
+  setInterval(() => setCount(count -1), 1000)
+}, []);
+
+return <div>{count}</div>
+```
+In this code, we want to create a timer clock start from 180. However, it will dislay `179` then stop rather than 179, 178,...
+To understand why does this happen, you need to know about the closure. So, what is the value of `count` in `setInterval`. Because the callback of `useEffect` only runs only the once after render, then `count` is referenced to the outside scope, which is 180. It equaivalents to:
+```jsx
+useEffect(() => {
+  setInterval(() => setCount(180 -1), 1000)
+}, []);
+ ```
+
+How to fix this:
+```jsx
+useEffect(() => {
+  // Now the value in setCount is not referenced to the outside anymore
+  // prevCount is take from the previous `setCount` again and again.
+  setInterval((prevCount) => setCount(prevCOunt -1), 1000) 
+}, []);
+
+// Or
+useEffect(() => {
+  setTimeout(() => setCount(count -1), 1000) // This will create multiple setTimeout base on count value
+}, [count]);
+```
+
+- Cleanup function with event
+
+<https://www.youtube.com/watch?v=Fnb3GbY9FUY&list=PL_-VfJajZj0UXjlKfBwFX73usByw3Ph9Q&index=37>
+```jsx
+const [count, setCount] = useState(0);
+
+useEffect(() => {
+
+  return () => {
+    // do something with the previous state
+  }
+}, [])
+
+const handleClick = () ={
+  // This will setState
+}
+```
+
+## `useLayoutEffect`
+
+<https://www.youtube.com/watch?v=loSqbCbH2xo&list=PL_-VfJajZj0UXjlKfBwFX73usByw3Ph9Q&index=39>
+
+This hook is very similar to `useEffect`. The difference is only the task order. Most of the time, we will use `useEffect`. Only use `useLayoutEffect` when we want to update the state before rendering UI to avoid flick in the UI. See the example above for more details.
+
+`useEffect`:
+
+1. Update state
+2. Update DOM (mutate the virtual DOM object) 
+3. Re-render UI
+4. Call cleanup function if deps change
+5. Call `useEffect` callback
+
+`useLayoutEffect`:
+
+1. Update state
+2. Update DOM
+3. Call cleanup function (synchronously)
+4. Call `useEffect` callback (synchronously). Synchronously means the step must be finish before jumping to the next step. So, the callback will be called first before rendering UI.
+3. Re-render UI
