@@ -83,3 +83,15 @@ const {
 )}
 ```
 
+## `watch`
+
+It replace the use of `useState`. RHF will watch value of all register fields. However, when using watch, all the fields will become uncontrolled input.
+
+## `setValue`
+
+Set value directly to the field
+
+## `trigger`
+
+`trigger()` will validate all inputs. It returns a promise. We can use trigger then call API to submit form manually.
+
