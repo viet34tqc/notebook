@@ -95,3 +95,26 @@ Set value directly to the field
 
 `trigger()` will validate all inputs. It returns a promise. We can use trigger then call API to submit form manually.
 
+## custom `onChange`
+
+You have to pass the `onChange` of the field (if you are using `Controller`)
+
+```jsx
+<Controller
+	name="voice"
+	control={control}
+	render={({ field }) => (
+		<SelectField
+		ref={field.ref}
+		control={control}
+		label="Voice"
+		options={voices}
+		onChange={(selectedOption) => {
+			field.onChange(selectedOption);
+			handleVoiceChange(selectedOption);
+		}}
+		error={errors?.voice?.message}
+		/>
+	)}
+/>
+```
