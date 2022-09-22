@@ -671,10 +671,12 @@ const delay = (ms: number) => new Promise( res => setTimeout(res, ms, 'some valu
 - export 1 biến hoặc hàm: `export a`
 - export list: `export {a,b,c}`
 - export default: 
-`export default from './abc.js'`. Nó tương đương `export {default} from './abc.js`
-`export * from './abc.js`
-`export * as abc from './abc.js`
-- export from hay còn gọi là re-export: `export {default as a} from './abc.js'`. Kĩ thuật này được sử dụng để gom các export từ các child component và export lại 1 lần nữa
+  - `export default ChildComponent`: chỉ 1 có 1 default export duy nhất. Khi import ta chỉ cần viết `import ChildComponent from './abc.js'`
+  - `export * from` hay còn gọi là re-export: `export {default} from './abc.js'`. Kĩ thuật này được sử dụng để gom các export từ các child component và export lại 1 lần nữa.  `*` ở đây là 1 object, chứa tất cả các export từ `./abc.js`, kể cả export thường lẫn export default. `{default}` là object destructure. `export * from` tương đương với `import * from` kết hợp với `export *`. Khi có nhiều child component cần re-export thì mình có thể viết như sau
+  ```js
+  export {default as a} from './a.js'
+  export {default as c} from './c.js'
+  ```
 
 ### `import`
 

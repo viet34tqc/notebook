@@ -41,6 +41,8 @@ That's when the `useCallback(callbackFun, [deps]` is helpful, given the same dep
 
 ## Good use case
 
+We use `useCallback` and `useMemo` when the parent component has multiple state. When one state changes, parent component re-renders, and other components re-render as well.
+
 Imagine you have two components. The first is a child component that render a big list of items:
 ```javascript
 function BigList({term, onItemClick}) {
@@ -89,6 +91,7 @@ function DualCounter() {
 ```
 
 ## Bad use case
+
 Let's look at another example
 ```javascript
 import { useCallback } from 'react';

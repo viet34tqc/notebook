@@ -67,3 +67,37 @@ const SecondPage = props => {
 
 };
 ```
+
+## Escape hatch (using less dependancies)
+
+### The latest ref
+
+<https://tkdodo.eu/blog/refs-events-and-escape-hatches>
+```jsx
+export const useDebouncedState = (callback, delay) => {
+  const [value, setValue] = React.useState('')
+  // 👇 store callback in a ref
+  const ref = React.useRef(callback)
+
+  // 👇 update the ref when the callback changes
+  React.useLayoutEffect(() => {
+    ref.current = callback
+  }, [callback])
+
+  React.useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (value) {
+        // 👇 use the ref instead of the callback
+        ref.current(value)
+      }
+    }, delay)
+
+    return () => {
+      clearTimeout(timeoutId)
+    }
+  // 👇 no need to include the callback
+  }, [value, delay])
+
+  return [value, setValue]
+}
+```

@@ -178,6 +178,22 @@ In the example above, the child component (Video) only exposes `play` method to 
 
 <https://tkdodo.eu/blog/simplifying-use-effect>
 
+- Be careful when passing the object as dependancy because the object value is referenced. React compare the dependancy using `Object.is`. Your object can be recreated everytime the component re-renders
+```jsx
+function App ({ options, teamId }) {
+  const [user, setUser] = useState(null)
+  const params = { ...options, teamId }
+
+  useEffect(() => {
+    fetch(`/teams/${params.teamId}/user`)
+      .then(response => response.json)
+      .then(user => { setUser(user) })
+  }, [params]) // Althought the properties can be the same but `params` still be re-created every re-render.
+
+  return <User user={user} params={params} />
+}
+```
+
 - One effect do one thing. Use multiple effects if you need.
 - Move that `useEffect` to custom hooks if you can.
 
