@@ -118,3 +118,40 @@ You have to pass the `onChange` of the field (if you are using `Controller`)
 	)}
 />
 ```
+
+## Using with `yup`
+
+- Optional field validation in Yup schema: only validate when field has value
+
+```js
+contactPhone: yup.string().when('contactPhone', (val) => {
+    if (val) {
+    return yup.string().matches(PHONE_REGEX, PHONE_FORMAT_ERROR).max(MAX_PHONE_CHAR);
+    } else {
+    return yup.string();
+    }
+}),
+```
+- Custom error message based on other field value: using `creatError` từ `context`
+
+```js
+content: yup
+  .string()
+  .test({
+    name: 'len',
+    test: (val, context) => {
+      const maxLength = getContentMaxCharacter(
+        context.parent.includePreamble,
+        context.parent.preamble
+      );
+      if (val.toString().length >= maxLength) {
+        const invalidLength = val?.length + context.parent.preamble.length;
+        return context.createError({
+          message: `Currently Preamble and Content is ${invalidLength} characters. Maximum is 800 characters.`,
+          path: context.path,
+        });
+      }
+      return true;
+    },
+  })
+```

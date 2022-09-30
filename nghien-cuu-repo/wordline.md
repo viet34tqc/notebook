@@ -15,6 +15,29 @@ contactPhone: yup.string().when('contactPhone', (val) => {
     }
 }),
 ```
+- Custom error message sử dụng giá trị động: dùng `creatError` từ `context`
+
+```js
+content: yup
+  .string()
+  .test({
+    name: 'len',
+    test: (val, context) => {
+      const maxLength = getContentMaxCharacter(
+        context.parent.includePreamble,
+        context.parent.preamble
+      );
+      if (val.toString().length >= maxLength) {
+        const invalidLength = val?.length + context.parent.preamble.length;
+        return context.createError({
+          message: `Currently Preamble and Content is ${invalidLength} characters. Maximum is 800 characters.`,
+          path: context.path,
+        });
+      }
+      return true;
+    },
+  })
+```
 
 ## MaxLength cho input number
 
