@@ -221,7 +221,7 @@ Cons:
 
 ### Static-site generation (Pre-rendering using NextJS)
 
-The HTML is generated at build-time and is reused for each request. This is the default rendering method of NextJS.
+The HTML is generated at build time and is reused for each request. This is the default rendering method of NextJS.
 
 - Initial Load: Server serves initial HTML and that's displayed on the initial load which leads to faster TTFB
 - JS Loaded

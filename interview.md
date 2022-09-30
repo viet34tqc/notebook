@@ -860,10 +860,13 @@ Set z-index for the container
 
 Using `background-blend-mode`: <https://www.smashingmagazine.com/2021/09/reducing-need-pseudo-elements/>
 
-## flex-shrink và flex-grow
+## flex-shrink, flex-grow, flex-basis
 
-Mặc định flex-grow: 0; flex-shrink: 1;
-Dùng để tính width của flex items
+<https://www.youtube.com/watch?v=1zKX71GYisE>
+
+Mặc định `flex-grow: 0; flex-shrink: 1; flex-basis: auto;`
+`flex-basis`: giá trị ban đầu của flex item để từ đó tăng hoặc giảm. Nếu flex-item có width thì flex-basis sẽ override width đấy.
+`flex-shrink` và `flex-grow`: tính toán sự tăng giảm width của flex items
 
 `flex-shrink: 1`: Khi tổng width của các item > parent và flex-shrink = 1 => width của item sẽ bị thu lại
 `flex-grow: 1`: Khi tổng width của item < parent và flex-grow: 1 => width của item sẽ tăng lên để fill hết width của parent

@@ -1,8 +1,22 @@
 # Display: grid
 
+<https://learncssgrid.com/>
+
 ## fr
 
-Fr is fraction unit and 1fr is for 1 part of the available space
+Fr is fraction unit and 1fr is for 1 part of the remaining available space
+
+## `grid-auto-rows` and `grid-auto-columns`
+
+Default value size for rows and columns.
+
+## `justify-items` and `justify-content`
+
+Display grid divides container into rows and columns. If the columns don't take the whole width of container, `justify-content` will work like `justify-content` in display flex
+
+Meanwhile, when the item inside each column doesn't take the whole width of that column, `justfiy-items` will work like that column has `display: flex` and `justify-content`
+
+In conclusion, `justify-content` align grid items, `justfiy-items` align content of grid items. The same goes for `align-items` and `align-content`
 
 ## `grid-auto-flow: dense`
 
