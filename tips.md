@@ -2,6 +2,7 @@
 
 - Log variable in arrow function <https://getfrontend.tips/log-a-variable-in-an-arrow-function.html>
 - <https://getfrontend.tips/number-headings-and-subheadings-automatically.html>
+- Get the first and last item of array: <https://getfrontend.tips/pick-the-first-and-last-items-of-an-array/>
 - Do not use MAGIC NUMBER: <https://getfrontend.tips/do-not-use-magic-numbers-when-manipulating-strings.html>
 - Quick query element in the Console: <https://getfrontend.tips/quick-query-elements-in-the-console.html>
 - Do not use 'submit' to name a submit button: <https://getfrontend.tips/do-not-use-submit-to-name-a-submit-button.html>
@@ -13,6 +14,8 @@
 - Create objects with dynamic key: <https://getfrontend.tips/create-an-object-with-dynamic-keys.html>
 - Datalist Element: <https://getfrontend.tips/create-an-autocomplete-list-with-the-datalist-element.html>
 - Prefix classname with 'js': <https://getfrontend.tips/prefix-class-name-with-js-to-manipulate-with-javascript.html>
+- Quick query element from console: <https://getfrontend.tips/quick-query-elements-in-the-console/>
+- Replace multiple if else with `switch(true)`: <https://getfrontend.tips/replace-multiple-if-statements-with-a-single-switch-statement/>
 - Remove a property from an object using spread operator: <https://getfrontend.tips/remove-a-property-from-an-object.html>
 - Use underscore to represent a number: <https://getfrontend.tips/use-underscores-to-represent-a-number.html>
 - <https://getfrontend.tips/wrap-arrow-function-body-in-parentheses.html>

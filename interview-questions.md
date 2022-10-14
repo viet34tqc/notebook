@@ -28,3 +28,4 @@
 - Implicitly and Explicitly
 - Hooks and what they do
 - What are rules of hook
+- When to use memo: <https://beta.reactjs.org/apis/react/memo#skipping-re-rendering-when-props-are-unchanged>

@@ -700,8 +700,10 @@ console.log(info);
 }
 ```
 
-## Các chỉ số cần quan tâm khi optimize speed:
+## Core Web Vital
 
+<https://i.imgur.com/jqIBleM.png>
+<https://i.imgur.com/DCsCct2.png> 
 <https://indepth.dev/posts/1498/101-javascript-critical-rendering-path>
 <https://web.dev/learn-web-vitals/>
 

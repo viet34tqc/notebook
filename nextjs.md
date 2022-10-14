@@ -1,5 +1,6 @@
 # NextJS
 
+<https://www.youtube.com/watch?v=PN1HgvAOmi8>
 <https://tsh.io/blog/ssr-vs-ssg-in-nextjs/>
 
 ## Why NextJS
@@ -299,4 +300,5 @@ If the background regeneration fails, the old page will stay unaltered
 
 ## Which rendering method to use
 
+<img src="https://i.imgur.com/HOdyKup.png" />
 <img src="https://i.imgur.com/WnE3o7T.png" />

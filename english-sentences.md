@@ -1,3 +1,11 @@
+## Common
+
+- They need'nt have (done): They did something but that wasn't necessary.
+- We might go as well: We should go, there is no better alternative.
+- It's time somebody did something - they should have already done it or started it: This situation can't continue. It's time you did something about it.
+- I tried to warn him, but he wouldn't listen to me. (= he refused to listen)
+- would is similar to used to: When we were children, we would get up early and go for a swim. 
+
 ## Future
 
 ### Making prediction
