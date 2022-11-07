@@ -111,3 +111,8 @@ const value = await expression;
 - If rejected, `await` throw an error.
 - If fulfilled, it resumes the `async` function execution and **return the value of the fulfilled Promise**
 
+You can catch the error right after await, without using `try...catch`
+```js
+const value = await expression.catch((e) => {})
+```
+

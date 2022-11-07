@@ -2,6 +2,7 @@
 
 <https://www.youtube.com/watch?v=PN1HgvAOmi8>
 <https://tsh.io/blog/ssr-vs-ssg-in-nextjs/>
+<https://prateeksurana.me/blog/future-of-rendering-in-react/>
 
 ## Why NextJS
 

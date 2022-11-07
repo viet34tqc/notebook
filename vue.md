@@ -130,6 +130,18 @@ In child component: using `@emit` to fire the event
 </template>
 ```
 
+To `emit` in `<script setup>`
+
+```html
+<script setup>
+const emit = defineEmits(['customChange'])
+const handleChange = (event) => {
+  emit('customChange', event.target.value.toUpperCase())
+}
+</script>
+```
+
+
 ### `slot`
 
 This is like `children` prop in React
@@ -187,9 +199,63 @@ export default {
 
 Like React, we should never mutate the props object directly, props are read-only
 
+## `watch` and `computed`
+
+The usage of `watch` is nearly the same as `computed`. Boths are used to track a variable. However, there are still a difference
+
+- `computed`: track a state and return another value based on that state, like return an filtered array
+- `watch`: track a state and do something
+
+`watch` and `watchEffect`: <https://www.vuemastery.com/blog/vues-watch-vs-watcheffect-which-should-i-use/>
+
+- In `watch`, we need to declare a dependancy or a state or reactive value
+- `watch` is lazy by default. As opposed to `watchEffect`, `watch` will NOT execute the effect function as soon as the `watch` method declaration is reached
+
+To watch an props
+
+```js
+const props = defineProps();
+
+watch(() => props.modalActive, (value) => {} )
+```
+
 ## Fetch data
 
 <https://vuejs.org/examples/#fetching-data>
 
 We put the code for fetching data in `watchEffect` (like `useEffect` in React)
-`watchEffect` take no dependancy array like `useEffect`. It re-rerún automatically when the state in the callback change
+`watchEffect` take no dependancy array like `useEffect`. It re-rerun automatically when the state in the callback change
+
+## Transition component
+
+This is a special component used to give the UI transition. It comes with some some built-in class: [name]-enter-active, [name]-leave-active, [name]-enter-from, [name]-enter-to, [name]-leave-from, [name]-leave-to. `name` here is the `name` attribute of Transition component. These classes are like the state of the component, so you will need to add style to it.
+
+```html
+<!-- We will have .modal-outer-enter-from, .modal-outer-enter-to and so on...-->
+<Transition name="modal-outer">
+```
+
+## Vue Router
+
+### `useRoute`
+
+Use this hook when you want to get params and query variables
+
+### `useRouter`
+
+Use this hook when you want to redirect to other page
+
+### Change the title before changing route
+
+```js
+router.beforeEach((to, from, next) => {
+  document.title = `${
+    to.params.state ? `${to.params.city}, ${to.params.state}` : to.meta.title
+  } | Weather App`;
+  next(); // call next() to render the route's component
+});
+```
+
+### Compare to react
+
+- Vue can mutate the state, React doesn't

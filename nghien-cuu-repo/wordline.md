@@ -39,6 +39,9 @@ content: yup
   })
 ```
 
+- RHF còn cung cấp FormContext cho phép lấy giá trị cũng như setValue cho các field ở component cha ở component con
+- Có thể watch 1 state bất kì mà không cần truyền vào field name, tiện lợi hơn so với việc dùng state
+
 ## MaxLength cho input number
 
 Mặc định input number sẽ không hiểu được thuộc tính maxLength như input text. Ngoài ra, input number còn cho phép điền kí tự +, -, e, E. Việc cần làm là chặn các kí tự này ngay khi gõ vào và cắt chiều dài của giá trị input

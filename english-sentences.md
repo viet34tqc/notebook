@@ -5,6 +5,9 @@
 - It's time somebody did something - they should have already done it or started it: This situation can't continue. It's time you did something about it.
 - I tried to warn him, but he wouldn't listen to me. (= he refused to listen)
 - would is similar to used to: When we were children, we would get up early and go for a swim. 
+- When we imagine something that will not happen, or we don't expect that it will happen: What would you do if you won a lot of money?
+(we don't really expect this to happen)
+- Our guests were supposed to come at 7.30, but they were late: supposed to to say what is intended, arranged or expected. Often this is different from the real situation:
 
 ## Future
 

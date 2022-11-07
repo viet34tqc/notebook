@@ -2,6 +2,9 @@
 
 - Log variable in arrow function <https://getfrontend.tips/log-a-variable-in-an-arrow-function.html>
 - <https://getfrontend.tips/number-headings-and-subheadings-automatically.html>
+- Avoid using boolean parameter: <https://getfrontend.tips/avoid-boolean-parameters/>
+- Adding big list to DOM using documentFragment: <https://getfrontend.tips/use-documentfragments-when-adding-a-big-list-of-elements/>
+- Count function calls: <https://getfrontend.tips/count-how-many-times-a-function-has-been-called/>
 - Get the first and last item of array: <https://getfrontend.tips/pick-the-first-and-last-items-of-an-array/>
 - Do not use MAGIC NUMBER: <https://getfrontend.tips/do-not-use-magic-numbers-when-manipulating-strings.html>
 - Quick query element in the Console: <https://getfrontend.tips/quick-query-elements-in-the-console.html>
@@ -10,6 +13,7 @@
 - Create a heading with line on sides: <https://getfrontend.tips/create-a-line-on-sides-heading.html>
 - Format a number as a currency string: <https://getfrontend.tips/format-a-number-as-a-currency-string.html>
 - Create a download link <https://getfrontend.tips/create-a-download-link.html>
+- Use underscore to make long number more readable: <https://getfrontend.tips/use-underscores-to-represent-a-number/>
 - Ignore items from array destructuring <https://getfrontend.tips/ignore-items-from-array-destructuring.html>
 - Create objects with dynamic key: <https://getfrontend.tips/create-an-object-with-dynamic-keys.html>
 - Datalist Element: <https://getfrontend.tips/create-an-autocomplete-list-with-the-datalist-element.html>
@@ -20,6 +24,8 @@
 - Use underscore to represent a number: <https://getfrontend.tips/use-underscores-to-represent-a-number.html>
 - <https://getfrontend.tips/wrap-arrow-function-body-in-parentheses.html>
 - Modify character of string: <https://getfrontend.tips/get-characters-of-a-string.html>
+- <https://getfrontend.tips/create-an-array-with-conditional-elements/>
+- <https://getfrontend.tips/get-characters-of-a-string/>
 
 ## Floating list titles
 

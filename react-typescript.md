@@ -1,5 +1,7 @@
 # React Typescript
 
+<https://www.freecodecamp.org/news/typescript-for-react-developers/>
+
 ## Component Props
 
 You can declare Component props with an interface like this:
@@ -16,7 +18,7 @@ And use it like this:
 const TextField = ({ text, handleChange }: InputProps) => {}
 ```
 
-Use `PropsWithChildren`
+### `PropsWithChildren`
 
 ```jsx
 
@@ -32,6 +34,20 @@ function Component({ someProperty, children }: PropsWithChildren<ComponentProps>
 }
 ```
 
+### Extend a HTML element type
+
+If you want to create a custom component that behaves like an `input`, you can use `React.ComponentProps`:
+
+```tsx
+
+type InputProps = React.ComponentProps<'input'>
+
+const Input = React.forwardRef(
+  (props: InputProps, ref: React.Ref<HTMLInputElement>) => {
+    return <input {...props} ref={ref} />
+  }
+)
+```
 
 ## Component Hooks:
 
