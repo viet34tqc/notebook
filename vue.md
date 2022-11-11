@@ -8,9 +8,25 @@ Using handlebars `{{ variable_name }}`
 
 - Using normal string for function instead of `{}` in JSX
 
-```vue
+```html
 <button @click="say('hello')">Say hello</button>
 ```
+
+- Single-file component
+
+To declare a component in Vue, we using a file with the suffix '.vue'. It includes 3 parts: component's logic, template (HTML) and style (CSS)
+
+<script></script>
+<template>
+  <button>Save</button>
+</template>
+<style>
+  button {
+    font-weight: bold;
+  }
+</style>
+
+There are two types of SFC: the legacy is options API and the newer one is composition API. If you comes from React using functional component, composition API is the better choice. For more details, go to <https://vuejs.org/guide/introduction.html#api-styles>
 
 ## Event handling
 
@@ -48,12 +64,33 @@ export default {
 </template>
 ```
 
-## Form inputs and state
+## State
+
+To define the state, we use `ref` like `useState` in React. 
+The ref's value is accessed by `ref.value` in `script` tag. In `template`, we can use `ref` directly
+```html
+<script setup>
+import { ref } from 'vue'
+const newTodo = ref('')
+console.log(newTodo.value);
+</script>
+
+<template>
+  {{newTodo}}
+</template>
+```
+In Vue, state can be muatated. To update the state, we don't need a function like `setState` like React, just replace the old one with the new one
+```js
+todos.value.push(newTodo)
+//or
+todos.value = todos.value.filter(/* ... */)
+```
+
+## Form inputs
 
 Vue is two-ways binding, which means when the UI change, the state update and vice versa.
 
-Input using `v-model` to synchronize value with the state. To define the state, we use `ref` like `useState` in React. 
-The ref's value is accessed by `ref.value` in `script` tag. In `template`, we can use `ref` directly
+Input using `v-model` to synchronize value with the state. 
 ```html
 <script setup>
 import { ref } from 'vue'
@@ -80,13 +117,6 @@ const newTodo = ref('')
 <select v-model="selected">
   <option value="abc">ABC</option>
 </select>
-```
-
-In Vue, to update the state in event handler, we don't have `setState` like React, just replace the old one with the new one
-```js
-todos.value.push(newTodo)
-//or
-todos.value = todos.value.filter(/* ... */)
 ```
 
 ### Modifiers
@@ -163,26 +193,6 @@ To render the content inside the `AlertBox` component, using slot
 </template>
 ```
 
-### Register component
-
-Component need to be registered before using. Local registration is preferred.
-
-```html
-<script>
-import ComponentA from './ComponentA.vue'
-
-export default {
-  components: {
-    ComponentA
-  }
-}
-</script>
-
-<template>
-  <ComponentA />
-</template>
-```
-
 ### Props
 
 Props need to register before using. We should declare type or validation for the props as well (<https://vuejs.org/guide/components/props.html#prop-validation>)
@@ -199,12 +209,33 @@ export default {
 
 Like React, we should never mutate the props object directly, props are read-only
 
-## `watch` and `computed`
+## `computed`
 
-The usage of `watch` is nearly the same as `computed`. Boths are used to track a variable. However, there are still a difference
+Use when you want to return a value based on the defined state, like when you want a filterd value of an array.
 
-- `computed`: track a state and return another value based on that state, like return an filtered array
-- `watch`: track a state and do something
+<script setup>
+import { ref, computed } from 'vue'
+
+const tasks = ref([
+  {name: 'Task 1', completed: true},
+  {name: 'Task 2', completed: false}
+])
+
+// a computed ref
+const completedTasks = computed(() => {
+  return tasks.value.filtered( task => task.completed )
+})
+
+console.log( completedTasks.value)
+</script>
+
+<template>
+  {{complatedTasks}}
+</template>
+
+## `watch`
+
+The usage of `watch` is nearly the same as `computed`, but instead of returning a value, it does something
 
 `watch` and `watchEffect`: <https://www.vuemastery.com/blog/vues-watch-vs-watcheffect-which-should-i-use/>
 
