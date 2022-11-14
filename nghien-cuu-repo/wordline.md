@@ -63,3 +63,12 @@ const blockInvalidCharInputNumber = (e) =>
     onChange={(e) => (e.target.value = e.target.value.slice(0, MAX_UIC_CHAR))}
 />
 ```
+
+## Date-fns
+
+1 số method sử dụng
+
+- `format(new Date(), formatString)`: format(new Date(2014, 1, 11), 'MM/dd/yyyy')
+- `startOfDay(date)`
+- `add(date, { days: 1, hours: 2, minutes: 30 }): add time to the date.
+- `isAfter(date1, date2)`
