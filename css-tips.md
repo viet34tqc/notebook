@@ -12,6 +12,16 @@ Because it might prevent overriding CSS
 
 Use `grid-template-area` instead of `grid-template-columns`
 
+## Using CSS for mobile screen
+
+```html
+<!-- Loading and parsing mobile.css is not render-blocking on large screens -->
+<link
+  rel="stylesheet"
+  href="mobile.css"
+  media="screen and (max-width: 480px)" />
+```
+
 ## `:only-child` and `:only-of-type`
 
 <https://www.youtube.com/watch?v=yyPteFyZsCE>

@@ -160,20 +160,12 @@ How to prevent unnecessary re-renders
 - Trigger a render: there are two reasons for a component to render
   - Calling `ReactDOM.render` to render the root component. This is the initial render
   - The component's states has been update via event, etc...
-- Render: React calls your components
-  - During the initial render, React will create the DOM nodes for <section>, <h1>, and three <img> tags.
+- Render: React calls your components to figure out what should be on the screen.
+  - During the initial render, React will create the DOM nodes.
   - During the re-render, React will calculate which of their properties, if any, have changed since the previous render. It won't do anything with that infomation until the next phase, the commit phase
 - Commit: React commit changes to the DOM
   - For the initial render, React will use `appendChild` DOM API to put all the DOM nodes it has created on the screen
   - For re-renders, **React only changes the DOM nodes if there is a difference between renders**. If a component re-renders, it only changes the updated DOMs (that could contains updated data), the other DOMs in that component are still the same
-
-After rendering is done and React updated the DOM, the browser will repaint the screen. 
-
-Problem: DOM manipulation is slow. Let's assume that you have a list of items. When you want to modify that item, you need to select that item and re-render it and re-paint the UI. Therefore, the more UI components you have, the more expensive the DOM updates could be, since they would need to be re-rendered for every DOM update.
-
-To address this problem, React use virtual DOM. A virtual DOM is a representation of DOM object and synced with the real DOM.
-
-React sử dụng sử dụng ReactDOM.render() và dùng jsx (React.createElement) để render virtual DOM ban đầu.
 
 ## How React update UI
 
@@ -810,6 +802,23 @@ const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-schem
 
 ## counter
 
+## `srcset` and `sizes`
+
+<https://imagekit.io/responsive-images/>
+
+```html
+<img src="https://ik.imgkit.net/ikmedia/women-dress-1.jpg" 
+     srcset="https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-225 225w,
+             https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-300 300w,
+             https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350 350w,
+             https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-640 640w"
+     sizes="(max-width: 400px) 100vw, (max-width: 700px) 50vw, (max-width: 900px) 33vw, 225px">
+```
+
+First, we need to calculate the image size. For example, if the viewport < 400px, let's say 350px, the image size will be 100vw, which is 350px. Then, the browser will use this image https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350
+
+If the viewport is 650px, the image size will be 325px, and the browser use https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350, which is the closest one
+
 ## fr in grid
 
 ## min, max, clamp()
@@ -906,6 +915,7 @@ If you don't have a responsive mobile website, and you open it on a small screen
 
 ## Resource hint: preconnect, dns-prefetch, preload
 
+<https://viblo.asia/p/thuat-ngu-trong-frontend-optimization-2oKLn2YgLQO>
 <https://webpack.js.org/guides/code-splitting/>
 <https://www.youtube.com/watch?v=6q75MVFLlok>
 <https://blog.dareboost.com/en/2020/05/preload-prefetch-preconnect-resource-hints/>

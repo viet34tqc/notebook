@@ -2,6 +2,7 @@
 
 ## Example
 
+<https://www.robinwieruch.de/categories/react-router-6/>
 <https://mitanshu.hashnode.dev/react-router-navigate-like-a-pro>
 <https://reacttraining.com/blog/react-router-v6-pre/>
 

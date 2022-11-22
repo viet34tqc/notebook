@@ -57,7 +57,6 @@ import { Link as MuiLink } from '@mui/material'
 </NextLink>
 ```
 
-
 ## Adding third-party scripts
 
 Use `Script` from `next/script`:
@@ -121,6 +120,10 @@ const router = useRouter();
 const { id } = router.query;
 ```
 
+## Data fetching
+
+- SSG: The data fetching happens at build time on the server side, not on client side
+- SSR:  The data fetching happens at run time on the server side, not on client side
 
 ## getStaticProps
 
@@ -193,9 +196,9 @@ export const getStaticPaths = async () => {
   - The path that has not been generated at build time will not return 404. Instead, NextJS will serve a *fallback version* of the page
   - In the background, the path is statically generated, **loading state** is shown while generating this path 
   - Page is rendered with required props after generating 
-  - New path will be cached in CDN (later requests will result in cached page) - crawler Bots may index fallback page (not good for SEO)
+  - New path will be cached in CDN (later requests will result in cached page) 
 - `blocking`:
-  - The path is switch to server-side rendering. Future requests will serve the static file from the cache.
+  - The path is switch to server-side rendering. Browser has to wait until the page is generated. Future requests will serve the static file from the cache.
   - the path is statically generated **without loading state** (no fallback page) - new path will be cached in CDN (later requests will result in cached page)
 
 
@@ -221,9 +224,10 @@ Cons:
 - Not good for SEO because Google bot cannot crawl any data at first load because it can only sees a div
 - High Initial load time because of JS bundle, then we need to run that JS, call API to get data...
 
-### Static-site generation (Pre-rendering using NextJS)
+### Static-site generation
 
-The HTML is generated at build time and is reused for each request. This is the default rendering method of NextJS.
+This is one of two pre-rendering methods. Pre-rendering is the default mechanism for rendering page in NextJS
+The HTML is generated at build time and is reused for each request.
 
 - Initial Load: Server serves initial HTML and that's displayed on the initial load which leads to faster TTFB
 - JS Loaded
@@ -263,17 +267,13 @@ Pros:
 - The data is always fresh
 
 Const:
+
 - UX is not so good because navigation needs page refresh
 - Redundant data fetching (if not cache)
 
 When to use:
 
 The content of the page updates frequently and it changes on every user request, ex: checkout page, cart page...
-
-- Marketing pages
-- Blog posts
-- E-commerce product listings
-- Help and documentation
 
 ### Incremental Static Regeneration
 
