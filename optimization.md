@@ -1,10 +1,12 @@
 # Performance optimization
 
 <https://xwp.co/how-to-build-a-rocket-best-practices-for-better-web-performance/>
+<https://10up.github.io/Engineering-Best-Practices/performance/#core-web-vitals>
 
 ## Font
 
 - Modern `@font-face`
+- 
 <https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Fonts/Variable_Fonts_Guide>
 ```css
 @font-face {
@@ -16,10 +18,10 @@
 }
 ```
 
+- preload font: `<link rel="preload" href="/assets/Pacifico-Bold.woff2" as="font" type="font/woff2" crossorigin> `
 - Self-host font
 - Optimize google font: https://css-tricks.com/how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy/
 - Chỉ dùng woff2
-- preload font
 
 ## Icon font và svg
 
@@ -37,7 +39,7 @@ Trong trường hợp phải dùng icon font thì phải optimize dùng `icomoon
 
 **CÁI NÀY QUAN TRỌNG**
 TTFB -> FCP -> LCP -> TTI
-- LCP: preload LCP image like hero image 
+- LCP: preload LCP image like hero image: `<link rel="preload" as="image" imagesrcset=" image-400.jpg 400w, image-800.jpg 800w, image-1600.jpg 1600w" imagesizes="100vw" />.`
 
 ### Slider ở đầu website
 

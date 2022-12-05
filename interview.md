@@ -441,6 +441,10 @@ map.set( 'key', value )
 ```javascript
 map.get( 'key' );
 ```
+- Get size
+```js
+map.size
+```
 - Loop
 ```javascript
 for( let [key, value] of map )
@@ -706,6 +710,7 @@ console.log(info);
 - Load: when all the resources are loaded ( resources are parsed and get acknowledged off before DOMContentLoaded)
 - First Contentful Paint(FCP): the moment when the first element from the DOM appears in the users' browser.
 - Speed Index: shows how quickly the contents of a page are visibly populated.
+- LCP (Largest Contentful Paint): LCP measures the time from when the user initiates loading the page until the largest image or text block is rendered within the viewport.
 - Time To (fully) Interactive(TTI): the amount of time it takes for the page to be fully interactive.
 - First Input Delay (FID): the time from when a user first interacts with a page to the time when the browser is actually able to respond to that interaction.
 - Total blocking time (TTB) = First contentful paint (FCT) + Time to interactive (TTI)
@@ -872,16 +877,28 @@ Set z-index for the container
 
 Using `background-blend-mode`: <https://www.smashingmagazine.com/2021/09/reducing-need-pseudo-elements/>
 
-## flex-shrink, flex-grow, flex-basis
+## `display: flex`
 
+<https://www.joshwcomeau.com/css/interactive-guide-to-flexbox/>
 <https://www.youtube.com/watch?v=1zKX71GYisE>
 
 Mặc định `flex-grow: 0; flex-shrink: 1; flex-basis: auto;`
-`flex-basis`: giá trị ban đầu của flex item để từ đó tăng hoặc giảm. Nếu flex-item có width thì `flex-basis` sẽ override width đấy. Note: `max-width` và `max-height` sẽ override `flex-basis`
+`flex-basis`: giá trị ban đầu của flex item để từ đó tăng hoặc giảm. Nếu flex-item có width thì `flex-basis` sẽ override width đấy. Note: `max-width` và `max-height` sẽ override `flex-basis`. `min-width` và `max-width` cũng ngăn chặn item bị shrink hoặc grow
 `flex-shrink` và `flex-grow`: tính toán sự tăng giảm width của flex items
 
-`flex-shrink: 1`: Khi tổng width của các item > parent và flex-shrink = 1 => width của item sẽ bị thu lại
-`flex-grow: 1`: Khi tổng width của item < parent và flex-grow: 1 => width của item sẽ tăng lên để fill hết width của parent
+`flex-shrink: 1` sẽ không chạy đúng khi width của container giảm trong trường hợp
+
+- item có min-width, vd input có default min-width: 170px - 200px tùy browser => set `min-width: 0` cho input
+- item có content dài
+
+`flex-shrink: 1`: Khi tổng width của các item > parent và `flex-shrink` = 1 => width của item sẽ bị thu lại
+`flex-grow: 1`: Khi tổng width của item < parent và `flex-grow`: 1 => width của item sẽ tăng lên để fill hết width của parent
+
+Khi container vẫn còn space hoặc container bị thu hẹp và các item đều được set `flex-grow` hoặc `flex-shrink` thì phần thừa hoặc thiếu đó sẽ được tính theo tỉ lệ `flex-grow` hoặc `flex-shrink` giữa các item
+
+Ví dụ: extra space là 150px, item 1 có `flex-grow` là 1, item 2 có `flex-grow` là 2 => item 1 sẽ tăng 50px so với flex basis, item 2 sẽ tăng 100px so với flex basis. Tương tự với `flex-shrink`, khi container bị thu hẹp lại thì width của các item sẽ bị giảm theo tỉ lệ
+
+`flex-wrap: wrap` sẽ tách row khi container width thu lại, từ 1 row sẽ thành 2, 3 row. `flex-grow` và `flex-shrink` sẽ tính toán theo từng row => width các item sẽ có thể bị thay đổi nếu row được tách ra
 
 ## So sánh `flex-basis` và width
 

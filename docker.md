@@ -2,6 +2,7 @@
 
 ## Reference
 
+<https://www.youtube.com/watch?v=3c-iBn73dDE&t=1s>
 <https://viblo.asia/p/docker-chua-biet-gi-den-biet-dung-phan-1-lich-su-ByEZkWrEZQ0>
 <https://www.youtube.com/watch?v=pTFZFxd4hOI>
 <https://devdojo.com/bobbyiliev/free-introduction-to-docker-ebook>
@@ -17,7 +18,7 @@ Có thể dev trên local và đồng bộ môi trường trên máy local với
 
 Tưởng tượng nó như 1 cái hộp, trong đấy chứa tất cả các hệ điều hành, database, và cả code của mình. Mình có thể dễ dàng quản lý, di chuyển, share cái container này.
 
-Về bản chất, *container* giống với *virtual machine* ở chỗ là có có thể cài app, OS tách biệt với máy tính đang chạy. Tuy nhiên, container có điểm khác so với vm:
+Về bản chất, *container* giống với *virtual machine* ở chỗ là có có thể cài app, OS tách biệt với máy tính đang chạy. Tuy nhiên, container có điểm khác so với vm đó là nó dùng chung OS kernal với hệ điều hành hiện tại của máy còn VM sẽ dùng OS kernal riêng. Do đó, container sẽ
 
 - Nhẹ hơn, tốn ít tài nguyên hơn
 - Khởi động nhanh hơn
@@ -46,6 +47,8 @@ EXPOSE 8080
 CMD [ "npm", "start" ]    // Khi setup xong thì chạy lệnh
 ```
 
+Để chạy docker file, dùng lệnh: `docker build -t <docker_image_name> .`. Docker image name có thể là my_app:1.0. Quá trình build docker image nó giống như lệnh `docker pull`, sau khi pull về thì chạy lệnh `docker run`
+
 ### Image
 
 Là 1 snapshot (giống file ghost) mà khi run snapshot này sẽ cho ra *Container*, hay nói cách khác là tái tạo lại môi trường. Có thể hiểu Docker Image như là class và container như là instance của class đó.
@@ -57,15 +60,28 @@ Tạo 1 file `.dockerignore` để ignore `node_module`
 
 - `docker ps`: liệt kê danh sách container đang chạy
 - `docker ps -a`: liệt kê danh sách container đang chạy và đang dừng
-- `docker image ls`: liệt kê danh sách images
-- `docker build -t <docker_image>` .: build image từ Dockerfile. Dấu chấm ở cuối để nói với Docker là chạy Dockerfile ở thư mục hiện tại
-- `docker run <docker_image>`: chạy 1 docker image, nếu image này chưa có trên local thì nó sẽ được pull về từ docker hub
-  ```
-  docker run -it ubuntu
-  ```
-- `docker-compose up`: chạy tất cả các container
+- `docker ps -a | grep <text>`: Search for text
+
+- `docker start <container_id>`: start 1 container
+- `docker stop <container_id>`: stop 1 container
 - `docker inspect <container_id> | grep "IPAddress"`: tìm IP của container
 
+- `docker pull <docker_image>`: pull docker image từ docker hub.
+- `docker run <docker_image>`: tạo và start 1 container từ 1 docker image, nếu image này chưa có trên local thì nó sẽ được pull về từ docker hub.
+- `docker run <docker_image> -p<host_port>:<container_port>`: tạo container từ 1 docker image, bind container đó với port của host (máy của mình). Điều này cho phép 2 container có cùng port nhưng vẫn có thể cùng chạy với 2 host_port khác nhau <https://youtu.be/3c-iBn73dDE?t=3287>
+- `docker image ls`: liệt kê danh sách images
+- `docker build -t <docker_image_name>` .: build image từ Dockerfile. Dấu chấm ở cuối để nói với Docker là chạy Dockerfile ở thư mục hiện tại
+
+- `docker run -it ubuntu`
+- `docker-compose up`: chạy tất cả các container
+
 Update code
-- Build lại docker image
+
+- Re-build lại docker image: phải xóa docker image cũ đi rồi build lại cái mới dùng lệnh `docker build -t` ở trên
 - Stop và remove container hiện tại: dùng lệnh `docker rm -f <the-container-id>` hoặc dùng Dashboard
+
+## Docker compose file
+
+Chứa hướng dẫn để build ra *Docker Container*, nó là 1 file `.yaml`
+
+Để chạy file dùng lênh: `docker-compose -f <yaml_file> up`

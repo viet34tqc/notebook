@@ -120,4 +120,45 @@ tạo ra 1 key lưu lại và thêm thời gian hết han của nó lưu lên lo
 
 Điều đầu tiên và dễ nhận thấy nhất đó là số lượng bug runtime, những lỗi dạng bị mismatch datatype hay sai property name so với dữ liệu BE trả về hay payload FE gửi lên giảm gần như bằng 0 (tất nhiên là với điều kiện bạn phải viết type đúng và đầy đủ chứ cứ khó tí lại phang "any" thì coi như công cốc).\
 Thứ hai là khi kết hợp với Husky pre-push, setup lệnh cho nó chạy build trk khi push code lên nhánh chính để phát hiện sớm các lỗi type tiềm ẩn (nhờ TS), giúp dự án gần như ko bao giờ bị chết pipeline trên CI/CD cả, tránh dc ảnh hưởng đến tiến độ của các teammates.\
-Và lợi ích thứ ba và cũng là điểm mình thấy tiện lợi nhất của TS đó là khả năng suggestion khi kết hợp với IntelliSense trong VSCode. Ví dụ khi viết component Input, mình chỉ cần extends Props của nó với React.HTMLAttributes của thẻ `<input />` là khi sử dụng component, VSCode sẽ tự suggest hết cả bộ các attributes và events của input, hầu như chả phải nhớ j. Ngoài ra mình còn đã áp dụng thành công TS vào trong hệ thống permissions với routing của dự án, giúp đơn giản hóa workflow của mn. Khi code ko cần phải nhớ chính xác tên của permission hay route/url nữa, mà chỉ cần gọi object chấm chấm cái nó tự suggest đầy đủ tên cho luôn, theo đúng thứ tự cha con luôn, ko bao giờ phải hardcode string nữa, giảm thời gian dev và giảm thiểu bug :))
+Và lợi ích thứ ba và cũng là điểm mình thấy tiện lợi nhất của TS đó là khả năng suggestion khi kết hợp với IntelliSense trong VSCode. Ví dụ khi viết component Input, mình chỉ cần extends Props của nó với React.HTMLAttributes của thẻ `<input />` là khi sử dụng component, VSCode sẽ tự suggest hết cả bộ các attributes và events của input, hầu như chả phải nhớ j. Ngoài ra mình còn đã áp dụng thành công TS vào trong hệ thống permissions với routing của dự án, giúp đơn giản hóa workflow của mn. Khi code ko cần phải nhớ chính xác tên của permission hay route/url nữa, mà chỉ cần gọi object chấm chấm cái nó tự suggest đầy đủ tên cho luôn, theo đúng thứ tự cha con luôn, ko bao giờ phải hardcode string nữa, giảm thời gian dev và giảm thiểu bug
+
+## Set httpOnly cho cookie
+
+Sau khi login, ko lưu token vào localStorage.
+
+Khi call /api/user/info, gửi token bằng header Authorization, server sẽ gửi về header "Set-Cookie" để set cookie httpOnly
+
+Tất cả các API khác sẽ chuyển phương thức xác thực bằng cookie. Riêng /api/user/info:
+
+- Nếu có header Authorization, xác thực và gửi về header "Set-Cookie"
+- Else, xác thực bằng cookie
+
+Cần có API logout, để có thể clear và invalidate cookie:
+
+- Clear: https://stackoverflow.com/a/5285982
+- Invalidate (hủy token): Revoking tokens - Amazon Cognito
+
+## Training
+
+Dành cho người mới muốn tìm hiểu và tự học FE (Web) + BE để đi làm (12-18tr NET)
+Đây là phương thức mình từng triển khai cho một số cty có hỗ trợ training fresher cũng như các team tự lập bên ngoài. Các bạn có thể tự học một mình. Tốt nhất bạn nên lập thành một nhóm tầm 3 4 thành viên.
+Mình sẽ lấy mục tiêu output là từ người mới hoàn toàn và đạt được kinh nghiệm 6m-1y với React + Node, có sản phẩm deploy live trên VPS (hiểu biết Docker). Ở level này các đủ sức apply vào các cty phổ thông trên thị trường ở level junior ~1y (mức lương dự kiến rơi vào khoảng 12-18tr NET).
+Ở level này các bạn phải cần biết: Mình ghi mấy cái chính thôi
+- Cơ bản về thuật toán và cấu trúc dữ liệu (optional nhưng quan trọng, các bạn có thể bỏ qua chỗ này, lý do mình sẽ nói bên dưới)
+- HTML,CSS,JS. Đối với JS, các bạn nên biết Typescript.
+- Kỹ năng phân tích giao diện thành các components, cách layout và phối hợp chúng.
+- React, Redux (Toolkit) và các lib thông dụng thường có như Router chẳng hạn.
+- Node ở mức độ cơ bản, làm được CRUD REST API, authentication, JWT, image uploader.
+Yêu cầu: có thời gian mỗi ngày 1-2 tiếng chuyên tâm và có máy tính cá nhân. Nếu được thì chủ động tìm kiếm các dev 2y exp review và định hướng sẽ rất tốt.
+Đầu tiên là mindset hãy xem mình đang đi làm (fresher/thực tập sinh) ở công ty, không phải là đang tự học một cái gì đó cho biết. Quan trọng là: "Làm web để học React/Node" thay vì "Học React/Node để làm web". Thấu triệt cái này các bạn sẽ thấy được lợi ích của nó.
+Các bạn hãy nghĩ về hình ảnh thợ sửa xe máy. Không nhất thiết các bạn phải học triệt để về động cơ, cơ khí, điện tử để có thể chế tạo được chúng. Đây là level của Engineer (kỹ sư). Các bạn vẫn có thể bắt đầu ở level sửa xe bình thường, sau đó trở thành engineer nếu bạn nỗ lực và đam mê. Đừng quan tâm phán xét, chê bai bạn chỉ là "thợ code". Xuất phát điểm không quá quan trọng như thế, đặc biệt là nghề dev.
+Đây là cách tiếp cận ngược (từ dưới lên), làm để học. Ưu là các bạn nhìn thấy được kết quả, có mục tiêu rõ ràng và duy trình động lực tốt. Nhược là ở giai đoạn này các bạn chưa có nền móng vững chắc. Xét trên khía cạnh học code để đi làm, nuôi sống bản thân thì vẫn không thành vấn đề. Về sau các bạn chuyên tâm bổ sung cũng được. Thay vì gãy gánh giữa đường vì kiến thức rất nhiều, học bao nhiêu cho đủ, học không có mục tiêu dễ lạc đường và mất động lực.
+Vì thế việc đầu tiên là chúng ta chọn ra một product khá cơ bản, tính năng vừa phải và bao quát được các kỹ năng cần thiết. Mình thường hay lấy Instagram làm hình mẫu:
+- Layout web các bạn có thể tham khảo web Instagram luôn. Cứ lượt bỏ mấy cái quá phức tạp, chấp nhận xấu trước rồi đẹp sau.
+- Home Feed cơ bản, list tất cả hình ảnh của các user, có phân trang và bộ lọc cơ bản (theo danh mục, theo user), sắp xếp theo mới tới cũ.
+- Các trang Register, Login cơ bản (username + password thôi). Chỗ này dùng JWT.
+- Đăng ảnh mới với caption, khỏi dùng hashtag nha, text bình thường thôi. Nếu làm edit thì upload ảnh mới và edit caption là được. Không làm mấy cái filter ảnh nhé.
+- Trong profile để show thông tin user và các hình ảnh của user.
+- Mấy cái like/comment các bạn làm thêm thì tốt, từ từ bổ sung sau.
+- Tìm hiểu cách deploy website, nhân tiện tìm hiểu Docker hoặc các tool CI/CD cơ bản.
+Coi như đây là thử thách các bạn cần làm bằng được trong 6 tháng tự thân hoặc có teamwork nhé. Tuỳ lực học và điều kiện mỗi người, nhưng hầu hết mình thấy 6 tháng, có người 3 4 tháng. Đừng nản nhé, có một năm cũng không sao, hãy nghĩ về tương lai 12-18tr NET/tháng làm động lực.

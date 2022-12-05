@@ -4,6 +4,9 @@
 <https://tsh.io/blog/ssr-vs-ssg-in-nextjs/>
 <https://prateeksurana.me/blog/future-of-rendering-in-react/>
 
+Build a blog with NextJS
+<https://github.com/itsrennyman/renatopozzi.me>
+
 ## Why NextJS
 
 - Zero-config: no Webpack and Babel
