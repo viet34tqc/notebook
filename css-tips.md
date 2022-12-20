@@ -41,6 +41,18 @@ Set `grid-area: 1/-1` the same for all the child element
 
 <https://www.youtube.com/watch?v=4prVdA7_6u0>
 
+## Inconsistantly sized logo
+
+```css
+.logo {
+  width: 15%;
+  aspect-ratio: 3/2;
+  object-fit: contain;
+  /* For logos that have different background color with container background color  */
+  mix-blend-mode: color-burn; 
+}
+```
+
 ## `z-index` without `position`
 
 We can use z-index on a grid or flex item. No need to add `position: relative` at all.

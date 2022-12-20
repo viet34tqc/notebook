@@ -187,7 +187,7 @@ Nếu giá trị state không thay đổi khi setState thì component sẽ rende
 ```js
 const [show, toggle] = useReducer(state => !state, true);
 ```
-Let's say you have a component which includes 2 buttons. The first one is for fetching the data and update the state. The second one is for unmounting the component. When you click the fetching button, then immediately click the second button, there is a chance that you will encountered an error: `Can't perform a React state update on unmounted component`. That's because your asynchonous request hasn't been resolved yet when the component is unmounted.
+Let's say you have a component which includes 2 buttons. The first one is for fetching the data and update the state. The second one is for unmounting the component. When you click the fetching button, then immediately click the second button, there is a chance that you will encountered an error: `Can't perform a React state update on unmounted component`. That's because your asynchronous request hasn't been resolved yet when the component is unmounted.
 
 To fix the problem you need to either cancel the request inside `useEffect`. Otherwise, you need to ignore the `setState` by using a variable to store the mounted state. The request is still resolved but, it won't make any changes to unmounted component. 
 
@@ -635,11 +635,11 @@ Object.defineProperty(obj, 'flameWarTopic', {
 ## Hiểu gì về async, await, promise, so sánh
 
 `Promise`:
-- Là 1 object bọc lấy kết quả trả về của 1 asynchonous function.
+- Là 1 object bọc lấy kết quả trả về của 1 asynchronous function.
 - Có 3 trạng thái:
   - pending: trạng thái mặc định khi mới tạo Promise.
-  - fulfilled: trạng thái khi asynchonous function bên trong resolve,
-  - rejected: trạng thái khi asynchonous function bên trong resolve,
+  - fulfilled: trạng thái khi asynchronous function bên trong resolve,
+  - rejected: trạng thái khi asynchronous function bên trong resolve,
 
 **Converting a setTimeout into a promisified `delay` function**
 ```ts
@@ -696,6 +696,10 @@ console.log(info);
 }
 ```
 
+## What happens when you type a URL into browser
+
+<https://www.youtube.com/watch?v=AlkDbnbv7dk>
+
 ## Core Web Vital
 
 <https://prateeksurana.me/blog/future-of-rendering-in-react/>
@@ -704,18 +708,16 @@ console.log(info);
 <https://indepth.dev/posts/1498/101-javascript-critical-rendering-path>
 <https://web.dev/learn-web-vitals/>
 
-- Time to first byte (TTFB): the time it takes the browsers to start receiving a data (images, fonts, js, css...) after requesting data from server: HTTP request time + Process request time + HTTP response time.
 - Critical Rendering Path: <https://indepth.dev/posts/1498/101-javascript-critical-rendering-path> is the sequences of steps of: convert the HTML, CSS, and JavaScript (images are not considered as critical resource) into pixels on the screen
 - DOMContentLoaded: the time for loading HTML before starting to load the content. The event does not wait for images, subframes or even stylesheets to be completely loaded. The only target is for the Document to be loaded
 - Load: when all the resources are loaded ( resources are parsed and get acknowledged off before DOMContentLoaded)
-- First Contentful Paint(FCP): the moment when the first element from the DOM appears in the users' browser.
 - Speed Index: shows how quickly the contents of a page are visibly populated.
-- LCP (Largest Contentful Paint): LCP measures the time from when the user initiates loading the page until the largest image or text block is rendered within the viewport.
-- Time To (fully) Interactive(TTI): the amount of time it takes for the page to be fully interactive.
+- Time to first byte (TTFB): the time it takes the browsers to start receiving the first byte of a request.
+- First Contentful Paint(FCP): the moment when the first element from the DOM appears in the users' browser.
+- Largest Contentful Paint (LCP): the time when the largest content element in the viewport becomes visible. It can be used to determine when the main content of the page has finished rendering on the screen.
+- Time To (fully) Interactive (TTI): the amount of time it takes for the page to be fully interactive. Users might expect this is the same time as LCP, but this can be different. If TTI and LCP differ, users might assume the website is broken.
 - First Input Delay (FID): the time from when a user first interacts with a page to the time when the browser is actually able to respond to that interaction.
-- Total blocking time (TTB) = First contentful paint (FCT) + Time to interactive (TTI)
-- Total Blocking Time: total amount of time between First Contentful Paint (FCP) and Time to Interactive (TTI) where the main thread was blocked for long enough to prevent input responsiveness.
-- Largest Contentful Paint (2.5s): the time when the largest content element in the viewport becomes visible. It can be used to determine when the main content of the page has finished rendering on the screen.
+- Total Blocking Time (TTB): total amount of time between First Contentful Paint (FCP) and Time to Interactive (TTI) where the main thread was blocked for long enough to prevent input responsiveness.
 
 ## Obtimize speed:
 

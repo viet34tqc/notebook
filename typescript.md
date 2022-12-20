@@ -54,23 +54,59 @@ function printId(id: number | string) {
 }
 ```
 
-## Intersection type
+## Discriminated union type (tagged union type)
 
-Create a type based on two or more interface. Use `&`
+It's a union of other types with discriminant properties (tag)
 
 ```ts
-interface Student {
-    name: string;
-    age: number;
-    year: number
+type LoadingState = {
+  state: "loading"; // tag
+};
+type FailedState = {
+  state: "failed"; // tag
+  status: number;
+};
+type SuccessState = {
+  state: "success"; // tag
+  response: {
+    isLoaded: boolean;
+  };
+};
+
+type State = LoadingState | FailedState | SuccessState;
+
+// The first | is just for readability
+type Shape =
+  | { kind: "circle"; radius: number }
+  | { kind: "square"; x: number }
+  | { kind: "triangle"; x: number; y: number };
+```
+
+## Intersection type
+
+Create a type based on two or more interfaces with `&`
+
+```ts
+interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
 }
 
 interface Engineer {
-    name: string;
-    age: number;
+  name: string;
+  age: number;
 }
 
-type Person = Studen & Engineer;
+type Person = User & Engineer
+
+const a: Person = {
+  id: 'string',
+  firstName: 'string',
+  lastName: 'string',
+  name: 'stirng',
+  age: 23
+}
 ```
 
 ## Type alias
@@ -137,24 +173,6 @@ type Window = {
 ## Never
 
 Often used for function that doesn't `return`
-
-## Tips
-
-### Using Type or Interface
-
-Use Interface until you need Types, ex: Union type or Intersection
-
-### Null and undefined check
-
-Just use `== null` or `!= null` (**not** `===` and `!==`)
-
-```ts
-function foo(a?: number | null) {
-  if (a == null) return;
-
-  // a is number now.
-}
-```
 
 ## Declare array with Type and Interface
 
@@ -387,6 +405,8 @@ Then you can access the constant like property of Object: `Order.First`, `Order.
 
 ## Utility Types
 
+Selectively construct type from other type
+
 - `Partial<Type>`: a type that has all props of `Type` to optional
 - `Required<Type>`: a type that has  all props of `Type` to required
 - `Pick<Type, Keys>`: a type by picking a set of `Keys` from Types
@@ -463,8 +483,55 @@ export type StorageItem = {
 }
 ```
 
-## ignore the error
+## Ignore the error
 
 You can ignore the typescript error by adding the exclamation mark, if you know that it's safe for sure.
 
 `data.value!`
+
+## Tips
+
+### Assigning dynamic keys to an object
+
+```ts
+// Method 1
+const cache: Record<string, string> = {}
+
+// Method 2
+const cache: {[id: string]: string} = {}
+```
+
+### Typing async function
+
+```ts
+type getUser = (id: string) => Promise<User>
+```
+
+### Using Type or Interface
+
+You can use whatever you want. Type is more preferred because we can use it to define union type which is not possible with Interface
+
+### Null and undefined check
+
+Just use `== null` or `!= null` (**not** `===` and `!==`)
+
+```ts
+function foo(a?: number | null) {
+  if (a == null) return;
+
+  // a is number now.
+}
+```
+
+### Error check
+
+We can put this in `catch` block
+```ts
+if (error instanceof Error) {
+  error
+// ^? const error: Error
+}
+
+// Check axios error
+if (axios.isAxiosError(error))
+```

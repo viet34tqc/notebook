@@ -124,6 +124,14 @@ export const ReducerExample: React.FC = () => {
 
 ```
 
+## `fowardRef`
+
+```tsx
+export const ToolbarButton = forwardRef<HTMLButtonElement, Props>(
+  (props, ref): JSX.Element => {})
+```
+
+
 ## Event
 
 Let's say I want to use the `onChange` method of input and take it as a prop

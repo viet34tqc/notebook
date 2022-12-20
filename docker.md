@@ -34,7 +34,7 @@ FROM node:12              // Download node image về
 
 WORKDIR /app              // CD đến thư mục app
 
-COPY package*.json ./     // Copy các file package*.json vào thư mục app. Nếu dùng yarn thì phải COPY package.json yarn.lock để
+COPY package*.json ./     // Copy các file package*.json vào thư mục app. Nếu dùng yarn thì phải COPY yarn.lock
 
 RUN npm install           // Nếu dùng yarn thì chạy yarn install
 

@@ -1,24 +1,46 @@
 # React Tips
 
-## Use callback refs to interact with DOM nodes
+## Never update state during render phase
+
+<https://alexsidorenko.com/blog/onclick-too-many-re-renders/>
+It could lead to infinite loop. Update the state like this is the same as calling the callback function inside click handler
+```jsx
+<button onClick={setState(count + 1)}>Click</button> /*DONT do that*/
+```
+
+
+## Use callback refs to interact with DOM nodes to avoid using `useEffect`
 
 <https://tkdodo.eu/blog/avoiding-use-effect-with-callback-refs>
 
+Passing a ref from `useRef` (a RefObject) to a React element is therefore just syntactic sugar for:
 ```js
-const ref = useRef(null)
-// is equal to
-const ref = (node) => {}
+<input
+  ref={(node) => {
+    ref.current = node;
+  }}
+  defaultValue="Hello world"
+/>
 ```
 
 ```jsx
 function MeasureExample() {
   const [height, setHeight] = React.useState(0)
 
+  // we use `useCallback` to avoid creating ref every render
   const measuredRef = React.useCallback(node => {
     if (node !== null) {
       setHeight(node.getBoundingClientRect().height)
     }
   }, [])
+
+  // Other solution with useRef as long as there is no dependancy in the function inside `useRef`
+  /*const measuredRef = React.useRef(node => {
+    if (node !== null) {
+      setHeight(node.getBoundingClientRect().height)
+    }
+  }, [])*/
+  // Then <h1 ref={measuredRef.current}>Hello, world</h1>
 
   return (
     <>
@@ -28,6 +50,8 @@ function MeasureExample() {
   )
 }
 ```
+
+In this example, we use only one hook instead of `useRef` and `useCallback`
 
 ## Pass params with `history.push` in react-router-dom
 
@@ -67,6 +91,13 @@ const SecondPage = props => {
 
 };
 ```
+
+## Remove Contradicting State
+
+<https://profy.dev/article/react-usestate-pitfalls>
+This is the case when we have too much state too update and those states relates to each other, for example: loading state, error state and data state can come together
+
+Solution: using `useReducer`, put all states in a wrapper state and update that big state.
 
 ## Escape hatch (using less dependancies)
 

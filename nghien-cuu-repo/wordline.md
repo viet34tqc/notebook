@@ -38,9 +38,14 @@ content: yup
     },
   })
 ```
-
 - RHF còn cung cấp FormContext cho phép lấy giá trị cũng như setValue cho các field ở component cha ở component con
 - Có thể watch 1 state bất kì mà không cần truyền vào field name, tiện lợi hơn so với việc dùng state
+
+## Giá trị number cho input number
+
+Mặc định giá trị của tất cả input khi được submit đều ở dạng string, kể cả input number => Sẽ có trường hợp điền giá trị là 0 thì submitted data sẽ là empty string.
+
+Giải pháp là lúc register thêm `{...register('ages', {valueAsNumber: true})}`
 
 ## MaxLength cho input number
 

@@ -12,7 +12,6 @@
 - caching: <https://react-query.tanstack.com/guides/caching>
 - staleTime: The duration until a query transitions from fresh to stale. As long as the query is fresh, data will always be read from the cache only, no network request will happen! If the query is stale (which per default is: instantly), you will still get data from the cache, but a background refetch can happen under certain conditions.
 
-
 ## Why do I need React Query when the browser has built-in fetch API already?
 
 One of the challenges we face when building an application with React is fetching data from the server. The most common way to handle data fetching is to use global state to determine the current status of the fetch operation
@@ -67,6 +66,16 @@ Fortunately, all those problem can be solved by React Query:
 - Code is simpler, no need to use multiple `useState` anymore
 - Cache the fetched data. When the component is unmounted, eg: when you click on another link, then you come back, the data is already cached and your component don't need to fetch the data again.
 
+## Refetch
+
+If the query is not stale (fresh), it won't be refreshed
+**Stale** queries are refetched automatically in the background when:
+
+- New instances of the query mount
+- The window is refocused
+- The network is reconnected
+- The query is optionally configured with a refetch interval
+
 ## React Query and global state managers
 
 There is a huge difference between these two
@@ -87,14 +96,12 @@ React Query replaces all the boilerplate code used to manage cache data in your 
 
 Under the hood, it uses the user interactions as the hints to know when to update the data. One of those hints is window refocus event. So when you refocus the browser, it detects that the users has came back, and it's time to update stale data in the background.
 
-## Hooks
-
-### useQuery
+## useQuery
 
 - Used to fetch the data.
 - Input
   - unique key
-  - fetching function: asynchronous function responsible for getting data or return error
+  - fetching function: any function that return a promise that resolve data or throw error when excuted (async function returns promise, not the data from await)
   - options(optional): Object
 - Output: Object
 ex:
@@ -105,43 +112,15 @@ export default function usePosts() {
   )
 }
 ```
-- Usage:
-  - Parallel queries: excute mutiple queries simultaneously. It accepts an array of query options object - like `useQuery` hook - to return an array of query result.
-  ```javascript
-	const results = useQueries([
-	  { queryKey: ['article', 1], queryFn: createFetchArticle },
-	  { queryKey: ['article', 2], queryFn: createFetchArticle },
-	])
-  ```
-	- Dependent queries
-	This is useful when you want to use the data returned from the first query to execute the second query. Do that with `enabled` option in `useQuery`.
-	```javascript
-	const { data: user } = useQuery(['user', email], getUserByEmail)
 
-	const userId = user?.id
-
-	const { isIdle, data: projects } = useQuery(
-	  ['projects', userId],
-	  getProjectsByUser,
-	  {
-	    // The query will not execute until the userId exists
-	    enabled: !!userId,
-	  }
-	)
-	```
-	- Paginated query:
-	You just need to pass the page number to the `queryKey` array and use `keepPreviousData` option in the `useQuery` hook. Afterward, when you jump between pages, you get cache data from the first one with new data loading in the background. The UI won't reload when you come back to the previous page when the data is the same.
-	```javascript
-	const query = useQuery(['articles', page], () => createFetchArticles(page), { keepPreviousData : true })
-	```
-
-### useMutation
+## useMutation
 
 - Used to create/delete/update data
 - Input: function for mutation and options ( which will utilize queryClient)
 - Output:
   - function as the event handle: (value) => void
   - mutationConfigure Info
+
 ```javascript
 export default function useCreatePost() {
   return useMutation( (newPost) => axios.post('/api/posts', newPost).then((res) => res.data))
@@ -152,8 +131,8 @@ export default function useCreatePost() {
 const [createPost, createPostInfo] = useCreatePost()
 ```
 - Options:
-  - `onMutate`: function fires before `useMutation`. It's quite helpful when you want to run optimistic updates on local cache and update data for the UI before the mutation happens on the server.
-  - `onSuccess`: function runs when the mutation is successfull. `queryClient.invalidateQueries` is often used here, so the data in other places is refetched in the background.
+  - `onMutate`: function fires before `useMutation`. It's quite helpful when you want to run optimistic updates on local cache and update data for the UI before the mutation happens on the server (<https://tanstack.com/query/v4/docs/guides/optimistic-updates>)
+  - `onSuccess`: function runs when the mutation is successfull. `queryClient.invalidateQueries` is often used here, so the data in another query is refetched in the background.
   ```javascript
   const mutation = useMutation(createPostArticle, {
 	  onSuccess: data => {
@@ -161,9 +140,40 @@ const [createPost, createPostInfo] = useCreatePost()
 	  },
 	})
   ```
+  If the query to invalidated is on the same page as the current query and you want to invalidate the other query asap, you could use `setQueryData`. This is optimistic update. However, in the end we still want to invalidate the query in `onSettled`
+  ```js
+  onSuccess: (data) => {
+  		// data is the response from mutationFn. If response doesn't return it, you need to find another way to get the ID
+			queryClient.setQueryData(discussionKeys.all(), (previous: any) =>
+				previous.filter((d: Discussion) => d.id !== data.id)
+			);
+	}
+  ```
+  If the query include a lot of params like a filters, your best bet is invalidate the whole query without any subkeys <https://tkdodo.eu/blog/effective-react-query-keys>
+  ```js
+  const { filters } = useFilterParams()
+
+  return useMutation(updateTitle, {
+    onSuccess: (newTodo) => {
+      queryClient.setQueryData(['todos', 'detail', newTodo.id], newTodo)
+
+      // ✅ update the list we are currently on instantly
+      queryClient.setQueryData(['todos', 'list', { filters }], (previous) =>
+        previous.map((todo) => (todo.id === newTodo.id ? newtodo : todo))
+      )
+
+      // 🥳 invalidate all the lists, but don't refetch the active one
+      queryClient.invalidateQueries({
+        queryKey: ['todos', 'list'],
+        refetchActive: false,
+      })
+    },
+  })
+  ```
   - `onError`: fires when the mutation encounters an error
 
 ### useQueryClient
+
 This hook return the queryClient instance. This instance helps a lot with caching
 ```javascript
  import { useQueryClient } from 'react-query'
@@ -185,9 +195,105 @@ export default function useCreatePost() {
 }
 ```
 
-### useFetching
+## Parallel queries:
 
-Check if React Query is fetching new data
+Excute mutiple queries simultaneously. It accepts an array of query options object - like `useQuery` hook - to return an array of query result.
+  ```javascript
+	const results = useQueries([
+	  { queryKey: ['article', 1], queryFn: createFetchArticle },
+	  { queryKey: ['article', 2], queryFn: createFetchArticle },
+	])
+  ```
+
+## Dependent queries
+
+This is useful when you want to use the data returned from the first query to execute the second query. Do that with `enabled` option in `useQuery`
+
+```javascript
+const { data: user } = useQuery(['user', email], getUserByEmail)
+
+const userId = user?.id
+
+const { isIdle, data: projects } = useQuery(
+  ['projects', userId],
+  getProjectsByUser,
+  {
+    // The query will not execute until the userId exists
+    enabled: !!userId,
+  }
+)
+```
+
+## Lazy queries
+
+<https://tanstack.com/query/v4/docs/guides/disabling-queries>
+
+```jsx
+function Todos() {
+  const [filter, setFilter] = React.useState('')
+
+  const { data } = useQuery({
+      queryKey: ['todos', filter],
+      queryFn: () => fetchTodos(filter), // We can also access the query key in queryFn like this: ({queryKey}) => fetchTodos(queryKey[0])
+      // ⬇️ disabled as long as the filter is empty
+      enabled: !!filter
+  })
+
+  return (
+      <div>
+        // applying the filter will enable and execute the query
+        <FiltersForm onApply={setFilter} />
+        {data && <TodosTable data={data}} />
+      </div>
+  )
+}
+```
+
+If you want to show a loading spinner, use `isInitialLoading` rather than `isLoading`
+
+
+## Paginated query
+
+You just need to pass the page number to the `queryKey` array and use `keepPreviousData` option in the `useQuery` hook. Afterward, when you jump between pages, you get cache data from the first one with new data loading in the background. The UI won't reload when you come back to the previous page when the data is the same.
+```javascript
+const query = useQuery(['articles', page], () => createFetchArticles(page), { keepPreviousData : true })
+```
+
+## React Query and Typescript
+
+<https://tkdodo.eu/blog/react-query-and-type-script>
+
+- `useQuery`
+
+You don't have to pass in any generic to `useQuery`. Instead, you'd better carefully define the type of return data from `queryFn`
+
+- Error
+
+```ts
+if (groups.error instanceof Error) {
+  return <div>An error occurred: {groups.error.message}</div>
+}
+```
+
+## `initialData`
+
+We often use `initialData` to pre-populate a query with data from another query. A good example of this would be searching the cached data from a todos list query for an individual todo item, then using that as the initial data for your individual todo query:
+
+```js
+function Todo({ todoId }) {
+  const result = useQuery(['todo', todoId], () => fetch('/todos'), {
+    initialData: () => {
+      // Use a todo from the 'todos' query as the initial data for this todo query
+      return queryClient.getQueryData(['todos'])?.find(d => d.id === todoId)
+    },
+    staleTime: 60 * 1000, // By default, it is zero, then the query is refetch immediately which is waste
+    // The time when initialData was last updated. With this value, the query can decide for itself whether the data needs to be refetched again or not because the query 'todos' might be old.
+    // React query will compare the substract of Date.now() and this value with staleTime.
+    initialDataUpdatedAt: queryClient.getQueryState(['todos'])?.dataUpdatedAt,
+  })
+}
+```
+
 
 ## React Query and React Router
 
@@ -204,7 +310,7 @@ I would suggest setting the staleTime: It will tell react-query for how long the
 
 ## React Query and useEffect and useState
 
-Cases: you have a load more button to fetch more posts. The posts here need to be a state because it will change whenever the button load clicks.
+Cases: you have a load more button to fetch more posts. The posts here need to be a state because it will change whenever the button clicks.
 
 First, you have to put `useEffect` and `useState` above the conditional checks (`isLoading` and `isError`).
 Then, The data get from `useQuery` have to be an dependency of `useEffect`. Inside the `useEffect` block, there should be a check for undefined `useQuery` data.

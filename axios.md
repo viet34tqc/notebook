@@ -6,6 +6,7 @@ Axios is a HTTP client library that allows you to make requests to given endpoin
 ## Why use Axios
 
 Compare to native fetch API, Axios has some advantages:
+
 - You don't need to convert your request body to JSON string like Fetch API, that saves you one `then()` to access your requested data.
 ```javascript
 

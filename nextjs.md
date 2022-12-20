@@ -204,7 +204,6 @@ export const getStaticPaths = async () => {
   - The path is switch to server-side rendering. Browser has to wait until the page is generated. Future requests will serve the static file from the cache.
   - the path is statically generated **without loading state** (no fallback page) - new path will be cached in CDN (later requests will result in cached page)
 
-
 ## Client-side rendering & Server-side rendering & Static-site generation & Pre-rendering
 
 ### Client-side rendering (Plain React.js app)
@@ -219,13 +218,13 @@ If you are trying to visit a react application that has a really large bundle on
 
 Pros:
 
-- Good for UX => used a lot in web application
+- Fast TTFB because most of computation happens on client side
 - Lower server usage
 
 Cons:
 
+- Requires additional time once the JavaScript bundle have been loaded and could lead to a blocked user interface during that time. Hence, metrics like First Paint, First Contentful Paint, Largest Contentful Paint, and Time-to-Interactive require more time.
 - Not good for SEO because Google bot cannot crawl any data at first load because it can only sees a div
-- High Initial load time because of JS bundle, then we need to run that JS, call API to get data...
 
 ### Static-site generation
 
@@ -240,25 +239,24 @@ Pros:
 
 - This method is really good for SEO because bots get fully rendered HTML and they can easily interpret the content on the page.
 - The data is fetched only one time and cached.
-- Faster TTFB
+- Time To First Byte, First Paint, First Contentful Paint, Largest Contentful Paint benefit from this approach as it is very similar to static serving.
 
 Const:
 
 - The data can get stale until you regenerate the content.
+- Time To Interactive can be slow because of hydration process
 
-In NextJS, you can use `next build` to build the app for production. When that happened, HTML is generated and is reused for every request. Two types of static-site generation
-
-- Without data: for pages that can be generated without fetching external data at build time. It's just simple HTML without talking to any APIs.
-- With data: for pages that can only be generated **after fetching** external data at build time. In NextJS, we fetch data in `getStaticProps` function
-
-When to use:
-
-The content of the page doesn't update frequently
+When to use: The content of the page doesn't update frequently. Data must be known at build time.
 
 - Marketing pages
 - Blog posts
 - E-commerce product listings
 - Help and documentation
+
+In NextJS, you can use `next build` to build the app for production. When that happened, HTML is generated and is reused for every request. Two types of static-site generation
+
+- Without data: for pages that can be generated without fetching external data at build time. It's just simple HTML without talking to any APIs.
+- With data: for pages that can only be generated **after fetching** external data at build time. In NextJS, we fetch data in `getStaticProps` function
 
 ### Server-side rendering
 
@@ -267,16 +265,17 @@ The HTML output of React components gets generated on every request. This is use
 Pros:
 
 - This method is really good for SEO because bots get fully rendered HTML and they can easily interpret the content on the page.
+- First Paint, First Contentful Paint, Largest Contentful Paint benefit from this approach as it is very similar to static serving.
 - The data is always fresh
 
 Const:
 
+- Generate pages on the server takes time, that often result in a slower TTFB, unlike SSG
+- Time To Interactive can be slow because of hydration process
 - UX is not so good because navigation needs page refresh
 - Redundant data fetching (if not cache)
 
-When to use:
-
-The content of the page updates frequently and it changes on every user request, ex: checkout page, cart page...
+When to use: The content of the page updates frequently and it changes on every user request, ex: checkout page, cart page...
 
 ### Incremental Static Regeneration
 
@@ -302,7 +301,7 @@ So, if the users visit your site at the first 60 seconds, he will see the static
 Then, in the background, NextJS triggers a regeneration of the page by calling `getStaticProps` again. Once the page has been successfully generated, it invalidtes the cache and updates it with the newest version of the page. Now, the next person who comes to the site will see the most updated content
 If the background regeneration fails, the old page will stay unaltered
 
-## Which rendering method to use
+### Which rendering method to use
 
 <img src="https://i.imgur.com/HOdyKup.png" />
 <img src="https://i.imgur.com/WnE3o7T.png" />

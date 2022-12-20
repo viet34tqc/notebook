@@ -1,5 +1,9 @@
 # React Hook Form
 
+## Example
+
+<https://github.com/react-hook-form/react-hook-form/tree/master/examples>
+
 ## Basic usage
 
 We only need to use `handleSubmit` and `register` from `userForm` hook to make your form work with React Hook Form
@@ -83,9 +87,56 @@ const {
 )}
 ```
 
+## `isSubmitting`
+
+`isSubmitting` comes in handy when you are performing asynchronous submit function. Then you can add that value to disabled props of submit button.
+
 ## `watch`
 
-It replace the use of `useState`. RHF will watch value of all register fields. However, when using watch, all the fields will become uncontrolled input.
+It replace the use of `useState`. RHF will watch value of all register fields. However, when using watch, all the fields will become uncontrolled input => the component will be re-rendered when the input changes
+
+## `reset`
+
+- When you want to reset the form to default values after submitting successfully, you need to put `reset` inside `useEffect`
+
+```jsx
+useEffect(() => {
+	if ( formState.isSubmitSuccessful) {
+		reset();
+	}
+}, [formState, reset]) // formState will be changed
+```
+
+- Another case when you want to reset partial default values, you can use `getValues` API: `reset({...getValues(), key: value})`
+
+## `useWatch`
+
+To improve performance, you can use `useWatch` for individual input
+
+```jsx	
+function Child({ control }) {
+  const firstName = useWatch({
+    control,
+    name: "firstName",
+  });
+
+  return <p>Watch: {firstName}</p>;
+}
+
+function App() {
+  const { register, control } = useForm({
+    firstName: "test"
+  });
+  
+  return (
+    <form>
+      <input {...register("firstName")} />
+      <Child control={control} />
+    </form>
+  );
+}
+```
+
 
 ## `setValue`
 
@@ -110,13 +161,26 @@ You have to pass the `onChange` of the field (if you are using `Controller`)
 		label="Voice"
 		options={voices}
 		onChange={(selectedOption) => {
-			field.onChange(selectedOption);
+			field.onChange(selectedOption); // You can also customise what value gets sent to hook form by transforming the value during onChange.
 			handleVoiceChange(selectedOption);
 		}}
 		error={errors?.voice?.message}
 		/>
 	)}
 />
+```
+
+## Custom Input component
+
+Custom input componenent needs to expose `ref`, so that form can get the value
+
+```jsx	
+const Checkbox = ({ register, ...rest }) => (
+  <Form.Check type="checkbox" {...register} {...rest} />
+);
+<Checkbox register={register("checkbox")} value="A" />
+<Checkbox register={register("checkbox")} value="B" />
+<Checkbox register={register("checkbox")} value="C" />
 ```
 
 ## Using with `yup`
