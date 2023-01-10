@@ -627,7 +627,7 @@ type Includes<T extends readonly any[], U> =
 
 ## Working with Object
 
-## Object to Object
+## Object to Union
 
 ```ts
 interface Values {
