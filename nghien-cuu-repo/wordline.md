@@ -15,6 +15,7 @@ contactPhone: yup.string().when('contactPhone', (val) => {
     }
 }),
 ```
+
 - Custom error message sử dụng giá trị động: dùng `creatError` từ `context`
 
 ```js
@@ -38,8 +39,38 @@ content: yup
     },
   })
 ```
+
 - RHF còn cung cấp FormContext cho phép lấy giá trị cũng như setValue cho các field ở component cha ở component con
 - Có thể watch 1 state bất kì mà không cần truyền vào field name, tiện lợi hơn so với việc dùng state
+- Custom Radio field sử dụng value là boolean. Ở đây Radio component đã được fowardRef. Nếu sử dụng input radio thì dùng `register`. Nếu value không ở dạng boolean thì truyền giá trị value vào là được, không cần `checked` và `onChange` như dưới
+
+```jsx
+<Controller
+  name="allTocs"
+  control={control}
+  render={({ field }) => (
+    <Radio
+      {...field}
+      checked={!field.value}
+      onChange={() => field.onChange(false)}
+      label="My TOC"
+    />
+  )}
+/>
+<Controller
+  name="allTocs"
+  control={control}
+  render={({ field }) => (
+    <Radio
+      {...field}
+      checked={field.value}
+      onChange={() => field.onChange(true)}
+      label="All TOCs"
+      className="mx-4"
+    />
+  )}
+/>
+```
 
 ## Giá trị number cho input number
 
@@ -50,7 +81,6 @@ Giải pháp là lúc register thêm `{...register('ages', {valueAsNumber: true}
 ## MaxLength cho input number
 
 Mặc định input number sẽ không hiểu được thuộc tính maxLength như input text. Ngoài ra, input number còn cho phép điền kí tự +, -, e, E. Việc cần làm là chặn các kí tự này ngay khi gõ vào và cắt chiều dài của giá trị input
-
 
 ```js
 const blockInvalidCharInputNumber = (e) =>
