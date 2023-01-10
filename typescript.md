@@ -12,14 +12,15 @@ If you don't set the input files in `tsconfig.json`, Typescript will automatical
 ## Explicit declartion
 
 Declare the type of variables first:
-```typescript
+
+```ts
 let names: string = 'viet'; // String
 let age: number = 3; // Number
 let arr: string[] = ['viet', 'nguyen'] // Array
 let mixed: (string|number|boolean)[] // Union
 let person = {
-	name: string,
-	age: number,
+ name: string,
+ age: number,
 } // Object
 let age: any // whatever types
 ```
@@ -27,6 +28,7 @@ let age: any // whatever types
 ## Implicit declaration
 
 With common primitive types(string, number, boolean), we can simply omit the type annotation
+
 ```ts
 let name = 'viet'
 let age = 3
@@ -112,6 +114,7 @@ const a: Person = {
 ## Value type
 
 The type is narrowed down to specific value instead of generic type like 'string' or numer
+
 ```ts
 const newValue = 'A' | 'B' | 'C';
 const name = 'viet' // name has 'viet' type
@@ -121,15 +124,15 @@ const name = 'viet' // name has 'viet' type
 
 Name a type
 Name convention: PascalCase
+
 ```typescript
 type StringOrNumber = string | number; // Union type
 type Student = {
-	name: string;
-	id: StringOrNumber;
+ name: string;
+ id: StringOrNumber;
 }
 function( id: StringOrNumber, name: string ): void {}
 ```
-
 
 ## Interface
 
@@ -205,15 +208,19 @@ const a: List1<number> = [1,2,3]
 ## Functions
 
 - Define type for arguments: using ':'
+
 ```typescript
 function rect( width: number, height: number )
 ```
 
 - Define type of return, default is `void`:
+
 ```ts
     function square( side: number ) : number
 ```
+
 - Function signature
+
 ```typescript
     let greet: ( a: string, b: number ) => void // function signature
     greet = (name: string, age: number ) => console.log(`${name}`)
@@ -233,8 +240,8 @@ class Employee {
 
     // You can also write your constructor like this
     constructor(
-    	public name: string
-    	private age: number
+     public name: string
+     private age: number
     ) {}
 
 
@@ -326,30 +333,39 @@ Why:
 Enable types, interface to be used as a parameter => help to reuse the same code for different type of inputs
 
 Let's say you have a function like this:
+
 ```ts
 const makeArr = (x: number) => [x]
 ```
+
 But what if we didn't know if we wanted to passed in the number here, maybe say we wanted to pass in string or boolean. What will you do?
 At first, you might want to change the type Number to any. However, this is basically going to remove all of your type safety and TS type functionality becomes useless.
 This is where Generic comes in. You can use generic like this:
+
 ```ts
 const makeArr = <T>(x: T) => [x]
 ```
+
 T is shorthand for 'Types' and can be set manually or automatically
+
 - Manually
+
 ```typescript
-	makeArr<string>('3')
-	makeArr<string>(3) // error
+ makeArr<string>('3')
+ makeArr<string>(3) // error
 ```
+
 - Automatically
+
 ```typescript
-	makeArr(3) // T is number
-	makeArr('3') // T is string
+ makeArr(3) // T is number
+ makeArr('3') // T is string
 ```
 
 ### Syntax
 
 With function:
+
 ```tsx
 const foo = <T, >(x: T) => x;
 function foo<T>(x: T): T {
@@ -358,12 +374,14 @@ function foo<T>(x: T): T {
 ```
 
 With type: When we pass generic to a type, it's like we are tranforming the type to a function and the generic is the param of that type
+
 ```ts
 type foo<T> = {
 };
 ```
 
 With interface:
+
 ```ts
 interface Resource<T> {
     uid: number,
@@ -377,6 +395,7 @@ const resourceOne: Resource<string> = {
 ```
 
 With array
+
 ```tsx
 foo<T>[]
 ```
@@ -384,6 +403,7 @@ foo<T>[]
 ### Generic extends
 
 The type can be restricted to a certain class family or interface, using the extends keyword:
+
 ```typescript
 const genericObject = <T extends {firstName: string, lastName: string}>( obj: T) => ({
 ...obj,
@@ -404,8 +424,9 @@ type AppleOrBanana = GetAppleOrBanana<Fruit> // 'apple' | 'banana'
 ```
 
 When we pass an union type to a generic, it's like we are iterating it through the type function. We call this as distributive conditional type
+
 ```ts
-type GetAppleOrBanana = 
+type GetAppleOrBanana =
     | ('apple' extends "apple" | "banana" ? 'apple' : never)
     | ('banana' extends "apple" | "banana" ? 'banana' : never)
 ```
@@ -413,6 +434,7 @@ type GetAppleOrBanana =
 ## Enums
 
 Enums are one great way to define named constant
+
 ```typescript
 enum Order {
   First,
@@ -421,7 +443,9 @@ enum Order {
   Fourth
 }
 ```
+
 You can assign values to the constant explicitly:
+
 ```typescript
 enum Order {
   First = 0,
@@ -430,7 +454,9 @@ enum Order {
   Fourth = 3
 }
 ```
+
 or also use strings:
+
 ```typescript
 enum Order {
   First = 'FIRST',
@@ -439,6 +465,7 @@ enum Order {
   Fourth = 'FOURTH'
 }
 ```
+
 Then you can access the constant like property of Object: `Order.First`, `Order.Second`
 
 ## Utility Types
@@ -499,6 +526,7 @@ bar = null;
 bar = true;
 bar = {};
 ```
+
 ### `unknown`
 
 The `unknown` type is a safer version of `any`
@@ -530,7 +558,9 @@ Then we have to call the fn function by passing in at a number for the first arg
 ```ts
 fn({ b: 1, c: 'a' });
 ```
+
 TypeScript will check against each signature to see if the property structure of the object we pass in as the argument matches any of the overloads. If it doesn’t match like if we have the following:
+
 ```ts
 fn({ b: 1 });
 ```
@@ -545,8 +575,8 @@ Overload 1 of 2, '(a: { b: number; c: string; d: boolean; })
 
 Contains type definitions for libraries originally written in vanilla javascript
 
-`.d.ts` file is where we put all the custom type definitions and ambient type declaration 
-However, they are not available in other files yet. To make our types available, we also have to export them 
+`.d.ts` file is where we put all the custom type definitions and ambient type declaration
+However, they are not available in other files yet. To make our types available, we also have to export them
 
 ```ts
 declare const isDevelopment: boolean // Ambient type
@@ -637,10 +667,12 @@ type Route =
 
 type RoutesObject = {
   [K in Route as K['route']]: K['search']
-}; 
+};
 ```
 
 ## Tips
+
+<https://github.com/millsp/ts-toolbelt>
 
 ### Assigning dynamic keys to an object
 
@@ -674,24 +706,10 @@ function foo(a?: number | null) {
 }
 ```
 
-### Type transformation
-
-- interface or type object A to union type B: convert A to object using `key ... in` then use `[keyof A]`
-```ts
-interface Attributes {
-  id: string;
-  email: string;
-  username: string;
-}
-
-type MutuallyExclusive = {
-  [K in keyof Attributes]: Record<K, Attributes[K]>;
-}[keyof T];
-```
-
 ### Error check
 
 We can put this in `catch` block
+
 ```ts
 if (error instanceof Error) {
   error
@@ -700,4 +718,24 @@ if (error instanceof Error) {
 
 // Check axios error
 if (axios.isAxiosError(error))
+```
+
+### Type for lookup table object
+
+<https://www.lloydatkinson.net/posts/2022/react-conditional-rendering-with-type-safety-and-exhaustive-checking>
+
+```tsx
+import { ReactNode } from 'react';
+
+const Apple = () => <span>🍎🍏</span>;
+const Kiwi = () => <span>🥝</span>;
+const Cherry = () => <span>🍒</span>;
+const Grape = () => <span>🍇</span>;
+
+const icon: Record<Fruit, ReactNode> = {
+    apple: <Apple />,
+    kiwi: <Kiwi />,
+    cherry: <Cherry />,
+    grape: <Grape />,
+};
 ```
