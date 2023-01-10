@@ -17,15 +17,22 @@
 - How to Handle Errors in the Fetch API: <https://www.freecodecamp.org/news/top-javascript-concepts-to-know-before-learning-react/>
 - Write bind function: https://blog.bitsrc.io/common-javascript-interview-question-write-your-own-bind-function-fbdabbbea3da
 - JS array method: <https://www.youtube.com/watch?v=BiblrzKMllc>
+- Why to use maps data structure: it's good for perfomance, it's like lookup data table
 
 ## React
+
+<https://www.youtube.com/watch?v=dYZLxhVHxrU>
 
 - Why use React over vanilla JS
 - What is state
 - What is state management (context) and the library
+- control and uncontrolled component
+- Ref, primary use of Ref
 - Virtual DOM
 - What is rendering
 - Implicitly and Explicitly
 - Hooks and what they do
 - What are rules of hook
+- `useMemo` and `useCallback`, why to use
+- Lazy loading, why to use, where does it load the chunks
 - When to use memo: <https://beta.reactjs.org/apis/react/memo#skipping-re-rendering-when-props-are-unchanged>

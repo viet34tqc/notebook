@@ -3,6 +3,10 @@
 <https://xwp.co/how-to-build-a-rocket-best-practices-for-better-web-performance/>
 <https://10up.github.io/Engineering-Best-Practices/performance/#core-web-vitals>
 
+## Basic concepts
+
+<https://developer.mozilla.org/en-US/docs/Web/Performance/How_browsers_work>
+
 ## Font
 
 - Modern `@font-face`

@@ -13,7 +13,7 @@ It could lead to infinite loop. Update the state like this is the same as callin
 
 <https://tkdodo.eu/blog/avoiding-use-effect-with-callback-refs>
 
-Passing a ref from `useRef` (a RefObject) to a React element is therefore just syntactic sugar for:
+Passing a ref from `useRef` (a RefObject) to a React element is just syntactic sugar for:
 ```js
 <input
   ref={(node) => {
@@ -39,7 +39,7 @@ function MeasureExample() {
     if (node !== null) {
       setHeight(node.getBoundingClientRect().height)
     }
-  }, [])*/
+  })*/
   // Then <h1 ref={measuredRef.current}>Hello, world</h1>
 
   return (

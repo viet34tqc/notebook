@@ -29,7 +29,8 @@ nextId.next(); // {value: 3, done: true}
 ### Generator object
 
 Chỉ được tạo thông qua Generator function.
-Generator object có 3 methods
+Generator object có 3 methods:
+
 - `next()`: tiếp tục thực thi đến khi gặp `yeild` hoặc `return`
 - `return()`: trả về kết quả return luôn
 - `throw()`: trả về lỗi `{value: undefined; done: true}`

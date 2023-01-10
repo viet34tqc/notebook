@@ -147,6 +147,26 @@ test('should remove header display', async () => {
 });
 ```
 
+## Test for class
+
+```jsx
+describe('Test AvatarGroup', () => {
+	it('should have class md if size = md', () => {
+		const maxLength = 2;
+		/*
+		Or:
+		render(<AvatarGroup data={data} size="md" maxLength={maxLength} />);
+		const container = screen.getByTestId('avatar-wrapper');
+		*/
+		const { getByTestId } = render(
+			<AvatarGroup data={data} size="md" maxLength={maxLength} />
+		);
+		const container = getByTestId('avatar-wrapper');
+		expect(container.getAttribute('class')).toContain('md');
+	});
+});
+```
+
 
 ## Mock
 

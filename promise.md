@@ -85,7 +85,7 @@ async function() {
 ```
 Put in front of function, then **returns a promise**. This promise will be resolved with the **value** returned by the async function or rejected with an error that is thrown inside async function
 
-If the **value** is not a promise, it will be converted to a promise.
+If the **value** is not a promise, it will be wrapped in promise.
 ```javascript
 async function foo() {
    return 1
@@ -97,6 +97,25 @@ function foo() {
    return Promise.resolve(1)
 }
 ```
+
+If you do return a promise for a value from within an async function, you will receive a promise for the value (not a promise for a promise for the value).
+
+```js
+function newPromise() {
+  return Promise.resolve(2);
+}
+
+async function secondPromise() {
+  // It doesn't matter whether you put an `await` here.
+  return await newPromise();
+}
+
+async function run() {
+  console.log(secondPromise());
+  const rs = await secondPromise();
+}
+```
+
 
 ### Await
 

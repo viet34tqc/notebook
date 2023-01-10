@@ -61,6 +61,11 @@ In react, it's a variable which whenever it updates, it will trigger a re-render
 - Create pure components. Immutable data can determine if changes have been made, which helps to *determine when a component require re-rerendering*.
 If you mutate the data directly, the components might not re-render that could lead to bugs.
 
+## Controlled vs uncontrolled input
+
+- Controlled input: input data is controlled via state
+- Uncontrolled input: input data is accessed via DOM, which means using `ref`
+
 ## Why do we need to put side effects in the `useEffect`
 
 With `useEffect`, we can control how the side effects run in the component. Normally, the side effects make the state change. So, if you put them outside the `useEffec` hook, it will lead to infinite re-render of the component.
@@ -180,17 +185,19 @@ Then real DOM is updated (this process is commit)
 
 Nếu giá trị state không thay đổi khi setState thì component sẽ render thêm 1 lần nữa. Đến lần setState thứ 3 thì nó dừng hẳn không re-render tiếp.
 
-## Preventing errors from unmounted components
+## Preventing setState errors on unmounted components
 
+**Update**: the warning has been removed in from React version 18.
+
+<https://www.developerway.com/posts/fetching-in-react-lost-promises>
 <https://www.digitalocean.com/community/tutorials/how-to-handle-async-data-loading-lazy-loading-and-code-splitting-with-react>
 
-```js
-const [show, toggle] = useReducer(state => !state, true);
-```
-Let's say you have a component which includes 2 buttons. The first one is for fetching the data and update the state. The second one is for unmounting the component. When you click the fetching button, then immediately click the second button, there is a chance that you will encountered an error: `Can't perform a React state update on unmounted component`. That's because your asynchronous request hasn't been resolved yet when the component is unmounted.
+Let's say you have two components, parent and child component.
+Parent component has a button to unmount the child component. Inside child component, we call API and update a state inside. When the child component is requesting API, click the toggle button to unmount child component, then there is a chance that you will encountered an error: `Can't perform a React state update on unmounted component`. That's because your asynchronous request hasn't been resolved yet when the component is unmounted. So, when the request is resolved, it update the state of unmounted component.
 
-To fix the problem you need to either cancel the request inside `useEffect`. Otherwise, you need to ignore the `setState` by using a variable to store the mounted state. The request is still resolved but, it won't make any changes to unmounted component. 
+To fix the problem, we have two methods: 
 
+- Ignore the `setState` by using a variable to store the mounted state. The request is still resolved but, it won't make any `setState` to unmounted component. 
 ```js
 useEffect(() => {
     let mounted = true;
@@ -204,6 +211,32 @@ useEffect(() => {
        mounted = false;
     } 
 }, [name])
+```
+- Cancel the request inside `useEffect` using `AbortController`
+```js
+useEffect(() => {
+  // create controller here
+  const controller = new AbortController();
+
+  // pass controller as signal to fetch
+  fetch(url, { signal: controller.signal })
+    .then((r) => r.json())
+    .then((r) => {
+      setData(r);
+    })
+    .catch((error) => {
+    // error because of AbortController
+    if (error.name === 'AbortError') {
+      // do nothing
+    } else {
+      // do something, it's a real error!
+    }
+
+  return () => {
+    // abort the request here
+    controller.abort();
+  };
+}, [url]);
 ```
 
 ## Why we cannot write `if`, `else`... in JSX
@@ -285,6 +318,11 @@ function outer() {
 outer.call({x: 5});
 ```
 
+## Stack and heap
+
+- In JS, stack is where to store primitive value (string, number, boolean, null, undefined, bigint, Symbol)
+- On the other hand, heap is the place to store dynamic value (object, array)
+
 ## Các cách authentication
 
 <https://viblo.asia/p/cac-phuong-thuc-pho-bien-dung-authentication-naQZRPGP5vx>
@@ -293,6 +331,10 @@ outer.call({x: 5});
 
 - Better for SEO
 - Better accessibility
+
+## How browser works
+
+<https://developer.mozilla.org/en-US/docs/Web/Performance/How_browsers_work>
 
 ## Event, Event handler, Event listener
 
@@ -357,6 +399,24 @@ async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
   debouncedSearch(e.target.value);
 }
 ```
+
+## Semantic version (SemVer)
+
+Syntax: `MAJOR.MINOR.PATCH`
+ví dụ:
+Version 0.3.10 ra đời trước 0.10.3
+Version 0.1.1 1.0.0
+Version 1.100.100 10.10.10
+Thay đổi:
+
+- MAJOR: often refet to 'breaking change', which means the big update and can be incompatible with older version.
+- MINOR: add more functions and compatible with the APIs of current version.
+- PATCH: fix bugs
+
+Range version:
+- `"library-x" : "*" ` => latest
+- `"library-x" : "~1.2.3" ` => include all patch and minor versions from the ones specified up to, but not including the next minor version: 1.2.3 <= x < 1.3.0
+- `"library-x" : "^1.2.3" ` => include all patch and minor versions from the ones specified up to, but not including the next major version: 1.2.3 <= x <2.0.0
 
 ## Object.assign() and Object.create()
 
@@ -790,7 +850,22 @@ if ( typeof window !== undefined ) {
 }
 ```
 
-## CSS
+## Expressions and Statement
+
+- Expression is the code snippet that evaluates to a value, like: operator (+, -, ...) or assign a value to a variable (`a = 1`)
+- Statement is the code snippet that performs an action, like declare and assign a value to variable (`let a = 1`)
+
+The best way to distinguish them is using `console.log`, anything that can be passed to `console.log()` is an expression.
+
+## `void`
+
+`void` is an **operator** that evaluates an expression to `undefined`. `void` is an operator, not a function, so that we don't need to wrap expression in parentheses
+
+```js
+void 0 === undefined
+void function() {} === undefined
+```
+
 
 ## prefers-color-scheme
 
@@ -878,33 +953,6 @@ Chỉnh padding cho section hero:
 Set z-index for the container
 
 Using `background-blend-mode`: <https://www.smashingmagazine.com/2021/09/reducing-need-pseudo-elements/>
-
-## `display: flex`
-
-<https://www.joshwcomeau.com/css/interactive-guide-to-flexbox/>
-<https://www.youtube.com/watch?v=1zKX71GYisE>
-
-Mặc định `flex-grow: 0; flex-shrink: 1; flex-basis: auto;`
-`flex-basis`: giá trị ban đầu của flex item để từ đó tăng hoặc giảm. Nếu flex-item có width thì `flex-basis` sẽ override width đấy. Note: `max-width` và `max-height` sẽ override `flex-basis`. `min-width` và `max-width` cũng ngăn chặn item bị shrink hoặc grow
-`flex-shrink` và `flex-grow`: tính toán sự tăng giảm width của flex items
-
-`flex-shrink: 1` sẽ không chạy đúng khi width của container giảm trong trường hợp
-
-- item có min-width, vd input có default min-width: 170px - 200px tùy browser => set `min-width: 0` cho input
-- item có content dài
-
-`flex-shrink: 1`: Khi tổng width của các item > parent và `flex-shrink` = 1 => width của item sẽ bị thu lại
-`flex-grow: 1`: Khi tổng width của item < parent và `flex-grow`: 1 => width của item sẽ tăng lên để fill hết width của parent
-
-Khi container vẫn còn space hoặc container bị thu hẹp và các item đều được set `flex-grow` hoặc `flex-shrink` thì phần thừa hoặc thiếu đó sẽ được tính theo tỉ lệ `flex-grow` hoặc `flex-shrink` giữa các item
-
-Ví dụ: extra space là 150px, item 1 có `flex-grow` là 1, item 2 có `flex-grow` là 2 => item 1 sẽ tăng 50px so với flex basis, item 2 sẽ tăng 100px so với flex basis. Tương tự với `flex-shrink`, khi container bị thu hẹp lại thì width của các item sẽ bị giảm theo tỉ lệ
-
-`flex-wrap: wrap` sẽ tách row khi container width thu lại, từ 1 row sẽ thành 2, 3 row. `flex-grow` và `flex-shrink` sẽ tính toán theo từng row => width các item sẽ có thể bị thay đổi nếu row được tách ra
-
-## So sánh `flex-basis` và width
-
-`flex-basis` sẽ thay đổi theo chiều. Tức là khi `flex-direction` là `column` thì initial height của flex item sẽ là `flex-basis`
 
 ## `vmin`, `vmax`
 

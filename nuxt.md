@@ -23,7 +23,7 @@ Nuxt3 supports auto import. Here is the list of what to be auto imported
 - Composibles in composible folder
 - Components in components folder
 
-All the  API (like components created in nuxt are automatically import. We don't need to import them manually.
+All the API (like components created in nuxt) are automatically import. We don't need to import them manually.
 
 ## SEO
 

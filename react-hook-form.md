@@ -87,6 +87,30 @@ const {
 )}
 ```
 
+## `FormError` component
+
+In order to display error message, we can pass `errorMess` prop to form field component. However, if the form has lots of fields, this could be tedious and error-prone. Instead, we can create a `FormError` component that use `FormContext` to retrieve the error for fields
+
+```tsx
+interface FieldErrorProps {
+	name?: string;
+}
+
+export function FieldError({ name }: FieldErrorProps) {
+	const {
+		formState: { errors },
+	} = useFormContext();
+
+	if (!name) return null;
+
+	const error = errors[name];
+
+	if (!error) return null;
+
+	return <div className="text-sm text-red-500 font-bold">{error.message}</div>;
+}
+```
+
 ## `isSubmitting`
 
 `isSubmitting` comes in handy when you are performing asynchronous submit function. Then you can add that value to disabled props of submit button.

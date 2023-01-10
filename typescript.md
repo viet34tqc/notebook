@@ -2,7 +2,7 @@
 
 ## Installation
 
-npm i -g typescript
+`npm i -g typescript`
 
 ## Command
 
@@ -109,6 +109,14 @@ const a: Person = {
 }
 ```
 
+## Value type
+
+The type is narrowed down to specific value instead of generic type like 'string' or numer
+```ts
+const newValue = 'A' | 'B' | 'C';
+const name = 'viet' // name has 'viet' type
+```
+
 ## Type alias
 
 Name a type
@@ -172,7 +180,7 @@ type Window = {
 
 ## Never
 
-Often used for function that doesn't `return`
+`Never` type is a way of saying that this should never happen, this shouldn't be allowed . Often used for function that doesn't `return`
 
 ## Declare array with Type and Interface
 
@@ -291,12 +299,26 @@ enum Type {
 
 ## Tuple
 
-Defined fixed types in an array
+Why:
+
+Normally, if we use union type for elements in an array, the element can be one of those type defined in the union
+
+```ts
+let arr: Array<string | number>;
+arr = ['viet', 1];
+arr = [1, 'viet'];
+```
+
+There could be problem, when the type of the elements in array are matter, like the first one need to be string, the second one is number. That's why we need tuple.
+
+Tuple defined fixed types in an array
 
 ```ts
 const tuple: [string, number] = ['viet', 30];
 const tupleFunction = (name: string, age: number): [string, number] => [name, age]
 ```
+
+When to use: when we want to strictly define type for elements in array, like the returned value of React Hook
 
 ## Generic
 
@@ -335,10 +357,23 @@ function foo<T>(x: T): T {
 }
 ```
 
-With type and interface:
-```tsx  
+With type: When we pass generic to a type, it's like we are tranforming the type to a function and the generic is the param of that type
+```ts
 type foo<T> = {
 };
+```
+
+With interface:
+```ts
+interface Resource<T> {
+    uid: number,
+    data: T
+}
+
+const resourceOne: Resource<string> = {
+    uid: 1,
+    data: 'viet'
+}
 ```
 
 With array
@@ -358,18 +393,21 @@ const args = {firstName: 'viet', lastName: 'nguyen', age: 30} // args must have 
 const n3 = genericObject(args) // Now T has the type of args
 ```
 
-### Generic Interface
+### Distributive conditional type
 
-```typescript
-interface Resource<T> {
-    uid: number,
-    data: T
-}
+```ts
+type Fruit = "apple" | "banana" | "orange";
 
-const resourceOne: Resource<string> = {
-    uid: 1,
-    data: 'viet'
-}
+type GetAppleOrBanana<T> = T extends "apple" | "banana" ? T : never;
+
+type AppleOrBanana = GetAppleOrBanana<Fruit> // 'apple' | 'banana'
+```
+
+When we pass an union type to a generic, it's like we are iterating it through the type function. We call this as distributive conditional type
+```ts
+type GetAppleOrBanana = 
+    | ('apple' extends "apple" | "banana" ? 'apple' : never)
+    | ('banana' extends "apple" | "banana" ? 'banana' : never)
 ```
 
 ## Enums
@@ -407,10 +445,44 @@ Then you can access the constant like property of Object: `Order.First`, `Order.
 
 Selectively construct type from other type
 
-- `Partial<Type>`: a type that has all props of `Type` to optional
-- `Required<Type>`: a type that has  all props of `Type` to required
-- `Pick<Type, Keys>`: a type by picking a set of `Keys` from Types
-- `Omit<Type, Keys>`: a type by omitting a set of `Keys` from Types
+- `Partial<Type>`: return an object type that has all props of `Type` to optional (Type is object type)
+- `Required<Type>`: return an object type that has all props of `Type` to required (Type is object type)
+- `Pick<Type, Keys>`: return an object type by picking a set of `Keys` from Types (Type is object type)
+- `Omit<Type, Keys>`: return an object type by omitting a set of `Keys` from Types (Type is object type)
+- `Extract<Type, Keys>`: return type extracted from `Type`: <https://i.imgur.com/gVCRZQ6.png>, it's kind of like `Pick` but Type in `Pick` is object and `Type` in `Extract` is Union
+- `Exclude<Type, Keys>`: return type by excluding from `Type` all union member from `Keys`, it's kind of like `Omit`
+
+## infer
+
+Let's say we have multiple function and we don't know which returned type of each function => we can create a type helper function like this
+
+```ts
+type GetReturn<Fun> =
+Fun extends (...args: any[]) => infer R ? R : never
+```
+
+With infer R we say that no matter the return type of this function, we store it in the type variable R. If we have a valid function, we return R as type
+
+## `null` and `undefined`
+
+Helper function to check `null` and `undefined`
+
+```ts
+declare function isAvailable<Obj>(obj: Obj): obj is NonNullable<Obj>
+
+// Implementation
+function isAvaialble<Obj>(obj: Obj): obj is NonNullable<Obj> {
+    return typeof obj !== 'undefined' && obj !== null
+}
+
+// Usage
+// orders is Order[] | null
+const orders = await fetchOrderList(customer)
+if(isAvailable(orders)) {
+    //orders is Order[]
+    listOrders(orders)
+}
+```
 
 ## `any` and `unknown`
 
@@ -489,6 +561,85 @@ You can ignore the typescript error by adding the exclamation mark, if you know 
 
 `data.value!`
 
+## Working with Array
+
+### Get array value
+
+```ts
+const fruits = ["apple", "banana", "orange"] as const;
+
+type AppleOrBanana = typeof fruits[0 | 1];
+type Fruit = typeof fruits[number];
+```
+
+## Non empty array
+
+```ts
+type NonEmptyArray<T> = [T, ...Array<T>];
+type Check = NonEmptyArray<[]> // false
+type Check = NonEmptyArray<['a']> // true
+```
+
+### Array Destructured
+
+```ts
+type T = Array<unknown>
+type Check = T extends [infer First, ...infer Rest] ? //...do something : //...do something
+
+// Example
+type Includes<T extends readonly any[], U> =
+  T extends [infer First, ...infer Rest]
+  ? Equal<First, U> extends true
+     ? true
+     : Includes<Rest, U>
+  : false
+```
+
+## Working with Object
+
+## Object to Object
+
+```ts
+interface Values {
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+type ValuesAsUnionOfTuples = {
+  [K in keyof Values]: [K, Values[K]];
+}[keyof Values];
+```
+
+## Union type to object
+
+```ts
+type Route = "/" | "/about" | "/admin" | "/admin/users";
+type RoutesObject = {
+    [K in Route]: K
+}
+```
+
+## Discriminated union to object
+
+```tsx
+type Route =
+  | {
+      route: "/";
+      search: {
+        page: string;
+        perPage: string;
+      };
+    }
+  | { route: "/about"; search: {} }
+  | { route: "/admin"; search: {} }
+  | { route: "/admin/users"; search: {} };
+
+type RoutesObject = {
+  [K in Route as K['route']]: K['search']
+}; 
+```
+
 ## Tips
 
 ### Assigning dynamic keys to an object
@@ -521,6 +672,21 @@ function foo(a?: number | null) {
 
   // a is number now.
 }
+```
+
+### Type transformation
+
+- interface or type object A to union type B: convert A to object using `key ... in` then use `[keyof A]`
+```ts
+interface Attributes {
+  id: string;
+  email: string;
+  username: string;
+}
+
+type MutuallyExclusive = {
+  [K in keyof Attributes]: Record<K, Attributes[K]>;
+}[keyof T];
 ```
 
 ### Error check

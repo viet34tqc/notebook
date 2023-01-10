@@ -178,6 +178,7 @@ In the example above, the child component (Video) only exposes `play` method to 
 
 <https://tkdodo.eu/blog/simplifying-use-effect>
 
+- The cleanup function is run after a component is unmounted, or before every re-render with changed dependencies. 
 - Be careful when passing the object as dependancy because the object value is referenced. React compare the dependancy using `Object.is`. Your object can be recreated everytime the component re-renders
 ```jsx
 function App ({ options, teamId }) {
