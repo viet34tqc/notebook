@@ -599,15 +599,34 @@ You can ignore the typescript error by adding the exclamation mark, if you know 
 const fruits = ["apple", "banana", "orange"] as const;
 
 type AppleOrBanana = typeof fruits[0 | 1];
-type Fruit = typeof fruits[number];
+type Fruit = typeof fruits[number]; // 'apple' | 'banana' | 'orange'
 ```
 
-## Non empty array
+### Array to union
+
+```ts
+const fruits = ["apple", "banana", "orange"] as const;
+type Fruit = typeof fruits[number]; // 'apple' | 'banana' | 'orange'
+
+// So, we can use this technique to handle every elements of array
+type Falsy = 0 | '' | false | [] | {[P in any] : never}
+type IsTruthy<T extends readonly unknown[]> = T extends Falsy ? false : true
+```
+
+### Non empty array
 
 ```ts
 type NonEmptyArray<T> = [T, ...Array<T>];
 type Check = NonEmptyArray<[]> // false
 type Check = NonEmptyArray<['a']> // true
+```
+
+### Checking empty array
+
+```ts
+type Method1<T> = T extends [] ? 'empty' : 'not empty';
+type Method2<T extends unknown[]> = T[number] extends never ? 'empty' : 'not empty'
+type Method3<T extends unknown[]> = T extends [infer P, ...infer Rest] ? : 'not empty and here you can do something with P and Rest' : 'empty'
 ```
 
 ### Array Destructured
@@ -639,6 +658,11 @@ interface Values {
 type ValuesAsUnionOfTuples = {
   [K in keyof Values]: [K, Values[K]];
 }[keyof Values];
+
+The technique above is called mapped type. When you call `K in keyof Values`, it will iterate through the union `keyof Value`. This is similar to distributive condition type.
+
+// Incase you want to extract specific keys from object, just use indexed type
+type emailOrFirstName = Values['email' | 'firstName'];
 ```
 
 ## Union type to object
@@ -669,6 +693,10 @@ type RoutesObject = {
   [K in Route as K['route']]: K['search']
 };
 ```
+
+## Working with union
+
+When you put an union into a generics (distributed conditional type) or mapped type of object, it's kind of being iterated through every single condtion of that union.
 
 ## Tips
 
