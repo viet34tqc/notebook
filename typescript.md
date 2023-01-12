@@ -332,6 +332,9 @@ When to use: when we want to strictly define type for elements in array, like th
 Why:
 Enable types, interface to be used as a parameter => help to reuse the same code for different type of inputs
 
+When:
+When you don't know which type of input you pass in
+
 Let's say you have a function like this:
 
 ```ts
@@ -646,7 +649,9 @@ type Includes<T extends readonly any[], U> =
 
 ## Working with Object
 
-## Object to Union
+### Object to Union
+
+The technique below is called mapped type. When you call `K in keyof Values`, it will iterate through the union `keyof Value`. This is similar to distributive condition type.
 
 ```ts
 interface Values {
@@ -658,14 +663,14 @@ interface Values {
 type ValuesAsUnionOfTuples = {
   [K in keyof Values]: [K, Values[K]];
 }[keyof Values];
+```
 
-The technique above is called mapped type. When you call `K in keyof Values`, it will iterate through the union `keyof Value`. This is similar to distributive condition type.
-
+```ts
 // Incase you want to extract specific keys from object, just use indexed type
 type emailOrFirstName = Values['email' | 'firstName'];
 ```
 
-## Union type to object
+### Union type to object
 
 ```ts
 type Route = "/" | "/about" | "/admin" | "/admin/users";
@@ -674,7 +679,7 @@ type RoutesObject = {
 }
 ```
 
-## Discriminated union to object
+### Discriminated union to object
 
 ```tsx
 type Route =
@@ -712,9 +717,28 @@ type AppendToObject<T, Prop extends string, Value> = {
 };
 ```
 
+## Working with function
+
+### Conditional second parameters
+
+```ts
+type Event =
+ | {
+   type: 'SIGN_IN';
+   payload: '123';
+   }
+ | {
+   type: 'SIGN_OUT';
+   };
+
+const sendEvent = <Type extends Event['type']>(...args: Extract<Event, {type: Type}> extends {payload: infer Payload} ? [type: Type, payload: Payload] : [type: Type]) => {}
+```
+
 ## Working with union
 
-When you put an union into a generics (distributed conditional type) or mapped type of object, it's kind of being iterated through every single condtion of that union.
+Union is iterated by default.
+
+When you put an union into a generics (distributed conditional type) or mapped type of object, it's kind of being iterated through every single condition of that union.
 
 ## Tips
 
