@@ -694,6 +694,24 @@ type RoutesObject = {
 };
 ```
 
+### Combine object
+
+- Using `&`
+
+```ts
+type A = { propA: valueA }
+type B = { propB: valueB }
+type C = A & B // {propA: valueA, propB: valueB}
+```
+
+- Convert from Union
+
+```ts
+type AppendToObject<T, Prop extends string, Value> = {
+  [P in keyof T | Prop]: P extends keyof T ? T[P] : Value;
+};
+```
+
 ## Working with union
 
 When you put an union into a generics (distributed conditional type) or mapped type of object, it's kind of being iterated through every single condtion of that union.
