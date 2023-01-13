@@ -329,11 +329,15 @@ When to use: when we want to strictly define type for elements in array, like th
 
 ## Generic
 
+**Must read**: <https://www.totaltypescript.com/mental-model-for-typescript-generics>
+
 Why:
-Enable types, interface to be used as a parameter => help to reuse the same code for different type of inputs
+
+- For types, interface, it turns them into a Javascript-alike function
+- For functions, it connects the type of params you pass in and the code in your function body
 
 When:
-When you don't know which type of input you pass in
+When you don't know which type of input you pass into the function
 
 Let's say you have a function like this:
 
