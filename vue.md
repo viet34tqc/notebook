@@ -16,6 +16,7 @@ Using handlebars `{{ variable_name }}`
 
 To declare a component in Vue, we using a file with the suffix '.vue'. It includes 3 parts: component's logic, template (HTML) and style (CSS)
 
+```html
 <script></script>
 <template>
   <button>Save</button>
@@ -25,8 +26,9 @@ To declare a component in Vue, we using a file with the suffix '.vue'. It includ
     font-weight: bold;
   }
 </style>
+```
 
-There are two types of SFC: the legacy is options API and the newer one is composition API. If you comes from React using functional component, composition API is the better choice. For more details, go to <https://vuejs.org/guide/introduction.html#api-styles>
+There are two types of SFC: the legacy is options API and the newer one is composition API. If you come from React using functional component, composition API is the better choice. For more details, go to <https://vuejs.org/guide/introduction.html#api-styles>
 
 ## Event handling
 
@@ -34,14 +36,14 @@ Syntax: `@event_name="method_name"`, ex: `<button @click="say('hello')">Say hell
 
 - Pass DOM event into method: use `$event`
 
-```
+```html
 <button @click="warn('Form cannot be submitted yet.', $event)">
   Submit
 </button>
 ```
 
 - Event modifiers like `preventDefault`: `@click.prevent="onSubmit"`
-- Key modifiers: 
+- Key modifiers:
 
 <https://vuejs.org/guide/essentials/event-handling.html#key-modifiers>
 `<input @keyup.enter="submit" />` or `<input @keyup.alt.enter="clear" />`
@@ -66,8 +68,9 @@ export default {
 
 ## State
 
-To define the state, we use `ref` like `useState` in React. 
+To define the state, we use `ref` like `useState` in React.
 The ref's value is accessed by `ref.value` in `script` tag. In `template`, we can use `ref` directly
+
 ```html
 <script setup>
 import { ref } from 'vue'
@@ -79,7 +82,9 @@ console.log(newTodo.value);
   {{newTodo}}
 </template>
 ```
-In Vue, state can be muatated. To update the state, we don't need a function like `setState` like React, just replace the old one with the new one
+
+In Vue, state can be mutated. To update the state, we don't need a function like `setState` like React, just replace the old one with the new one
+
 ```js
 todos.value.push(newTodo)
 //or
@@ -90,7 +95,8 @@ todos.value = todos.value.filter(/* ... */)
 
 Vue is two-ways binding, which means when the UI change, the state update and vice versa.
 
-Input using `v-model` to synchronize value with the state. 
+Input using `v-model` to synchronize value with the state.
+
 ```html
 <script setup>
 import { ref } from 'vue'
@@ -121,9 +127,10 @@ const newTodo = ref('')
 
 ### Modifiers
 
-- `.number`: 
+- `.number`:
 
 Here, `age` is typecast to number
+
 ```html
 <input v-model.number="age" />
 ```
@@ -131,6 +138,7 @@ Here, `age` is typecast to number
 - `.trim`:
 
 Here, value from input is trim automatically
+
 ```html
 <input v-model.trim="msg" />
 ```
@@ -170,7 +178,6 @@ const handleChange = (event) => {
 }
 </script>
 ```
-
 
 ### `slot`
 
@@ -213,6 +220,7 @@ Like React, we should never mutate the props object directly, props are read-onl
 
 Use when you want to return a value based on the defined state, like when you want a filterd value of an array.
 
+```html
 <script setup>
 import { ref, computed } from 'vue'
 
@@ -232,6 +240,7 @@ console.log( completedTasks.value)
 <template>
   {{complatedTasks}}
 </template>
+```
 
 ## `watch`
 
@@ -261,7 +270,7 @@ We put the code for fetching data in `watchEffect` (like `useEffect` in React)
 
 This is a special component used to give the UI transition. It comes with some some built-in class: [name]-enter-active, [name]-leave-active, [name]-enter-from, [name]-enter-to, [name]-leave-from, [name]-leave-to. `name` here is the `name` attribute of Transition component. These classes are like the state of the component, so you will need to add style to it.
 
-```html
+```jsx
 <!-- We will have .modal-outer-enter-from, .modal-outer-enter-to and so on...-->
 <Transition name="modal-outer">
 ```
