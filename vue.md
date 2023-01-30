@@ -275,6 +275,63 @@ This is a special component used to give the UI transition. It comes with some s
 <Transition name="modal-outer">
 ```
 
+## Vue with Typescript
+
+First, we need to declare `lang=ts` in `script` tag
+
+```html
+<script setup lang=ts></script>
+```
+
+When we import types from other modules, we have to use `import type ...` like `import type { Restaurant } from '@/types'`
+
+### Define type for props
+
+```ts
+type PropTypes = {
+  restaurant: Restaurant
+}
+
+defineProps<{
+  restaurant: Restaurant
+}>()
+
+// Define props with default value
+withDefaults(defineProps<{
+  restaurant: Restaurant
+}>(), {
+  restaurant: {...}
+})
+```
+
+### Typing `ref` and `computed`
+
+Normally, `ref` and `computed` infer type from their value. If you want to specify types, you can do like this
+
+```ts
+import type { Ref, computed } from 'vue'
+const year: Ref<string | number> = ref('2020')
+
+const double = computed<number>(() => {
+  // type error if this doesn't return a number
+})
+```
+
+### Typing template refs
+
+```html
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const el = ref<HTMLInputElement | null>(null)
+
+</script>
+
+<template>
+  <input ref="el" />
+</template>
+```
+
 ## Vue Router
 
 ### `useRoute`
@@ -296,6 +353,6 @@ router.beforeEach((to, from, next) => {
 });
 ```
 
-### Compare to react
+## Compare to react
 
 - Vue can mutate the state, React doesn't
