@@ -8,6 +8,13 @@ It could lead to infinite loop. Update the state like this is the same as callin
 <button onClick={setState(count + 1)}>Click</button> /*DONT do that*/
 ```
 
+## Working with form inputs
+
+<https://www.joshwcomeau.com/react/data-binding/>
+
+## Set empty string as initial value for input text and textarea
+
+When the input is controlled, we should pass initial value as empty string rather than `undefined`. If value attribute is `undefined`, React will omit it, then the input becomes uncontrolled
 
 ## Use callback refs to interact with DOM nodes to avoid using `useEffect`
 

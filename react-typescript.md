@@ -18,7 +18,7 @@ And use it like this:
 const TextField = ({ text, handleChange }: InputProps) => {}
 ```
 
-### `PropsWithChildren`
+## `PropsWithChildren`
 
 ```jsx
 
@@ -34,7 +34,7 @@ function Component({ someProperty, children }: PropsWithChildren<ComponentProps>
 }
 ```
 
-### Extend a HTML element type
+## Extend a HTML element type
 
 If you want to create a custom component that behaves like an `input`, you can use `React.ComponentProps`:
 
@@ -131,7 +131,6 @@ export const ToolbarButton = forwardRef<HTMLButtonElement, Props>(
   (props, ref): JSX.Element => {})
 ```
 
-
 ## Event
 
 Let's say I want to use the `onChange` method of input and take it as a prop
@@ -164,7 +163,7 @@ function App() {
 
 If there is no matching type definition, you can use `SyntheticEvent`
 
-### Form Submit events
+## Form Submit events
 
 ```ts
 const handleLogin = (event: FormEvent<HTMLFormElement>) => {

@@ -225,11 +225,9 @@ useEffect(() => {
       setData(r);
     })
     .catch((error) => {
-    // error because of AbortController
-    if (error.name === 'AbortError') {
-      // do nothing
-    } else {
-      // do something, it's a real error!
+    // it's a real error, not because of AbortController
+    if ( error && error.name !== 'AbortError') {
+      // do something, 
     }
 
   return () => {
@@ -730,7 +728,7 @@ const delay = (ms: number) => new Promise( res => setTimeout(res, ms, 'some valu
   - `export default ChildComponent`: chỉ 1 có 1 default export duy nhất. Khi import ta chỉ cần viết `import ChildComponent from './abc.js'`
   - `export * from` hay còn gọi là re-export: `export {default} from './abc.js'`. Kĩ thuật này được sử dụng để gom các export từ các child component và export lại 1 lần nữa.  `*` ở đây là 1 object, chứa tất cả các export từ `./abc.js`, kể cả export thường lẫn export default. `{default}` là object destructure. `export * from` tương đương với `import * from` kết hợp với `export *`. Khi có nhiều child component cần re-export thì mình có thể viết như sau
   ```js
-  export {default as a} from './a.js'
+  export {default as a} from './a.js' // tương đương với import {default as a} from './a.js' và export a
   export {default as c} from './c.js'
   ```
 
@@ -886,6 +884,7 @@ const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-schem
 
 ## `srcset` and `sizes`
 
+<https://12daysofweb.dev/2021/image-display-elements/>
 <https://imagekit.io/responsive-images/>
 
 ```html
@@ -947,6 +946,48 @@ Chỉnh padding cho section hero:
 ## Build URL with params
 
 <https://www.valentinog.com/blog/url/>
+<https://www.builder.io/blog/new-url>
+
+```js
+const url = new URL('https://builder.io/api/v2/content')
+
+url.searchParams.set('model', model)
+url.searchParams.set('locale', locale)
+url.searchParams.set('text', text)
+  
+console.log(url.toString())
+console.log(url.searchParams.get('foo'))
+```
+
+URL properties to know
+
+<https://i.imgur.com/KfQOAZq.png>
+
+```js
+const url = new URL('https://builder.io/blog?page=1');
+
+url.protocol // https:
+url.host     // builder.io
+url.pathname // /blog
+url.search   // ?page=1
+url.href     // https://builder.io/blog?page=1
+url.origin   // https://builder.io
+url.searchParams.get('page') // 1
+```
+
+## `new URL()` and `new URLSearchParams()`
+
+If you only need to work with the params part, you could use `URLSearchParams`
+
+```js
+const params = new URLSearchParams({
+  page: 1,
+  text: 'foobar',
+})
+params.set('page', 2)
+params.toString()
+```
+
 
 ## Create text on image with an overlay
 

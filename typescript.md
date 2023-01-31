@@ -9,7 +9,7 @@
 tsc -w: watch mode. Requires `tsconfig.json` file. It can Work without any configuration.
 If you don't set the input files in `tsconfig.json`, Typescript will automatically find all the ts file in all folder, then compile `ts` files to `js` files in the same folder.
 
-## Explicit declartion
+## Type annotation (Explicit declartion)
 
 Declare the type of variables first:
 
@@ -670,7 +670,7 @@ type ValuesAsUnionOfTuples = {
 ```
 
 ```ts
-// Incase you want to extract specific keys from object, just use indexed type
+// In case you want to extract specific keys from object, just use indexed type
 type emailOrFirstName = Values['email' | 'firstName'];
 ```
 
@@ -794,6 +794,25 @@ if (error instanceof Error) {
 if (axios.isAxiosError(error))
 ```
 
+### Combine `is` and `if` with function to narrow type
+
+```ts
+
+// You could return the boolean type, but it's not good if you use this function with `if` later
+// function petIsCat(pet: Pet): boolean {
+//   return pet.species === "cat";
+// }
+function petIsCat(pet: Pet): pet is Cat {
+  return pet.species === "cat";
+}
+
+//Good
+if (petIsCat(p)) {
+  p.meow(); // now compiler knows for sure that the variable is of type Cat and it has meow method
+}
+
+```
+
 ### Type for lookup table object
 
 <https://www.lloydatkinson.net/posts/2022/react-conditional-rendering-with-type-safety-and-exhaustive-checking>
@@ -812,4 +831,22 @@ const icon: Record<Fruit, ReactNode> = {
     cherry: <Cherry />,
     grape: <Grape />,
 };
+```
+
+### Type one or the other
+
+If you have a type with 2 props, both optional, but you want only one of them to exist at the same time. It's like when prop1 is null then prop2 is no longer optional and vice versa.
+
+```ts
+type Freecourse = {
+    youtube: string;
+    price?: never
+}
+
+type Paidcourse = {
+    youtube?: never;
+    price: number
+}
+
+type Course = Freecourse | Paidcourse;
 ```

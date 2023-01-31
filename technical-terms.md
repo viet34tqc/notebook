@@ -6,6 +6,7 @@
 - render tree: The CSSOM and DOM tree created in the parsing HTML step are combined which is then used to compute the layout of every single element, which is then painted to the screen. <https://web.dev/howbrowserswork/>
 - layout or reflow: When the render tree is created, it does not have a position and size. Calculating these values is called layout or reflow
 - race condition: two different requests 'raced' against each other and came in a different order than you expected. <https://beta.reactjs.org/learn/you-might-not-need-an-effect>
+- RESTful API: is the api that help client interact with server to exchange information via HTTP methods (GET, POST, PUT, DELETE)
 - deploying: the act of taking a website live on a server
 - cookie:
 	+ `httpOnly`: prevent browser to read any cookies with the cookie API

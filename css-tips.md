@@ -12,6 +12,58 @@ Because it might prevent overriding CSS
 
 Use `grid-template-area` instead of `grid-template-columns`
 
+## Conditional CSS
+
+### Using `:has`
+
+<https://12daysofweb.dev/2022/css-has-selector/>
+```css
+.other-field {
+  display: none;
+}
+
+form:has(option[value="other"]:checked) .other-field {
+  display: block;
+}
+
+/*Change grid columns based on number of items*/
+.wrapper {
+  --item-size: 200px;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--item-size), 1fr)
+  );
+  gap: 1rem;
+}
+
+.wrapper:has(.item:nth-last-child(n + 5)) {
+  --item-size: 120px;
+}
+```
+
+### Force wrap to a new line using `flex-basis`
+
+```css
+/* If it’s less than 190px, it will wrap into a new line.*/
+.card__title {
+  flex-grow: 1;
+  flex-basis: 190px;
+}
+```
+
+### Header, body, footer layout using `min-content`
+
+```css
+/*https://i.imgur.com/KCSwUm7.png*/
+.c-todo {
+  display: grid;
+  grid-template-rows: min-content auto min-content;
+  height: 100vh;
+}
+```
+
+
 ## Using CSS for mobile screen
 
 ```html
@@ -25,6 +77,14 @@ Use `grid-template-area` instead of `grid-template-columns`
 ## `:only-child` and `:only-of-type`
 
 <https://www.youtube.com/watch?v=yyPteFyZsCE>
+
+## Disable double click to zoom in iOS.
+
+```css
+button {
+    touch-action: manipulation;
+}
+```
 
 ## Background image opacity
 

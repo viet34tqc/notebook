@@ -1,5 +1,6 @@
-## Promise:
+# Promise
 
+<https://www.builder.io/blog/promises>
 <https://www.youtube.com/watch?v=qW3raOCefms>
   
 - A promise is an object that encapsulates the result of an asynchronous operation.
@@ -8,13 +9,13 @@
   - fulfilled: meaning the asynchronous operation was completed successfully
   - rejected: meaning the asynchronous operation was failed.
 
-### How to create a promise
+## How to create a promise
 
 ```javascript
   const promise = new Promise( (resolve, reject) => {})
 ```
 
-### `Promise.resolve(value)` and `Promise.reject(value)`
+## `Promise.resolve(value)` and `Promise.reject(value)`
 
 Both returns a promise. `value` can be a promise or a non-promise.
 `Promise.resolved()` returns a promise with resolved value. If value is a promise, it will be the promise with the resolved value of the passed promise.
@@ -36,7 +37,7 @@ Promise.rejected('Failed').then(function(value) {
 });
 ```
 
-### `then()`
+## `then()`
 
 Access the fulfilled value from promise
 - Inputs: callback function for success and failure cases of the promise (raraly use, often use catch)
@@ -57,16 +58,16 @@ If we the callback return a resolved promise instead of a value, the next then w
 doSomething().then(doSomethingElse).then((d) => {console.log('d', d)}) // d is world
 ```
 
-### `catch()`
+## `catch()`
 
 Access the rejection error from promise
 - Inputs: error object
 - Optput: another promise
 
-### `finally()`
+## `finally()`
 Called when everything above is done
 
-### `Promise.all` and `Promise.race`
+## `Promise.all` and `Promise.race`
 
 Both take an array of promises
 `Promise.all` return a single Promise that resolves an array of result of input promises. If one of the input promises fails, it will jump to the `catch` block
@@ -76,7 +77,7 @@ Both take an array of promises
 
 ## Async/Await
 
-### Async
+## Async
 
 **Syntax**:
 ```javascript
@@ -117,7 +118,7 @@ async function run() {
 ```
 
 
-### Await
+## Await
 
 Can only be used inside `async` function.
 **Syntax**:
