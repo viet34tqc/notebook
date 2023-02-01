@@ -80,7 +80,7 @@ If a react component returns exact the same element reference in its render outp
 - The child component is pass as a prop or children prop
 - The child component is memorized using `memo()`. That makes the component as pure component
 
-``` jsx 
+``` jsx
 // The `props.children` content won't re-render if we update state
 function SomeProvider({children}) {
   const [counter, setCounter] = useState(0);
@@ -142,7 +142,7 @@ How to prevent unnecessary re-renders
 - Moving state down: keep the state of the component as close as possible if that state is used in the component only
 - Composition: children as props or component as props
 - `React.memo` without `useMemo`: use when rendering a heavy component that is independent from the parent component's state. Besides using `React.memo` in the child component, we can also create a function use `useMemo` inside parent component that return the heavy component.
-- `React.memo` with `useMemo`: use when the child component use state from parent component as props. 
+- `React.memo` with `useMemo`: use when the child component use state from parent component as props.
 - Context value: memorize context value, split value into chunks
 
 ## `useState` and `useReducer`
@@ -195,9 +195,9 @@ Nếu giá trị state không thay đổi khi setState thì component sẽ rende
 Let's say you have two components, parent and child component.
 Parent component has a button to unmount the child component. Inside child component, we call API and update a state inside. When the child component is requesting API, click the toggle button to unmount child component, then there is a chance that you will encountered an error: `Can't perform a React state update on unmounted component`. That's because your asynchronous request hasn't been resolved yet when the component is unmounted. So, when the request is resolved, it update the state of unmounted component.
 
-To fix the problem, we have two methods: 
+To fix the problem, we have two methods:
 
-- Ignore the `setState` by using a variable to store the mounted state. The request is still resolved but, it won't make any `setState` to unmounted component. 
+- Ignore the `setState` by using a variable to store the mounted state. The request is still resolved but, it won't make any `setState` to unmounted component.
 ```js
 useEffect(() => {
     let mounted = true;
@@ -209,7 +209,7 @@ useEffect(() => {
     });
     return () => {
        mounted = false;
-    } 
+    }
 }, [name])
 ```
 - Cancel the request inside `useEffect` using `AbortController`
@@ -227,7 +227,7 @@ useEffect(() => {
     .catch((error) => {
     // it's a real error, not because of AbortController
     if ( error && error.name !== 'AbortError') {
-      // do something, 
+      // do something,
     }
 
   return () => {
@@ -268,7 +268,7 @@ Khi 1 component bất kì có props key, khi key này bị thay đổi thì comp
 
 API là các phương thức (functions, protocols) giúp cho ứng dụng A có thể tương tác với ứng dụng B mà không cần quan tâm ứng dụng B được thực hiện thế nào
 
-VD: 
+VD:
 - ứng dụng B cung cấp 1 hàm tính tổng cho ứng dụng A.
 - React cung cấp hàm `useState` để ltv sử dụng
 - Backend xây dựng API để Frontend sử dụng để lấy data
@@ -283,7 +283,7 @@ Mỗi khi render 1 component nào đó, props object của component đó sẽ �
 ## React Portal
 
 Cho phép render 1 component vào 1 DOM node nằm ngoài root.
-Why: để tạo ra các component mà không bị ảnh hưởng bởi style của component cha vì component cha có thể bị overflow hidden 
+Why: để tạo ra các component mà không bị ảnh hưởng bởi style của component cha vì component cha có thể bị overflow hidden
 Trong 1 App react thông thường, toàn bộ UI (components) sẽ được render trong 1 the div với id là root `<div id="root"><div>`
 Giả sử ta muốn tạo 1 cái modal và thẻ div bọc lấy modal này nằm ngoài root. Và vì thẻ div này nằm ngoài root, ta không thể tạo component và render bình thường được mà phải dùng React Portal.
 
@@ -360,7 +360,7 @@ If needed, frontend part will communicate to the backend end via API (using REST
 ## Cơ chế làm việc của session và JWT
 
 <https://viblo.asia/p/cach-trien-khai-refreshtoken-va-freshtoken-p1-dung-luu-tat-ca-phien-cua-nguoi-dung-3Q75wN23lWb>
-  
+
 - Session
 
 Khi client tạo 1 request login tới server, server sẽ tìm trong sổ user coi có hợp lệ không, nếu oke thì lấy các quyền mà user đó có, rồi tạo 1 session lưu ở server và trả về cho client 1 cookie (chứa session id (không trùng lặp)). Với mỗi request, client sẽ cầm theo cookie, server sẽ dựa vào id trong đó để tìm trong sổ session, coi cái nào khớp thì coi có quyền gì mà xử lí, không có thì bắt login lại.
@@ -642,7 +642,7 @@ const b = Object.assign({}, a); // or b = {...a}
 
 ```js
 const a = { x: 0, y: { z: 0 } };
-const b = JSON.parse(JSON.stringify(a)); 
+const b = JSON.parse(JSON.stringify(a));
 ```
 
 - Use `lodash.cloneDeep`
@@ -724,7 +724,7 @@ const delay = (ms: number) => new Promise( res => setTimeout(res, ms, 'some valu
 
 - export 1 biến hoặc hàm: `export a`
 - export list: `export {a,b,c}`
-- export default: 
+- export default:
   - `export default ChildComponent`: chỉ 1 có 1 default export duy nhất. Khi import ta chỉ cần viết `import ChildComponent from './abc.js'`
   - `export * from` hay còn gọi là re-export: `export {default} from './abc.js'`. Kĩ thuật này được sử dụng để gom các export từ các child component và export lại 1 lần nữa.  `*` ở đây là 1 object, chứa tất cả các export từ `./abc.js`, kể cả export thường lẫn export default. `{default}` là object destructure. `export * from` tương đương với `import * from` kết hợp với `export *`. Khi có nhiều child component cần re-export thì mình có thể viết như sau
   ```js
@@ -762,7 +762,7 @@ console.log(info);
 
 <https://prateeksurana.me/blog/future-of-rendering-in-react/>
 <https://i.imgur.com/jqIBleM.png>
-<https://i.imgur.com/DCsCct2.png> 
+<https://i.imgur.com/DCsCct2.png>
 <https://indepth.dev/posts/1498/101-javascript-critical-rendering-path>
 <https://web.dev/learn-web-vitals/>
 
@@ -888,7 +888,7 @@ const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-schem
 <https://imagekit.io/responsive-images/>
 
 ```html
-<img src="https://ik.imgkit.net/ikmedia/women-dress-1.jpg" 
+<img src="https://ik.imgkit.net/ikmedia/women-dress-1.jpg"
      srcset="https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-225 225w,
              https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-300 300w,
              https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350 350w,
@@ -954,7 +954,7 @@ const url = new URL('https://builder.io/api/v2/content')
 url.searchParams.set('model', model)
 url.searchParams.set('locale', locale)
 url.searchParams.set('text', text)
-  
+
 console.log(url.toString())
 console.log(url.searchParams.get('foo'))
 ```
@@ -1023,12 +1023,13 @@ If you don't have a responsive mobile website, and you open it on a small screen
 
 ## Resource hint: preconnect, dns-prefetch, preload
 
+<https://3perf.com/blog/link-rels/>
 <https://viblo.asia/p/thuat-ngu-trong-frontend-optimization-2oKLn2YgLQO>
 <https://webpack.js.org/guides/code-splitting/>
 <https://www.youtube.com/watch?v=6q75MVFLlok>
 <https://blog.dareboost.com/en/2020/05/preload-prefetch-preconnect-resource-hints/>
 
-Trước khi trình duyệt lấy được dữ liệu từ server, nó sẽ phải trải qua 3 bước cơ bản như sau:
+Trước khi trình duyệt lấy được dữ liệu từ server, nó sẽ phải trải qua quá trình kết nối gồm 3 bước cơ bản như sau:
 
 - Kết nối tới DNS Server để phân giải tên miền của máy chủ
 - Thiết lập kết nối TCP
@@ -1036,22 +1037,31 @@ Trước khi trình duyệt lấy được dữ liệu từ server, nó sẽ ph�
 
 Trong từng bước trên trình duyệt gửi một phần dữ liệu tới máy chủ, và máy chủ gửi lại một phản hồi. Hành trình này, từ máy chủ gốc đến địa chỉ cần đến và quay ngược trở lại, được gọi là khứ hồi (round trip). Mỗi bước sẽ có 1 hoặc nhiều round trip. Mỗi round trip khi được thực hiện lại có 1 độ trễ nhất định (latency). Qua đây chúng ta thấy rằng việc chờ đợi để thiết lập kết nối trước khi download data mình cần về khá tiêu tốn khá nhiều thời gian và chính điều này sẽ làm giảm tốc độ tải trang web
 
-Mặc định browser sau sẽ parse HTML và CSS để biết mình cần tải data gì và tải chúng theo thứ tự. `preconnect` sẽ nói với browser rằng tôi đang thực sự cần tài nguyên này, hãy thực hiện các bước trên sớm nhất có thể. Và trình duyệt sẽ thực hiện 3 bước trên song song với các kết nối khác trước. Nếu không có `preconnect` thì tài nguyên này có thể phải đợi các kết nối khác xong trước và thực hiện lại từ đầu 3 bước trên.
-`preconnect` thường được sử dụng để tăng tốc độ tải
+Mặc định browser sẽ parse HTML và CSS để biết mình cần tải data gì và tải chúng theo thứ tự. `preconnect` sẽ nói với browser rằng tôi đang thực sự cần tài nguyên này, hãy thực hiện quá trình kết nối gồm các bước trên sớm nhất có thể. Và trình duyệt sẽ thực hiện 3 bước trên song song với các kết nối khác trước. Nếu không có `preconnect` thì tài nguyên này có thể phải đợi các kết nối khác xong trước và thực hiện lại từ đầu 3 bước trên.
+`preconnect` thường được sử dụng để tăng tốc độ tải font, ảnh quan trọng (hero image)...
 
 `dns-prefetch` tương tự như `preconnect` nhưng chỉ thực hiện trước bước kết nối tới DNS Server. `dns-prefetch` có thể dùng chung với `preconnect` như là 1 dạng fallback khi 1 số trình duyệt không hỗ trợ `preconnect`.
 
-`prefetch` báo cho browser biết để download trước 1 tài nguyên nào đó với low priority mà tài nguyên này có thể chưa cần sử dụng ngay. Lấy ví dụ ở 1 trang bán hàng, khả năng cao là khách sẽ đặt hàng và thanh toán trang thanh toán. Vậy nên ở trang chủ, mình có thể prefetch 1 vài script cho trang thanh toán, ví dụ checkout.js và cache script này vào trình duyệt. Khi sang trang thanh toán, script này sẽ được sử dụng ngay mà không cần thiết lập kết nối và down về
+`prefetch` báo cho browser biết để download trước 1 tài nguyên nào đó với low priority mà tài nguyên này có thể chưa cần sử dụng ngay. Tài nguyên này được download khi browser idle và có đủ bandwidth. Lấy ví dụ ở 1 trang bán hàng, khả năng cao là khách sẽ đặt hàng và thanh toán trang thanh toán. Vậy nên ở trang chủ, mình có thể prefetch 1 vài script cho trang thanh toán, ví dụ checkout.js và cache script này vào trình duyệt. Khi sang trang thanh toán, script này sẽ được sử dụng ngay mà không cần thiết lập kết nối và down về
 
 <https://indepth.dev/posts/1498/101-javascript-critical-rendering-path>
-  
-`preload` thì gần như là 1 nâng cấp của `preconnect`. Nó yêu cầu browser thiết lập kết nối và download tài nguyên đó càng sớm càng tốt, song song với các tải về HTML và CSS (`preconnect` phải đợi parse HTML và CSS trước). Tuy nhiên, độ ưu tiên của preload vẫn nằm sau các tài nguyên synchronous trong thẻ `head`. Ta thường dùng `preload` để load các tài nguyên không có trong HTML mà chỉ xuất hiện khi parse JS và CSS (VD: font). Việc dùng `preload` phải cẩn thận vì nó làm đảo lộn độ ưu tiên của browser. Chỉ dùng preload các file *above the fold*
+
+`preload` thì gần như là 1 nâng cấp của `preconnect`. Nó yêu cầu browser thiết lập kết nối và download tài nguyên đó càng sớm càng tốt.
+Việc dùng `preload` phải cẩn thận vì nó làm đảo lộn độ ưu tiên của browser vì khi mình tăng độ ưu tiên của 1 tài nguyên thì sẽ giảm độ ưu tiên của các tài nguyên khác. Chỉ dùng preload các file *above the fold*
 
 The HTML attribute crossorigin defines how to handle crossorigin requests. Setting the crossorigin attribute (equivalent to crossorigin="anonymous") will switch the request to a CORS request using the same-origin policy. **It is required on the rel="preload" as font requests require same-origin policy.**
 
 <https://web.dev/codelab-preload-web-fonts/#preloading-web-fonts>
 
+### Tóm lại
+
+<https://3perf.com/blog/link-rels/>
 Không nên lạm dụng resource hint vì chúng vẫn làm tiêu tốn tài nguyên CPU của cả client và server
+
+`preload` – when you’re going to need a resource in a few seconds
+`prefetch` – when you need a resource for the next page
+`preconnect` – when you know you’ll need a resource soon, but you don’t know its full url yet
+`dns-prefetch` – when you know you’ll need a resource soon, but you don’t know its full url yet (for older browsers)
 
 ## Race conditions
 

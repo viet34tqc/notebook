@@ -10,8 +10,9 @@
 ## Font
 
 - Modern `@font-face`
-- 
+
 <https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Fonts/Variable_Fonts_Guide>
+
 ```css
 @font-face {
  font-family: 'MyVariableFontName';
@@ -22,9 +23,17 @@
 }
 ```
 
-- preload font: `<link rel="preload" href="/assets/Pacifico-Bold.woff2" as="font" type="font/woff2" crossorigin> `
+- preload or preconnect font:
+
+```html
+<!-- This is recommended by google font using preconnect -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+```
+
 - Self-host font
-- Optimize google font: https://css-tricks.com/how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy/
+- Optimize google font: <https://css-tricks.com/> how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy/
 - Chỉ dùng woff2
 
 ## Icon font và svg
