@@ -9,20 +9,6 @@
 
 ## Font
 
-- Modern `@font-face`
-
-<https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Fonts/Variable_Fonts_Guide>
-
-```css
-@font-face {
- font-family: 'MyVariableFontName';
- src: url('path/to/font/file/myvariablefont.woff2') format('woff2-variations');
- font-weight: 125 950;
- font-stretch: 75% 125%;
- font-style: normal;
-}
-```
-
 - preload or preconnect font:
 
 ```html
@@ -33,6 +19,10 @@
 ```
 
 - Self-host font
+
+Download google font => Upload to font squirell for optimization => Using `@font-face`
+<https://www.youtube.com/watch?v=zK-yy6C2Nck>
+
 - Optimize google font: <https://css-tricks.com/> how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy/
 - Chỉ dùng woff2
 

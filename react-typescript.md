@@ -133,7 +133,9 @@ export const ToolbarButton = forwardRef<HTMLButtonElement, Props>(
 
 ## Event
 
+You can use DOM event handler types or `ComponentProps`
 Let's say I want to use the `onChange` method of input and take it as a prop
+
 ```typescript
 const TextField = ({handleChange}: InputProps) => {
 	const [count, setCount] = useState<number | null>(null);
