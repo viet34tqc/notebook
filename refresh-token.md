@@ -1,4 +1,4 @@
-# Refresh token on the frontend using Axios>
+# Refresh token on the frontend using Axios
 
 <https://www.bezkoder.com/axios-interceptors-refresh-token/>
 <https://anonystick.com/blog-developer/authorization-framework-access-token-refresh-token-cung-giong-viec-sinh-vien-thue-nha-tro-2019061161976500>

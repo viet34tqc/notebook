@@ -93,6 +93,10 @@ dist
 
 ## Husky
 
+`yarn install -D husky`
+
+First, you need to *prepare* (install) husky before using it.
+
 There are two cases when installing husky
 
 ## `.git` and `package.json` are on the same folder
@@ -100,6 +104,10 @@ There are two cases when installing husky
 Add this to `package.json`
 
 ```json
+"scripts": {
+		...
+    "prepare": "cd ../ && husky install ./frontend/.husky"
+},
 "husky": {
     "hooks": {
       "pre-commit": "npm run prettier && npm run lint"
@@ -107,6 +115,30 @@ Add this to `package.json`
 }
 ```
 
+Run `yarn prepare`
+
 ## `package.json` is in nested folder
 
 <https://scottsauber.com/2021/06/01/using-husky-git-hooks-and-lint-staged-with-nested-folders/>
+
+Add this to `package.json`
+
+```json
+"scripts": {
+		...
+    "prepare": "cd ../ && husky install ./frontend/.husky"
+}
+```
+
+Run `yarn prepare`
+
+Then create a pre-commit file with no file extension under the .husky folder with the following contents
+
+```
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+cd ./backend && npm run prettier && npm run lint
+```
+
+`backend` is the folder installing husky.

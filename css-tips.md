@@ -17,6 +17,7 @@ Use `grid-template-area` instead of `grid-template-columns`
 ### Using `:has`
 
 <https://12daysofweb.dev/2022/css-has-selector/>
+<https://www.smashingmagazine.com/2023/01/level-up-css-skills-has-selector/>
 ```css
 .other-field {
   display: none;
@@ -40,6 +41,18 @@ form:has(option[value="other"]:checked) .other-field {
 .wrapper:has(.item:nth-last-child(n + 5)) {
   --item-size: 120px;
 }
+
+/* Fix layout when sidebar can be hidden */
+.grid {
+  display: grid;
+}
+.grid:has(.sidebar) {
+  grid-template-columns: 1fr 3fr ;
+}
+/*Or*/
+.grid > .content:only-child {
+  grid-column: 1 / -1;
+}
 ```
 
 ### Force wrap to a new line using `flex-basis`
@@ -62,7 +75,6 @@ form:has(option[value="other"]:checked) .other-field {
   height: 100vh;
 }
 ```
-
 
 ## Using CSS for mobile screen
 
@@ -127,6 +139,16 @@ Basically, when the parent element has `display: content`, it is removed from th
 <https://ishadeed.com/article/min-content-size-css-grid/>
 
 If the child element has a slider or something that has exceeds the width of that child, we need to set its width as `minmax(0, 1fr)` instead of `1fr`
+
+## Form control and input width problem
+
+By default, the input doesn't take the whole width of its parents. Then, we can apply `display: grid` into parent class
+
+```css
+.form-control {
+  display: grid;
+}
+```
 
 ## `scroll-snap`
 

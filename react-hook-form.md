@@ -117,7 +117,7 @@ export function FieldError({ name }: FieldErrorProps) {
 
 ## `watch`
 
-It replace the use of `useState`. RHF will watch value of all register fields. However, when using watch, all the fields will become uncontrolled input => the component will be re-rendered when the input changes
+It replace the use of `useState`. RHF will watch value of all register fields. However, when using watch, all the fields will become controlled input => the component will be re-rendered when the input changes
 
 ## `reset`
 
@@ -160,7 +160,6 @@ function App() {
   );
 }
 ```
-
 
 ## `setValue`
 
