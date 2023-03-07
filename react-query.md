@@ -182,6 +182,7 @@ This hook return the queryClient instance. This instance helps a lot with cachin
 ```
 
 - ***inValidateQueries***: mark a query as stale and potentially refetch them.
+
 ```javascript
 export default function useCreatePost() {
   return useMutation(

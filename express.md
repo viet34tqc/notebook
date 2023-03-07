@@ -10,8 +10,21 @@ Middleware take 3 params: `request` object, `response` object and `next` functio
 
 There are 2 ways to call application middleware:
 
-- `app.use(middleware)`: When we call `app.use` without path, the middleware is trigger on any route.
+- `app.use(middleware)`: When we call `app.use` without path, the middleware is trigger on any routes after applying this middleware
 - `app.get('path', (req, res, next) {} )`: the middleware is trigger only for that route (not common because we often add middleware with path to router)
+
+### Get data returned from middleware
+
+Using `res.locals`
+
+```js
+// In middleware
+res.locals.jwtDecoded = decoded;
+next();
+
+// In next controller
+const userId = res.locals.jwtDecoded.id;
+```
 
 ### Router middlware
 

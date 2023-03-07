@@ -1,6 +1,8 @@
 # Refresh token on the frontend using Axios
 
+<https://i.imgur.com/TxtHdpI.png>
 <https://www.bezkoder.com/axios-interceptors-refresh-token/>
+<https://thedutchlab.com/blog/using-axios-interceptors-for-refreshing-your-api-token>
 <https://anonystick.com/blog-developer/authorization-framework-access-token-refresh-token-cung-giong-viec-sinh-vien-thue-nha-tro-2019061161976500>
 
 ## Definition of refresh token

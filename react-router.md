@@ -125,6 +125,23 @@ function Users() {
 }
 ```
 
+## Authorization and authentication
+
+In an application, we more often than not have 2 types of authorization
+
+- Route Authorization: there are 2 ways:
+  - Prevent user from accessing the route by redirecting them according to user role: create a ProtectedRoute component and check the user role inside that component
+  - Filter route according to user role
+- UI Authorization: hide something on the UI
+  - Based on user role
+  - Based on user's capability (ex: comment can only be deleted by its owner)
+
+2 types of authentication
+
+- All routes are protected and you are using third-party login: then you check the user availability in App.tsx, user data is retrieved from AuthContext, if the user is not logged in then return to third-party login
+- Not all routes are protected and you are implementing login yourself: create a ProtectedRoute component and check the user inside that component
+
+
 ## Layout Route
 
 ```jsx
@@ -307,7 +324,7 @@ const ProtectedRoute = ({ children }) => {
 
 If you open an application at a protected route, but you are not logged in, you get a redirect to the Login page. After the login, you will get a redirect to the desired protected route.
 
-In order to do that, you have to remember the location from where the redirection happened. There we use `useLocation` to grab the current location before redirecting the user.
+In order to do that, you have to remember the location from where the redirection happened. Here, we use `useLocation` to grab the current location before redirecting the user.
 
 ```jsx
 const ProtectedRoute = ({ children }) => {
@@ -326,6 +343,8 @@ Then we grab the state of location on 'home' route. When a login happens, we can
 
 ```js
 const navigate = useNavigate();
+const location = useLocation();
+
 const handleLogin = async () => {
   const token = await fakeAuth();
 
@@ -335,6 +354,8 @@ const handleLogin = async () => {
   navigate(origin);
 };
 ```
+
+Utilizing `useNavigate` and `useLocation` like this, we can also pass data from page A to page B, ex: display message sent from page A on page B after doing asynchronous task from page A.
 
 ## Hooks
 

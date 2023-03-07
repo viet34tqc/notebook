@@ -302,6 +302,7 @@ The difference happens when the `success` callback returns a **rejected promise*
 - If the new keyword is used when calling the function, this inside the function is a all new empty object.
 - If apply, call, or bind is used, this inside the function is the object that is passed in as the argument.
 - If a function is called as a method this is the object that the function is a property of.
+- If a method is assigned to a variable, then that method is detached from object and this is `undefined` in strict mode or `window` as global object. Example: `this` will be undefined in controller class because when you execute a method of that class in route, the method is detached from controller class <https://stackoverflow.com/questions/45643005/why-is-this-undefined-in-this-class-method>
 - If a function is invoked as a free function invocation, this is the global object.
 - If it's an arrow function, this value will be the context of its surrounding scope at the time it is created. Arrow function will try to resolve this inside it lexically just like any other variable and ask the Outer function - Do you have a this? And Outer Function will reply YES and gives inner function its own context to this
 
@@ -444,6 +445,42 @@ Khi nào sử dụng `grid`
 - Các element được chia đều
 - Parent quản lý vị trí các element con (dùng `grid-template-area`)
 
+## Display date as string in JS
+
+First we need to create a Date instance using `new Date()`, then we pass in our date which could be timestamp, iso 8601 format.
+
+- ISO 8601 format
+
+What is ISO 8601 format:
+Examples: '2011-10-05T14:48:00.000Z'. T means nothing but a space between date and time, Z means zero UTC offset (UTC+0). If Z is ignore, the local system timezone will be used
+
+How to convert to ISO Format:
+
+```js
+new Date("05 October 2011 14:48 UTC").toISOString()
+```
+
+Usage:
+
+```js
+Date.parse("2019-01-01T00:00:00");
+new Date("1995-12-17T03:24:00");
+```
+
+- `Date.UTC`
+
+`Date.UTC()` returns the number of milliseconds since January 1, 1970, 00:00:00 UTC (timestamp)
+
+```js
+const date = new Date(Date.UTC(2012, 11, 20, 3, 0, 0));
+```
+
+After creating date instance, we use `Intl.DateTimeFormat` to display Date as string
+
+```js
+new Intl.DateTimeFormat('en-US').format(date)
+```
+
 ## Kiến thức bảo mật tối thiểu ở frontend
 
 ## Các cách check null và undefined
@@ -567,6 +604,7 @@ http://Example.com:80
 http://example.com
 
 Khác origin:
+
 - Khác schemes
 http://example.com/app1
 https://example.com/app2

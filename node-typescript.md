@@ -1,6 +1,7 @@
 # Setup
 
 Reference: 
+- <https://www.youtube.com/watch?v=H91aqUHn8sE>
 - <https://khalilstemmler.com/blogs/typescript/node-starter-project/>
 - <https://khalilstemmler.com/blogs/tooling/prettier/>
 
