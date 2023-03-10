@@ -2,6 +2,7 @@
 
 ## Reference
 
+<https://codefrontend.com/introduction-to-seo-for-react-developers/>
 <https://www.youtube.com/watch?v=JSm4aQl4w_U>
 
 ## What is SEO

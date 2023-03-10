@@ -151,3 +151,7 @@ sudo apt-get update
 sudo apt-get install yarn -y
 yarn install
 ```
+
+## Setup SSL using certbot
+
+Go to https://certbot.eff.org/ and do as the instructions. When install Certbot, chose `sudo certbot --nginx`, it will automatically set up the SSL

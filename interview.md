@@ -70,6 +70,10 @@ If you mutate the data directly, the components might not re-render that could l
 
 With `useEffect`, we can control how the side effects run in the component. Normally, the side effects make the state change. So, if you put them outside the `useEffec` hook, it will lead to infinite re-render of the component.
 
+## Why we the callback in `useEffect` mustn't be async function
+
+Because async function return promise. `useEffect` hook isn't expecting us to return a promise. It expects us to return either nothing (like we are above), or a cleanup function.
+
 ## When react does not re-render
 
 <https://www.zhenghao.io/posts/react-rerender>
@@ -296,6 +300,7 @@ The difference happens when the `success` callback returns a **rejected promise*
 
 ## Rule for `this`
 
+<https://javascript.info/arrow-functions>
 <https://blog.tusharcodes.tech/5-rules-to-master-this-in-javascript>
 <https://i.imgur.com/tUjhc3r.png>
 
@@ -375,7 +380,13 @@ Các vấn đế của JWT
 
 - User A authen thành công ➜ server response token ➜ User A bị Man-in-the-middle attack, do User A bất cẩn làm token rơi vào tay hacker ➜ hacker chiếm quyền truy cập account của user A mà server không hề hay biết
 - User A đang truy cập các private API, đột nhiên token expired, màn hình đột ngột bị rediect sang trang login vì server response 403
-- server chưa cài đặt cơ chế hủy token, phía database thì account user A đã bị ban, nhưng token vẫn đang lưu rải rác tại các client (desktop app, mobile app, web, server khác, ...), client vẫn cứ gửi token, server encode payload token thấy vẫn còn hạn sử dụng, phần mã hash chữ ký vẫn hợp lệ ➜ user vẫn author thành công
+- server chưa cài đặt cơ chế hủy token, phía database thì account user A đã bị ban, nhưng token vẫn đang lưu rải rác tại các client (desktop app, mobile app, web, server khác, ...), client vẫn cứ gửi token, server decode payload token thấy vẫn còn hạn sử dụng, phần mã hash chữ ký vẫn hợp lệ ➜ user vẫn author thành công
+
+Cách logout jwt
+
+- Khi gọi API logout thì lưu token đã logout vào blacklist.
+- Trong các API được authen, khi có request đến, check token có nằm trong blacklist hay không, nếu có thì coi như unauthorize.
+- Bài toán đặt ra là lưu blacklist ở đâu để việc đọc token đảm bảo được về mặt hiệu suất khi mà tần số gọi API dày đặc như vậy? Câu trả lời là lưu trong redis. Mặc khác vì jwt token nó có thời hạn sống ngắn, nên hoàn toàn có thể clean up dữ liệu, xoá các token đã thực sự hết hạn trong redis.
 
 ## Debounce và throttle
 
@@ -583,7 +594,7 @@ const copied = new Map(myMap);
 
 ## Else if using operation tenerry
 
-const a = b ? c : d ? e : f
+`const a = b ? c : d ? e : f`
 
 ## OOP
 
@@ -593,6 +604,7 @@ const a = b ? c : d ? e : f
 
 Là cơ chế của server cho phép các origin khác (origin = scheme(protocol) + domain + port) ngoài chính nó gửi request.
 Cùng origin: cùng scheme, domain và port
+
 - Cùng scheme và cùng domain
 
 http://example.com/app1/index.html
@@ -639,6 +651,7 @@ https://example.com/app2
 ## Closure
 
 <https://dmitripavlutin.com/simple-explanation-of-javascript-closures/>
+
 - Lexical scope của 1 hàm:
   - Là tất cả các outer scope cộng với inner scope của hàm đó.
   - Outer scope là môi trường bên ngoài nơi định nghĩa của 1 hàm.
@@ -676,14 +689,18 @@ Primitive type là immutable. Ta chỉ có thể gán lại biến đấy sang 1
 Reference type là mutable. Nếu ta copy biến đấy sang 1 biến khác, 2 biến đấy sẽ trỏ vào cùng 1 box chứ 2 biến không trỏ lẫn sang nhau. Và nếu 1 trong 2 biến mutate (ví dụ như là thay đổi giá trị của property) thì biến còn lại cũng thay đổi theo (vì vẫn chung 1 box)
 
 Notes:
+
 - Các giá trị dạng reference là riêng biệt:
+
 Mỗi khi ta khai báo 1 hàm hoặc 1 object, `() => {}` hoặc `{}` thì 1 box mới được tạo ra
 ```js
 const a = () => {}
 const b = () => {}
 console.log( a === b ) // return false.
 ```
+
 - Truyền tham số dạng reference có thể xảy ra Mutation không mong muốn
+
 ```javascript
 function minimum(array) {
   array.sort();
@@ -746,6 +763,7 @@ Có 3 loại scope: `global scope`, `local scope` (function) và `block scope` (
 ## for-in and for-of
 
 `for-in`:
+
 - iterate over enumerable properties of an object. enumerable properties are the "key" of the property the Object or "index" of the Array.
 If the propery is defined with the `enumerable` false, it is not interated
 ```javascript
@@ -760,6 +778,7 @@ Object.defineProperty(obj, 'flameWarTopic', {
 - cannot be used with Object like Map() or Set();
 
 `for-of`:
+
 - interate over **value** of iterable objects.
 - can be used with built-in `String`, `Array`, array-like objects (e.g., arguments or `NodeList`), `TypedArray`, `Map`, `Set`
 - cannot be used with simple Object

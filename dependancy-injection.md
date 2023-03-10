@@ -1,7 +1,10 @@
 # Dependancy injection
 
-Dependancy injection is a popular pattern that solve the big problem: hardcoded dependancy. So what's hardcoded dependancy?
+<https://blog.codeminer42.com/di-with-some-context/>
 
+Dependancy injection is a popular pattern used to remove hardcoded dependancy between units in an application. The aim of this technique is to make our code more flexible and scalable
+
+So what's hardcoded dependancy?
 Hardcode dependancy means class A is tightly coupled to class B, class B is called inside class A. There are some issue with this:
 
 - It's harder for testing: Let's say we want to test class A. And because class A is using class B, it's really hard to mock class B

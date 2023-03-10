@@ -100,8 +100,9 @@ button {
 
 ## Background image opacity
 
-Apply opacity to absolute psuedo element, parent element use isolation: isolate
+Apply opacity to absolute psuedo element, parent element use `isolation: isolate`, that will create a stacking context and prevent absolute children with negatives `z-index` to break out of parents
 <https://www.youtube.com/watch?v=lRPguPbovro>
+<https://www.youtube.com/watch?v=o1HzOJfgugE>
 
 ## Replace `position: absolute` with `display: grid`
 

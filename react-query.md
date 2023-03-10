@@ -295,6 +295,27 @@ function Todo({ todoId }) {
 }
 ```
 
+## Handle errors
+
+While most utilities like `axios` automatically throw errors for unsuccessful HTTP calls, some utilities like fetch do not throw errors by default. If that's the case, you'll need to throw them on your own. Here is a simple way to do that with the popular fetch API
+
+```js
+// Using axios
+useQuery(['todos', todoId], async () => {
+   const response = await axios.get('/todos/' + todoId)
+   return response.data
+})
+
+// Using fetch
+useQuery(['todos', todoId], async () => {
+   const response = await fetch('/todos/' + todoId)
+   if (!response.ok) {
+     throw new Error('Network response was not ok')
+   }
+   return response.json()
+})
+```
+
 
 ## React Query and React Router
 
