@@ -1,7 +1,15 @@
 # JWT
 
 JWT is used for authorization, a replacement for session-cookie model
-Why not use session-cookie model: because of extension. Session-cookie only works for web app, Native apps like iOS or Android don't support cookie
+
+## Why use JWT over session-cookie model for authorization
+
+- Session-cookie have to store session data in server (ram, database) and look it up on every request => introduce latency. JWT flow self-contains user data and send back to client
+
+## Downside of JWT
+
+- Token can be stolen
+- Token might be stale, for example if the user role is updated, he can still use the old token to access to the page with the old role
 
 ## JWT components
 

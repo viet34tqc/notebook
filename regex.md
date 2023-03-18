@@ -1,4 +1,12 @@
-Regex
+# Regex
+
+<https://regexone.com/>
+
+Two ways to capture a patterns
+
+- Write regex for the whole string but put the pattern we want into `()`: `^\s*(.*)\s*$` <https://regexone.com/problem/trimming_whitespace>
+- Put the pattern inside `()` directly: `(\d{3})` <https://regexone.com/problem/matching_phone_numbers>
+
 Check a word in a string
 	regex.test(string);
 Check multiple words in a string

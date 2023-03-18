@@ -7,7 +7,7 @@
 - `man [command]` or `[command] --help`: command --help. Find instruction for command. Ex: `cat --help`
 - `cat`: 
   - read the file, combines with `grep`
-  - concat files
+  - concat files: `cat github-actions.pub >> ~/.ssh/authorized_keys`
 - `tail`: reads the last ten (default) rows in the file. Usage: read newest bugs in the log file.
   - `tail -n 5 file_name`: read 5 rows
   - `tail -f file_name`: watch the file

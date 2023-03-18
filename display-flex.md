@@ -3,7 +3,7 @@
 <https://www.joshwcomeau.com/css/interactive-guide-to-flexbox/>
 <https://www.youtube.com/watch?v=1zKX71GYisE>
 
-Mặc định `flex-grow: 0; flex-shrink: 1; flex-basis: auto;`
+giá trị mặc định của flex item: `flex-grow: 0; flex-shrink: 1; flex-basis: auto;`
 
 `flex-basis`: giá trị desired width của flex item và giá trị này có thể tăng hoặc giảm. Nếu flex-item có width thì `flex-basis` sẽ override width đấy. Note: `max-width` và `max-height` sẽ override `flex-basis`. `min-width` và `max-width` cũng ngăn chặn item bị shrink hoặc grow
 

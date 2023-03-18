@@ -20,8 +20,10 @@
 
 - Self-host font
 
-Download google font => Upload to font squirell for optimization => Using `@font-face`
 <https://www.youtube.com/watch?v=zK-yy6C2Nck>
+Download google font => Upload to font squirell for optimization => Using `@font-face`
+
+- Using variable font: <https://www.youtube.com/watch?v=0fVymQ7SZw0>, <https://www.browserstack.com/guide/variable-fonts-vs-static-fonts>
 
 - Optimize google font: <https://css-tricks.com/> how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy/
 - Chỉ dùng woff2

@@ -305,3 +305,32 @@ If the background regeneration fails, the old page will stay unaltered
 
 <img src="https://i.imgur.com/HOdyKup.png" />
 <img src="https://i.imgur.com/WnE3o7T.png" />
+
+## API
+
+### `next/router`
+
+Navigate to internal URLs in app
+
+```js
+// router.push(url, as, options)
+// https://nextjs.org/docs/api-reference/next/router#routerpush
+
+router.push('/about')
+
+router.push(
+  {
+    pathname: `/search`,
+    query: q ? { q } : {},
+  },
+  undefined,
+  { shallow: true }
+)
+```
+
+Replace without adding URL entry into history stack
+
+```js
+router.replace(url, as, options)
+```
+

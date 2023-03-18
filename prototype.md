@@ -1,5 +1,8 @@
 # Prototype
 
+<https://prateeksurana.me/blog/how-javascript-classes-work-under-the-hood/>
+<https://zellwk.com/blog/javascript-prototype/>
+
 There are two ways to create an object: via function constructor and via `{}`
 
 ## Function constructor
@@ -7,11 +10,13 @@ There are two ways to create an object: via function constructor and via `{}`
 - All the function (**not only function constructor**) has a default property called `proptotype`.
 - **Arrow function doesn't have** `prototype` property
 - Default, f.prototype is an object like this:
+- 
 ```javascript
 f.prototype = { constructor: f }
 ```
 
 - You can define methods and properties on the prototype object:
+
 ```javascript
 function Dog() {}
 Dog.prototype = {
@@ -32,9 +37,11 @@ Dog --------> Dog.prototype
                   |
                   |
                chihuahua
+
 ```javascript
 chihuahua.__proto__ = Dog.prototype
 ```
+
 `Dog.prototype` inherits from `Object.prototype` (`Dog.prototype.__proto__`) and `Object.prototype` has no prototype (`Object.prototype.__prototype__` is null). **All the objects has prototype except for Object.prototype**
 
 ## {}

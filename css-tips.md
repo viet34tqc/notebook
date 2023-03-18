@@ -6,6 +6,7 @@ Create a div wrapper and apply border radius and box shadow for it
 
 ## DON'T USE SHORTHAND CSS FOR UTILITY CLASS
 
+Shorthand CSS is like `margin: 0px 1px`
 Because it might prevent overriding CSS
 
 ## Reorder the element using display grid
@@ -55,17 +56,26 @@ form:has(option[value="other"]:checked) .other-field {
 }
 ```
 
-### Force wrap to a new line using `flex-basis`
+## Force wrap to a new line using `flex-basis`
 
+<https://ishadeed.com/article/conditional-css/>
 ```css
 /* If it’s less than 190px, it will wrap into a new line.*/
+/* Here flex-shrink is default to 1 */
+/* flex-basis without flex-shrink is like min-width: 190px */
 .card__title {
   flex-grow: 1;
   flex-basis: 190px;
 }
 ```
 
-### Header, body, footer layout using `min-content`
+## Remove button outline
+
+<https://www.youtube.com/shorts/4B_4WLpbyp8>
+
+`outline-color: transparent`
+
+## Header, body, footer layout using `min-content`
 
 ```css
 /*https://i.imgur.com/KCSwUm7.png*/
@@ -100,7 +110,7 @@ button {
 
 ## Background image opacity
 
-Apply opacity to absolute psuedo element, parent element use `isolation: isolate`, that will create a stacking context and prevent absolute children with negatives `z-index` to break out of parents
+Apply opacity to absolute psuedo element, parent element uses `isolation: isolate`, that will create a stacking context and prevent absolute children with negatives `z-index` to break out of parents
 <https://www.youtube.com/watch?v=lRPguPbovro>
 <https://www.youtube.com/watch?v=o1HzOJfgugE>
 
@@ -141,6 +151,29 @@ Basically, when the parent element has `display: content`, it is removed from th
 
 If the child element has a slider or something that has exceeds the width of that child, we need to set its width as `minmax(0, 1fr)` instead of `1fr`
 
+## Sidebar layout
+
+```css
+.with-sidebar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.sidebar {
+  /* ↓ The width when the sidebar _is_ a sidebar */
+  flex-basis: 20rem;
+  flex-grow: 1;
+}
+
+.not-sidebar {
+  /* ↓ Grow from nothing */
+  flex-basis: 0;
+  flex-grow: 999;
+  /* ↓ Wrap when the elements are of equal width */
+  min-inline-size: 50%;
+}
+```
+
 ## Form control and input width problem
 
 By default, the input doesn't take the whole width of its parents. Then, we can apply `display: grid` into parent class
@@ -154,3 +187,10 @@ By default, the input doesn't take the whole width of its parents. Then, we can 
 ## `scroll-snap`
 
 <https://codepen.io/5t3ph/pen/yLzQeGr/652097fa9ce1150aeb5400637ab91b63>
+
+## Alternative to input number
+
+<https://css-tricks.com/finger-friendly-numerical-inputs-with-inputmode/>
+Use in case `input="number"` is inapropriate like credit-card number
+
+`<input inputmode="numeric" pattern="[0-9]*" type="text" name="creditcard">`

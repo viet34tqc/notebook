@@ -3,14 +3,17 @@
 ## Reference
 
 <https://www.youtube.com/watch?v=3c-iBn73dDE&t=1s>
-<https://viblo.asia/p/docker-chua-biet-gi-den-biet-dung-phan-1-lich-su-ByEZkWrEZQ0>
 <https://www.youtube.com/watch?v=pTFZFxd4hOI>
 <https://devdojo.com/bobbyiliev/free-introduction-to-docker-ebook>
 <https://www.freecodecamp.org/news/how-to-remove-all-docker-images-a-docker-cleanup-guide/>
 
 ## Tại sao phải sử dụng docker
 
-Có thể dev trên local và đồng bộ môi trường trên máy local với các máy khác (reproducing environment). Các máy khác không phải setup môi trường phức tạp để chạy code của mình
+<https://dev.to/techworld_with_nana/what-problems-does-docker-really-solve-496a>
+
+Giải quyết vấn đề triển khai code. Ví dụ có 3 môi trường dev, test, product, mỗi môi trường khác nhau về OS, hardware... => việc setup (setup webserver, database, packages version...) để app chạy cho từng môi trường cũng tiêu tốn nhiều thời gian. Kể cả các môi trường có giống nhau đi chăng nữa, giống như local của máy A và local của máy B cùng chung OS và hardware, thì việc setup lại từ đầu cũng không hay.
+
+Docker sẽ đóng gói ứng dụng vào 1 container, mỗi môi trường có thể có container riêng của môi trường đó, khi deploy ta chỉ cần run docker container đấy là mọi thứ sẽ được setup. 
 
 ## Các thuật ngữ
 
@@ -82,6 +85,12 @@ Update code
 
 ## Docker compose file
 
-Chứa hướng dẫn để build ra *Docker Container*, nó là 1 file `.yaml`
+1 file `.yaml` chứa hướng dẫn để build ra *Docker Container*, dùng để chạy nhiều docker file cùng lúc
 
 Để chạy file dùng lênh: `docker-compose -f <yaml_file> up`
+
+## Optimize docker image size
+
+<https://github.com/webuild-community/advent-of-frontend/blob/main/2022/day-23.md>
+
+- Remove devDependencies bằng cách build multi-stage

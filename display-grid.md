@@ -4,7 +4,19 @@
 
 ## fr
 
-Fr is fraction unit and 1fr is for 1 part of the remaining available space
+Fr is fraction unit and 1fr is for 1 part of the remaining available space. So to calculate 1fr, we have to get the remaining space first.
+
+- If there is no static value, like `1fr 2fr 1fr`: the remaining space is full width
+- If there is static value, like `200px 1f 1fr` or `minmax(200px, 400px) 1fr 1fr`: the remaining space = full width - static value
+
+## `minmax(min, max)`
+
+<https://ishadeed.com/article/css-grid-minmax/>
+<https://www.hongkiat.com/blog/css-grid-layout-minmax/>
+
+The returned value lies between `min` and `max` value
+- static value `minmax(100px, 200px)`: by default, if there is space, this returns `200px`, otherwise `100px` is the value (not less than 100px)
+- dynamic value `minmax(100px, 1fr) 1fr 1fr`: 1fr is calculated first, the static value is `100px`. If 1fr value is bigger than 100px, then it returns 1fr
 
 ## `grid-auto-rows` and `grid-auto-columns`
 

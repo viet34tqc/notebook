@@ -1,5 +1,7 @@
 # Technical terms
 
+<https://punits.dev/jargon-free-intros/>
+
 ## Transpile:
 
 convert the code so that older browser can also run it.
@@ -27,11 +29,16 @@ is the api that help client interact with server to exchange information via HTT
 
 the act of taking a website live on a server
 
-## cookie:
+## Cookie:
+
+<https://prateeksurana.me/blog/javascript-developer-guide-to-browser-cookies/>
 
 - `httpOnly`: prevent browser to read any cookies with the cookie API
-- `SameSite`: SameSite=Strict Domain in URL bar equals the cookie's domain (first-party) AND the link isn't coming from a third-party. SameSite=Lax  Domain in URL bar equals the cookie's domain (first-party)
-- 
+- `SameSite`: `SameSite=Strict`: Domain in URL bar equals the cookie's domain (first-party) AND the link to the request is on the same domain as well. `SameSite=Lax`: Domain in URL bar equals the cookie's domain (first-party), the link to the request can be from the other site that point to domain, like you click on the domain on google search result.
+- `domain`: tell browser which host are allowed to access a cookie, default to the same host that set the cookie. This attribute is used only when the current domain is a subdomain like abc.xyz.com. So the default domain is abc.xyz.com and if your client is hosted on another domain, not abc.xyz.com, the cookies are set in response header but they aren't existed on client site
+- `path`: tell browser which path are allowed to access a cookie. A cookie with the path attribute as Path=/store would only be accessible on the path /store and its subpaths /store/cart, /store/gadgets
+- `secure`: A cookie with the Secure attribute is only sent to the server over the secure HTTPS protocol, so the domain of client must be HTTPS
+
 ## tree-shaking:
 
 remove unused code before bundling. This can be an issue when using barrel files: <https://github.com/vercel/next.js/issues/12557> <https://renatopozzi.me/articles/your-nextjs-bundle-will-thank-you>
@@ -130,10 +137,19 @@ How to prevent:
 
 ### CSRF attack
 
-Attacker tricks user into clicking a link with or script on third-party site that make malicious requests to your site.
+<https://zellwk.com/blog/understanding-csrf-attacks/>
+
+Attacker tricks user into submitting a malicious request, execute unwanted actions to a website where they are authenticated
+
+The request must originate from another website, which gives it the name "Cross-Site". This request also impersonates an authenticated user, which gives it the name "Request Forgery".
 
 For example: Attacker send a picture with malicious website URL to user email. This website includes an unwanted request to user bank website, like send attacker money and it is run automatically when the user visit website. Luckily, the user has just logged into bank account which means the cookie is stored in browser. Then he is tricked to visit the malicious website and the unwanted request is made because the cookie is still available.
 
 How to prevent
 
 - Using cookie with `SameSite` flag set to `Lax` or `Strict`
+
+## Artifacts in devops
+
+Pipeline artifact: files that are produced by a step in the pipeline, which can be used as the input for next step)
+Build artifact: files that created by build process.

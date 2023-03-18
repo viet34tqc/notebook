@@ -11,18 +11,28 @@ If you don't set the input files in `tsconfig.json`, Typescript will automatical
 
 ## Type annotation (Explicit declartion)
 
-Declare the type of variables first:
+There are 4 ways of assigning a type to a variable
+
+- colon annotations
+- `satisfies`
+- `as` annotations
+- not annotating and letting TS infer it
 
 ```ts
 let names: string = 'viet'; // String
 let age: number = 3; // Number
-let arr: string[] = ['viet', 'nguyen'] // Array
-let mixed: (string|number|boolean)[] // Union
-let person = {
- name: string,
- age: number,
-} // Object
-let age: any // whatever types
+```
+
+In fact, most of the time you don't need to type your variables on declartion at all, just let TS infer it
+However it's often to use type annotation when you declare an object
+
+```ts
+const results = {}
+results.abc = 1 // you can't use string to index into result:
+
+// We need to annotate the type of results first
+const results: Record<string, unknown> = {}
+resuts.abc = 1
 ```
 
 ## Implicit declaration
@@ -737,6 +747,42 @@ type Event =
 
 const sendEvent = <Type extends Event['type']>(...args: Extract<Event, {type: Type}> extends {payload: infer Payload} ? [type: Type, payload: Payload] : [type: Type]) => {}
 ```
+
+### Using generics to declare the relative between params
+
+```ts
+const groupBy = <
+  TObj extends Record<string, unknown>,
+  TKey extends keyof TObj
+>(
+  arr: TObj[],
+  key: TKey
+) => {
+  const result = {} as Record<
+    TObj[TKey] & PropertyKey,
+    TObj[]
+  >;
+  arr.forEach((item) => {
+    const resultKey = item[key] as TObj[TKey] &
+      PropertyKey;
+    if (result[resultKey]) {
+      result[resultKey].push(item);
+    } else {
+      result[resultKey] = [item];
+    }
+  });
+  return result;
+};
+
+const result = groupBy(array, "age");
+
+result[20].forEach((item) => {
+  // No errors, no validation needed!
+  console.log(item.name, item.age);
+});
+
+```
+
 
 ## Working with union
 

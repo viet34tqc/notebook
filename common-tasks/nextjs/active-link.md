@@ -10,3 +10,16 @@ const router = useRouter()
 	<a className={router.pathname === '/' ? 'active': ''}>Home</a>
 </Link>
 ```
+
+Or you can wrap `Link` inside a HTML tag
+
+```jsx
+<li
+    key={path}
+    className={cn(
+   
+        underline: activeBrand?.id === id,
+    )}
+  >
+    <Link />
+```

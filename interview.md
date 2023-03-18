@@ -370,7 +370,9 @@ If needed, frontend part will communicate to the backend end via API (using REST
   
 - Session
 
-Khi client tạo 1 request login tới server, server sẽ tìm trong sổ user coi có hợp lệ không, nếu oke thì lấy các quyền mà user đó có, rồi tạo 1 session lưu ở server và trả về cho client 1 cookie (chứa session id (không trùng lặp)). Với mỗi request, client sẽ cầm theo cookie, server sẽ dựa vào id trong đó để tìm trong sổ session, coi cái nào khớp thì coi có quyền gì mà xử lí, không có thì bắt login lại.
+Khi client tạo 1 request login tới server, server sẽ tìm trong database xem user đó có hợp lệ không, nếu oke thì lấy các quyền mà user đó có, rồi tạo 1 session lưu ở server (có thể lưu ở ram hoặc database) và trả về cho client 1 cookie (chứa session id (không trùng lặp)). Với mỗi request, client sẽ cầm theo cookie, server sẽ dựa vào id trong đó để tìm trong sổ session, coi cái nào khớp thì coi có quyền gì mà xử lí, không có thì bắt login lại.
+
+Khi user không tương tác với server trong 1 khoảng thời gian thì session của user đó sẽ timeout (session timeout) hoặc khi cookie lưu phía client expire thì phiên đăng nhập của user hết hạn và người dùng sẽ bị đăng xuất
 
 - JWT
 
@@ -428,6 +430,11 @@ Range version:
 - `"library-x" : "*" ` => latest
 - `"library-x" : "~1.2.3" ` => include all patch and minor versions from the ones specified up to, but not including the next minor version: 1.2.3 <= x < 1.3.0
 - `"library-x" : "^1.2.3" ` => include all patch and minor versions from the ones specified up to, but not including the next major version: 1.2.3 <= x <2.0.0
+
+## `target` and `currentTarget`
+
+target = element that triggered event; 
+currentTarget = element that listens to event. 
 
 ## Object.assign() and Object.create()
 
@@ -693,6 +700,7 @@ Notes:
 - Các giá trị dạng reference là riêng biệt:
 
 Mỗi khi ta khai báo 1 hàm hoặc 1 object, `() => {}` hoặc `{}` thì 1 box mới được tạo ra
+
 ```js
 const a = () => {}
 const b = () => {}
@@ -708,7 +716,7 @@ function minimum(array) {
 }
 
 const items = [7, 1, 9, 4];
-const min = minimum(items); // Khi truyền items vào dưới dạng tham số, hàm sẽ copy tham số sang 1 biết khác: const array = items. Array thay đổi thì items cũng thay đổi vì khi này cả array và items cùng trỏ tới 1 box hay là cùng trỏ tới 1 địa chỉ chứa giá trị
+const min = minimum(items); // Khi truyền items vào dưới dạng tham số, hàm sẽ copy tham số sang 1 biến khác: const array = items. Array thay đổi thì items cũng thay đổi vì khi này cả array và items cùng trỏ tới 1 box hay là cùng trỏ tới 1 địa chỉ chứa giá trị
 console.log(min) // 1
 console.log(items) // [1,4,7,9]
 ```
@@ -1091,8 +1099,8 @@ Using `background-blend-mode`: <https://www.smashingmagazine.com/2021/09/reducin
 ## `vmin`, `vmax`
 
 `vmin` and vmax can change whilst the browser window is resized or the orientation of the mobile phone is changed.
-`vmin` is the minimum between the viewport's height or width in percentage depending on which is smaller.
-`vmax` is the maximum between the viewport's height or width in percentage depending on which is bigger.
+`vmin` is the minimum between the viewport's height or width in percentage depending on which is smaller: `min(vh, vw)`
+`vmax` is the maximum between the viewport's height or width in percentage depending on which is bigger: `max(vh, vw)`
 
 ## <!DOCTYPE html>
 
