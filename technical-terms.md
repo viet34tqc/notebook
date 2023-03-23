@@ -25,6 +25,15 @@ two different requests 'raced' against each other and the result might come in a
 
 is the api that help client interact with server to exchange information via HTTP methods (GET, POST, PUT, DELETE)
 
+## Hydration (Rehydration)
+
+Hydration is the process of using client-side JavaScript to add application state and interactivity to server-rendered HTML.
+
+When a visitor requests their first URL from your site, the response contains static HTML along with linked JavaScript, CSS, and images. React then takes over and hydrates that HTML. React adds event listeners to the DOM created during HTML parsing, and turns your site into a full React application. Subsequent page requests are DOM updates managed by React.
+
+[https://www.joshwcomeau.com/react/the-perils-of-rehydration/](https://www.joshwcomeau.com/react/the-perils-of-rehydration/)
+Beside adding interactivity, React also builds up a mental picture of what the DOM should look like, by mounting all of your components. Then it compares the mounted DOM with the DOM nodes already on the page, and tries to fit the two together. If not there will be an error like this (only happens on development mode but you are warning because this is bug) 
+
 ## deploying:
 
 the act of taking a website live on a server
@@ -70,17 +79,18 @@ is the process of getting your static HTML from server and turning it into dynam
 
 ### What happens when you visit a website:
 
+<https://www.youtube.com/watch?v=27r4Bzuj5NQ> (**Must read**)
 <https://www.cloudflare.com/learning/dns/what-is-a-dns-server/>
 <https://www.cloudflare.com/learning/dns/dns-server-types/#recursive-resolver>
 
 - You type URL like example.com into the address bar and hit enter
-- Your browser uses DNS to retrieve the domain's nameservers: <https://www.youtube.com/watch?v=72snZctFFtA>
-  + DNS resolver (also known as a DNS recursor) receives the query first. The recursive resolver acts as a middleman between a client and a DNS nameserver
-  + The URL gets broken up into sections. 
-  + DNS resolver queries a top-level domain (TLD) nameserver, which then points the query to the nameserver that contains 'example.', which is domain registrar's nameserver
-  + That information is brought back to your browser.
-- Your browser asks for the A record that contains the IP address of the web server (a specific DNS record)
-- The nameservers provide the IP address from the A record
+- Browser first checks its cache. If no answer, it will check in the cache of OS (which is the host file)
+- If it's not there, browser uses DNS to retrieve the domain's nameservers: <https://www.youtube.com/watch?v=72snZctFFtA>
+  + *DNS resolver* (also known as a *DNS recursor*) receives the query first. The IP of DNS resolver is set in network settings of you computer, default is your ISP
+  + If DNS resolver does not have the answer in the cache, then it will ask *Root nameservers* (.). Root nameservers have the IP of *top-level domain (TLD) nameserver* (.com, .org) and return it to DNS resolver
+  + DNS resolver reachs TLD nameserver, TLD nameserver returns the IP of nameserver that contains 'example.', which is domain registrar's nameserver (*authoritative nameserver*)
+  + DNS resolver goes to `example.com` namesever and it returns IP of `example.com` to DNS resolver
+  + DNS resolver returns IP to browser
 - Your browser requests the website content from that IP address
 - Your browser retrieves the content and renders it in your browser
 

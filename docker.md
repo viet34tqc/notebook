@@ -2,8 +2,9 @@
 
 ## Reference
 
-<https://www.youtube.com/watch?v=3c-iBn73dDE&t=1s>
+<https://www.youtube.com/watch?v=3c-iBn73dDE&t=1s> (must watch for beginner)
 <https://www.youtube.com/watch?v=pTFZFxd4hOI>
+<https://www.youtube.com/watch?v=pg19Z8LL06w>
 <https://devdojo.com/bobbyiliev/free-introduction-to-docker-ebook>
 <https://www.freecodecamp.org/news/how-to-remove-all-docker-images-a-docker-cleanup-guide/>
 
@@ -11,9 +12,9 @@
 
 <https://dev.to/techworld_with_nana/what-problems-does-docker-really-solve-496a>
 
-Giải quyết vấn đề triển khai code. Ví dụ có 3 môi trường dev, test, product, mỗi môi trường khác nhau về OS, hardware... => việc setup (setup webserver, database, packages version...) để app chạy cho từng môi trường cũng tiêu tốn nhiều thời gian. Kể cả các môi trường có giống nhau đi chăng nữa, giống như local của máy A và local của máy B cùng chung OS và hardware, thì việc setup lại từ đầu cũng không hay.
+Giải quyết vấn đề triển khai code. Ví dụ có 2 máy khác nhau về OS, hardware... => việc setup (setup webserver, database, packages version...) để app chạy cho từng môi trường tiêu tốn nhiều thời gian. Kể cả các môi trường có giống nhau đi chăng nữa thì việc setup lại từ đầu cũng không hiệu quả.
 
-Docker sẽ đóng gói ứng dụng vào 1 container, mỗi môi trường có thể có container riêng của môi trường đó, khi deploy ta chỉ cần run docker container đấy là mọi thứ sẽ được setup. 
+Docker sẽ đóng gói ứng dụng vào 1 container, các môi trường có thể dùng chung container hoặc có container riêng của môi trường đó, khi deploy ta chỉ cần run docker container đấy là mọi thứ sẽ được setup chứ không còn phải setup từ đầu nữa 
 
 ## Các thuật ngữ
 
@@ -28,9 +29,45 @@ Về bản chất, *container* giống với *virtual machine* ở chỗ là có
 
 *Container* được tạo ra từ *Docker Image*.
 
+Làm thế nào để access Docker container?
+Docker container được chạy trong 1 isolated Docker network, nên ta phải expose container ra ngoài máy local (host). Quá trình này gọi là `port binding`
+
+Commands:
+
+- `docker ps`: list các container đang chạy
+- `docker ps -a`: list các container đang chạy và stop
+- `docker run -d -p {HOST_PORT}:{CONTAINER_PORT} {name}:{tag}`: run image, create new container và expose container port to host, `{HOST_PORT}` tùy chọn nhưng nên giống với `{CONTAINER_PORT}`, `{CONTAINER_PORT}` xem từ `docker ps`. `{CONTAINER_PORT}` bắt buộc phải chính xác
+
+### Image
+
+Là 1 snapshot (giống file ghost) mà khi run snapshot này sẽ cho ra *Container*, hay nói cách khác là tái tạo lại môi trường. Có thể hiểu Docker Image như là class và container như là instance của class đó. Vậy Image này lấy từ đâu?
+
+Docker image sẽ được lấy lấy từ `docker registries`, e.g DockerHub. Nó giống như kiểu github nhưng chỉ chứa các docker images (public và private)
+
+Ngoài các image có sẵn, ta có thể tự tạo custom image bằng `Dockerfile`
+
+Commands:
+
+- `docker images`: liệt kê tất cả các images hiện có
+- `docker run {name}:{tag}`: run 1 image với tag của nó, nếu nó không tìm thấy trong máy local, docker sẽ tự động pull về từ DockerHub
+- `docker run -d {name}:{tag}`: `-d` means detach, which means docker runs in the background without block terminal
+- `docker run -d --name {container_name} {name}:{tag}`: thêm tên cho container cho dễ nhớ
+
 ### Dockerfile
 
 Chứa hướng dẫn để setup môi trường và build ra *Docker Image*
+
+Tại sao cần dùng Dockerfile: Sau khi dev xong, chúng ta mong muốn deploy app lên server. Lúc này ta cần tạo custom image để deploy app như là docker container. Để tạo custom image, ta sử dụng Dockerfile
+
+`Dockerfile => Docker image => Docker container`
+
+Commands:
+
+- `FROM`: khai báo rằng image này được tạo từ 1 parent image or base image. Với app js thì sẽ là node
+- `COPY {files_in_host} {dest_folder_in_container}`: copy file từ host (local machine) vào container
+- `WORKDIR`: working directory. Đây là thư mục để chạy các command bên dưới, thường là trùng với destination folder ở trong lệnh `COPY`. Khi khai báo `WORKDIR /app` là ta `cd` đến thư mục `app`
+- `RUN`: chạy 1 command nào đó trong môi trường base image
+- `CMD`: chạy command này khi Docker container start. Chỉ có 1 `CMD` trong 1 Dockerfile
 
 ```code
 FROM node:12              // Download node image về
@@ -50,14 +87,11 @@ EXPOSE 8080
 CMD [ "npm", "start" ]    // Khi setup xong thì chạy lệnh
 ```
 
-Để chạy docker file, dùng lệnh: `docker build -t <docker_image_name> .`. Docker image name có thể là my_app:1.0. Quá trình build docker image nó giống như lệnh `docker pull`, sau khi pull về thì chạy lệnh `docker run`
-
-### Image
-
-Là 1 snapshot (giống file ghost) mà khi run snapshot này sẽ cho ra *Container*, hay nói cách khác là tái tạo lại môi trường. Có thể hiểu Docker Image như là class và container như là instance của class đó.
-Có thể push image này lên cloud và người khác có thể pull image này về máy mình và chạy
-
 Tạo 1 file `.dockerignore` để ignore `node_module`
+
+Để chạy docker file, dùng lệnh: `docker build -t <docker_image_name> .`. `-t` hay `--tag` là đánh tag cho docker image
+Docker image name có thể là my_app:1.0. Sau khi build xong chạy `docker run` như trên để tạo ra container
+
 
 ## Commands
 

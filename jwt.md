@@ -1,8 +1,12 @@
 # JWT
 
+<https://www.youtube.com/watch?v=67mezK3NzpU&t=2493s>
+
 JWT is used for authorization, a replacement for session-cookie model
 
 ## Why use JWT over session-cookie model for authorization
+
+<https://viblo.asia/p/authentication-voi-jwt-luu-token-o-dau-la-bao-mat-nhat>
 
 - Session-cookie have to store session data in server (ram, database) and look it up on every request => introduce latency. JWT flow self-contains user data and send back to client
 

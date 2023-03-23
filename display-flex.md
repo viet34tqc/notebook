@@ -23,6 +23,8 @@ Ví dụ: available space là 150px, item 1 có `flex-grow` là 1, item 2 có `f
 
 `flex-wrap: wrap` sẽ tách row khi container width thu lại, từ 1 row sẽ thành 2, 3 row. `flex-grow` và `flex-shrink` sẽ tính toán theo từng row => width các item sẽ có thể bị thay đổi nếu row được tách ra
 
+`flex-wrap: wrap-reverse`: reverse the order of flex items when wrapping happen
+
 ## So sánh `flex-basis` và width
 
 - `flex-basis` sẽ thay đổi theo chiều. Tức là khi `flex-direction` là `column` thì initial height của flex item sẽ là `flex-basis`

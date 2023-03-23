@@ -3,6 +3,7 @@
 ## Step 1: Create an observer
 
 `new IntersectionObserver(callback(entries: HTMLDOMElement[], observer: Object), observerOptions)`
+
 ```javascript
 const appearOptions = {
 	threshold: 0,

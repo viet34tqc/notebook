@@ -191,6 +191,24 @@ By default, the input doesn't take the whole width of its parents. Then, we can 
 ## Alternative to input number
 
 <https://css-tricks.com/finger-friendly-numerical-inputs-with-inputmode/>
+<https://codepen.io/kevinpowell/pen/dyjwWEY>
 Use in case `input="number"` is inapropriate like credit-card number
 
 `<input inputmode="numeric" pattern="[0-9]*" type="text" name="creditcard">`
+
+```js
+function validateInput(el) {
+  el.addEventListener("beforeinput", function (e) {
+    let beforeValue = el.value;
+    e.target.addEventListener(
+      "input",
+      function () {
+        if (el.validity.patternMismatch) {
+          el.value = beforeValue;
+        }
+      },
+      { once: true }
+    );
+  });
+}
+```

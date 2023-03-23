@@ -506,6 +506,12 @@ new Intl.DateTimeFormat('en-US').format(date)
 ```js
 let x;
 if ( x == void 0) {}
+
+let firstName = null;
+let lastName;
+
+console.log(Object.is(firstName, null)); // true
+console.log(Object.is(lastName, null)); // false
 ```
 
 ## getter, setter trong javascript. Có ưu điểm gì so với hàm bình thường

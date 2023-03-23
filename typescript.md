@@ -344,7 +344,7 @@ When to use: when we want to strictly define type for elements in array, like th
 Why:
 
 - For types, interface, it turns them into a Javascript-alike function
-- For functions, it connects the type of params you pass in and the code in your function body
+- For functions, it connects the type of params you pass in and the code in your function body. **If two params has connection to each other, you need to use generics**, e.g one param is object and the other one is its key
 
 When:
 When you don't know which type of input you pass into the function

@@ -208,11 +208,11 @@ export const getStaticPaths = async () => {
 
 ### Client-side rendering (Plain React.js app)
 
-HTML is rendered on client side by using JS
+All the rendering happens in the browser (client)
 
 - Initial Load: App is not rendered
-- JS Loaded
-- Hydration: App is hydrated, React components are initialized and App becomes interactive (Hydration is the process of getting your static HTML from server and turning it into dynamic DOM that React can modify)
+- Browser parse HTML and JS loaded
+- React renders the tree and generates all the DOM nodes
 
 If you are trying to visit a react application that has a really large bundle on a slow connection, you might see a flash of white on the page
 
@@ -233,7 +233,7 @@ The HTML is generated at build time and is reused for each request.
 
 - Initial Load: Server serves initial HTML and that's displayed on the initial load which leads to faster TTFB
 - JS Loaded
-- Hydration: App is hydrated, React components are initialized and App becomes interactive (convert from static HTML to interactive HTML)
+- Hydration: App is hydrated, React components are initialized and App becomes interactive. [https://www.gatsbyjs.com/docs/conceptual/react-hydration/](https://www.gatsbyjs.com/docs/conceptual/react-hydration/)
 
 Pros:
 
@@ -265,7 +265,7 @@ The HTML output of React components gets generated on every request. This is use
 Pros:
 
 - This method is really good for SEO because bots get fully rendered HTML and they can easily interpret the content on the page.
-- First Paint, First Contentful Paint, Largest Contentful Paint benefit from this approach as it is very similar to static serving.
+- First Paint, First Contentful Paint, Largest Contentful Paint is fast as it is very similar to static serving.
 - The data is always fresh
 
 Const:
