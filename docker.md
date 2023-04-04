@@ -35,8 +35,9 @@ Docker container được chạy trong 1 isolated Docker network, nên ta phải
 Commands:
 
 - `docker ps`: list các container đang chạy
-- `docker ps -a`: list các container đang chạy và stop
-- `docker run -d -p {HOST_PORT}:{CONTAINER_PORT} {name}:{tag}`: run image, create new container và expose container port to host, `{HOST_PORT}` tùy chọn nhưng nên giống với `{CONTAINER_PORT}`, `{CONTAINER_PORT}` xem từ `docker ps`. `{CONTAINER_PORT}` bắt buộc phải chính xác
+- `docker ps -a`: list các container đang chạy và đang bị stop
+- `docker rm -f <id>`: remove container
+- `docker run -dp {HOST_PORT}:{CONTAINER_PORT} {name}:{tag}`: run image, create new container và expose container port to host, `{HOST_PORT}` tùy chọn nhưng nên giống với `{CONTAINER_PORT}`, `{CONTAINER_PORT}` xem từ `docker ps`. `{CONTAINER_PORT}` bắt buộc phải chính xác
 
 ### Image
 
@@ -89,9 +90,8 @@ CMD [ "npm", "start" ]    // Khi setup xong thì chạy lệnh
 
 Tạo 1 file `.dockerignore` để ignore `node_module`
 
-Để chạy docker file, dùng lệnh: `docker build -t <docker_image_name> .`. `-t` hay `--tag` là đánh tag cho docker image
+Để chạy Dockerfile, dùng lệnh: `docker build -t <docker_image_name> .`. `-t` hay `--tag` là đánh tag cho docker image
 Docker image name có thể là my_app:1.0. Sau khi build xong chạy `docker run` như trên để tạo ra container
-
 
 ## Commands
 
@@ -117,11 +117,68 @@ Update code
 - Re-build lại docker image: phải xóa docker image cũ đi rồi build lại cái mới dùng lệnh `docker build -t` ở trên
 - Stop và remove container hiện tại: dùng lệnh `docker rm -f <the-container-id>` hoặc dùng Dashboard
 
-## Docker compose file
+## Docker volume
 
-1 file `.yaml` chứa hướng dẫn để build ra *Docker Container*, dùng để chạy nhiều docker file cùng lúc
+Why: If your container has the feature to store user data in database, this data will be gone when you start another container from the same image. To make it persist, we use docker volume to store our data because docker volume is separated from docker container. This docker volume is store on host file. If you are using Docker desktop, its location is `\\wsl$\docker-desktop-data\data\docker\volumes` (<https://stackoverflow.com/questions/43181654/locating-data-volumes-in-docker-desktop-windows>)
 
-Để chạy file dùng lênh: `docker-compose -f <yaml_file> up`
+How:
+We create a volume, then mount that volume to the directory where we store db in container. When we run container, do something and update db, our volume will be synchronized. So, if we create another container using this volume, the db still remains and is ready to use.
+
+Commands: 
+
+```bash
+# First, create a volume
+docker volume create todo-db
+
+# Run the container using volume
+# `todo-db` is the name of volume
+# `etc/todos` is where container store the db, we set this location in the code
+docker run -dp 3000:3000 -v todo-db:/etc/todos getting-started
+```
+
+## Docker compose
+
+Why:
+
+- In practice, our app will have multiple containers, like: container for FE, container for BE, container for DB. We need these containers connect to each other.
+- Each container requires a single Dockerfile => hard to maintain.
+
+By using Docker compose, we set up all the docker containers in only one `.yml` file (set up name, volumes...)
+
+An example of `docker-compose.yml`
+
+```bash
+# Declare container
+services:
+  app:
+    image: node:18-alpine
+    command: sh -c "yarn install && yarn run dev"
+    ports:
+      - 3000:3000
+    working_dir: /app # similar to Dockerfile, after container created, cd to `/app` folder then run command above
+    volumes: 
+      - ./:/app # Mount the current folder on host machine to the `/app` folder in the container. So, when we modify codebase, the app in container is synchronized
+    environment: # environment variables
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: todos
+
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - todo-mysql-data:/var/lib/mysql # /var/lib/mysql is where MySQL stores data
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: todos
+
+# Define a volume name
+volumes:
+  todo-mysql-data:
+
+```
+
+After create docker-compose file, run this command: `docker compose up -d`
 
 ## Optimize docker image size
 

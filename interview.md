@@ -304,6 +304,9 @@ The difference happens when the `success` callback returns a **rejected promise*
 <https://blog.tusharcodes.tech/5-rules-to-master-this-in-javascript>
 <https://i.imgur.com/tUjhc3r.png>
 
+<https://unicorn-utterances.com/posts/javascript-bind-usage>
+By default, JavaScript looks at the class that uses the `this` keyword, not the class that creates the `this` keyword. Arrow function will bound `this` to original scope and cannot be modified (even if you use `bind`)
+
 - If the new keyword is used when calling the function, this inside the function is a all new empty object.
 - If apply, call, or bind is used, this inside the function is the object that is passed in as the argument.
 - If a function is called as a method this is the object that the function is a property of.
