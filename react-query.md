@@ -21,43 +21,44 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 // regular fetch with axios
 function App() {
-	const [isLoading, setLoading] = useState(false);
-	const [isError, setError] = useState(false);
-	const [data, setData] = useState({});
+ const [isLoading, setLoading] = useState(false);
+ const [isError, setError] = useState(false);
+ const [data, setData] = useState({});
 
-	useEffect(() => {
-		const fetchData = async () => {
-			setError(false);
-			setLoading(true);
+ useEffect(() => {
+  const fetchData = async () => {
+   setError(false);
+   setLoading(true);
 
-			try {
-				const response = await axios('http://swapi.dev/api/people/1/');
+   try {
+    const response = await axios('http://swapi.dev/api/people/1/');
 
-				setData(response.data);
-			} catch (error) {
-				setError(true);
-			}
-			setLoading(false);
-		};
-		fetchData();
-	}, []);
-	return (
-		<div className="App">
-			<h1>React Query example with Star Wars API</h1>
-			{isError && <div>Something went wrong ...</div>}
+    setData(response.data);
+   } catch (error) {
+    setError(true);
+   }
+   setLoading(false);
+  };
+  fetchData();
+ }, []);
+ return (
+  <div className="App">
+   <h1>React Query example with Star Wars API</h1>
+   {isError && <div>Something went wrong ...</div>}
 
-			{isLoading ? (
-				<div>Loading ...</div>
-			) : (
-				<pre>{JSON.stringify(data, null, 2)}</pre>
-			)}
-		</div>
-	);
+   {isLoading ? (
+    <div>Loading ...</div>
+   ) : (
+    <pre>{JSON.stringify(data, null, 2)}</pre>
+   )}
+  </div>
+ );
 }
 export default App;
 ```
 
 The code above has some problems:
+
 - It requires both `useState` and `useEffect` hooks and three different states for data, loading state and error.
 - Server data is not stored in your app and could be stale. You need to figure out a way for caching and invalidating that data.
 
@@ -105,6 +106,7 @@ Under the hood, it uses the user interactions as the hints to know when to updat
   - options(optional): Object
 - Output: Object
 ex:
+
 ```javascript
 export default function usePosts() {
   return useQuery('posts', () =>
@@ -130,26 +132,32 @@ export default function useCreatePost() {
 // createPostInfo is an object with isLoading, isError, isSuccess properties
 const [createPost, createPostInfo] = useCreatePost()
 ```
+
 - Options:
   - `onMutate`: function fires before `useMutation`. It's quite helpful when you want to run optimistic updates on local cache and update data for the UI before the mutation happens on the server (<https://tanstack.com/query/v4/docs/guides/optimistic-updates>)
   - `onSuccess`: function runs when the mutation is successfull. `queryClient.invalidateQueries` is often used here, so the data in another query is refetched in the background.
+
   ```javascript
   const mutation = useMutation(createPostArticle, {
-	  onSuccess: data => {
-	    queryClient.invalidateQueries('articles')
-	  },
-	})
+    onSuccess: data => {
+      queryClient.invalidateQueries('articles')
+    }
+  })
   ```
+
   If the query to invalidated is on the same page as the current query and you want to invalidate the other query asap, you could use `setQueryData`. This is optimistic update. However, in the end we still want to invalidate the query in `onSettled`
+
   ```js
-  onSuccess: (data) => {
-  		// data is the response from mutationFn. If response doesn't return it, you need to find another way to get the ID
-			queryClient.setQueryData(discussionKeys.all(), (previous: any) =>
-				previous.filter((d: Discussion) => d.id !== data.id)
-			);
-	}
+    onSuccess: (data) => {
+      // data is the response from mutationFn. If response doesn't return it, you need to find another way to get the ID
+    queryClient.setQueryData(discussionKeys.all(), (previous: any) =>
+      previous.filter((d: Discussion) => d.id !== data.id)
+    );
+  }
   ```
+
   If the query include a lot of params like a filters, your best bet is invalidate the whole query without any subkeys <https://tkdodo.eu/blog/effective-react-query-keys>
+
   ```js
   const { filters } = useFilterParams()
 
@@ -170,15 +178,17 @@ const [createPost, createPostInfo] = useCreatePost()
     },
   })
   ```
+
   - `onError`: fires when the mutation encounters an error
 
 ### useQueryClient
 
 This hook return the queryClient instance. This instance helps a lot with caching
-```javascript
- import { useQueryClient } from 'react-query'
 
- const queryClient = useQueryClient()
+```javascript
+import { useQueryClient } from 'react-query'
+
+const queryClient = useQueryClient()
 ```
 
 - ***inValidateQueries***: mark a query as stale and potentially refetch them.
@@ -196,14 +206,15 @@ export default function useCreatePost() {
 }
 ```
 
-## Parallel queries:
+## Parallel queries
 
 Excute mutiple queries simultaneously. It accepts an array of query options object - like `useQuery` hook - to return an array of query result.
+
   ```javascript
-	const results = useQueries([
-	  { queryKey: ['article', 1], queryFn: createFetchArticle },
-	  { queryKey: ['article', 2], queryFn: createFetchArticle },
-	])
+ const results = useQueries([
+   { queryKey: ['article', 1], queryFn: createFetchArticle },
+   { queryKey: ['article', 2], queryFn: createFetchArticle },
+ ])
   ```
 
 ## Dependent queries
@@ -252,10 +263,10 @@ function Todos() {
 
 If you want to show a loading spinner, use `isInitialLoading` rather than `isLoading`
 
-
 ## Paginated query
 
 You just need to pass the page number to the `queryKey` array and use `keepPreviousData` option in the `useQuery` hook. Afterward, when you jump between pages, you get cache data from the first one with new data loading in the background. The UI won't reload when you come back to the previous page when the data is the same.
+
 ```javascript
 const query = useQuery(['articles', page], () => createFetchArticles(page), { keepPreviousData : true })
 ```
@@ -316,7 +327,6 @@ useQuery(['todos', todoId], async () => {
 })
 ```
 
-
 ## React Query and React Router
 
 React Router will unmount your component when you navigate away from it
@@ -336,3 +346,12 @@ Cases: you have a load more button to fetch more posts. The posts here need to b
 
 First, you have to put `useEffect` and `useState` above the conditional checks (`isLoading` and `isError`).
 Then, The data get from `useQuery` have to be an dependency of `useEffect`. Inside the `useEffect` block, there should be a check for undefined `useQuery` data.
+
+## Hydration and Dehydration with NextJS
+
+<https://prateeksurana.me/blog/mastering-data-fetching-with-react-query-and-next-js/>
+
+- Dehydration refers to creating a frozen representation of the cache. This can be later hydrated on the browser with React Query's hydrate methods. This is useful if you want to store the cache for later use, for instance in localstorage or in our case sending the cache from server to client.
+- Hydration lets you add any previously dehydrated state to the cache on a QueryClient instance with the full functionality of the library when the app is rendering on the browser.
+
+React Query lets you fetch any number of queries you want during any of the Next.js pre-rendering steps and then dehydrate those queries. This allows you to pre-render your markup that will be available with all the data on page load and once the page renders on the client, React Query will hydrate those dehydrated queries with the full functionality of the library.
