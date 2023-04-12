@@ -1229,3 +1229,9 @@ paragraph.children;   // HTMLCollection: [HTMLElement]
 ```
 
 `paragraph.children` returns elements only. Text node wasn't included here because its type is text (Node.TEXT_NODE), and not an element (Node.ELEMENT_NODE).
+
+## `clientHeight`, `scrollY`, `scrollHeight` and more
+
+- `clientHeight`: returns element height + padding. `document.documentElement.clientHeight` returns the viewport height
+- `scrollY`: `window.scrollY` returns how long the scrollbar has scroll
+- `scrollHeight`: returns element content height. `document.documentElement.scrollHeight` returns the height of the whole document. `scrollHeight` > `clientHeight`
