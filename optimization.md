@@ -62,11 +62,17 @@ Trong trường hợp phải dùng icon font thì phải optimize dùng `icomoon
 
 ## CSS
 
-Only preload non-critcal CSS
+<https://pagespeedchecklist.com/eliminate-render-blocking-resources>
+
+- Load critcal CSS asap
+- Load non-critical CSS asynchronously
 
 ```html
 <head>
 <!-- other <head> stuff like critical CSS -->
+
+<!-- very small file for critical CSS (or optionally inlined with a <style> block) -->
+<link rel="stylesheet" href="critical.css">
 
 <!-- optionally increase loading priority -->
 <link rel="preload" as="style" href="non-critical.css">
@@ -74,6 +80,17 @@ Only preload non-critcal CSS
 <!-- core asynchronous functionality -->
 <link rel="stylesheet" media="print" onload="this.onload=null;this.removeAttribute('media');" href="non-critical.css">
 </head>
+```
+
+## JS
+
+Put JS in the `head` and use `defer` to download the scripts in the background and execute later
+
+Optimize Google Analytics
+
+```html
+<script defer src="anylytic-script.js"></script> <!-- contains formerly-inline snippet -->
+<script defer src="https://www.google-analytics.com/analytics.js"></script>
 ```
 
 ## Core web vitals
@@ -97,3 +114,7 @@ Slider ở đầu sẽ ảnh hưởng đến `CLS`. Ta có thể ẩn các slide
 1 số slider nhẹ: keen slider, glider.js
 
 Nếu slide của slider có text thì nên cố định chiều cao cho slide để nó không bị dịch chuyển (dùng `height` nếu có thể). Nếu có ảnh và overlay thì có áp dụng phương pháp `display: grid` thay cho `position absolute`
+
+## Lazy load youtube iframe
+
+<https://pagespeedchecklist.com/on-demand-embedded-videos>

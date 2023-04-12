@@ -1139,6 +1139,17 @@ If you don't have a responsive mobile website, and you open it on a small screen
 <https://www.youtube.com/watch?v=6q75MVFLlok>
 <https://blog.dareboost.com/en/2020/05/preload-prefetch-preconnect-resource-hints/>
 
+TLDR:
+
+- `dns-prefetch` & `preconnect` are for high priority but indirectly-called third-party domains like CDNs or external plugins.
+- `preload` is for high priority but indirectly-called files like above-the-fold CSS background images.
+- `prefetch` is for low priority files very likely needed soon, like HTML, CSS or images used on subsequent pages.
+
+- `dns-prefetch` & `preconnect` reference just the domain name, like 'https://example.com', whereas preload and prefetch reference a specific file, like header-logo.svg. `prerender` references an entire page, like blog.html.
+- `dns-prefetch` & `preconnect` should also be used sparingly as some web browsers may limit the number of preemptive connections.
+- Both `prefetch` and `prerender` should be used with care to avoid downloading files that aren't used, which can be costly on mobile networks. Avoid using `prefetch` and `prerender` unless files are certain to be used later or extra data download isn't an issue.
+- Resource hints for font files (even when self-hosted) and CORS enabled resources will also need the crossorigin attribute: `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`
+
 Mặc định browser parse HTML tải các resoureces theo thứ tự được khai báo trong HTML. Tuy nhiên, với 1 số resource quan trọng cần độ ưu tiên cao hơn, ta có thể sử dụng resource hint cho điều chỉnh lại thứ tự này và yêu cầu browser load chúng nhanh nhất có thể
 
 Trước khi trình duyệt lấy được dữ liệu từ server, nó sẽ phải trải qua 3 bước cơ bản như sau:
@@ -1157,7 +1168,7 @@ Trong từng bước trên trình duyệt gửi một phần dữ liệu tới m
 
 <https://indepth.dev/posts/1498/101-javascript-critical-rendering-path>
 
-`preload` yêu cầu browser download tài nguyên và cache càng sớm càng tốt. Dùng cho các resource cần load ngay sau khi render page (e.g font vì browser cần display text ngay khi sau khi render tree).
+`preload` yêu cầu browser download tài nguyên và cache càng sớm càng tốt. Dùng cho các resource cần load ngay sau khi render page (e.g font vì browser cần display text ngay khi sau khi render tree hoặc hero image).
 
 The HTML attribute crossorigin defines how to handle crossorigin requests. Setting the crossorigin attribute (equivalent to crossorigin="anonymous") will switch the request to a CORS request using the same-origin policy. **It is required on the rel="preload" as font requests require same-origin policy.**
 
