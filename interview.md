@@ -202,6 +202,7 @@ Parent component has a button to unmount the child component. Inside child compo
 To fix the problem, we have two methods:
 
 - Ignore the `setState` by using a variable to store the mounted state. The request is still resolved but, it won't make any `setState` to unmounted component.
+
 ```js
 useEffect(() => {
     let mounted = true;
@@ -216,7 +217,9 @@ useEffect(() => {
     }
 }, [name])
 ```
+
 - Cancel the request inside `useEffect` using `AbortController`
+
 ```js
 useEffect(() => {
   // create controller here
@@ -273,6 +276,7 @@ Khi 1 component bất kì có props key, khi key này bị thay đổi thì comp
 API là các phương thức (functions, protocols) giúp cho ứng dụng A có thể tương tác với ứng dụng B mà không cần quan tâm ứng dụng B được thực hiện thế nào
 
 VD:
+
 - ứng dụng B cung cấp 1 hàm tính tổng cho ứng dụng A.
 - React cung cấp hàm `useState` để ltv sử dụng
 - Backend xây dựng API để Frontend sử dụng để lấy data
@@ -406,6 +410,7 @@ Ví dụ event scroll với 1 event listener .on('scroll') và hàm f, trong đi
 
 **Using Lodash debounce**
 <https://www.carlrippon.com/using-lodash-debounce-with-react-and-ts/>
+
 ```jsx
 const debouncedSearch = debounce(async (criteria) => {
   setCharacters(await search(criteria));
@@ -430,9 +435,10 @@ Thay đổi:
 - PATCH: fix bugs
 
 Range version:
-- `"library-x" : "*" ` => latest
-- `"library-x" : "~1.2.3" ` => include all patch and minor versions from the ones specified up to, but not including the next minor version: 1.2.3 <= x < 1.3.0
-- `"library-x" : "^1.2.3" ` => include all patch and minor versions from the ones specified up to, but not including the next major version: 1.2.3 <= x <2.0.0
+
+- `"library-x" : "*"` => latest
+- `"library-x" : "~1.2.3"` => include all patch and minor versions from the ones specified up to, but not including the next minor version: 1.2.3 <= x < 1.3.0
+- `"library-x" : "^1.2.3"` => include all patch and minor versions from the ones specified up to, but not including the next major version: 1.2.3 <= x <2.0.0
 
 ## `target` and `currentTarget`
 
@@ -623,19 +629,19 @@ Cùng origin: cùng scheme, domain và port
 
 - Cùng scheme và cùng domain
 
-http://example.com/app1/index.html
-http://example.com/app2/index.html
+<http://example.com/app1/index.html>
+<http://example.com/app2/index.html>
 
 - Port 80 by default
 
-http://Example.com:80
-http://example.com
+<http://Example.com:80>
+<http://example.com>
 
 Khác origin:
 
 - Khác schemes
-http://example.com/app1
-https://example.com/app2
+<http://example.com/app1>
+<https://example.com/app2>
 
 Để server có thể cho phép client gửi cross-origin request, server đó phải set giá trị cho 1 header có tên là `Access-Control-Allow-Origin` và giá trị đó là origin của client.
 
@@ -674,6 +680,7 @@ https://example.com/app2
   - Bên trong hàm đó có thể tiếp cận được các biến được định nghĩa trong hàm cũng như ở outer scope.
 - Closure: là 1 hàm mà có thể nhớ được (capture, remember) các biến bên ngoài lexical scope mà không cần quan tâm là nó được thực thi ở đâu (The closure is a function that remembers the variables from the outer scope, no matter where it is excuted)
 - Đặc điểm nhận dạng closure: trong hàm có 1 biến và biến này không được khai báo trong hàm đó
+
 ```javascript
 function outerFunc() {
   let outerVar = 'I am outside!';
@@ -783,6 +790,7 @@ Có 3 loại scope: `global scope`, `local scope` (function) và `block scope` (
 
 - iterate over enumerable properties of an object. enumerable properties are the "key" of the property the Object or "index" of the Array.
 If the propery is defined with the `enumerable` false, it is not interated
+
 ```javascript
 Object.defineProperty(obj, 'flameWarTopic', {
     value: 'Angular2 vs ReactJS',
@@ -791,6 +799,7 @@ Object.defineProperty(obj, 'flameWarTopic', {
     enumerable: false
 });
 ```
+
 - can be used with String, Array, or simple Object.
 - cannot be used with Object like Map() or Set();
 
@@ -803,6 +812,7 @@ Object.defineProperty(obj, 'flameWarTopic', {
 ## Hiểu gì về async, await, promise, so sánh
 
 `Promise`:
+
 - Là 1 object bọc lấy kết quả trả về của 1 asynchronous function.
 - Có 3 trạng thái:
   - pending: trạng thái mặc định khi mới tạo Promise.
@@ -810,6 +820,7 @@ Object.defineProperty(obj, 'flameWarTopic', {
   - rejected: trạng thái khi asynchronous function bên trong resolve,
 
 **Converting a setTimeout into a promisified `delay` function**
+
 ```ts
 const delay = (ms: number) => new Promise( res => setTimeout(res, ms))
 const delay = (ms: number) => new Promise( res => setTimeout(res, ms, 'some value')) // If you want to send some value
@@ -820,6 +831,7 @@ const delay = (ms: number) => new Promise( res => setTimeout(res, ms, 'some valu
 `await` chỉ có thể dùng trong `async function`
 `await` đặt trước 1 `Promise` hoặc 1 `value`. Nếu là 1 `value` thì `value` này sẽ được convert thành 1 promise thông qua `Promise.resolve(value)`
 `await` sẽ pause `async function` và chờ cho `Promise` `reject` hoặc `resolve`.
+
 - Nếu `reject` thì `await` throw 1 error.
 - Nếu `resolve` thì `await` trả về kết quả resolve
 
@@ -837,6 +849,7 @@ const delay = (ms: number) => new Promise( res => setTimeout(res, ms, 'some valu
 - export default:
   - `export default ChildComponent`: chỉ 1 có 1 default export duy nhất. Khi import ta chỉ cần viết `import ChildComponent from './abc.js'`
   - `export * from` hay còn gọi là re-export: `export {default} from './abc.js'`. Kĩ thuật này được sử dụng để gom các export từ các child component và export lại 1 lần nữa.  `*` ở đây là 1 object, chứa tất cả các export từ `./abc.js`, kể cả export thường lẫn export default. `{default}` là object destructure. `export * from` tương đương với `import * from` kết hợp với `export *`. Khi có nhiều child component cần re-export thì mình có thể viết như sau
+
   ```js
   export {default as a} from './a.js' // tương đương với import {default as a} from './a.js' và export a
   export {default as c} from './c.js'
@@ -887,9 +900,10 @@ console.log(info);
 - First Input Delay (FID): the time from when a user first interacts with a page to the time when the browser is actually able to respond to that interaction.
 - Total Blocking Time (TTB): total amount of time between First Contentful Paint (FCP) and Time to Interactive (TTI) where the main thread was blocked for long enough to prevent input responsiveness.
 
-## Obtimize speed:
+## Obtimize speed
 
 <https://towardsdev.com/website-performance-optimization-267b28b877df>
+
 - TTFB: <https://searchfacts.com/reduce-ttfb/>
   - Fast web hosting
   - Keep the server close to users
@@ -909,6 +923,7 @@ console.log(info);
 The critical rendering path includes the Document Object Model (DOM), CSS Object Model (CSSOM), Render tree, Layout, and Paint.
 The document object model is created as the HTML is parsed. The HTML may request JavaScript, which may, in turn, alter the DOM. The HTML includes or makes requests for styles, which in turn builds the CSS object model. The browser engine combines the two to create the Render Tree. Layout determines the size and location of everything on the page. Once the layout is determined, pixels are painted to the screen.
 Optimizing the critical render path improves render performance. Performance tips include:
+
 - Minimizing the number of critical resources by deferring their download ( defer attribute), marking them as async (async attribute), or eliminating them altogether.
 - Optimizing the number of requests required along with the file size of each request.
 - Optimizing the order in which critical resources are loaded by prioritizing the downloading critical assets, shorten the critical path length.
@@ -931,6 +946,7 @@ When variable declared with `let` and `const`, it returns `ReferenceError`
 ## Hoisting
 
 It's the process that stores functions and variables in the memory before executing any code (creation phase);
+
 - Functions are stored with the entire function. That's why you can invoke them before the line we declare them
 - Variables is different.
   - Variables with the `var` keyword are stored with the value of `undefined`
@@ -974,7 +990,6 @@ void 0 === undefined
 void function() {} === undefined
 ```
 
-
 ## prefers-color-scheme
 
 Đây là 1 tính năng của CSS `@media` để check xem thiết bị của bạn (máy tính hoặc điện thoại) đang sử dụng dark theme hay light theme
@@ -1006,9 +1021,9 @@ const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-schem
      sizes="(max-width: 400px) 100vw, (max-width: 700px) 50vw, (max-width: 900px) 33vw, 225px">
 ```
 
-First, we need to calculate the image size. For example, if the viewport < 400px, let's say 350px, the image size will be 100vw, which is 350px. Then, the browser will use this image https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350
+First, we need to calculate the image size. For example, if the viewport < 400px, let's say 350px, the image size will be 100vw, which is 350px. Then, the browser will use this image <https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350>
 
-If the viewport is 650px, the image size will be 325px, and the browser use https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350, which is the closest one
+If the viewport is 650px, the image size will be 325px, and the browser use <https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350>, which is the closest one
 
 ## fr in grid
 
@@ -1016,37 +1031,49 @@ If the viewport is 650px, the image size will be 325px, and the browser use http
 
 <https://moderncss.dev/practical-uses-of-css-math-functions-calc-clamp-min-max/>
 <https://ishadeed.com/article/css-min-max-clamp/>
+
 - `min(value1, value2)`: thiết lập giá trị max cho selector (giống max-width). Nó sẽ chọn ra giá trị nhỏ nhất giữa value 1 và value 2 tùy theo viewport width. Thứ tự value không quan trọng. VD:
+
 ```css
 width: min(80ch, 100% - 2rem) // Ở màn hình nhỏ hơn thì 100% - 2rem < 80ch nên width = 100% - 2rem nhưng ở màn hình lớn hơn khi mà 100% - 2rem > 80ch thì width = 80ch;
 ```
+
   CSS trên sẽ tương đương với
+
 ```css
   width: 100% - 2rem;
   max-width: 80ch
 ```
+
 - `max(value, value)`: ngược lại với min(), thiết lập giá trị nhỏ nhất cho selector (giống min-width) . VD: disable zoom trên safari khi focus vào input
+
 ```CSS
 input {
   font-size: max(16px, 1rem);
 }
 ```
+
 - `clamp(min, value, max)`: thứ tự các giá trị cũng không quan trọng. Thường dùng để làm responsive cho font-size.
+
 ```CSS
 p {
   font-size: clamp(2rem, 5vw, 5rem)
 }
 ```
+
 `font-size` sẽ được tính theo vw. 5vw là 5% width của view. Nếu `value` nằm giữa `2rem` và `5rem` thì `font-size` là 5vw. Nếu `value` < `2rem` thì trả về `2rem`, nếu > `5rem` thì trả về `5rem`.
 1 lưu ý là nếu chỉ dùng 5vw thì font-size sẽ bị fix theo vw và trên mobile có thể bị bé. Khi dùng `clamp`, giá trị min của font-size sẽ luôn là 2rem
 Cần chú ý là khi zoom thì font size sẽ không bị thay đổi vì nó phụ thuộc vào vw. Có thể sửa lại dùng rem vì rem thay đổi theo zoom
 => có thể thay đổi thành:
+
 ```CSS
 p {
   font-size: clamp(2rem, 1rem + 2vw, 5rem);
 }
 ```
+
 Chỉnh padding cho section hero:
+
 ```CSS
 .hero {
   padding: clamp(2rem, 15vmax, 15rem) 1rem;
@@ -1097,7 +1124,6 @@ const params = new URLSearchParams({
 params.set('page', 2)
 params.toString()
 ```
-
 
 ## Create text on image with an overlay
 
@@ -1180,3 +1206,26 @@ Không nên lạm dụng resource hint vì chúng vẫn làm tiêu tốn tài ng
 
 <https://wanago.io/2022/04/11/abort-controller-race-conditions-react>
 A race condition is when your application have a sequence of events and their order is uncontrollable. This might occur with asynchronous
+
+## Node and element
+
+<https://stackoverflow.com/questions/9979172/difference-between-node-object-and-element-object>
+<https://dmitripavlutin.com/dom-node-element/>
+
+- Node is DOM object. DOM document consists of a hierarchy of nodes. Each node can have a parent and/or children.
+- There are many types of nodes (ELEMENT_NODE, TEXT_NODE, etc...). Node.ELEMENT_NODE represents an element node so DOM Element is one specific type of node (ELEMENT_NODE).
+- `Nodelist` is array-like list of nodes
+
+```html
+<p>
+  <b>Thank you</b> for visiting my web page!
+</p>
+```
+
+```js
+const paragraph = document.querySelector('p');
+paragraph.childNodes; // NodeList:       [HTMLElement, Text]
+paragraph.children;   // HTMLCollection: [HTMLElement]
+```
+
+`paragraph.children` returns elements only. Text node wasn't included here because its type is text (Node.TEXT_NODE), and not an element (Node.ELEMENT_NODE).
