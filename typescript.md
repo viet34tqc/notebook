@@ -531,6 +531,39 @@ if(isAvailable(orders)) {
 ## `any` and `unknown`
 
 <https://thewebdev.info/2020/08/12/typescript-any-and-unknown-types/>
+<https://dev.to/arafat4693/5-mistakes-that-every-typescript-deverloper-should-avoid-33b>
+
+When we use `any`, we are telling TS to ignore type of the value
+
+On the other hand, using the `unknown` type tells the compiler that the type of a value is not known at the point where it is being declared, but that type will be checked at runtime. This allows the compiler to catch type-related errors at development time, while still allowing you to use the value in a type-safe way.
+
+**You can assign anything to an unknown type, but you have to do a type check to operate on unknown**
+
+```ts
+function myFunction(fn: any) {
+  fn();
+}
+
+invokeAnything(1); // this line won't trigger type error but it will throws runtime errors
+
+function myFunction(fn: unknown) {
+  fn(); // triggers a type error
+}
+
+invokeAnything(1);
+```
+
+So, to get rid of this problem you can perform type checking before using a variable of type `unknown`. In the example, you would need to check if `fn` is a function type:
+
+```ts
+function myFunction(fn: unknown) {
+  if (typeof fn === 'function') {
+    fn(); // no type error
+  }
+}
+
+invokeAnything(1);
+```
 
 ### `any`
 
@@ -556,6 +589,11 @@ function func(value: unknown) {
   return (value as number).toFixed(2);
 }
 ```
+
+## Type guard
+
+<https://dev.to/arafat4693/5-mistakes-that-every-typescript-deverloper-should-avoid-33b>
+In TypeScript, a type guard is a way to narrow the type of a variable within a conditional block
 
 ## Overload functions
 

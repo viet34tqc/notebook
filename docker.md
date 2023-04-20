@@ -16,9 +16,7 @@ Giải quyết vấn đề triển khai code. Ví dụ có 2 máy khác nhau v�
 
 Docker sẽ đóng gói ứng dụng vào 1 container, các môi trường có thể dùng chung container hoặc có container riêng của môi trường đó, khi deploy ta chỉ cần run docker container đấy là mọi thứ sẽ được setup chứ không còn phải setup từ đầu nữa 
 
-## Các thuật ngữ
-
-### Container
+## Container
 
 Tưởng tượng nó như 1 cái hộp, trong đấy chứa tất cả các hệ điều hành, database, và cả code của mình. Mình có thể dễ dàng quản lý, di chuyển, share cái container này.
 
@@ -39,7 +37,7 @@ Commands:
 - `docker rm -f <id>`: remove container
 - `docker run -dp {HOST_PORT}:{CONTAINER_PORT} {name}:{tag}`: run image, create new container và expose container port to host, `{HOST_PORT}` tùy chọn nhưng nên giống với `{CONTAINER_PORT}`, `{CONTAINER_PORT}` xem từ `docker ps`. `{CONTAINER_PORT}` bắt buộc phải chính xác
 
-### Image
+## Image
 
 Là 1 snapshot (giống file ghost) mà khi run snapshot này sẽ cho ra *Container*, hay nói cách khác là tái tạo lại môi trường. Có thể hiểu Docker Image như là class và container như là instance của class đó. Vậy Image này lấy từ đâu?
 
@@ -54,7 +52,7 @@ Commands:
 - `docker run -d {name}:{tag}`: `-d` means detach, which means docker runs in the background without block terminal
 - `docker run -d --name {container_name} {name}:{tag}`: thêm tên cho container cho dễ nhớ
 
-### Dockerfile
+## Dockerfile
 
 Chứa hướng dẫn để setup môi trường và build ra *Docker Image*
 
@@ -71,7 +69,7 @@ Commands:
 - `CMD`: chạy command này khi Docker container start. Chỉ có 1 `CMD` trong 1 Dockerfile
 
 ```code
-FROM node:12              // Download node image về
+FROM node:18-alpine              // Download node image về
 
 WORKDIR /app              // CD đến thư mục app
 
@@ -80,8 +78,6 @@ COPY package*.json ./     // Copy các file package*.json vào thư mục app. N
 RUN npm install           // Nếu dùng yarn thì chạy yarn install
 
 COPY . .                  // Copy tất cả code trong repo vào thư mục app. Nhớ tạo file .dockerignore để ignore node_module
-
-ENV PORT=8080
 
 EXPOSE 8080
 
@@ -92,6 +88,7 @@ Tạo 1 file `.dockerignore` để ignore `node_module`
 
 Để chạy Dockerfile, dùng lệnh: `docker build -t <docker_image_name> .`. `-t` hay `--tag` là đánh tag cho docker image
 Docker image name có thể là my_app:1.0. Sau khi build xong chạy `docker run` như trên để tạo ra container
+
 
 ## Commands
 
@@ -179,6 +176,12 @@ volumes:
 ```
 
 After create docker-compose file, run this command: `docker compose up -d`
+
+## Doker ARG, ENV and .env
+
+[https://vsupalov.com/docker-arg-env-variable-guide/](https://vsupalov.com/docker-arg-env-variable-guide/)
+
+
 
 ## Optimize docker image size
 

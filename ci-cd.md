@@ -6,9 +6,11 @@
 
 ## What is CI/CD
 
-It's the process of building, testing, deploying new code to production automatically. This process is called workflow or CI/CD pipeline
+It's the process of building, testing, deploying new code to server automatically. This process is called workflow or CI/CD pipeline
 
 A common workflow is when you commit your code, the workflow starts. It tests your code, builds it into an artifact (build artifact: which are files created by a build process), pushes the artifacts in some storage and then deploys the application on an server
+
+In practical, CI deploys code to Testing environments. Continuous delivery deploys code to Staging and Continuous Deployment deploys code to Production. However, Continuous Deployment is hard to implement because production enviroment is user's environment, so we still need to check and deploy manually.
 
 There are many CI/CD tools on the market but if you are using github for hosting your code you can use Github Actions to implement these kind of workflow.
 
