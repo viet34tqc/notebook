@@ -33,17 +33,21 @@ git merge master
 
 ## Rebase
 
+<https://www.freecodecamp.org/news/how-to-use-git-rebase>
+
 If you prefer the project's histoy as a straight line, without such automatic merge commit, you can think of using rebase.
 Let's say, you want to integrate the changes from `branch B` into `branch A`.
+
 - First, `branch A` will temporarily save all the latest commit on `branch A` that happened after the branching out point. It's like git stash
 - Next, it applies all commits from `branch B` that we want to integrate. At this point, `branch A` and B look exactly the same
 - Final, the new commits on `branch A` are reapplied - but on another position, on top of the integrated commits from `branch B` (they are re-based)
-In result, you will have a straight line history for your project. However, rebase has a pitfall: **it rewrites the history**.
-As you can see from the example above, the newest commits on `branch A` has the new parent commit. Their history has changed. So, another developer working on the latest commit on `branch A` might got trouble
 
-**NOTE**
-Do not use rebase on shared branch on remote repository (ex: *master*)
-You should use rebase only for cleaning up your local work (like your *feature* branch) then merge it into shared team branch
+In result, you will have a straight line history for your project. However, rebase has a pitfall: **it rewrites the history**.
+As you can see from the example above, the newest commits on `branch A` has the new parent commit. **It's like branch A is branching from newest commit from branch B**, not from the old commit of branch B anymore => Branch A's history has changed. So, another developer working on the latest commit on `branch A` might got trouble
+
+**REBASE BEST PRACTICE**
+- Do not use rebase on shared branch on remote repository (ex: *master*). You should use rebase only for cleaning up your local work (like your *feature* branch) then merge it into shared team branch
+- Regularly fetch and rebase your local branches to stay up-to-date with the main branch. Conflicts become messy! Rebase early and often.
 
 Command:
 ```bash
@@ -66,9 +70,17 @@ Before we rebase `master` on to `dev`, we might want to modify the commit on `de
 <https://www.freecodecamp.org/news/resolve-merge-conflicts-in-git-a-practical-guide/>
 
 When Git cannot perform an auto-merge because changes are in the same region, it indicates the conflicting regions with special characters. The character sequences are like this:
+
 ```
 <<<<<<<
 =======
 >>>>>>>
 ```
+
+There is a different between rebase and merge when there is conflict
+
+- Merge conflict
+
 Everything between `<<<<<<<` and `=======` are your local changes. These changes are not in the remote repository yet. All the lines between `=======` and `>>>>>>>` are the changes from the remote repository or another branch
+
+- Rebase conflict is opposite to rebase: Code in `<<<<<<<` and `=======` comes from other branch. The current changes on your local branch is pushed down

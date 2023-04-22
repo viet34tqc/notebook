@@ -52,7 +52,7 @@ const doSomethingElse = () => Promise.resolve('world')
 doSomething().then(doSomethingElse()).then((c) => {console.log('c', c)}) // c return hello
 ```
 
-If we the callback return a resolved promise instead of a value, the next then will take that resolved value as the input
+If the callback returns a resolved promise instead of a value, the next then will take that resolved value as the input
 
 ```js
 doSomething().then(doSomethingElse).then((d) => {console.log('d', d)}) // d is world
@@ -105,6 +105,8 @@ function foo() {
 
 If you do return a promise for a value from within an async function, you will receive a promise for the value (not a promise for a promise for the value).
 
+<https://www.youtube.com/watch?v=zT0k4w_K4uM>
+
 ```js
 function newPromise() {
   return Promise.resolve(2);
@@ -112,11 +114,11 @@ function newPromise() {
 
 async function secondPromise() {
   // It doesn't matter whether you put an `await` here.
-  return await newPromise();
+  return newPromise();
 }
 
 async function run() {
-  console.log(secondPromise());
+  console.log(secondPromise()); // secondPromise returns Promise<Promise<number>> that is flatted into Promise<number> 
   const rs = await secondPromise();
 }
 ```
@@ -138,6 +140,7 @@ const value = await expression;
 - If fulfilled, it resumes the `async` function execution and **return the value of the fulfilled Promise**
 
 You can catch the error right after await, without using `try...catch`
+
 ```js
 const value = await expression.catch((e) => {})
 ```
