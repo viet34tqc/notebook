@@ -10,7 +10,7 @@ const appearOptions = {
 	rootMargin: '0px 0px -250px 0px',
 };
 
-const appearOnScroll = new IntersectionObserver(function (entries, observer) {
+const observer = new IntersectionObserver(function (entries, observer) {
 	entries.forEach((entry) => {
 		if (!entry.isIntersecting) {
 			return;
@@ -24,10 +24,12 @@ const appearOnScroll = new IntersectionObserver(function (entries, observer) {
 
 ## Step 2: Tageting the element to be observered
 
+Observer has a method `observe`. We use this method to observe the element we want
+
 ```javascript
 const sliders = document.querySelectorAll('.slide-in');
 
 sliders.forEach((slider) => {
-	appearOnScroll.observe(slider);
+	observer.observe(slider);
 });
 ```

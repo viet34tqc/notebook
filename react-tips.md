@@ -4,6 +4,7 @@
 
 <https://alexsidorenko.com/blog/onclick-too-many-re-renders/>
 It could lead to infinite loop. Update the state like this is the same as calling the callback function inside click handler
+
 ```jsx
 <button onClick={setState(count + 1)}>Click</button> /*DONT do that*/
 ```
@@ -18,6 +19,32 @@ When we use props as initial state, that state won't react to props update. The 
 ## Working with form inputs
 
 <https://www.joshwcomeau.com/react/data-binding/>
+
+```js
+ const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
+ 
+  const onInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+ 
+  return (
+    <form>
+      <label>
+        First name:
+        <input
+          type="text"
+          name="firstName"
+          value={formData.firstName}
+          onChange={onInputChange}
+        />
+      </label>
+      ...
+```
 
 ## Set empty string as initial value for input text and textarea
 

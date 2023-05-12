@@ -10,6 +10,7 @@
 ## Merge:
 
 There are two cases of merge:
+
 - fast-foward
 This is the simpler one. One of the two branches, let's say it is `branch A`, doesn't have any new commits since the branching happened.
 In this case, performing the integration is dead simple: Git adds all the commits of the other branch (`branch B`) on top of the `branch A`. This is 'fast-foward' merge. Both branch has exact the same history.
@@ -19,12 +20,15 @@ Normally, however, both branches move foward individually.
 To make an integration, Git will have to create a new commit that contains all the changes between them - the merge commit. Instead of being created by a developer, this commit is created automatically by Git.
 
 Command:
+
 ```bash
 git checkout feature
-// Pull the latest commit from master and merge into feature branch
+#Pull the latest commit from master and merge into feature branch
 git pull origin master:master
 ```
+
 equal to
+
 ```bash
 git checkout feature
 git fetch origin master:master
@@ -46,10 +50,12 @@ In result, you will have a straight line history for your project. However, reba
 As you can see from the example above, the newest commits on `branch A` has the new parent commit. **It's like branch A is branching from newest commit from branch B**, not from the old commit of branch B anymore => Branch A's history has changed. So, another developer working on the latest commit on `branch A` might got trouble
 
 **REBASE BEST PRACTICE**
+
 - Do not use rebase on shared branch on remote repository (ex: *master*). You should use rebase only for cleaning up your local work (like your *feature* branch) then merge it into shared team branch
 - Regularly fetch and rebase your local branches to stay up-to-date with the main branch. Conflicts become messy! Rebase early and often.
 
 Command:
+
 ```bash
 git checkout feature
 git pull --rebase master
@@ -57,9 +63,22 @@ git pull --rebase master
 
 Git workflow
 
+```bash	
+git checkout {remote target branch}
+git pull
+git checkout {my feature branch}
+git rebase {remote target branch}
+```
+
 <https://www.youtube.com/watch?v=vQgcl8VouLU>
 
 Rebase `feature` onto the tip of `master` then merge `feature` into `master`
+
+### How to write commit
+
+`git commit -am "WIP: something".`
+
+WIP: Work In Progress - used to describe a project or task that is currently being worked on, but it not yet completed.
 
 ### Interactive rebase
 
@@ -77,7 +96,7 @@ When Git cannot perform an auto-merge because changes are in the same region, it
 >>>>>>>
 ```
 
-There is a different between rebase and merge when there is conflict
+There is a difference between rebase and merge when conflict appears
 
 - Merge conflict
 

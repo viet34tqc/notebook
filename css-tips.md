@@ -56,6 +56,13 @@ form:has(option[value="other"]:checked) .other-field {
 }
 ```
 
+## Height with transition
+
+<https://www.youtube.com/watch?v=B_n4YONte5A>
+
+- Use `flex-direction: column` for wrapper and `flex-basis: 0` for item
+- Use `grid-template-rows: 0`
+
 ## Force wrap to a new line using `flex-basis`
 
 <https://ishadeed.com/article/conditional-css/>

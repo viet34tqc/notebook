@@ -5,6 +5,7 @@
 ## Component Props
 
 You can declare Component props with an interface like this:
+
 ```typescript
 interface InputProps {
 	text: string; // this prop is required and its type is string
@@ -14,6 +15,7 @@ interface InputProps {
 }
 ```
 And use it like this:
+
 ```typescript
 const TextField = ({ text, handleChange }: InputProps) => {}
 ```

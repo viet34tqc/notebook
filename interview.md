@@ -26,6 +26,8 @@
 
 <https://blog.isquaredsoftware.com/2021/01/context-redux-differences/>
 
+Redux is like multiple React Context
+
 React Context doesn't manage any state at all. When we use Context, we manage the state via React hooks `useState` and `useReducer`. The only purpose of React Context is to avoid **prop-drilling**
 
 Context + `useReducer` relies on passing *the current state value via Context*. React-Redux passes *the current Redux store* instance via Context.
@@ -48,6 +50,29 @@ In react, it's a variable which whenever it updates, it will trigger a re-render
 - Each render is a snapshot, like a photo taken by a camera, that shows what the UI should look like, based on the current application state.
 - Each render create their own scope, they work individually.
 - The point of a re-render is to figure out how a state change should affect the user interface. And so we need to re-render all potentially-affected components, to get an accurate snapshot.
+
+## React element and React component
+
+- React element is an JS object that describes a DOM node and its attributes or properties. It's created by calling `React.createElement`
+- React component is a function (or class) that returns React element.
+- JSX (`<App />) is syntax sugar of `React.createElement`. When we write JSX, we are just using `React.createElement`
+
+## Why we shouldn't directly call React Components
+
+<https://dev.to/igor_bykov/react-calling-functional-components-as-functions-1d3l>
+<https://kentcdodds.com/blog/dont-call-a-react-function-component>
+
+When a functional component is used with JSX (or `React.createElement`), it will have a lifecycle and can have a state.
+
+When a function is called directly as `Component()` it will just run and (probably) return something. The component doesn't exist in React tree elements
+
+It could be dangerous if the component have state and is called directly. The reason relates to the number of hook in the parent component. You need to make sure that the hooks are always **called the same number of times for a given component**.
+
+Let's say we have an `useState` in both parent and child component and calling `useState` in parent component will add more child component. In our case we are calling child function component, so there will be two `useState` in the parent component. Because number of child component can be changed => number of `useState` hook changes => error
+
+## Why we shouldn't declare a function inside another function
+
+That's because when the outer component re-renders, it clears the previous output and mounts the new output of inner component => the inner component will be reset (unmount and mount again) and lose all of its state.
 
 ## How to build a good component
 
@@ -72,7 +97,7 @@ With `useEffect`, we can control how the side effects run in the component. Norm
 
 ## Why we the callback in `useEffect` mustn't be async function
 
-Because async function return promise. `useEffect` hook isn't expecting us to return a promise. It expects us to return either nothing (like we are above), or a cleanup function.
+Because async function return promise. `useEffect` hook isn't expecting us to return a promise. It expects us to return either nothing or a cleanup function.
 
 ## When react does not re-render
 
@@ -167,8 +192,8 @@ How to prevent unnecessary re-renders
 3 phases:
 
 - Trigger a render: there are two reasons for a component to render
-  - Calling `ReactDOM.render` to render the root component. This is the initial render
-  - The component's states has been update via event, etc...
+  - Initial render: calling `ReactDOM.render` to render the root component. This is the initial render
+  - Re-render: the component's states has been update via event, etc...
 - Render: React calls your components to figure out what should be on the screen.
   - During the initial render, React will create the DOM nodes.
   - During the re-render, React will calculate which of their properties, if any, have changed since the previous render. It won't do anything with that infomation until the next phase, the commit phase
@@ -178,10 +203,15 @@ How to prevent unnecessary re-renders
 
 ## How React update UI
 
-This process is called reconciliation
+<https://www.youtube.com/watch?v=7YhdqIR2Yzo>
+
+By a process called reconciliation
+
+All React does is create a tree of elements (React elements are object that is the result of calling `React.createElement`). This tree of elements is called Virtual DOM and is kept in the memory.
+
 Once virtual DOM has updated, React compares the entire virtual DOM with a virtual DOM snapshot that was taken right before the update.
-By comparing, React knows exactly which virtual DOM **object** (component) has changed. If there are a lot of updates, React can batch them (collect the updates) for efficency.
-Then real DOM is updated (this process is commit)
+It only finds the elements that has changed. If there are a lot of updates, React can batch them (collect the updates) for efficency.
+Then React sync the virtual DOM with the real DOM (this process is commit)
 
 ## React bailing out of updating states
 
@@ -262,9 +292,9 @@ Normally, in React, state updates are queued. That means `setState` doesn't upda
 
 <https://kentcdodds.com/blog/understanding-reacts-key-prop>
 
-Key giúp React có thể theo dõi (track) được item nào bị xóa, thêm hay bị sửa. Key của mỗi item phải là duy nhất và không thay đổi. Nếu lấy key là index thì khi thêm, hoặc xóa item, index bị thay đổi => render sai
+Key giúp React có thể theo dõi (track) được item nào bị xóa, thêm hay bị sửa. Khi có update, Nếu key của item giữ nguyên không đổi thì react sẽ bỏ qua việc re-render lại item này.
 
-Ngoài ra, khi sắp xếp, thêm, xóa item, việc render DOM sẽ tốn rất nhiều thời gian. Nếu item có key, React sẽ nhớ được item đó và chỉ việc hiển thị lại item đấy chứ không phải re-render lại từ đầu => tối ưu về mặt thời gian
+Key của mỗi item phải là duy nhất và không thay đổi. Nếu lấy key là index thì khi thêm, hoặc xóa item, index bị thay đổi => render sai
 
 When the `key` props is changed, React unmount the previous instance, and mount a new one. This means that all state that had existed in the component at the time is completely removed and the component is reinitialized
 Khi 1 component bất kì có props key, khi key này bị thay đổi thì component sẽ bị unmount, state của nó cũng sẽ bị xóa bỏ và React sẽ mount lại 1 component mới
@@ -287,6 +317,121 @@ Có thể liên tưởng tới UI: user tương tác với giao diện (interfac
 
 <https://kentcdodds.com/blog/optimize-react-re-renders>
 Mỗi khi render 1 component nào đó, props object của component đó sẽ được làm mới hoàn toàn, kể cả khi property của prop objects đó không đổi
+
+## Why use Vite over CRA, why it's fast
+
+<https://semaphoreci.com/blog/vite>
+
+CRA use webpack for bundler. Webpack bundles the entire application code before it can be served. With a large codebase, it takes more time to spin up the development server and reflecting the changes made takes a long time.
+
+Unlike CRA, Vite does not build your entire application before serving, instead, it builds the application on demand using native ESM.
+
+Benefits of using native ESM
+
+- There is no need for bundling. They are understood directly by browser
+- Native EMS is on-demand by nature. Based on the browser request, Vite transforms and serves source code on demand. If the module is not needed for some screen, it is not processed.
+
+Vite divides the application modules into two categories: dependencies and source code.
+
+- Dependencies: Plain JavaScript that will not change much during development (e.g. component libraries such as MUI).
+  + Vite pre-bundles these dependencies using `esbuild`, which is 10-100x faster than JavaScript-based bundlers.
+  + Pre-bundling ensures that each dependency maps to only one HTTP request, avoiding HTTP overhead and network congestion.
+  + As dependencies do not change, they can also be cached and we can skip pre-bundling.
+- Source code: JSX, CSS, Vue/React and other components that require conversion. Vite serves source code using `native ESM`.
+
+Dependency pre-bundling only applies in development mode, and uses esbuild to convert dependencies to ESM. In production builds, @rollup/plugin-commonjs is used instead.
+
+## What is side effect
+
+Side effect is anything that affects something outside the function scope, ex: network request, updating the screen, starting an animation, changing data. They are things happens on the side, not during rendering
+
+## Are react re-render bad? When is it bad and when is isn't?
+
+Only optimize when the re-render makes your app slow. 
+When re-render is bad?: when a component has complex calculation or includes charts.
+Why we shouldn't pre-optimize (with `useMemo` and `useCallback`)
+
+- Your code is more complex
+- React is very fast. If your component is pure, rendering your component one time or multiple times shouldn’t cause any differences on the actual UI.
+
+## What is pure function
+
+Pure function is a function:
+
+- That doesn't change any objects or variables outside function scope
+- Given the same input, returns the same output
+
+## Declare React hook rule
+
+- Don't call Hooks inside loops, conditions, or nested functions. Because React requires the order of Hook calls are the same between re-renders. If we put a call hooks inside an `if` statement, this order will be changed
+- Don't call Hooks from regular JavaScript functions. So don't call hooks inside callback function of `useEffect`
+
+## Error Boundary
+
+Is React error boundary component that catch errors inside React component
+
+## Why we shouldn't use `@import` in CSS
+
+This method causes the browser to load each CSS file sequentially, rather than in parallel. Since CSS is render-blocking, by default, this is likely to affect page performance.
+
+## Can you explain the role of HTML tag, HTML elements, and HTML document?
+
+HTML document is HTML file. When an HTML document is loaded into a web browser, it becomes a `document` object. `document` object represents the whole html document. `window.document` === `document`. For HTML document, `document.documentElement` returns root element (<html>)
+HTML elements are part of DOM which includes HTML opening tags, closing tags, attributes or text content
+HTML tags are name of HTML elements
+
+## Explain the difference between Async/Await and Promises.
+
+- Async await is syntactic sugar for promises. Making code looks like executed synchronously and easier to understand
+- Debugging is much easier with async/await using `try catch` block. In promise, we have to use `then catch` chaining. In case we have errors, if we don't handle, the script dies 
+
+## Explain how you can use JavaScript functions such as forEach, Map.
+
+- `map` is used to transform each element of an array. It returns an array without changing original array
+- `forEach` is used to run a function for each element. For example, we have a variable and we want to sum each element with that var. `forEach` returns undefined
+
+## Explain the difference between Flexbox and CSS Grid. When would you use any of these? What are their strengths and weaknesses?
+
+The basic difference between CSS Grid Layout and CSS Flexbox Layout is that flexbox was designed for layout in one dimension - either a row or a column. Grid was designed for two-dimensional layout - rows, and columns at the same time
+
+If we want a FLEXIBLE layout (the size of the content decide how much individual space each item takes up), we use flex.
+If we want a more fixed layout (you create a layout and then you place items into it) and you want to control the alignment by row and column, we use grid.
+
+## Can you describe the key principles of accessibility in web development, and how you would apply these in a front-end project
+
+## one-way binding and two-way binding and unidirectional data flow
+
+- One-way binding (One-way data binding) means the data (or state) flows in one direction, state updates lead to updates in view or vice versa. Ex: you have a count state and you display it somewhere. When count state updates, the view for count state updates as well.
+- Two-way binding means data flows in both direction. Ex: you have an input in view, and a state. When you type into input, the state changes accordingly (view updates => state updates). Then you assign this state to `value` attribute of input and the value of input changes when you type as well (state updates => view updates, or you can display the state somewhere else, that could be also state updates => view updates)
+- Unidirectional data flow: In React, it also means the data is passed from parent to child component and not vice versa
+
+## What propertie is not Browser Object Model(BOM) ?
+
+Document
+
+## Which resources are loaded first when accessing a website
+
+HTML loaded first. When it's parsed, resources in `<head>` tag is load, then resources in `body` tag
+
+The lifecycle of an HTML page has three important events:
+
+`DOMContentLoaded` (`document.addEventListener("DOMContentLoaded")`)– the browser fully loaded HTML, and the DOM tree is built, but external resources like pictures <img> and stylesheets may not yet have loaded.
+`load` (`window.onload`) – not only HTML is loaded, but also all the external resources: images, styles etc.
+`beforeunload`/`unload` (`window.beforeunload`/`window.unload`) – the user is leaving the page.
+
+## What is load balancing and how it works?
+
+Load balancing is the process of distributing traffic among multiple servers to improve a service or application's performance and reliability. Load balancing is handled by a tool or application called a load balancer. A load balancer can be either hardware-based or software-based
+
+## `useEffect` instead of `getServerSideProps`, what's the problem?
+
+`useEffect` will run after your component mounted, therefore you will notice your page loads then the data appears.
+`getServerSideProps` will make your page load with the data already on it, so you won't notice a flash of data appearing after the page already loaded.
+
+## Should we set props value as initial state
+
+<https://vhudyma-blog.eu/react-antipatterns-props-in-initial-state>
+This is anti pattern because `useState` hook initializes the state only once - when the child component is rendered. So, the state in child component will not be updated when prop value from parent updates
 
 ## React Portal
 
@@ -474,24 +619,37 @@ Khi nào sử dụng `grid`
 
 ## Display date as string in JS
 
-First we need to create a Date instance using `new Date()`, then we pass in our date which could be timestamp, iso 8601 format.
+First we need to create a Date instance using `new Date()`, then we pass in our date string, or Unix timestamp (in mi)
 
-- ISO 8601 format
+```js
+// Create a date object for Halloween
+let halloween = new Date('October 31, 2022');
 
-What is ISO 8601 format:
+// Create a date object for March 21 at 2pm
+let springLuncheon = new Date('March 21, 2023 14:00');
+
+// Using timestamp
+let earthDay = new Date(1682136000000);
+```
+
+For better accuracy across browsers and operating systems, it’s recommended that you use the **ISO 8601 format**: `YYYY-MM-DDTHH:MM:SS`.
+
 Examples: '2011-10-05T14:48:00.000Z'. T means nothing but a space between date and time, Z means zero UTC offset (UTC+0). If Z is ignore, the local system timezone will be used
 
-How to convert to ISO Format:
+You can also create a Date object by passing in a series of arguments: year, monthIndex, day, hours, minutes, seconds, and milliseconds. Only year and monthIndex are required.
+
+```js
+// Notice the month index is 9 even though October is the 10th month
+let halloween = new Date(2021, 9, 31);
+
+// Christmas morning at 10:30 am, local time
+let christmas = new Date(2021, 11, 25, 10, 30);
+```
+
+Use `toISOString` convert Date object back to ISO Format:
 
 ```js
 new Date("05 October 2011 14:48 UTC").toISOString()
-```
-
-Usage:
-
-```js
-Date.parse("2019-01-01T00:00:00");
-new Date("1995-12-17T03:24:00");
 ```
 
 - `Date.UTC`
@@ -502,11 +660,16 @@ new Date("1995-12-17T03:24:00");
 const date = new Date(Date.UTC(2012, 11, 20, 3, 0, 0));
 ```
 
+### Get data from Date instance
+
 After creating date instance, we use `Intl.DateTimeFormat` to display Date as string
 
 ```js
+const date = new Date(Date.UTC(2012, 11, 20, 3, 0, 0));
 new Intl.DateTimeFormat('en-US').format(date)
 ```
+
+If you want to get the day, month, year, you can use `getDay`, `getMonth`, `getYear` from date object
 
 ## Kiến thức bảo mật tối thiểu ở frontend
 
@@ -560,11 +723,20 @@ console.log( config.language ) // ['VN']
 Why:
 <https://www.builder.io/blog/maps>
 
-- `Map` sửa xóa property nhanh hơn sơ với object => Sử dụng `Map` nếu cần sửa xóa nhiều property, còn lại nếu chỉ có đọc data thì có thể dùng object
+- `Map` sửa xóa property nhanh hơn so với object => Sử dụng `Map` nếu cần sửa xóa nhiều property, còn lại nếu chỉ có đọc data thì có thể dùng object
 - Object có built-in properties và các properties này có thể bị override
-
 - Gần giống như object, khác ở chỗ key có thể là bất cứ type nào, kể cả object, function
-- Cú pháp:
+- `Map` giữ nguyên order của key
+- Việc lặp qua các phần tử trong `Map` cũng đơn giản hơn, k cần sử dụng đến `Object.keys`, `Object.values`... để transform trước khi lặp
+  ```js
+  map1.forEach((value, key) => ...
+  // Or
+  for (const [key, value] of map1) {
+  // Nếu muốn chỉ lặp qua key hoặc values thì có thể dùng `map1.keys()` hoặc `map1.values()`
+  ```
+  
+
+Cú pháp:
 
 ```javascript
 const map = new Map([iterable]); // iterable is optional, such as new Map([[a,1], [b,2]])
@@ -605,6 +777,8 @@ for( const [key, value] of map )
 // Map reserves order or keys, not like Object
 const [[firstKey, firstValue]] = myMap
 ```
+
+- Convert to array: [...newMap]
 
 - Copy
 
@@ -706,7 +880,7 @@ Primitive type: string, number, boolean, undefined, null, Symbol
 Reference type: object, array, Map, Set
 
 Primitive lưu giá trị
-Reference lưu địa chỉ chứa giá trị
+Reference lưu địa chỉ chứa giá trị.
 
 Primitive type là immutable. Ta chỉ có thể gán lại biến đấy sang 1 giá trị khác (1 box khác)
 Reference type là mutable. Nếu ta copy biến đấy sang 1 biến khác, 2 biến đấy sẽ trỏ vào cùng 1 box chứ 2 biến không trỏ lẫn sang nhau. Và nếu 1 trong 2 biến mutate (ví dụ như là thay đổi giá trị của property) thì biến còn lại cũng thay đổi theo (vì vẫn chung 1 box)
@@ -736,6 +910,14 @@ const min = minimum(items); // Khi truyền items vào dưới dạng tham số,
 console.log(min) // 1
 console.log(items) // [1,4,7,9]
 ```
+
+## Pass by value and pass by reference
+
+<https://www.aleksandrhovhannisyan.com/blog/javascript-pass-by-reference/#what-is-pass-by-value>
+
+- Pass by reference: JS doesn't pass by reference. If so, then param would be an alias for argument. Any changes to param reflected back to argument
+- passing by value is about copying. When an argument is passed by value, the formal parameter receives a copy of the argument's value (argument is the variable that passed to function when the function is called)
+- passing pointer by value: when we pass a pointer into a function as an argument, the formal parameter receives a copy of the memory address to which the argument was pointing. This lets us modify the underlying object being pointed to. If JS is passed by reference, the param and the argument both point to the new address if the param (which is an object) is modified.
 
 ## Copy object
 
@@ -893,10 +1075,11 @@ console.log(info);
 - DOMContentLoaded: the time for loading HTML before starting to load the content. The event does not wait for images, subframes or even stylesheets to be completely loaded. The only target is for the Document to be loaded
 - Load: when all the resources are loaded ( resources are parsed and get acknowledged off before DOMContentLoaded)
 - Speed Index: shows how quickly the contents of a page are visibly populated.
-- Time to first byte (TTFB): the time it takes the browsers to start receiving the first byte of a request.
-- First Contentful Paint(FCP): the moment when the first element from the DOM appears in the users' browser.
-- Largest Contentful Paint (LCP): the time when the largest content element in the viewport becomes visible. It can be used to determine when the main content of the page has finished rendering on the screen.
-- Time To (fully) Interactive (TTI): the amount of time it takes for the page to be fully interactive. Users might expect this is the same time as LCP, but this can be different. If TTI and LCP differ, users might assume the website is broken.
+- Time to first byte (TTFB): the time it takes the browsers to start receiving the first byte of a request. How to improve: use cache, Use a server that is suited for your needs, Use a content delivery network, Reduce queries
+- First paint (FP): Time for the first pixel to render on the screen after user navigates to web page
+- First Contentful Paint(FCP): the moment when the first element from the DOM appears in the browser. Element here includes text, images, non-white canvas, or scalable vector graphics (SVG). How to improve: Eliminate render-blocking resources, Minify CSS, Remove unused CSS, Remove unused JavaScript
+- Largest Contentful Paint (LCP): the time when the largest content element (text or images, svg) in the viewport becomes visible. It can be used to determine when the main content of the page has finished rendering on the screen.
+- Time To (fully) Interactive (TTI): the amount of time it takes for the page to be fully interactive. Users might expect this is the same time as LCP, but this can be different. If TTI and LCP differ, users might assume the website is slow.
 - First Input Delay (FID): the time from when a user first interacts with a page to the time when the browser is actually able to respond to that interaction.
 - Total Blocking Time (TTB): total amount of time between First Contentful Paint (FCP) and Time to Interactive (TTI) where the main thread was blocked for long enough to prevent input responsiveness.
 
@@ -1159,6 +1342,7 @@ If you don't have a responsive mobile website, and you open it on a small screen
 
 ## Resource hint: preconnect, dns-prefetch, preload
 
+<https://imkev.dev/fetchpriority-opportunity>
 <https://3perf.com/blog/link-rels/> (**Must read**)
 <https://viblo.asia/p/thuat-ngu-trong-frontend-optimization-2oKLn2YgLQO>
 <https://webpack.js.org/guides/code-splitting/>
@@ -1168,9 +1352,8 @@ If you don't have a responsive mobile website, and you open it on a small screen
 TLDR:
 
 - `dns-prefetch` & `preconnect` are for high priority but indirectly-called third-party domains like CDNs or external plugins.
-- `preload` is for high priority but indirectly-called files like above-the-fold CSS background images.
+- `preload` is for resources with high priority but loaded inside stylesheets or scripts like above-the-fold CSS background images or fonts. For image in the markup, preload has little effect
 - `prefetch` is for low priority files very likely needed soon, like HTML, CSS or images used on subsequent pages.
-
 - `dns-prefetch` & `preconnect` reference just the domain name, like 'https://example.com', whereas preload and prefetch reference a specific file, like header-logo.svg. `prerender` references an entire page, like blog.html.
 - `dns-prefetch` & `preconnect` should also be used sparingly as some web browsers may limit the number of preemptive connections.
 - Both `prefetch` and `prerender` should be used with care to avoid downloading files that aren't used, which can be costly on mobile networks. Avoid using `prefetch` and `prerender` unless files are certain to be used later or extra data download isn't an issue.

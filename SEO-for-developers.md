@@ -60,16 +60,28 @@ It signals what your content is about. It's really good for your SEO if you use 
 
 ## Some other terms
 
-### Sitemap
+## Sitemap
 
 A file where you provide information about pages, videos and other files and the relationships between them
 
-### robots.txt
+## robots.txt
 
 - tell the search engine crawlers which URLs the crawlers can access on your site.
 - this is used to overloading your site with requests
 
-### Meta tags:
+## Type of links
+
+Links on our website:
+
+- Interal links: links that navigate you to another page on your website. These links allow viewers to stay on your page longer as they are redirected around your website. As a result, it increases your website authority which contributes to ranking.
+- External links (Outbound links): links that navigate you to another domain.
+	+ nofollow links: link with `rel="nofollow`. This tells Google not to trust this link and to discount it from consideration => it shouldn't help the target link to rank any better. Why use this: use when you don't control the links that are added to your page
+
+Links on other websites:
+
+- Backlink (Inbound links): links created on other website and point to our website. These backlinks will contribute to your ranking on the SERP. The more backlinks a website receives, the more relevant, useful and important it is.
+
+## Meta tags:
 
 - Provide search engines with information about your website
 - Are added to the `<head>` section
@@ -80,7 +92,7 @@ A file where you provide information about pages, videos and other files and the
 	  - `content="noindex`: prevent search engine crawlers from indexing this page on your website
 	  - `content="nofollow`: prevent search engine crawlers to crawl any of the links on the page
 
-### Canonical URL
+## Canonical URL
 
 If you have single page that is accessable by multiple URLs, or different pages with similar content, Google sees these as duplicate versions of the same page. Google will choose one URL as the canonical version and crawl that, others are considered duplicate URLs and crawled less.
 - Why have duplicated URLs

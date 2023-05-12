@@ -17,9 +17,22 @@ is the combination of The CSSOM and DOM tree created in the parsing HTML step. R
 
 `layout or reflow`: When the render tree is created, it does not have a position and size. Calculating these values is called layout or reflow
 
-## race condition:
+## Bundle
 
-two different requests 'raced' against each other and the result might come in a different order than you expected. <https://beta.reactjs.org/learn/you-might-not-need-an-effect>
+Bundle is the process of combining multiple pieces of JS code into one large file
+
+## Side effect
+
+Side effect is anything that affects something outside the function scope, ex: network request, updating the screen, starting an animation, changing data. They are things happens on the side, not during rendering
+
+## Race condition
+
+Two different requests 'raced' against each other and the result might come in a different order than you expected. <https://beta.reactjs.org/learn/you-might-not-need-an-effect>
+
+## Object reference (reference) in JS
+
+<https://www.aleksandrhovhannisyan.com/blog/javascript-pass-by-reference/#object-references-are-pointers>
+'Object references' in JavaScript are really pointers. A pointer is a variable that—instead of directly storing a primitive value like an int, bool, float, or char—stores the memory address where some data lives
 
 ## RESTful API:
 
@@ -32,7 +45,7 @@ Hydration is the process of using client-side JavaScript to add application stat
 When a visitor requests their first URL from your site, the response contains static HTML along with linked JavaScript, CSS, and images. React then takes over and hydrates that HTML. React adds event listeners to the DOM created during HTML parsing, and turns your site into a full React application. Subsequent page requests are DOM updates managed by React.
 
 [https://www.joshwcomeau.com/react/the-perils-of-rehydration/](https://www.joshwcomeau.com/react/the-perils-of-rehydration/)
-Beside adding interactivity, React also builds up a mental picture of what the DOM should look like, by mounting all of your components. Then it compares the mounted DOM with the DOM nodes already on the page, and tries to fit the two together. If not there will be an error like this (only happens on development mode but you are warning because this is bug) 
+Beside adding interactivity, React also builds up a mental picture of what the DOM should look like, by mounting all of your components. Then it compares the mounted DOM with the DOM nodes already on the page, and tries to fit the two together. If not there will be an error like this: "Expected server HTML to contain a matching <div> inside a <nav>" (only happens on development mode but you are warning because this is bug) 
 
 ## deploying:
 

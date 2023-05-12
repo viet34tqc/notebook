@@ -223,6 +223,7 @@ Pros:
 
 Cons:
 
+- User get a blank page while waiting for JS code to run
 - Requires additional time once the JavaScript bundle have been loaded and could lead to a blocked user interface during that time. Hence, metrics like First Paint, First Contentful Paint, Largest Contentful Paint, and Time-to-Interactive require more time.
 - Not good for SEO because Google bot cannot crawl any data at first load because it can only sees a div
 
@@ -230,6 +231,9 @@ Cons:
 
 This is one of two pre-rendering methods. Pre-rendering is the default mechanism for rendering page in NextJS
 The HTML is generated at build time and is reused for each request.
+
+Why:
+Client-side rendering gives user a blank page at first. That's not good for UX. SSG gives the user something to look at while we download JS, parse, and hydrate the app
 
 - Initial Load: Server serves initial HTML and that's displayed on the initial load which leads to faster TTFB
 - JS Loaded
@@ -281,7 +285,7 @@ When to use: The content of the page updates frequently and it changes on every 
 
 <https://vercel.com/docs/concepts/next.js/incremental-static-regeneration>
 
-In static-site generation with Data, the data fetching is run at build time. However, you can also make it happen at <i>request time</i> **without having to re-build the entire site**. This is done by using `revalidate` property.
+In static-site generation with Data, the data fetching is run at build time and this data might be stale. In this case, you can use incremental static regeneration, which allows you to re-generate your static pages in the background after a request **without having to re-build the entire site**. This is done by using `revalidate` property.
 
 ```javascript
 export const getStaticProps = async ( { params } ) => {
