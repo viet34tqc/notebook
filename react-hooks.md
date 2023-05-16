@@ -251,8 +251,9 @@ const handleClick = () ={
 ## `useLayoutEffect`
 
 <https://www.youtube.com/watch?v=loSqbCbH2xo&list=PL_-VfJajZj0UXjlKfBwFX73usByw3Ph9Q&index=39>
+<https://daveceddia.com/useeffect-vs-uselayouteffect/>
 
-This hook is very similar to `useEffect`. The difference is only the task order. Most of the time, we will use `useEffect`. Only use `useLayoutEffect` when we want to update the state before rendering UI to avoid flick in the UI. See the example above for more details.
+This hook is very similar to `useEffect`. The difference is only the task order. Most of the time, we will use `useEffect`. Only use `useLayoutEffect` when we want to update the state before rendering UI to avoid flick in the UI. `useLayoutEffect` is synchronous a.k.a. blocking a.k.a. the app won’t visually update until your effect finishes running… it could cause performance issues like stuttering if you have slow code in your effect.
 
 `useEffect`:
 
@@ -265,7 +266,7 @@ This hook is very similar to `useEffect`. The difference is only the task order.
 `useLayoutEffect`:
 
 1. Update state
-2. Update DOM
+2. Update DOM (mutate the virtual DOM object)
 3. Call cleanup function (synchronously)
-4. Call `useEffect` callback (synchronously). Synchronously means the step must be finish before jumping to the next step. So, the callback will be called first before rendering UI.
+4. Call `useLayoutEffect` callback (synchronously). Synchronously means the step must be finish before jumping to the next step. So, the callback will be called first before rendering UI.
 3. Re-render UI

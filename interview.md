@@ -55,7 +55,7 @@ In react, it's a variable which whenever it updates, it will trigger a re-render
 
 - React element is an JS object that describes a DOM node and its attributes or properties. It's created by calling `React.createElement`
 - React component is a function (or class) that returns React element.
-- JSX (`<App />) is syntax sugar of `React.createElement`. When we write JSX, we are just using `React.createElement`
+- JSX (`<App />`) is syntax sugar of `React.createElement`. When we write JSX, we are just using `React.createElement`
 
 ## Why we shouldn't directly call React Components
 
@@ -196,7 +196,7 @@ How to prevent unnecessary re-renders
   - Re-render: the component's states has been update via event, etc...
 - Render: React calls your components to figure out what should be on the screen.
   - During the initial render, React will create the DOM nodes.
-  - During the re-render, React will calculate which of their properties, if any, have changed since the previous render. It won't do anything with that infomation until the next phase, the commit phase
+  - During the re-render, React will calculate which of component's properties, if any, have changed since the previous render. It won't do anything with that information until the next phase, the commit phase.
 - Commit: React commit changes to the DOM
   - For the initial render, React will use `appendChild` DOM API to put all the DOM nodes it has created on the screen
   - For re-renders, **React only changes the DOM nodes if there is a difference between renders**. If a component re-renders, it only changes the updated DOMs (that could contains updated data), the other DOMs in that component are still the same

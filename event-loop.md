@@ -2,6 +2,7 @@
 
 ## References
 
+<https://blog.xnim.me/event-loop-and-render-queue>
 <https://dmitripavlutin.com/javascript-promises-settimeout/>
 
 ## Synchronous and Asynchronous
@@ -14,6 +15,7 @@ If we make that kind of action in the synchronous model, the browser cannot do o
 In order to prevent blocking behavior, the browser has many Web APIs that are asynchronous (setTimout, async/await), meaning they can run parallel with other operations. It allows the user to continue using browser while the asynchronous is being processed.
 
 ## Event loop
+
 Javascript can only execute one statement at a time. In order to do that, Javascript uses
 	- Call Stack
 		- What: Holds the state of what function is currently running
@@ -40,5 +42,5 @@ Javascript can only execute one statement at a time. In order to do that, Javasc
 		- Once it find ones, it adds it to the stack
 		- Queue has two types:
 			- message queue or task queue or **macrotask queue**: handle `setTimeout`, `setInterval`, lower priority
-			- job queue or **microtask queue**: handles promises callbacks (`then` callbacks), higher priority
+			- job queue or **microtask queue**: handles promises callbacks (`onResolved/onRejected` and `then` callbacks), higher priority
 
