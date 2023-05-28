@@ -374,9 +374,11 @@ Is React error boundary component that catch errors inside React component
 
 This method causes the browser to load each CSS file sequentially, rather than in parallel. Since CSS is render-blocking, by default, this is likely to affect page performance.
 
-## Can you explain the role of HTML tag, HTML elements, and HTML document?
+## Can you explain the role of HTML tag, HTML elements, window, and HTML document?
 
-HTML document is HTML file. When an HTML document is loaded into a web browser, it becomes a `document` object. `document` object represents the whole html document. `window.document` === `document`. For HTML document, `document.documentElement` returns root element (<html>)
+HTML document is HTML file. When an HTML document is loaded into a web browser, it becomes a `document` object. `document` object represents the whole html document. 
+
+`document` is a property of `window` object. `window.document` === `document`. For HTML document, `document.documentElement` returns root element (<html>)
 HTML elements are part of DOM which includes HTML opening tags, closing tags, attributes or text content
 HTML tags are name of HTML elements
 
@@ -447,6 +449,109 @@ The difference happens when the `success` callback returns a **rejected promise*
 `then(f,f)`: `error` callback is not invoked
 `then(f).catch(f)`: error callback is invoked
 
+## Shallow copy and deep copy
+
+<https://anonystick.com/blog-developer/phong-van-su-khac-nhau-giua-shallow-copying-va-deep-copying-trong-object-javascript-2019112823755023>
+
+Shallow copy cannot copy the nested object value. So, nested object in the original and in the copy still point to the same reference (same memory address)
+
+We have an object, like this:
+
+```js
+const obj = {a:1,b:2,c:{d:3}};
+const shallowClone = {...obj};
+obj.c.d = 34;
+console.log(obj);
+console.log(shallowClone);
+```
+
+**NOTE**
+
+Deep copy using `JSON.parse()` and `JSON.stringify()` can miss some properties with `NaN` or `undefined`
+
+## Loop with promises
+
+Using `async/await`
+
+```js
+const promise1 = new Promise(res => {
+  setTimeout(res, 1000, 'first');
+});
+const promise2 = new Promise(res => {
+  setTimeout(res, 2000, 'second');
+});
+
+(async () => {
+  for (const item of [promise1, promise2]) {
+    console.log(await item);
+  }
+})();
+```
+
+## Can `catch` in `try...catch` catch errors using `throw Error()` or `reject()` in Promise
+
+<https://catchjs.com/Docs/AsyncAwait>
+<https://javascript.info/try-catch>
+
+No.
+If we `throw` or `reject` an error in Promise or using `setTimeout`, `try...catch` cannot catch the error. Because the callback in promise and `setTimeout` is executed later in different call stack, when `try...catch` is already done.
+
+```js
+async function fails() {
+  throw Error();
+}
+
+function fails2() {
+    return new Promise((resolve, reject) => {
+        reject(new Error());
+        // Or using setTimeout
+        setTimeout(() => reject(new Error()), 1000)
+    });
+}
+
+try {
+  fails();
+} catch (error) {
+  // Error here cannot catch
+  console.log('error', error);
+}
+```
+
+To catch that, we need to use `await`
+
+```js
+(async function () {
+    try {
+        await fails2();
+    } catch (e) {
+        console.log("that failed", e); 
+    }
+})();
+```
+
+`try...catch` cannot also catch error in the setTimeout because 
+
+## Difference between `throw Error()` and `reject(new Error())`
+
+<https://catchjs.com/Docs/AsyncAwait>
+
+`reject(new Error())` just a function call, so it doesn't break the execution flow like `throw` does. his means you can write code that both rejects and resolves, like this:
+
+```js
+// Reject is call first because it's lie above `resolve`
+// If `resolve` is called fisrt, and we throw, `throw` wont be called
+function test() {
+    return new Promise((resolve, reject) => {
+        reject(new Error());
+        resolve("great success");
+    });
+}
+
+test()
+  .then(val => console.log(val))
+  .catch(err => console.log(err));
+```
+
 ## Rule for `this`
 
 <https://javascript.info/arrow-functions>
@@ -456,12 +561,12 @@ The difference happens when the `success` callback returns a **rejected promise*
 <https://unicorn-utterances.com/posts/javascript-bind-usage>
 By default, JavaScript looks at the class that uses the `this` keyword, not the class that creates the `this` keyword. Arrow function will bound `this` to original scope and cannot be modified (even if you use `bind`)
 
-- If the new keyword is used when calling the function, this inside the function is a all new empty object.
-- If apply, call, or bind is used, this inside the function is the object that is passed in as the argument.
-- If a function is called as a method this is the object that the function is a property of.
-- If a method is assigned to a variable, then that method is detached from object and this is `undefined` in strict mode or `window` as global object. Example: `this` will be undefined in controller class because when you execute a method of that class in route, the method is detached from controller class <https://stackoverflow.com/questions/45643005/why-is-this-undefined-in-this-class-method>
-- If a function is invoked as a free function invocation, this is the global object.
-- If it's an arrow function, this value will be the context of its surrounding scope at the time it is created. Arrow function will try to resolve this inside it lexically just like any other variable and ask the Outer function - Do you have a this? And Outer Function will reply YES and gives inner function its own context to this
+- If the new keyword is used when calling the function, `this` inside the function is a all new empty object.
+- If apply, call, or bind is used, `this` inside the function is the object that is passed in as the argument.
+- If a function is called as a method `this` is the object that the function is a property of.
+- If a method is assigned to a variable, then that method is detached from object and `this` is `undefined` in strict mode or `window` as global object. Example: `this` will be undefined in controller class because when you execute a method of that class in route, the method is detached from controller class <https://stackoverflow.com/questions/45643005/why-is-this-undefined-in-this-class-method>
+- If a function is invoked as a free function invocation, `this` is the global object.
+- If it's an arrow function, `this` value will be the context of its surrounding scope at the time it is created. Arrow function will try to resolve this inside it lexically just like any other variable and ask the Outer function - Do you have a this? And Outer Function will reply YES and gives inner function its own context to this
 
 ```js
 function outer() {
@@ -473,6 +578,30 @@ function outer() {
   inner();
 }
 outer.call({x: 5});
+```
+
+## Normal function and arrow function
+
+- `this` keyword: in arrow function, `this` value depends on the context where the function is created. Meanwhile, in normal function, `this` value depends on the object that call the function
+
+```js
+class Person {
+  construtor() {
+    this.name = 'viet'
+  } 
+  getName() {
+    setTimeout(() => {
+      console.log(this.name); // return 'viet' because `this` in arrow function refers to where it's created which is the class
+    }, 1000) 
+
+    setTimeout(() => {
+      console.log(this.name); // return 'undefined' because the callback is executed by window
+    }, 1000)
+  }
+}
+
+const p = new Person();
+p.getName();
 ```
 
 ## Stack and heap
@@ -515,6 +644,29 @@ Headless website is built with separated back-end and frontend. With headless, y
 Your frontend is a JS application that run by browser, and it doesn't need to be hosted on a server. You just need to put your code somewhere browser can download it (Often it's just on CDN)
 Whereas, your backend can be WordPress or NodeJS and hosted on a server.
 If needed, frontend part will communicate to the backend end via API (using REST or GraphQL) to get the data or perform other actions such as sending email
+
+## Handle `setTimeout` this
+
+<https://developer.mozilla.org/en-US/docs/Web/API/setTimeout#the_this_problem>
+
+- USE A WRAPPER FUNCTION or `bind` or `call`
+
+```js
+const myArray = ["zero", "one", "two"];
+myArray.myMethod = function (sProperty) {
+  console.log(arguments.length > 0 ? this[sProperty] : this);
+}
+
+// USE A WRAPPER FUNCTION
+setTimeout(function () {
+  myArray.myMethod();
+}, 2.0 * 1000); 
+
+// Or using bind
+setTimeout(
+  myArray.myMethod.bind(myArray)
+, 2.0 * 1000); 
+```
 
 ## Cơ chế làm việc của session và JWT
 
@@ -882,7 +1034,16 @@ Reference type: object, array, Map, Set
 Primitive lưu giá trị
 Reference lưu địa chỉ chứa giá trị.
 
+=> Khi so sánh, primitive value so sánh bằng giá trị, còn object so sánh thông qua reference. JS sẽ check xem 2 object có reference tới cùng 1 box không
+
 Primitive type là immutable. Ta chỉ có thể gán lại biến đấy sang 1 giá trị khác (1 box khác)
+
+```js
+const a = 'abc';
+a[2] = 'd'
+console.log(a) // Still 'abc'
+```
+
 Reference type là mutable. Nếu ta copy biến đấy sang 1 biến khác, 2 biến đấy sẽ trỏ vào cùng 1 box chứ 2 biến không trỏ lẫn sang nhau. Và nếu 1 trong 2 biến mutate (ví dụ như là thay đổi giá trị của property) thì biến còn lại cũng thay đổi theo (vì vẫn chung 1 box)
 
 Notes:
@@ -910,6 +1071,10 @@ const min = minimum(items); // Khi truyền items vào dưới dạng tham số,
 console.log(min) // 1
 console.log(items) // [1,4,7,9]
 ```
+
+## What is REST
+
+REST is kind of convention of how you set up an API, how you transfer data between client and server
 
 ## Pass by value and pass by reference
 
@@ -948,7 +1113,7 @@ const b = JSON.parse(JSON.stringify(a));
 
 - Only call Hooks at the top level. You shouldn't call `useState` in loop, conditions
 - Only call Hooks inside React function components
-- Whenever we have connected useState and useEffect hooks, it’s a good opportunity to extract them into a custom hook:
+- Whenever we have connected `useState` and `useEffect` hooks, it’s a good opportunity to extract them into a custom hook:
 - `useState` doens't merge objects when the state is updated. It replaces them.
 - Don't use `async` with callback function in `useEffect`. It can work fine if you have only one `useEffect`. However, if you have multiple `useEffect`, you could run into race conditon.
 
@@ -1111,13 +1276,15 @@ Optimizing the critical render path improves render performance. Performance tip
 - Optimizing the number of requests required along with the file size of each request.
 - Optimizing the order in which critical resources are loaded by prioritizing the downloading critical assets, shorten the critical path length.
 
-## var and let, const
+## `var` and `let`, `const`
 
 - Blocked scope
-`var` is blocked scope only when it is declared inside a function
+
+`var` is global scoped and only blocked scope only when it is declared inside a function
 `let` and `const` blocked scope every where
 
 - Creation phase
+
 This is the very first phase when JS setting up memory for the data. No code is executed at this point.
 Variable declared with `let` and `const` are stored `uninitialized`
 Variable declared with `var` are stored with the default value of `undefined`
@@ -1128,9 +1295,10 @@ When variable declared with `let` and `const`, it returns `ReferenceError`
 
 ## Hoisting
 
-It's the process that stores functions and variables in the memory before executing any code (creation phase);
+It's the process of moving the declaration of functions, variables, or classes to the top their scope, prior to execution of the code
+that stores functions and variables in the memory before executing any code (creation phase);
 
-- Functions are stored with the entire function. That's why you can invoke them before the line we declare them
+- Functions are stored with the entire function. That's why you can invoke them before the line we declare them. However, if you declare function by assigning it to a variable, the hoisting rule for variable is applied.
 - Variables is different.
   - Variables with the `var` keyword are stored with the value of `undefined`
   - Variables with the `let` and `const` keyword are stored `uninitialized`. If we try to access them before declare them, it will return `ReferenceError`
@@ -1326,7 +1494,7 @@ This is the doctype tag to let the browser know that this is HTML5 page and shou
 
 ## <meta charset="utf-8">
 
-This meta tag tells the browser which character encoding browser to use. UTF-8 is greate because you can use all sorts of symbols and emoji
+This meta tag tells the browser which character encoding browser to use. UTF-8 is great because you can use all sorts of symbols and emoji
 
 ## <meta name="viewport" content="width=device-width"
 
@@ -1354,7 +1522,7 @@ TLDR:
 - `dns-prefetch` & `preconnect` are for high priority but indirectly-called third-party domains like CDNs or external plugins.
 - `preload` is for resources with high priority but loaded inside stylesheets or scripts like above-the-fold CSS background images or fonts. For image in the markup, preload has little effect
 - `prefetch` is for low priority files very likely needed soon, like HTML, CSS or images used on subsequent pages.
-- `dns-prefetch` & `preconnect` reference just the domain name, like 'https://example.com', whereas preload and prefetch reference a specific file, like header-logo.svg. `prerender` references an entire page, like blog.html.
+- `dns-prefetch` & `preconnect` reference just the domain name, like 'https://example.com', whereas `preload` and `prefetch` reference a specific file, like header-logo.svg. `prerender` references an entire page, like blog.html.
 - `dns-prefetch` & `preconnect` should also be used sparingly as some web browsers may limit the number of preemptive connections.
 - Both `prefetch` and `prerender` should be used with care to avoid downloading files that aren't used, which can be costly on mobile networks. Avoid using `prefetch` and `prerender` unless files are certain to be used later or extra data download isn't an issue.
 - Resource hints for font files (even when self-hosted) and CORS enabled resources will also need the crossorigin attribute: `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`

@@ -27,6 +27,11 @@ Ví dụ: available space là 150px, item 1 có `flex-grow` là 1, item 2 có `f
 
 ## So sánh `flex-basis` và width/height
 
+Giống:
+
+- `flex-basis` và `width/height` được hiểu như initial width/height, giá trị này có thể bị thay đổi dựa vào `flex-shrink: 1`, `flex-grow: 1` và available space
+
+Khác:
+
 - `flex-basis` sẽ thay đổi theo `flex-direction`. Tức là khi `flex-direction` là `column` thì initial height của flex item === `flex-basis`
-- `flex-basis` được hiểu như initial width/height, giá trị này có thể bị thay đổi dựa vào `flex-shrink: 1`, `flex-grow: 1` và available space
 - `flex-basis` có thể transition, height thì không

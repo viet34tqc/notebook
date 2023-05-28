@@ -8,7 +8,8 @@ There are two ways to create an object: via function constructor and via `{}`
 
 ## Function constructor
 
-- All the function (**not only function constructor**) has two default properties called `proptotype` and `__proto__`.
+- All the functions (**not only function constructor**) have two default properties called `proptotype` and `__proto__`
+- An instance of a function constructor access `F.prototype` via `__proto__`
 - **Arrow function doesn't have** `prototype` property
 - Default, f.prototype is an **object** like this:
 
@@ -33,6 +34,7 @@ Dog.prototype = {
 function Dog() {}
 const chihuahua = new Dog() // chihuahua will inherits from Dog.prototype
 ```
+
     .prototype             __proto__
 Dog --------> Dog.prototype ---------> Object.prototype
  |                |                          |

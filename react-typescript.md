@@ -55,10 +55,11 @@ const Input = React.forwardRef(
 
 ### useRef
 
-Always set the type of the Ref
+When working with HTML element, always set defaultValue as `null` instead of `undefined` because useRef doesn't accept `undefined` as default value 
+
 ```javascript
 const TextField: React.FC<InputProps> = ({handleChange}) => {
-	const inputRef = useRef<HTMLInputElement | null>(null);
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	return (
 		<div ref={divRef}>
@@ -166,6 +167,12 @@ function App() {
 ```
 
 If there is no matching type definition, you can use `SyntheticEvent`
+
+## Extract Component props
+
+```ts
+type Extraction = React.ComponentProps<typeof ComponentToExtract>
+```
 
 ## Form Submit events
 

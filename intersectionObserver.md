@@ -20,6 +20,13 @@ const observer = new IntersectionObserver(function (entries, observer) {
 		}
 	});
 }, appearOptions);
+
+// If you just want to toggle A when B intersect
+// https://www.youtube.com/watch?v=V-CBdlfCPic&ab_channel=KevinPowell
+const navObserver = new IntersectionObserver(() => {
+	primaryHeader.classList.toggle('sticking');
+})
+navObserver.observe(scrollWatcher)
 ```
 
 ## Step 2: Tageting the element to be observered

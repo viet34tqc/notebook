@@ -11,8 +11,20 @@
 
 ## How to create a promise
 
+**NOTE**: when a promise is created, the callback in promise is executed immediately
+
 ```javascript
-  const promise = new Promise( (resolve, reject) => {})
+const promise = new Promise( (resolve, reject) => {
+  // Any code inside here will be excuted immediately
+})
+```
+
+So, in case you have an API and you don't want to call it right when the promise is created, just wrap it in a function
+
+```javascript
+const creatPromise = () => new Promise( (resolve, reject) => {
+  // Any code inside here will be excuted immediately
+})
 ```
 
 ## `Promise.resolve(value)` and `Promise.reject(value)`
@@ -65,6 +77,7 @@ Access the rejection error from promise
 - Optput: another promise
 
 ## `finally()`
+
 Called when everything above is done
 
 ## `Promise.all` and `Promise.race`
@@ -143,6 +156,30 @@ You can catch the error right after await, without using `try...catch`
 
 ```js
 const value = await expression.catch((e) => {})
+```
+
+## Loop with promises
+
+Using `async/await`
+
+```js
+const promise1 = new Promise(res => {
+  setTimeout(res, 1000, 'first');
+});
+const promise2 = new Promise(res => {
+  setTimeout(res, 2000, 'second');
+});
+
+(async () => {
+  for (const item of [promise1, promise2]) {
+    console.log(await item);
+  }
+
+  // Or
+  for await (const item of [promise1, promise2]) {
+    console.log(item);
+  }
+})();
 ```
 
 ## Handle concurrent promises

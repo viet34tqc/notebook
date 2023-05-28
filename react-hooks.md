@@ -210,6 +210,7 @@ return <div>{count}</div>
 ```
 In this code, we want to create a timer clock start from 180. However, it will dislay `179` then stop rather than 179, 178,...
 To understand why does this happen, you need to know about the closure. So, what is the value of `count` in `setInterval`. Because the callback of `useEffect` only runs only the once after render, then `count` is referenced to the outside scope, which is 180. It equaivalents to:
+
 ```jsx
 useEffect(() => {
   setInterval(() => setCount(180 -1), 1000)
@@ -217,6 +218,7 @@ useEffect(() => {
  ```
 
 How to fix this:
+
 ```jsx
 useEffect(() => {
   // Now the value in setCount is not referenced to the outside anymore

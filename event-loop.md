@@ -18,7 +18,7 @@ In order to prevent blocking behavior, the browser has many Web APIs that are as
 
 Javascript can only execute one statement at a time. In order to do that, Javascript uses
 	- Call Stack
-		- What: Holds the state of what function is currently running
+		- What: is the place where statements run
 		- How:
 			- The statement is added to the stack
 			- statement run
@@ -31,14 +31,14 @@ Javascript can only execute one statement at a time. In order to do that, Javasc
 				- remove `setTimeout`
 				- Run other statements until the end of the script
 	- Web API:
-		- What: is the place that the async operations (promises, `setTimeout`, `setInterval`) callbacks are waiting to complete.
+		- What: is the place that the async operations (`promises`, `setTimeout`, `setInterval`) callbacks are waiting to complete.
 		- How:
 		  - For `setTimeout` and `setInterval` callbacks, the timer runs for a period of time that equals to the second arguments then the callback functions is passed to the **queue**.
 		  - Promises callbacks are passed immediately to the **queue**.
-  		  - This is the time for the event loop to do its only task: **connect the queue with the call stack**.
+  		  - This is the time for the `event loop` to do its only task: **connect the queue with the call stack**.
 	- Queue:
 		- FIFO
-		- When the call stack is empty, event loop checks the queue for pending statements, starting from oldest messages
+		- When the call stack is empty, `event loop` checks the queue for pending statements, starting from oldest messages
 		- Once it find ones, it adds it to the stack
 		- Queue has two types:
 			- message queue or task queue or **macrotask queue**: handle `setTimeout`, `setInterval`, lower priority
