@@ -31,6 +31,20 @@
 
 <https://www.30secondsofcode.org/css/s/floating-list-titles>
 
+## Get list of dynamic key-params from URL
+
+```js
+// First, get the searchParams
+const {searchParams} = new URL(request.url);
+
+// Second, get entries from searchParams
+const entries = searchParams.entries();
+
+// Return object from entries
+return Object.fromEntries(entries)
+```
+
+
 ## Avoid using flags as arguments
 
 A flag in one of the arguments effectively means the function can still be simplified.
@@ -59,10 +73,10 @@ function createPublicFile(name) {
 
 Làm lập trình viên, hẳn ai cũng biết tới khái niệm … web bán hàng. Code một trang web bán hàng là cách rất tốt để áp dụng ngôn ngữ/công nghệ mới. Thông qua các chức năng đăng kí, đăng nhập, show sản phẩm, ta học được cách phân quyền, routing, phân trang, xử lý business logic.
 
-Nhiều bạn sinh viên cho rằng code web bán hàn.g là một chuyện đơn giản, phần nhiều chỉ là thêm bớt xóa sửa. Thật vậy chăng? Hãy đọc bài viết này để xem bạn có mắc phải hai sai lầm dưới không nhé nhé.
+Nhiều bạn sinh viên cho rằng code web bán hàng là một chuyện đơn giản, phần nhiều chỉ là thêm bớt xóa sửa. Thật vậy chăng? Hãy đọc bài viết này để xem bạn có mắc phải hai sai lầm dưới không nhé nhé.
 
 𝐒𝐚𝐢 𝐥𝐚̂̀𝐦 𝟏 – 𝐊𝐡𝐨̂𝐧𝐠 𝐥𝐮̛𝐮 𝐠𝐢𝐚́ 𝐭𝐢𝐞̂̀𝐧 𝐜𝐮̉𝐚 𝐬𝐚̉𝐧 𝐩𝐡𝐚̂̉𝐦 𝐯𝐚̀𝐨 𝐭𝐫𝐨𝐧𝐠 𝐡𝐨́𝐚 đ𝐨̛𝐧
-Quan hệ giữa Order và Item là many-to-many, do đó ta phải thêm 1 bảng ở giữa để kết nối 2 bảng này. Theo lý thuyết, khi hiển thị hóa đơn, có thể tham chiếu qua bên bảng Item để lấy gi.á của sản phẩm và đem ra hiển thị.
+Quan hệ giữa Order và Item là many-to-many, do đó ta phải thêm 1 bảng ở giữa để kết nối 2 bảng này. Theo lý thuyết, khi hiển thị hóa đơn, có thể tham chiếu qua bên bảng Item để lấy giá của sản phẩm và đem ra hiển thị.
 
 Tuy nhiên theo thực tế, giá tiền của sản phẩm thường thay đổi. Giả sử 10/5, giá một ổ bánh mì là 10k; đến ngày 12/5, giá của một ổ bánh mì là 15k. Khi ta xem chiếu lại hóa đơn ngày 10/5, ta thấy giá ổ bánh mì vẫn là 15k, vì nó tham chiếu tới giá hiện tại trong bảng Item. Ngoài ra, giá còn bị tác động các chương trình khuyến mãi, giảm giá. Nếu chỉ lưu giá sản phẩm thì lúc hiển thị hay xuất báo cáo, thông tin sẽ bị sai lệch.
 
@@ -144,16 +158,19 @@ Dành cho người mới muốn tìm hiểu và tự học FE (Web) + BE để �
 Đây là phương thức mình từng triển khai cho một số cty có hỗ trợ training fresher cũng như các team tự lập bên ngoài. Các bạn có thể tự học một mình. Tốt nhất bạn nên lập thành một nhóm tầm 3 4 thành viên.
 Mình sẽ lấy mục tiêu output là từ người mới hoàn toàn và đạt được kinh nghiệm 6m-1y với React + Node, có sản phẩm deploy live trên VPS (hiểu biết Docker). Ở level này các đủ sức apply vào các cty phổ thông trên thị trường ở level junior ~1y (mức lương dự kiến rơi vào khoảng 12-18tr NET).
 Ở level này các bạn phải cần biết: Mình ghi mấy cái chính thôi
+
 - Cơ bản về thuật toán và cấu trúc dữ liệu (optional nhưng quan trọng, các bạn có thể bỏ qua chỗ này, lý do mình sẽ nói bên dưới)
 - HTML,CSS,JS. Đối với JS, các bạn nên biết Typescript.
 - Kỹ năng phân tích giao diện thành các components, cách layout và phối hợp chúng.
 - React, Redux (Toolkit) và các lib thông dụng thường có như Router chẳng hạn.
 - Node ở mức độ cơ bản, làm được CRUD REST API, authentication, JWT, image uploader.
+
 Yêu cầu: có thời gian mỗi ngày 1-2 tiếng chuyên tâm và có máy tính cá nhân. Nếu được thì chủ động tìm kiếm các dev 2y exp review và định hướng sẽ rất tốt.
 Đầu tiên là mindset hãy xem mình đang đi làm (fresher/thực tập sinh) ở công ty, không phải là đang tự học một cái gì đó cho biết. Quan trọng là: "Làm web để học React/Node" thay vì "Học React/Node để làm web". Thấu triệt cái này các bạn sẽ thấy được lợi ích của nó.
 Các bạn hãy nghĩ về hình ảnh thợ sửa xe máy. Không nhất thiết các bạn phải học triệt để về động cơ, cơ khí, điện tử để có thể chế tạo được chúng. Đây là level của Engineer (kỹ sư). Các bạn vẫn có thể bắt đầu ở level sửa xe bình thường, sau đó trở thành engineer nếu bạn nỗ lực và đam mê. Đừng quan tâm phán xét, chê bai bạn chỉ là "thợ code". Xuất phát điểm không quá quan trọng như thế, đặc biệt là nghề dev.
 Đây là cách tiếp cận ngược (từ dưới lên), làm để học. Ưu là các bạn nhìn thấy được kết quả, có mục tiêu rõ ràng và duy trình động lực tốt. Nhược là ở giai đoạn này các bạn chưa có nền móng vững chắc. Xét trên khía cạnh học code để đi làm, nuôi sống bản thân thì vẫn không thành vấn đề. Về sau các bạn chuyên tâm bổ sung cũng được. Thay vì gãy gánh giữa đường vì kiến thức rất nhiều, học bao nhiêu cho đủ, học không có mục tiêu dễ lạc đường và mất động lực.
 Vì thế việc đầu tiên là chúng ta chọn ra một product khá cơ bản, tính năng vừa phải và bao quát được các kỹ năng cần thiết. Mình thường hay lấy Instagram làm hình mẫu:
+
 - Layout web các bạn có thể tham khảo web Instagram luôn. Cứ lượt bỏ mấy cái quá phức tạp, chấp nhận xấu trước rồi đẹp sau.
 - Home Feed cơ bản, list tất cả hình ảnh của các user, có phân trang và bộ lọc cơ bản (theo danh mục, theo user), sắp xếp theo mới tới cũ.
 - Các trang Register, Login cơ bản (username + password thôi). Chỗ này dùng JWT.
@@ -161,4 +178,5 @@ Vì thế việc đầu tiên là chúng ta chọn ra một product khá cơ b�
 - Trong profile để show thông tin user và các hình ảnh của user.
 - Mấy cái like/comment các bạn làm thêm thì tốt, từ từ bổ sung sau.
 - Tìm hiểu cách deploy website, nhân tiện tìm hiểu Docker hoặc các tool CI/CD cơ bản.
+- 
 Coi như đây là thử thách các bạn cần làm bằng được trong 6 tháng tự thân hoặc có teamwork nhé. Tuỳ lực học và điều kiện mỗi người, nhưng hầu hết mình thấy 6 tháng, có người 3 4 tháng. Đừng nản nhé, có một năm cũng không sao, hãy nghĩ về tương lai 12-18tr NET/tháng làm động lực.

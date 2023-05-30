@@ -39,9 +39,18 @@ React + Redux have middleware support using Redux Thunk
 
 if you get past 2-3 state-related contexts in an application, you're re-inventing a weaker version of React-Redux and should just switch to using Redux.
 
+## Handle state
+
+TLDR: Check if that state can be calculated from other state, if not, create new state.
+When to create a new state
+
+- State to save data from API
+- Status state (loading, error status while loading data from API)
+- State relates to event (boolean state when click on a button...);
+
 ## What is state in React
 
-Information that changes in response to user interactions is called "state".
+It's the data that represents UI
 In react, it's a variable which whenever it updates, it will trigger a re-renders of the component.
 
 ## What is rendering in React
@@ -376,9 +385,8 @@ This method causes the browser to load each CSS file sequentially, rather than i
 
 ## Can you explain the role of HTML tag, HTML elements, window, and HTML document?
 
-HTML document is HTML file. When an HTML document is loaded into a web browser, it becomes a `document` object. `document` object represents the whole html document. 
+HTML document is HTML file. When an HTML document is loaded into a web browser, a `document` object appears. `document` object represents the whole html document. `document` is a property of `window` object. `window.document` === `document`. For HTML document, `document.documentElement` returns root element (<html>)
 
-`document` is a property of `window` object. `window.document` === `document`. For HTML document, `document.documentElement` returns root element (<html>)
 HTML elements are part of DOM which includes HTML opening tags, closing tags, attributes or text content
 HTML tags are name of HTML elements
 
@@ -407,13 +415,13 @@ If we want a more fixed layout (you create a layout and then you place items int
 - Two-way binding means data flows in both direction. Ex: you have an input in view, and a state. When you type into input, the state changes accordingly (view updates => state updates). Then you assign this state to `value` attribute of input and the value of input changes when you type as well (state updates => view updates, or you can display the state somewhere else, that could be also state updates => view updates)
 - Unidirectional data flow: In React, it also means the data is passed from parent to child component and not vice versa
 
-## What propertie is not Browser Object Model(BOM) ?
+## Which property is not Browser Object Model(BOM) ?
 
 Document
 
 ## Which resources are loaded first when accessing a website
 
-HTML loaded first. When it's parsed, resources in `<head>` tag is load, then resources in `body` tag
+HTML loaded first. When it's parsed, resources in `<head>` tag are loaded, then resources in `body` tag
 
 The lifecycle of an HTML page has three important events:
 

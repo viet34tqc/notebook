@@ -14,7 +14,29 @@ It could lead to infinite loop. Update the state like this is the same as callin
 <https://sentry.io/answers/using-props-to-initialize-state/>
 <https://prateeksurana.me/blog/why-you-should-avoid-using-state-for-computed-properties/>
 
-When we use props as initial state, that state won't react to props update. The reason is because `useState` called only once when the component mounts. 
+When we use props as initial state, that state won't react to props update. The reason is because `useState` called only once when the component mounts.
+
+## Conditionally swap component
+
+<https://julesblom.com/writing/neat-react-tricks>
+
+We use ternary operator on component name, not the components themselves for better code reading
+
+```jsx
+function UsersManagement({ users, isNewAPI }) {
+  // ...
+
+  // capitalized variable name!
+  const UserPermissions = isNewAPI ? UserPermissions : NewUserPermissions;
+
+  return (<UserPermissions
+    permission={permission}
+    users={users}
+    currentUser={currentUser}
+  />)
+}
+```
+
 
 ## Working with form inputs
 

@@ -1,6 +1,7 @@
 # Technical terms
 
 <https://punits.dev/jargon-free-intros/>
+<https://thanhle.blog/blog/thuat-ngu-trong-frontend-optimization>
 
 ## Transpile:
 
@@ -29,6 +30,11 @@ Side effect is anything that affects something outside the function scope, ex: n
 
 Two different requests 'raced' against each other and the result might come in a different order than you expected. <https://beta.reactjs.org/learn/you-might-not-need-an-effect>
 
+## Prefetch and preload
+
+- Prefetch tells browser that you are gonna need this resource in the future, and browser will load it when it's idle. Usecase: apply when user hovers on a link, it's a very high chance that he will click it so you prefetch this link in advance (like NextJS 13)
+- Preload tells browser that this resource is very important, please load it asap. Usecase: apply for important resource in the first render, ex: font, hero image.
+
 ## Object reference (reference) in JS
 
 <https://www.aleksandrhovhannisyan.com/blog/javascript-pass-by-reference/#object-references-are-pointers>
@@ -40,7 +46,9 @@ is the api that help client interact with server to exchange information via HTT
 
 ## Hydration (Rehydration)
 
-Hydration is the process of using client-side JavaScript to add application state and interactivity to server-rendered HTML.
+<https://thanhle.blog/blog/server-side-rendering-voi-hydration-lang-phi-tai-nguyen-nhu-the-nao>
+
+Hydration is the process of using client-side JavaScript to recover application state and add interactivity to server-rendered HTML.
 
 When a visitor requests their first URL from your site, the response contains static HTML along with linked JavaScript, CSS, and images. React then takes over and hydrates that HTML. React adds event listeners to the DOM created during HTML parsing, and turns your site into a full React application. Subsequent page requests are DOM updates managed by React.
 

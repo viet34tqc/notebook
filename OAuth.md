@@ -1,5 +1,11 @@
 # OAuth
 
+Google login flow
+
+- First, we need to send request to Google Consent page (`https://accounts.google.com/o/oauth2/v2/auth`) with params (this is done on FE). The `redirect_uri` params must be match with the `redirect url` in Google Consent credentials. `redirect_uri` value is the backend route.
+- Secondly, if successfull, user would be redirected to `redirect_uri` with a `code` value. In the handler function of backend route (handler for Google Auth route), with that `code` we get GoogleOauth access token by sending POST request to `https://oauth2.googleapis.com/token`
+- Lastly, with that token, we get Google user data by sending GET request to `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`
+
 <https://voz.vn/t/oauth-cac-bac-giai-thich-giup-em-theo-kieu-nong-dan-voi.731978/>
 
 OAuth viết tắt của Open Authorization là một cơ chế xác thực quyền truy cập (ngoài ra còn có Basic Auth, Token Auth, JWT..), giúp cho 1 user cấp quyền cho 1 ứng dụng thứ 3 truy cập vào 1 kho dữ liệu mà không cần phải đưa cho ứng dụng đó mật khẩu của mình.

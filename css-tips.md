@@ -19,6 +19,7 @@ Use `grid-template-area` instead of `grid-template-columns`
 
 <https://12daysofweb.dev/2022/css-has-selector/>
 <https://www.smashingmagazine.com/2023/01/level-up-css-skills-has-selector/>
+
 ```css
 .other-field {
   display: none;
@@ -66,6 +67,7 @@ form:has(option[value="other"]:checked) .other-field {
 ## Force wrap to a new line using `flex-basis`
 
 <https://ishadeed.com/article/conditional-css/>
+
 ```css
 /* If it’s less than 190px, it will wrap into a new line.*/
 /* Here flex-shrink is default to 1 */

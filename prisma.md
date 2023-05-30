@@ -24,7 +24,7 @@ model Post {
 ### Prisma push and pull
 
 - `npx prisma push`: you have `schema.prisma` file and this command will generate table in your db
-- `npx prisma pull`: opposite to `npx prisma pull`, your db is ready and you want to synchronize the current db with prisma schema
+- `npx prisma db pull`: opposite to `npx prisma pull`, your db is ready and you want to synchronize the current db with prisma schema
 
 ### Prisma migrate
 
@@ -63,7 +63,7 @@ Model field composes of 4 parts
 
 ## Update on product when schema change
 
-Run `npx prisma db push`
+Run `npx prisma db push` or ` npx prisma db push --preview-feature`
 
 ## Delete cascade
 
