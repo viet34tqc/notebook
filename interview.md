@@ -6,6 +6,16 @@
 
 <https://jantu.hashnode.dev/how-to-implement-infinite-scrolling-with-reactjs>
 
+## What do you think about JS, compares to other language (cons and pros)
+
+## Which data type to be stored in local storage
+
+## Where is React state stored
+
+## Process when taking a task
+
+## Compare SPA and NextJS. Why use NextJS over SPA
+
 ## Why React
 
 - Declarative
@@ -21,6 +31,13 @@
   - Whenever there is an update, like state changes or props, React update the virtual DOM
   - React compares the previous and the current state of the virtual DOM
   - Those updates are applied to real DOM
+
+## Why use virtual DOM in React
+
+<https://www.youtube.com/watch?v=za2FZ8QCE18&ab_channel=FrontStart>
+
+React uses Virtual DOM because of perfomance
+The Virtual DOM in React is in fact a tree of React Elements, or objects, which is the results of calling `React.createElement`. Creating a few hundred or thousands of JS objects is faster and cheaper than writing directly to the DOM.
 
 ## Redux and React Context
 
@@ -99,6 +116,12 @@ If you mutate the data directly, the components might not re-render that could l
 
 - Controlled input: input data is controlled via state
 - Uncontrolled input: input data is accessed via DOM, which means using `ref`
+
+## What is Temporary Dead Zone
+
+It is the area where a variable is inaccessible until it is declared.
+The variables declared with `let` and `const` are also hoisted like the var, they are both saved in memory before the code executions however they are not initialized
+When we try to access those variables before they are declared, JavaScript throws a `ReferenceError`
 
 ## Why do we need to put side effects in the `useEffect`
 
@@ -205,7 +228,7 @@ How to prevent unnecessary re-renders
   - Re-render: the component's states has been update via event, etc...
 - Render: React calls your components to figure out what should be on the screen.
   - During the initial render, React will create the DOM nodes.
-  - During the re-render, React will calculate which of component's properties, if any, have changed since the previous render. It won't do anything with that information until the next phase, the commit phase.
+  - During the re-render, React will compare the previous Virtual DOM with the current Virtual DOM side by side, line by line [https://www.youtube.com/watch?v=za2FZ8QCE18&ab_channel=FrontStart](https://www.youtube.com/watch?v=za2FZ8QCE18&ab_channel=FrontStart). It won't do anything with that information until the next phase, the commit phase.
 - Commit: React commit changes to the DOM
   - For the initial render, React will use `appendChild` DOM API to put all the DOM nodes it has created on the screen
   - For re-renders, **React only changes the DOM nodes if there is a difference between renders**. If a component re-renders, it only changes the updated DOMs (that could contains updated data), the other DOMs in that component are still the same
@@ -300,11 +323,14 @@ Normally, in React, state updates are queued. That means `setState` doesn't upda
 ## Why list item need a unique `key`
 
 <https://kentcdodds.com/blog/understanding-reacts-key-prop>
+<https://www.youtube.com/watch?v=za2FZ8QCE18&ab_channel=FrontStart>
 
-Key giúp React có thể theo dõi (track) được item nào bị xóa, thêm hay bị sửa. Khi có update, Nếu key của item giữ nguyên không đổi thì react sẽ bỏ qua việc re-render lại item này.
+React uses `key` as a way to distinguish between any components. Let's say you have a list of items without `key`. Under the hood, React converts the items into React elements with the same type. There is no way to distinguish them. When we have an unique key for each item, React can differentiate and also track them when they get deleted, added or re-ordered.
 
-Key của mỗi item phải là duy nhất và không thay đổi. Nếu lấy key là index thì khi thêm, hoặc xóa item, index bị thay đổi => render sai
+If the key of item retains between re-renders, React will ignore re-rendering it => better perfomance.
 
+Key must be unique. And you shouldn't take index as key, as when you add or remove items, the index (or key) of all items will be changed => bugs
+  
 When the `key` props is changed, React unmount the previous instance, and mount a new one. This means that all state that had existed in the component at the time is completely removed and the component is reinitialized
 Khi 1 component bất kì có props key, khi key này bị thay đổi thì component sẽ bị unmount, state của nó cũng sẽ bị xóa bỏ và React sẽ mount lại 1 component mới
 
@@ -372,7 +398,7 @@ Pure function is a function:
 
 ## Declare React hook rule
 
-- Don't call Hooks inside loops, conditions, or nested functions. Because React requires the order of Hook calls are the same between re-renders. If we put a call hooks inside an `if` statement, this order will be changed
+- Don't call Hooks inside loops, conditions, or nested functions. Because React requires the order of Hook calls are the same between re-renders. If we put a hook calls inside an `if` statement, this order will be changed
 - Don't call Hooks from regular JavaScript functions. So don't call hooks inside callback function of `useEffect`
 
 ## Error Boundary
@@ -404,8 +430,13 @@ HTML tags are name of HTML elements
 
 The basic difference between CSS Grid Layout and CSS Flexbox Layout is that flexbox was designed for layout in one dimension - either a row or a column. Grid was designed for two-dimensional layout - rows, and columns at the same time
 
-If we want a FLEXIBLE layout (the size of the content decide how much individual space each item takes up), we use flex.
+If we want a FLEXIBLE layout (the size of the content decides how much individual space each item takes up), we use flex.
 If we want a more fixed layout (you create a layout and then you place items into it) and you want to control the alignment by row and column, we use grid.
+
+## What if we put anchor tag into `head` and put `title` or `link` tag into body
+
+When we put the tags used in `body` tag into `head`, they will be moved back to the very top of `body` tag
+When we put `title` or `link` tag in the body, it still works but not recommended.
 
 ## Can you describe the key principles of accessibility in web development, and how you would apply these in a front-end project
 
@@ -1527,8 +1558,8 @@ If you don't have a responsive mobile website, and you open it on a small screen
 
 TLDR:
 
-- `dns-prefetch` & `preconnect` are for high priority but indirectly-called third-party domains like CDNs or external plugins.
-- `preload` is for resources with high priority but loaded inside stylesheets or scripts like above-the-fold CSS background images or fonts. For image in the markup, preload has little effect
+- `dns-prefetch` & `preconnect` are for high priority resources from a domain but you don't know what exactly what it is, you just know that you are going to download them from that domain.
+- `preload` is for resources with high priority but loaded inside stylesheets or scripts like above-the-fold CSS background images or custom fonts. For image in the markup, preload has little effect
 - `prefetch` is for low priority files very likely needed soon, like HTML, CSS or images used on subsequent pages.
 - `dns-prefetch` & `preconnect` reference just the domain name, like 'https://example.com', whereas `preload` and `prefetch` reference a specific file, like header-logo.svg. `prerender` references an entire page, like blog.html.
 - `dns-prefetch` & `preconnect` should also be used sparingly as some web browsers may limit the number of preemptive connections.
@@ -1568,10 +1599,11 @@ A race condition is when your application have a sequence of events and their or
 
 ## Node and element
 
+<https://thisthat.dev/element-vs-node/>
 <https://stackoverflow.com/questions/9979172/difference-between-node-object-and-element-object>
 <https://dmitripavlutin.com/dom-node-element/>
 
-- Node is DOM object. DOM document consists of a hierarchy of nodes. Each node can have a parent and/or children.
+- Node represents a single node in the DOM. DOM document consists of a hierarchy of nodes. Each node can have a parent and/or children.
 - There are many types of nodes (ELEMENT_NODE, TEXT_NODE, etc...). Node.ELEMENT_NODE represents an element node so DOM Element is one specific type of node (ELEMENT_NODE).
 - `Nodelist` is array-like list of nodes
 
@@ -1591,6 +1623,30 @@ paragraph.children;   // HTMLCollection: [HTMLElement]
 
 ## `clientHeight`, `scrollY`, `scrollHeight` and more
 
-- `clientHeight`: returns element height + padding. `document.documentElement.clientHeight` returns the viewport height
+<https://htmldom.dev/determine-the-height-and-width-of-an-element/>
+
+- `clientHeight`: height + padding of element. `document.documentElement.clientHeight` returns the viewport height
+- `offsetHeight`: height + padding + border of element
 - `scrollY`: `window.scrollY` returns how long the scrollbar has scroll
 - `scrollHeight`: returns element content height. `document.documentElement.scrollHeight` returns the height of the whole document. `scrollHeight` > `clientHeight`
+- `clientX`, `clientY`: returns the coordinate of mouse pointer relative to the viewport
+
+## Get CSS styles (`padding`, `margin`) of an element
+
+```js
+const styles = window.getComputedStyle(ele);
+console.log(styles.paddingTop)
+console.log(styles.marginTop)
+console.log(styles.backgroundColor)
+```
+
+## Get and set element attribute
+
+```js
+image.setAttribute('width', '100px');
+image.getAttribute('width')
+```
+
+## Move element
+
+Use `insertBefore`, `insertAdjacentElement`, `insertAdjacentHTML`

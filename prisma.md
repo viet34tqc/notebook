@@ -23,7 +23,7 @@ model Post {
 
 ### Prisma push and pull
 
-- `npx prisma push`: you have `schema.prisma` file and this command will generate table in your db
+- `npx prisma db push`: you have `schema.prisma` file and this command will generate table in your db
 - `npx prisma db pull`: opposite to `npx prisma pull`, your db is ready and you want to synchronize the current db with prisma schema
 
 ### Prisma migrate
