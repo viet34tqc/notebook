@@ -56,9 +56,11 @@ In case you have only one item in the row, `auto-fit` will expend it to fill the
 
 <https://www.youtube.com/watch?v=vNwoDkn7AIc>
 
+When we use `display: grid`, the container is divided into cells which contain grid items. By default, grid items take up full width of its cell.
+
 - `place-content`: 
   - shorthand for `align-content` and `justify-content`
-  - behaves like `display: flex`
+  - align the whole grid items together
 - `place-items`:
   - shorthand for `align-items` and `justify-items`
-  - align the content in that grid
+  - align the items within its cell

@@ -1,6 +1,7 @@
 # Setup ESlint + Prettier + Typescript React
 
 <https://cathalmacdonnacha.com/setting-up-eslint-prettier-in-vitejs>
+<https://z1.digital/blog/eslint-guide-how-to-use-it-with-confidence>
 
 Making a new project ready for development can be a little overwhelming, especially if you use React, Typescript, ESLint, and Prettier, but today I am going to help you set up your React project correctly in a simple way.
 

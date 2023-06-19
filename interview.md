@@ -8,9 +8,23 @@
 
 ## What do you think about JS, compares to other language (cons and pros)
 
+Cons:
+
+- Simple: It's easier to learn and to work with. JS can be run directly within browser, meaning that there's no need to compile the code before running it.
+- Flexibility: You can declare variables without type.
+- Popularity: JS is strongly supported and very popular
+- Rich API: JS provides lots of API to make interactions, which enhance UI and UX 
+
+Pros:
+
+- Security Issues: JavaScript is client-side scripting language which means the code runs on the user’s computer. This can lead to security issues if not implemented properly.
+- Too Flexible: JS is weak typed language => errors. It doesn't even require any variable declaration. This is allowed due to hoisting.
+- JS is executed during runtime without a compiler, if your JS code has error => your app can be crashed.
+- Browser Support: The browser interprets JavaScript differently in different browsers. Thus, the code must be run on various platforms before publishing. 
+
 ## Which data type to be stored in local storage
 
-## Where is React state stored
+Non-sensitive data because local storage can be access via XSS attack
 
 ## Process when taking a task
 
@@ -357,7 +371,7 @@ Mỗi khi render 1 component nào đó, props object của component đó sẽ �
 
 <https://semaphoreci.com/blog/vite>
 
-CRA use webpack for bundler. Webpack bundles the entire application code before it can be served. With a large codebase, it takes more time to spin up the development server and reflecting the changes made takes a long time.
+CRA use webpack for bundling. Webpack bundles the entire application code before it can be served. With a large codebase, it takes more time to spin up the development server and reflecting the changes made takes a long time.
 
 Unlike CRA, Vite does not build your entire application before serving, instead, it builds the application on demand using native ESM.
 
@@ -398,8 +412,8 @@ Pure function is a function:
 
 ## Declare React hook rule
 
-- Don't call Hooks inside loops, conditions, or nested functions. Because React requires the order of Hook calls are the same between re-renders. If we put a hook calls inside an `if` statement, this order will be changed
-- Don't call Hooks from regular JavaScript functions. So don't call hooks inside callback function of `useEffect`
+- Don't declare Hooks inside loops, conditions, or nested functions. Because React requires the order of Hook calls are the same between re-renders. If we put a hook calls inside an `if` statement, this order will be changed
+- Don't declare Hooks from regular JavaScript functions. So don't declare hooks inside callback function of `useEffect`
 
 ## Error Boundary
 
@@ -1399,6 +1413,7 @@ const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-schem
 
 ## `srcset` and `sizes`
 
+<https://blog.webdevsimplified.com/2023-05/responsive-images/>
 <https://12daysofweb.dev/2021/image-display-elements/>
 <https://imagekit.io/responsive-images/>
 
