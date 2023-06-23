@@ -34,7 +34,7 @@ Javascript can only execute one statement at a time. In order to do that, Javasc
 		- What: is the place that the async operations (`promises`, `setTimeout`, `setInterval`) callbacks are waiting to complete.
 		- How:
 		  - For `setTimeout` and `setInterval` callbacks, the timer runs for a period of time that equals to the second arguments then the callback functions is passed to the **queue**.
-		  - Promises callbacks are passed immediately to the **queue**.
+		  - Promises callbacks are passed immediately to the **microtask queue**.
   		  - This is the time for the `event loop` to do its only task: **connect the queue with the call stack**.
 	- Queue:
 		- FIFO

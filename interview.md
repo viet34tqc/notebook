@@ -6,6 +6,11 @@
 
 <https://jantu.hashnode.dev/how-to-implement-infinite-scrolling-with-reactjs>
 
+## Why frontend first
+
+- It's easier to start with, you can see your result immediately on the browser
+- Every app needs UI, you can have an app without any backend at all, but you cannot have an app with only database.
+
 ## What do you think about JS, compares to other language (cons and pros)
 
 Cons:
@@ -28,23 +33,20 @@ Non-sensitive data because local storage can be access via XSS attack
 
 ## Process when taking a task
 
+- Read the requirement carefully. If not, ask the BA or PM or client for clarification
+- If the task is too big, break it into smaller chunks
+- If the task requires a technology you've never done before, research or discuss with your team member to see if you can do it or you can meet the deadline
+- Write test case
+- Code
+- Try to pass the unit test
+
 ## Compare SPA and NextJS. Why use NextJS over SPA
 
-## Why React
+## Why React (over vanilla JS)
 
-- Declarative
-
-- Easy to start
-- Component-based
-  - consistent
-  - Easy to maintain and scale
-- Virtual DOM
-  - Provide faster update on the DOM
-  - It's copy of the real DOM
-  - Updating DOM using vanilla JS is slow, especially when your DOM is big
-  - Whenever there is an update, like state changes or props, React update the virtual DOM
-  - React compares the previous and the current state of the virtual DOM
-  - Those updates are applied to real DOM
+- Like other JS frameworks, you can break your app into components that can be reuseable
+- It's declarative, all the UI interaction is done by using state. In vanilla JS, you need to handle both the state logic and UI interaction
+- It's faster by using Virtual DOM. Virtual DOM is just objects, React update the real DOM via virtual DOM. 
 
 ## Why use virtual DOM in React
 
@@ -1329,7 +1331,8 @@ Optimizing the critical render path improves render performance. Performance tip
 - Optimizing the number of requests required along with the file size of each request.
 - Optimizing the order in which critical resources are loaded by prioritizing the downloading critical assets, shorten the critical path length.
 
-## `var` and `let`, `const`
+## `var` and `let`,
+
 
 - Blocked scope
 
@@ -1408,6 +1411,12 @@ void function() {} === undefined
 ```JS
 const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; // true if system is using dark theme
 ```
+
+## `.lock` file
+
+<https://11sigma.com/blog/2021/09/03/yarn-lock-how-it-works-and-what-you-risk-without-maintaining-yarn-dependencies-deep-dive/>
+
+When present in a project, `.lock` file is the source of information about the current version of dependencies in the project. `yarn` or `npm` will compare dependencies version in the `.lock` file with the current version in the `package.json` and updates packages if needed.
 
 ## counter
 
@@ -1643,7 +1652,7 @@ paragraph.children;   // HTMLCollection: [HTMLElement]
 - `clientHeight`: height + padding of element. `document.documentElement.clientHeight` returns the viewport height
 - `offsetHeight`: height + padding + border of element
 - `scrollY`: `window.scrollY` returns how long the scrollbar has scroll
-- `scrollHeight`: returns element content height. `document.documentElement.scrollHeight` returns the height of the whole document. `scrollHeight` > `clientHeight`
+- `scrollHeight`: returns height + padding + content not visible of element . `document.documentElement.scrollHeight` returns the height of the whole document. `scrollHeight` > `clientHeight`
 - `clientX`, `clientY`: returns the coordinate of mouse pointer relative to the viewport
 
 ## Get CSS styles (`padding`, `margin`) of an element

@@ -89,23 +89,25 @@ For assertion
 - `toBeNull()`
 - `Function.toHaveBeenCalled()`
 
-Recap:
+**RECAP**:
 
 - If you want to select an element that is rendered after an asynchronous operation, use the `findBy*` or `findByAll*` variants.
-- If you want to assert that an element should not be in the DOM (using `not.toBeInTheDocument` and `toBeNull`, use `queryBy*` or `queryByAll*` variants. Otherwise use `getBy*` and `getByAll*` variants.
+- If you want to assert that an element should not be in the DOM (combine `queryBy*` or `queryByAll*` with `not.toBeInTheDocument` or `toBeNull`) - Otherwise, use `getBy*` and `getByAll*` variants.
 
 ### Event
 
 - `fireEvent` from `@testing-library/react`
+
 ```js
 fireEvent.click(
 	screen.getByRole('button', { name: 'Subtract from Counter' })
 );
 ```
 
-- `user` from `@testing-library/user-event`
+- `userEvent` from `@testing-library/user-event`
+
 ```js
-user.click(
+userEvent.click(
 	screen.getByRole('button', { name: 'Subtract from Counter' })
 );
 
@@ -119,14 +121,14 @@ userEvent.type(screen.getByRole('input'), 'Oreos are delicious');
 ```	jsx
 render(<App/>);
 
-  const button = screen.getAllByText('×')[0]
-  
-  // TODO: Mimic clicking on the button
-  userEvent.click( button );
+const button = screen.getAllByText('×')[0]
 
-  // We grab the thought again. It should be null after we clicked the '×' button using userEvent.
-  const removedThought = screen.queryByText('This is a place for your passing thoughts.')
-  expect(removedThought).toBeNull()
+// TODO: Mimic clicking on the button
+userEvent.click( button );
+
+// We grab the thought again. It should be null after we clicked the '×' button using userEvent.
+const removedThought = screen.queryByText('This is a place for your passing thoughts.')
+expect(removedThought).toBeNull()
 ```
 
 ### Wait for an element to be disappeared
@@ -168,7 +170,6 @@ describe('Test AvatarGroup', () => {
 });
 ```
 
-
 ## Mock
 
 <https://pawelgrzybek.com/mocking-functions-and-modules-with-jest/>
@@ -179,19 +180,24 @@ describe('Test AvatarGroup', () => {
 <https://jestjs.io/docs/jest-object#jestspyonobject-methodname>
 `jest.mock()`: mock a *module*
 
-## Config with TypeScript
+## Packages to installed:
 
-### Packages to installed:
-
-- ts-jest (version 26.4.2: Fix `Jest: a transform must export something`)
-- jest-scss-transform (if you are using SCSS import)
-If you are not using create-react-app (like: NextJS), you need to install these additional packages
+- jest
+- jest-environment-jsdom
 - @testing-library/jest-dom
 - @testing-library/react
 - @testing-library/user-event
+- eslint-plugin-jest-dom
+- eslint-plugin-testing-library
+- jest-scss-transform (if you are using SCSS import)
+
+If you are working with Typescript, install these additional libraries
+
+- ts-jest
+- ts-node
 - @types/jest
 
-### Configuration files
+## Configuration files
 
 If you are using CRA, this configuration file won't work by default and you have to run `react-scripts test -- --config jest.config.js`. However, it's NOT RECOMMEND to have a seperate jest configuration file with CRA. If you need other settings, put it in the `package.json`
 
