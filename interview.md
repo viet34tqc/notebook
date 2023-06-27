@@ -22,7 +22,7 @@ Cons:
 
 Pros:
 
-- Security Issues: JavaScript is client-side scripting language which means the code runs on the user’s computer. This can lead to security issues if not implemented properly.
+- Security Issues: JavaScript is client-side scripting language which means the code runs on the user's computer. This can lead to security issues if not implemented properly.
 - Too Flexible: JS is weak typed language => errors. It doesn't even require any variable declaration. This is allowed due to hoisting.
 - JS is executed during runtime without a compiler, if your JS code has error => your app can be crashed.
 - Browser Support: The browser interprets JavaScript differently in different browsers. Thus, the code must be run on various platforms before publishing. 
@@ -45,7 +45,7 @@ Non-sensitive data because local storage can be access via XSS attack
 ## Why React (over vanilla JS)
 
 - Like other JS frameworks, you can break your app into components that can be reuseable
-- It's declarative, all the UI interaction is done by using state. In vanilla JS, you need to handle both the state logic and UI interaction
+- It's declarative, we can describe how UI should look like by JS state. In vanilla JS, you need to handle both the state logic and UI interaction
 - It's faster by using Virtual DOM. Virtual DOM is just objects, React update the real DOM via virtual DOM. 
 
 ## Why use virtual DOM in React
@@ -267,7 +267,7 @@ Then React sync the virtual DOM with the real DOM (this process is commit)
 
 Nếu giá trị state không thay đổi khi setState thì component sẽ render thêm 1 lần nữa. Đến lần setState thứ 3 thì nó dừng hẳn không re-render tiếp.
 
-## Preventing setState errors on unmounted components
+## Preventing setState errors on unmounted components or race condition
 
 **Update**: the warning has been removed in from React version 18.
 
@@ -276,6 +276,8 @@ Nếu giá trị state không thay đổi khi setState thì component sẽ rende
 
 Let's say you have two components, parent and child component.
 Parent component has a button to unmount the child component. Inside child component, we call API and update a state inside. When the child component is requesting API, click the toggle button to unmount child component, then there is a chance that you will encountered an error: `Can't perform a React state update on unmounted component`. That's because your asynchronous request hasn't been resolved yet when the component is unmounted. So, when the request is resolved, it update the state of unmounted component.
+
+Another case is when we type into an input and call API. If we type too fast, there would be multiple request to be sent, the result might come in different order than you expected => race condition.
 
 To fix the problem, we have two methods:
 
@@ -291,7 +293,7 @@ useEffect(() => {
       }
     });
     return () => {
-       mounted = false;
+       mounted = false; // mounted here has the value of previous render. So if we type too fast, we won't have multiple setState, because the setState of previous render will never run
     }
 }, [name])
 ```
@@ -317,7 +319,7 @@ useEffect(() => {
 
   return () => {
     // abort the request here
-    controller.abort();
+    controller.abort(); // If the dependancy changes, this callback is call, controller will abort the previous request send.
   };
 }, [url]);
 ```
@@ -345,7 +347,7 @@ React uses `key` as a way to distinguish between any components. Let's say you h
 
 If the key of item retains between re-renders, React will ignore re-rendering it => better perfomance.
 
-Key must be unique. And you shouldn't take index as key, as when you add or remove items, the index (or key) of all items will be changed => bugs
+Key must be unique. And you shouldn't take index as key, as when you add or remove items (at the top of the list), the index (or key) of all items will be changed => bugs
   
 When the `key` props is changed, React unmount the previous instance, and mount a new one. This means that all state that had existed in the component at the time is completely removed and the component is reinitialized
 Khi 1 component bất kì có props key, khi key này bị thay đổi thì component sẽ bị unmount, state của nó cũng sẽ bị xóa bỏ và React sẽ mount lại 1 component mới
@@ -363,6 +365,10 @@ VD:
 - Backend xây dựng API để Frontend sử dụng để lấy data
 
 Có thể liên tưởng tới UI: user tương tác với giao diện (interface) của ứng dụng mà không cần quan tâm giao diện đấy được thực hiện sao
+
+## How to approach a design
+
+
 
 ## Optimize React re-render
 
@@ -403,7 +409,7 @@ When re-render is bad?: when a component has complex calculation or includes cha
 Why we shouldn't pre-optimize (with `useMemo` and `useCallback`)
 
 - Your code is more complex
-- React is very fast. If your component is pure, rendering your component one time or multiple times shouldn’t cause any differences on the actual UI.
+- React is very fast. If your component is pure, rendering your component one time or multiple times shouldn't cause any differences on the actual UI.
 
 ## What is pure function
 
@@ -839,7 +845,7 @@ let springLuncheon = new Date('March 21, 2023 14:00');
 let earthDay = new Date(1682136000000);
 ```
 
-For better accuracy across browsers and operating systems, it’s recommended that you use the **ISO 8601 format**: `YYYY-MM-DDTHH:MM:SS`.
+For better accuracy across browsers and operating systems, it's recommended that you use the **ISO 8601 format**: `YYYY-MM-DDTHH:MM:SS`.
 
 Examples: '2011-10-05T14:48:00.000Z'. T means nothing but a space between date and time, Z means zero UTC offset (UTC+0). If Z is ignore, the local system timezone will be used
 
@@ -1134,10 +1140,91 @@ REST is kind of convention of how you set up an API, how you transfer data betwe
 ## Pass by value and pass by reference
 
 <https://www.aleksandrhovhannisyan.com/blog/javascript-pass-by-reference/#what-is-pass-by-value>
+<https://www.30secondsofcode.org/js/s/pass-by-reference-or-pass-by-value>
 
-- Pass by reference: JS doesn't pass by reference. If so, then param would be an alias for argument. Any changes to param reflected back to argument
-- passing by value is about copying. When an argument is passed by value, the formal parameter receives a copy of the argument's value (argument is the variable that passed to function when the function is called)
-- passing pointer by value: when we pass a pointer into a function as an argument, the formal parameter receives a copy of the memory address to which the argument was pointing. This lets us modify the underlying object being pointed to. If JS is passed by reference, the param and the argument both point to the new address if the param (which is an object) is modified.
+- Passing by value is about copying. When an argument is passed by value, the formal parameter receives a copy of the argument's value (argument is the variable that passed to function when the function is called)
+- In pass by reference, param would be an alias for argument, which means param values change will lead to change in argument value. But JS always **pass by value** (both primitive and non-primitive values) and doesn't pass by reference.
+Here we are passing a primitive value:
+
+```js
+function swap(a, b) {
+    const temp = a;
+    a = b;
+    b = temp;
+
+    console.log(a); // 2
+    console.log(b); // 4
+}
+
+let x = 4;
+let y = 2;
+swap(x, y);
+
+// x and y do not swap, whereas a and b do locally.
+// If it did, then a would’ve been an alias for x and b would’ve been an alias for y. Any changes to a and b would have been reflected back to x and y
+console.log(x); // 4
+console.log(y); // 2
+```
+
+And now, we pass a non-primitive value (an object)
+
+```js
+function changeName(person) {
+    // person.name = 'Jane';
+    // If we modify the param, the original argument changes as well but the still point to the same memory address in the heap
+    // But if we assign person to the new value which is the new object
+    // The original argument doesn't change at all
+    person = {name: 'Jane'};
+}
+
+let bob = { name: 'Bob' };
+changeName(bob);
+console.log(bob) // bob is still {name: 'Bob'}
+```
+
+## Regular function and async function. When to use async function
+
+Async function always return a promise. It's often used when we want to perform some asynchronous action inside the function.
+
+## How do you debug error in JS
+
+## Why we use arrow function over normal function
+
+- Less code to write
+
+## Why you should put your modal outside of main area.
+
+<https://www.developerway.com/posts/positioning-and-portals-in-react>
+Normally, when you build a modal, you will set its position `fixed` and give it a high value of `z-index`. However, if you render your modal in a nested div, there will be a high chance that your modal will lie below other elements.
+The reason is because of stacking context. If the parent element of modal create its own stacking context (position with positive `z-index`, `transform`...), the `z-index` value of modal will be counted only inside its parent. And if modal's parent lie below other elements in DOM, the modal will as well and its position is relative to its containing block which default is the viewport. By using `transform`, the parent becomes new modal's containing block
+
+## Difference between `async await` and promises
+
+They are both used to handle asynchronous tasks. The difference is The promise involves chaining `.then` and `.catch` methods, whereas Async Await uses a try-catch block that looks more like synchronous code. So, it's easier to read code with `async` and `await`
+
+## Common web securities
+
+- Preventing XSS
+  + Don't save sensitive data in local storage
+  + Using cookie with `httpOnly` flag set to true
+  + Escape dynamic content when you read it from database
+  + Sanitize data before saving into db
+- Preventing CSRF
+  + Using cookie with `SameSite` flag set to `Lax` or `Strict` to prevent 
+- SQL injection
+
+## What is responsive design, how to implement it.
+
+Is a web design approach to make web pages render well on all screen sizes and resolutions while ensuring good usability
+
+How:
+
+Without CSS, using only HTML can make web layout responsive by default.
+With CSS, for simple layout, we can use `flexbox` and `grid` to make responsive. For rather complex layout, we can use media query
+
+## CSS priority
+
+`!important` => inline style => id => class => tag name
 
 ## Copy object
 
@@ -1168,7 +1255,7 @@ const b = JSON.parse(JSON.stringify(a));
 
 - Only call Hooks at the top level. You shouldn't call `useState` in loop, conditions
 - Only call Hooks inside React function components
-- Whenever we have connected `useState` and `useEffect` hooks, it’s a good opportunity to extract them into a custom hook:
+- Whenever we have connected `useState` and `useEffect` hooks, it's a good opportunity to extract them into a custom hook:
 - `useState` doens't merge objects when the state is updated. It replaces them.
 - Don't use `async` with callback function in `useEffect`. It can work fine if you have only one `useEffect`. However, if you have multiple `useEffect`, you could run into race conditon.
 
@@ -1301,6 +1388,7 @@ console.log(info);
 - Largest Contentful Paint (LCP): the time when the largest content element (text or images, svg) in the viewport becomes visible. It can be used to determine when the main content of the page has finished rendering on the screen.
 - Time To (fully) Interactive (TTI): the amount of time it takes for the page to be fully interactive. Users might expect this is the same time as LCP, but this can be different. If TTI and LCP differ, users might assume the website is slow.
 - First Input Delay (FID): the time from when a user first interacts with a page to the time when the browser is actually able to respond to that interaction.
+- CLS (Cumulative Layout Shift) – it's a metric that measures the visual stability of a page layout. It's calculated as the sum of shifts that are visible during page loading. This includes unexpected shifts, i.e., those unrelated to user interaction.
 - Total Blocking Time (TTB): total amount of time between First Contentful Paint (FCP) and Time to Interactive (TTI) where the main thread was blocked for long enough to prevent input responsiveness.
 
 ## Obtimize speed
@@ -1397,6 +1485,20 @@ void 0 === undefined
 void function() {} === undefined
 ```
 
+## Design system
+
+A design system is a collection of reusable components with clear standards (code styleguides, fonts, colors, spacing...). These components combine together to build any applications.
+
+A UI framework library like Bootstrap, MUI, Ant-design... are design system. The downside of these libraries is that every sites using the same library can look the same. Of course, we can customize the library but it can take times.
+
+Atomic design
+
+- Atom: like button, input, label
+- Molecules: collections of atoms, like Search Bar
+- Organisms: collections of Molecules, like Header, Footer
+- Templates: collections of Organism, like layouts. A site can have multiple layouts
+- Pages: a specific pages that can use one of templates
+
 ## prefers-color-scheme
 
 Đây là 1 tính năng của CSS `@media` để check xem thiết bị của bạn (máy tính hoặc điện thoại) đang sử dụng dark theme hay light theme
@@ -1437,7 +1539,7 @@ When present in a project, `.lock` file is the source of information about the c
 
 First, we need to calculate the image size. For example, if the viewport < 400px, let's say 350px, the image size will be 100vw, which is 350px. Then, the browser will use this image <https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350>
 
-If the viewport is 650px, the image size will be 325px, and the browser use <https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350>, which is the closest one
+If the viewport is 650px, the image size will be 325px. It tells browser to use the picture with minimum of 325px => the browser use <https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350>, which is the closest one
 
 ## fr in grid
 
@@ -1569,7 +1671,7 @@ These og meta tags are used to display information of the post like the title, f
 
 ## `text-size-adjust`
 
-If you don't have a responsive mobile website, and you open it on a small screen, so the browser might resize the text to make it bigger so it’s easier to read. The CSS `text-size-adjust` property can either disable this feature with the value none or specify a percentage up to which the browser is allowed to make the text bigger.
+If you don't have a responsive mobile website, and you open it on a small screen, so the browser might resize the text to make it bigger so it's easier to read. The CSS `text-size-adjust` property can either disable this feature with the value none or specify a percentage up to which the browser is allowed to make the text bigger.
 
 ## Resource hint: preconnect, dns-prefetch, preload
 
@@ -1674,3 +1776,41 @@ image.getAttribute('width')
 ## Move element
 
 Use `insertBefore`, `insertAdjacentElement`, `insertAdjacentHTML`
+
+## Handle scroll
+
+There are two API to handle scrolling in JS: `scrollTo` and `scrollIntoView`
+
+`scrollTo` calls on window, `scrollIntoView` calls on element itself
+
+```jsx
+function App() {
+  const paragraphRef = useRef(null);
+  return (
+    <div>
+      <button
+        onClick={() =>
+          window.scrollTo({
+            top: paragraphRef.current.getBoundingClientRect().top
+            behavior: "smooth",
+          })
+        }
+      ><button
+        onClick={() =>
+          paragraphRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          })
+        }
+      >
+        Scroll to element
+      </button>
+      <p ref={paragraphRef}>
+        Lorem ipsum…
+      </p>
+    </div>
+  );
+}
+```
+
+

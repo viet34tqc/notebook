@@ -37,8 +37,9 @@ function UsersManagement({ users, isNewAPI }) {
 }
 ```
 
+## Working with multiple states
 
-## Working with form inputs
+Case 1: States are input state. However, this only works for jsx file because we don't know which type of event handler
 
 <https://www.joshwcomeau.com/react/data-binding/>
 

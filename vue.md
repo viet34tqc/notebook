@@ -6,7 +6,7 @@
 
 Using handlebars `{{ variable_name }}`
 
-- Using normal string for function instead of `{}` in JSX
+- In template, if we want to access state or function, we use string instead of `{}` like in JSX. We also don't need `""` as well
 
 ```html
 <button @click="say('hello')">Say hello</button>
@@ -53,11 +53,10 @@ Syntax: `@event_name="method_name"`, ex: `<button @click="say('hello')">Say hell
 Like `ref` in react. You can only access ref after the component is mounted
 
 ```html
-<script>
-export default {
-  mounted() {
-    this.$refs.input.focus()
-  }
+<script setup>
+const input = ref(null);
+onMounted() {
+  input.value.focus()
 }
 </script>
 
@@ -156,7 +155,7 @@ In parent component:
 />
 ```
 
-In child component: using `@emit` to fire the event
+In child component: using `$emit` to fire the event
 
 ```html
 <!-- BlogPost.vue, omitting <script> -->
@@ -244,7 +243,7 @@ console.log( completedTasks.value)
 
 ## `watch`
 
-The usage of `watch` is nearly the same as `computed`, but instead of returning a value, it does something
+The usage of `watch` is nearly the same as `computed`, but instead of returning a value, it does something. It's more like `useEffect` in React.
 
 `watch` and `watchEffect`: <https://www.vuemastery.com/blog/vues-watch-vs-watcheffect-which-should-i-use/>
 
@@ -353,6 +352,10 @@ router.beforeEach((to, from, next) => {
 });
 ```
 
-## Compare to react
+## Compare to React
 
-- Vue can mutate the state, React doesn't
+- Vue doesn't have `setState` function. You can mutate the state directly, React doesn't allow. For example, you can use `push` to add item to array state, or you can assign state to the new value (`state = newState`)
+- Data binding: Data binding is easier in Vue. For example, for checkbox value, you only need to define a state and assign it to element via `v-model`. Updating value is handled automatically. Wheareas, React handles it manually via a `setState`
+- List rendering: I prefer using array method (`map`, `filter`) to render a list in React because it's more like JS
+- Computed: React doesn't need API to calculate a state based on other state. Vue requires `computed()`
+- Method props: In React, prop as a method can be call directly, in Vue we need to `defineEmit` first and use `$emit()` to emit events from parent

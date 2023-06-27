@@ -180,16 +180,20 @@ describe('Test AvatarGroup', () => {
 <https://jestjs.io/docs/jest-object#jestspyonobject-methodname>
 `jest.mock()`: mock a *module*
 
-## Packages to installed:
+## Packages to install:
 
-- jest
-- jest-environment-jsdom
-- @testing-library/jest-dom
+If we are not using vite (CRA, NextJS), we can use `jest`. Otherwise, vitest is recommended rather than vite (<https://github.com/CodingGarden/react-ts-starter>)
+
+- jest or vitest
+- jest-environment-jsdom: By default, Jest uses node for testing. This package creates browser env for UI tests
+- @testing-library/jest-dom: <https://github.com/testing-library/jest-dom#usage>
 - @testing-library/react
 - @testing-library/user-event
 - eslint-plugin-jest-dom
 - eslint-plugin-testing-library
 - jest-scss-transform (if you are using SCSS import)
+- jest-svg-transformer (for svg)
+- identity-obj-proxy (css modules)
 
 If you are working with Typescript, install these additional libraries
 
@@ -200,6 +204,8 @@ If you are working with Typescript, install these additional libraries
 ## Configuration files
 
 If you are using CRA, this configuration file won't work by default and you have to run `react-scripts test -- --config jest.config.js`. However, it's NOT RECOMMEND to have a seperate jest configuration file with CRA. If you need other settings, put it in the `package.json`
+
+If your project use JSX, you will need `babel` setup, otherwise, `ts-jest` will handle `ts, tsx` files
 
 - `jest.config.js`
 
@@ -216,6 +222,10 @@ module.exports = {
 		'^.+\\.jsx?$': 'babel-jest',
 		'^.+\\.scss$': 'jest-scss-transform',
 	},
+	moduleNameMapper: {
+    '^.+\\.svg$': 'jest-svg-transformer',
+    '^.+\\.css$': 'identity-obj-proxy',
+  },
 	setupFilesAfterEnv: ['./jest.setup.ts'],
 };
 ```

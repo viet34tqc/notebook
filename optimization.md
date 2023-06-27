@@ -1,5 +1,6 @@
 # Performance optimization
 
+<https://evilmartians.com/chronicles/before-your-next-frontend-pull-request-use-this-checklist>
 <https://www.youtube.com/watch?v=0fONene3OIA>
 <https://pagespeedchecklist.com/>
 <https://xwp.co/how-to-build-a-rocket-best-practices-for-better-web-performance/>
@@ -55,10 +56,10 @@ Trong trường hợp phải dùng icon font thì phải optimize dùng `icomoon
 
 ## Ảnh
 
-- Resize image
+- Resize and compress image: <https://squoosh.app/>
 - Dùng webp cho ảnh, svg nếu ảnh dưới dạng vector
 - Thêm width và height cho ảnh để cải thiện điểm CLS
-- Chỉ lazy load ảnh ở phía dưới hoặc ảnh không hiện ra khi mới load trang. Ảnh nào hiện ra ngay khi load trang thì không lazy load.
+- Lazy loading: only lazy load image below the fold, do not lazy load hero image
 - preload LCP background image like hero image: `<link rel="preload" as="image" imagesrcset=" image-400.jpg 400w, image-800.jpg 800w, image-1600.jpg 1600w" imagesizes="100vw" />.`
 - For image in the markup, combine preload with `fetchpriority`: <https://imkev.dev/fetchpriority-opportunity>
 

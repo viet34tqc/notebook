@@ -42,7 +42,7 @@ Two different requests 'raced' against each other and the result might come in a
 
 ## RESTful API:
 
-is the api that help client interact with server to exchange information via HTTP methods (GET, POST, PUT, DELETE)
+It is the api that helps client interact with server to exchange information via HTTP methods (GET, POST, PUT, DELETE)
 
 ## Hydration (Rehydration)
 
