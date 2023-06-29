@@ -73,6 +73,10 @@ the act of taking a website live on a server
 
 remove unused code before bundling. This can be an issue when using barrel files: <https://github.com/vercel/next.js/issues/12557> <https://renatopozzi.me/articles/your-nextjs-bundle-will-thank-you>
 
+## Prototype chain
+
+Every object in JavaScript has a built-in property, which is called its prototype (`__proto__`. The prototype is itself an object, so the prototype will have its own prototype, making what's called a prototype chain. The chain ends when we reach a prototype that has null for its own prototype. 
+
 ## postCSS:
 
 it's like webpack for CSS. There are variaty of postCSS plugins like minify, compile sass to css... <https://www.youtube.com/watch?v=Kn2SKUOaoT4>

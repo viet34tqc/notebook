@@ -90,7 +90,7 @@ todos.value.push(newTodo)
 todos.value = todos.value.filter(/* ... */)
 ```
 
-## Form inputs
+## `v-model`
 
 Vue is two-ways binding, which means when the UI change, the state update and vice versa.
 
@@ -100,7 +100,6 @@ Input using `v-model` to synchronize value with the state.
 <script setup>
 import { ref } from 'vue'
 
-
 const newTodo = ref('')
 </script>
 
@@ -109,6 +108,40 @@ const newTodo = ref('')
   {{newTodo}}
 </template>
 ```
+
+You might not need to declare a state to work with `v-model`, in case you are working with event handler
+
+```html
+<script setup>
+import { ref } from 'vue'
+
+function addTodo(e: KeyboardEvent) {
+  const value = (e.target as HTMLInputElement).value.trim()
+  if (value) {
+    todos.value.push({
+      id: Math.floor(Math.random() * Date.now()).toString(16),
+      name: value,
+      completed: false
+    })
+    e.target.value= ''
+  }
+}
+</script>
+
+<template>
+  <input @keyup.enter="addTodo">
+  {{newTodo}}
+</template>
+```
+
+Or if you have a state as an array, your input can react to array item instead of the whole state of array
+
+```html
+<li v-for="todo in todos" :key="todo.id">
+    <input type="checkbox" v-model="todo.completed" />
+</li>
+```
+
 
 ```html
 `<input v-model="text">`
@@ -241,14 +274,16 @@ console.log( completedTasks.value)
 </template>
 ```
 
-## `watch`
+## `watch` and `watchEffect`
 
-The usage of `watch` is nearly the same as `computed`, but instead of returning a value, it does something. It's more like `useEffect` in React.
+<https://www.vuemastery.com/blog/vues-watch-vs-watcheffect-which-should-i-use/>
+<https://vuejs.org/api/reactivity-core.html>
 
-`watch` and `watchEffect`: <https://www.vuemastery.com/blog/vues-watch-vs-watcheffect-which-should-i-use/>
+The usage of `watch` and `watchEffect` is nearly the same as `computed`, but instead of returning a value, it does something. It's more like `useEffect` in React.
 
 - In `watch`, we need to declare a dependancy or a state or reactive value
-- `watch` is lazy by default. As opposed to `watchEffect`, `watch` will NOT execute the effect function as soon as the `watch` method declaration is reached
+- `watchEffect` run the callback immediately.
+- `watch` is lazy by default. As opposed to `watchEffect`, `watch` will NOT execute the effect function as soon as the watched source has changed.
 
 To watch an props
 
@@ -355,7 +390,10 @@ router.beforeEach((to, from, next) => {
 ## Compare to React
 
 - Vue doesn't have `setState` function. You can mutate the state directly, React doesn't allow. For example, you can use `push` to add item to array state, or you can assign state to the new value (`state = newState`)
+- Because of the direct mutation, you can also assign state to new value in Vue. **This could be dangerous** if we mutate one, the other mutate as well
 - Data binding: Data binding is easier in Vue. For example, for checkbox value, you only need to define a state and assign it to element via `v-model`. Updating value is handled automatically. Wheareas, React handles it manually via a `setState`
 - List rendering: I prefer using array method (`map`, `filter`) to render a list in React because it's more like JS
 - Computed: React doesn't need API to calculate a state based on other state. Vue requires `computed()`
 - Method props: In React, prop as a method can be call directly, in Vue we need to `defineEmit` first and use `$emit()` to emit events from parent
+- Working with TS: React makes it easier to work with TS, at least for typing event handlers. Vue doens't have type for each kind of event.
+- You might not need to declare a state to work with input, in case you are working with event handler [https://vuejs.org/examples/#todomvc](https://vuejs.org/examples/#todomvc)

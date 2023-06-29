@@ -37,11 +37,11 @@ const chihuahua = new Dog() // chihuahua will inherits from Dog.prototype
 
     .prototype             __proto__
 Dog --------> Dog.prototype ---------> Object.prototype
- |                |                          |
- | __proto__      | __proto__                |
- |                |                          |
-Function      chihuahua                      |
-.prototype------------------------------------
+  |                /|\                         |
+  | __proto__       | __proto__                |
+ \|/                |                          |
+Function        chihuahua.constructor === Dog  |
+.prototype--------------------------------------
                       __proto__ 
 
 ```javascript
@@ -77,7 +77,7 @@ function Animal() { }
 function Bird() { }
 function Dog() { }
 
-Bird.prototype = Object.create(Animal.prototype);
+Bird.prototype = Object.create(Animal.prototype); // Bird.prototype.__proto__ = Anima.prototype
 Dog.prototype = Object.create(Animal.prototype);
 
 Bird.prototype.constructor = Bird;

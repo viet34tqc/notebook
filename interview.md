@@ -599,7 +599,7 @@ To catch that, we need to use `await`
 `reject(new Error())` just a function call, so it doesn't break the execution flow like `throw` does. his means you can write code that both rejects and resolves, like this:
 
 ```js
-// Reject is call first because it's lie above `resolve`
+// Reject is call first because it lies above `resolve`
 // If `resolve` is called fisrt, and we throw, `throw` wont be called
 function test() {
     return new Promise((resolve, reject) => {
@@ -627,7 +627,7 @@ By default, JavaScript looks at the class that uses the `this` keyword, not the 
 - If a function is called as a method `this` is the object that the function is a property of.
 - If a method is assigned to a variable, then that method is detached from object and `this` is `undefined` in strict mode or `window` as global object. Example: `this` will be undefined in controller class because when you execute a method of that class in route, the method is detached from controller class <https://stackoverflow.com/questions/45643005/why-is-this-undefined-in-this-class-method>
 - If a function is invoked as a free function invocation, `this` is the global object.
-- If it's an arrow function, `this` value will be the context of its surrounding scope at the time it is created. Arrow function will try to resolve this inside it lexically just like any other variable and ask the Outer function - Do you have a this? And Outer Function will reply YES and gives inner function its own context to this
+- If it's an arrow function, `this` value will be the context of its surrounding scope at the time it is created. Arrow function will try to resolve `this` inside it lexically just like any other variable and ask the Outer function - Do you have a `this`? And Outer Function will reply YES and gives inner function its own context to this
 
 ```js
 function outer() {
@@ -655,7 +655,7 @@ class Person {
       console.log(this.name); // return 'viet' because `this` in arrow function refers to where it's created which is the class
     }, 1000) 
 
-    setTimeout(() => {
+    setTimeout(function() {
       console.log(this.name); // return 'undefined' because the callback is executed by window
     }, 1000)
   }
@@ -1359,11 +1359,11 @@ export default 'I love JavaScript';
 import * as info from './info';
 console.log(info);
 
-{
-  default: "I love JavaScript",
-  name: "Lydia",
-  age: 21
-}
+// {
+//   default: "I love JavaScript",
+//   name: "Lydia",
+//   age: 21
+// }
 ```
 
 ## What happens when you type a URL into browser
@@ -1419,8 +1419,7 @@ Optimizing the critical render path improves render performance. Performance tip
 - Optimizing the number of requests required along with the file size of each request.
 - Optimizing the order in which critical resources are loaded by prioritizing the downloading critical assets, shorten the critical path length.
 
-## `var` and `let`,
-
+## `var` and `let`, `const`
 
 - Blocked scope
 
@@ -1440,7 +1439,7 @@ When variable declared with `let` and `const`, it returns `ReferenceError`
 ## Hoisting
 
 It's the process of moving the declaration of functions, variables, or classes to the top their scope, prior to execution of the code
-that stores functions and variables in the memory before executing any code (creation phase);
+It stores functions and variables in the memory before executing any code (creation phase);
 
 - Functions are stored with the entire function. That's why you can invoke them before the line we declare them. However, if you declare function by assigning it to a variable, the hoisting rule for variable is applied.
 - Variables is different.
