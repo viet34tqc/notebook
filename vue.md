@@ -6,10 +6,11 @@
 
 Using handlebars `{{ variable_name }}`
 
-- In template, if we want to access state or function, we use string instead of `{}` like in JSX. We also don't need `""` as well
+- In template, if we want to write JS like access state or execute function, we use string (`""`) instead of `{}` like in JSX. 
 
 ```html
 <button @click="say('hello')">Say hello</button>
+<button :class="`text-sm mb-2 ${statusColor}`">Button</button>
 ```
 
 - Single-file component
@@ -236,14 +237,14 @@ To render the content inside the `AlertBox` component, using slot
 
 Props need to register before using. We should declare type or validation for the props as well (<https://vuejs.org/guide/components/props.html#prop-validation>)
 
-```js
+```html
 // This means the component has two Props. In React, we also has props object and pass to function component as a param.
-export default {
-  props: {
-    title: String,
-    likes: Number
-  }
-}
+<script setup lang="ts">
+  defineProps<{
+    title?: string
+    likes?: number
+  }>()
+</script>
 ```
 
 Like React, we should never mutate the props object directly, props are read-only
@@ -389,7 +390,7 @@ router.beforeEach((to, from, next) => {
 
 ## Compare to React
 
-- Vue doesn't have `setState` function. You can mutate the state directly, React doesn't allow. For example, you can use `push` to add item to array state, or you can assign state to the new value (`state = newState`)
+- Vue doesn't have `setState` function and you can mutate the state directly, while React doesn't allow. For example, you can use `push()` to add item to array state, or you can assign state to the new value (`state = newState`)
 - Because of the direct mutation, you can also assign state to new value in Vue. **This could be dangerous** if we mutate one, the other mutate as well
 - Data binding: Data binding is easier in Vue. For example, for checkbox value, you only need to define a state and assign it to element via `v-model`. Updating value is handled automatically. Wheareas, React handles it manually via a `setState`
 - List rendering: I prefer using array method (`map`, `filter`) to render a list in React because it's more like JS

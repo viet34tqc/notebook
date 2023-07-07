@@ -71,25 +71,27 @@ const useTaskStore = defineStore('taskStore', {
 ```js
 const useTaskStore = defineStore(() => {
 	const tasks = ref([]);
-	const completedTasks = () => {tasks.filtered(task => task.completed:)}
+	const completedTasks = () => computed(() => tasks.value.filtered(task => task.completed:))
 	function addTask(task) {
-		tasks.push(task);
+		tasks.value.push(task);
 	}
 	async function getTask() {
 		const res = await axios.get('getTask')
 		if (res.data) {
-			tasks = res.data
+			tasks.value = res.data
 		}
 	}
-	async function deleteTasks(task) {
+	async function deleteTask(task) {
 		await axios.delete(task)
 	}
+
+	return {tasks, completedTasks, getTask, deleteTask}
 })
 ```
 
 ## How to use pinia store in Vue Component
 
-For convenience, if you want to destructure this reactive value, you need to use `storeToRef(storeName)`. Actions can also be destructured without using `storeToRef`
+For convenience, if you want to destructure **reactive values** (not actions), you need to use `storeToRef(storeName)`. Actions are destructured without using `storeToRef`
 
 ```js
 const taskStore = useTaskStore();
