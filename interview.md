@@ -271,7 +271,7 @@ How to prevent unnecessary re-renders
 
 By a process called reconciliation
 
-All React does is create a tree of elements (React elements are object that is the result of calling `React.createElement`). This tree of elements is called Virtual DOM and is kept in the memory.
+All React does is create a tree of elements (React elements are object that is the result of calling `React.createElement`). This tree of elements is called `Virtual DOM` and is kept in the memory.
 
 Once virtual DOM has updated, React compares the entire virtual DOM with a virtual DOM snapshot that was taken right before the update.
 It only finds the elements that has changed. If there are a lot of updates, React can batch them (collect the updates) for efficency.
@@ -285,7 +285,7 @@ Nếu giá trị state không thay đổi khi setState thì component sẽ rende
 
 ## Preventing setState errors on unmounted components or race condition
 
-**Update**: the warning has been removed in from React version 18.
+**Update**: the warning has been removed from React version 18.
 
 <https://www.developerway.com/posts/fetching-in-react-lost-promises>
 <https://www.digitalocean.com/community/tutorials/how-to-handle-async-data-loading-lazy-loading-and-code-splitting-with-react>
@@ -385,7 +385,6 @@ Có thể liên tưởng tới UI: user tương tác với giao diện (interfac
 ## How to approach a design
 
 
-
 ## Optimize React re-render
 
 <https://kentcdodds.com/blog/optimize-react-re-renders>
@@ -418,7 +417,7 @@ Dependency pre-bundling only applies in development mode, and uses esbuild to co
 
 Side effect is anything that affects something outside the function scope, ex: network request, updating the screen, starting an animation, changing data. They are things happens on the side, not during rendering
 
-## Are react re-render bad? When is it bad and when is isn't?
+## Is react re-render bad? When is it bad and when is isn't?
 
 Only optimize when the re-render makes your app slow. 
 When re-render is bad?: when a component has complex calculation or includes charts.
@@ -947,10 +946,9 @@ console.log( config.language ) // ['VN']
 
 Đó là việc 1 website có thể hiển thị và tương tác (UI và UX) tốt trên tất cả các trình duyệt và các cỡ màn hình
 
-## Map trong javascript
+## `Map` trong javascript
 
-Why:
-<https://www.builder.io/blog/maps>
+Why: <https://www.builder.io/blog/maps>
 
 - `Map` sửa xóa property nhanh hơn so với object => Sử dụng `Map` nếu cần sửa xóa nhiều property, còn lại nếu chỉ có đọc data thì có thể dùng object
 - Object có built-in properties và các properties này có thể bị override

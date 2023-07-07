@@ -3,16 +3,16 @@
 <https://punits.dev/jargon-free-intros/>
 <https://thanhle.blog/blog/thuat-ngu-trong-frontend-optimization>
 
-## Transpile:
+## Transpile
 
-convert the code so that older browser can also run it.
+Convert the code so that older browser can also run it.
 
-## Babel:
+## Babel
 
-enable writing codes with JS features that are not supported by most browser yet. The modern code is transpiled back to vanilla JS so that every environment can understand it.
+Enable writing codes with JS features that are not supported by most browser yet. The modern code is transpiled back to vanilla JS so that every environment can understand it.
 `babel-loader`: the loader used with Webpack to transpile JS
 
-## render tree:
+## Render tree
 
 is the combination of The CSSOM and DOM tree created in the parsing HTML step. Render tree is then used to compute the layout of every single element, which is then painted to the screen. <https://web.dev/howbrowserswork/>
 
@@ -69,9 +69,9 @@ the act of taking a website live on a server
 - `path`: tell browser which path are allowed to access a cookie. A cookie with the path attribute as Path=/store would only be accessible on the path /store and its subpaths /store/cart, /store/gadgets
 - `secure`: A cookie with the Secure attribute is only sent to the server over the secure HTTPS protocol, so the domain of client must be HTTPS
 
-## tree-shaking:
+## Tree-shaking
 
-remove unused code before bundling. This can be an issue when using barrel files: <https://github.com/vercel/next.js/issues/12557> <https://renatopozzi.me/articles/your-nextjs-bundle-will-thank-you>
+Remove unused code before bundling. This can be an issue when using barrel files: <https://github.com/vercel/next.js/issues/12557> <https://renatopozzi.me/articles/your-nextjs-bundle-will-thank-you>
 
 ## Prototype chain
 
@@ -81,11 +81,7 @@ The prototype chain is a mechanism that allows objects to inherit properties and
 
 it's like webpack for CSS. There are variaty of postCSS plugins like minify, compile sass to css... <https://www.youtube.com/watch?v=Kn2SKUOaoT4>
 
-## hydration:
-
-is the process of getting your static HTML from server and turning it into dynamic DOM that React can modify
-
-## encode and encrypt
+## Encode and Encrypt
 
 - Encoding transforms data into another format using a scheme that is publicly available so that it can easily be reversed.
 - Encryption transforms data into another format in such a way that only specific individual(s) can reverse the transformation

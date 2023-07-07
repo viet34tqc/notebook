@@ -1,6 +1,6 @@
 # Bugs Fix
 
-This is some common bugs I encounter when developing
+This is some common bugs I encounter while developing
 
 ## Typescript
 
@@ -17,12 +17,14 @@ interface IAuthContext{
 const AuthContext = React.createContext<IAuthContext|null>(null)
 ```
 
-Then, you retrieve the variable's value from the context, TS will raise an error `Property  does not exist on type context IAuthContext|null`
+Then, you retrieve the variable's value from the context, TS will raise an error `Property does not exist on type context IAuthContext|null`
+
 ```typescript
 const {user, error} = useContext(AuthContext)
 ```
 
 This can be fixed by casting the useContext:
+
 ```typescript
 const {user, error} = useContext(AuthContext) as IAuthContext
 ```
