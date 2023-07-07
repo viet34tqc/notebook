@@ -18,12 +18,12 @@ Cons:
 - Simple: It's easier to learn and to work with. JS can be run directly within browser, meaning that there's no need to compile the code before running it.
 - Flexibility: You can declare variables without type.
 - Popularity: JS is strongly supported and very popular
-- Rich API: JS provides lots of API to make interactions, which enhance UI and UX 
+- Rich API: JS provides lots of APIs to make interactions, which enhance UI and UX 
 
 Pros:
 
 - Security Issues: JavaScript is client-side scripting language which means the code runs on the user's computer. This can lead to security issues if not implemented properly.
-- Too Flexible: JS is weak typed language => errors. It doesn't even require any variable declaration. This is allowed due to hoisting.
+- Too Flexible: JS is weak typed language => errors in run time. It doesn't even require any variable declaration. This is allowed due to hoisting.
 - JS is executed during runtime without a compiler, if your JS code has error => your app can be crashed.
 - Browser Support: The browser interprets JavaScript differently in different browsers. Thus, the code must be run on various platforms before publishing. 
 
@@ -41,6 +41,12 @@ Non-sensitive data because local storage can be access via XSS attack
 - Try to pass the unit test
 
 ## Compare SPA and NextJS. Why use NextJS over SPA
+
+- Faster initial page load: it can pre-render the content on server side without waiting for bundling process like in SPA
+- SEO friendly: NextJS pre-render the page before returning to client, so Google Bot can read and crawl the page, that is impossible in SPA
+- Routing without any router packages
+- Images optimization with `Image` component
+- Code splitting and bundling
 
 ## Why React (over vanilla JS)
 
@@ -112,7 +118,7 @@ It could be dangerous if the component have state and is called directly. The re
 
 Let's say we have an `useState` in both parent and child component and calling `useState` in parent component will add more child component. In our case we are calling child function component, so there will be two `useState` in the parent component. Because number of child component can be changed => number of `useState` hook changes => error
 
-## Why we shouldn't declare a function inside another function
+## Why we shouldn't declare a component inside another component
 
 That's because when the outer component re-renders, it clears the previous output and mounts the new output of inner component => the inner component will be reset (unmount and mount again) and lose all of its state.
 
@@ -128,6 +134,16 @@ That's because when the outer component re-renders, it clears the previous outpu
 - Create pure components. Immutable data can determine if changes have been made, which helps to *determine when a component require re-rerendering*.
 If you mutate the data directly, the components might not re-render that could lead to bugs.
 
+## How do you scale large React component
+
+## Benefit of `react-query` over `useEffect`
+
+## What is the use of `generic` in TS
+
+## Difference between `generic` and `unknown` in TS
+
+## Handle API in React
+
 ## Controlled vs uncontrolled input
 
 - Controlled input: input data is controlled via state
@@ -136,14 +152,14 @@ If you mutate the data directly, the components might not re-render that could l
 ## What is Temporary Dead Zone
 
 It is the area where a variable is inaccessible until it is declared.
-The variables declared with `let` and `const` are also hoisted like the var, they are both saved in memory before the code executions however they are not initialized
+The variables declared with `let` and `const` are also hoisted like `var`, they are both saved in memory before the code executions however they are not initialized
 When we try to access those variables before they are declared, JavaScript throws a `ReferenceError`
 
 ## Why do we need to put side effects in the `useEffect`
 
 With `useEffect`, we can control how the side effects run in the component. Normally, the side effects make the state change. So, if you put them outside the `useEffec` hook, it will lead to infinite re-render of the component.
 
-## Why we the callback in `useEffect` mustn't be async function
+## Why the callback in `useEffect` mustn't be async function
 
 Because async function return promise. `useEffect` hook isn't expecting us to return a promise. It expects us to return either nothing or a cleanup function.
 
@@ -345,7 +361,7 @@ Normally, in React, state updates are queued. That means `setState` doesn't upda
 
 React uses `key` as a way to distinguish between any components. Let's say you have a list of items without `key`. Under the hood, React converts the items into React elements with the same type. There is no way to distinguish them. When we have an unique key for each item, React can differentiate and also track them when they get deleted, added or re-ordered.
 
-If the key of item retains between re-renders, React will ignore re-rendering it => better perfomance.
+If the key of item retains between re-renders, React will reuse the component instead of re-create it => better perfomance.
 
 Key must be unique. And you shouldn't take index as key, as when you add or remove items (at the top of the list), the index (or key) of all items will be changed => bugs
   
@@ -1171,7 +1187,7 @@ And now, we pass a non-primitive value (an object)
 ```js
 function changeName(person) {
     // person.name = 'Jane';
-    // If we modify the param, the original argument changes as well but the still point to the same memory address in the heap
+    // If we modify the param, the original argument changes as well but still points to the same memory address in the heap
     // But if we assign person to the new value which is the new object
     // The original argument doesn't change at all
     person = {name: 'Jane'};
@@ -1196,11 +1212,14 @@ Async function always return a promise. It's often used when we want to perform 
 
 <https://www.developerway.com/posts/positioning-and-portals-in-react>
 Normally, when you build a modal, you will set its position `fixed` and give it a high value of `z-index`. However, if you render your modal in a nested div, there will be a high chance that your modal will lie below other elements.
-The reason is because of stacking context. If the parent element of modal create its own stacking context (position with positive `z-index`, `transform`...), the `z-index` value of modal will be counted only inside its parent. And if modal's parent lie below other elements in DOM, the modal will as well and its position is relative to its containing block which default is the viewport. By using `transform`, the parent becomes new modal's containing block
+
+The reason is because of stacking context. 
+
+Actually, fixed elements are relative to its containing block which is viewport by default. We can also create this containing block by adding `transfrom` property. So if the parent element of nested modal is a containing block, the `z-index` value of modal will be counted only inside its parent. And if modal's parent lie below other elements in DOM, the modal will lie below other element as well.
 
 ## Difference between `async await` and promises
 
-They are both used to handle asynchronous tasks. The difference is The promise involves chaining `.then` and `.catch` methods, whereas Async Await uses a try-catch block that looks more like synchronous code. So, it's easier to read code with `async` and `await`
+They are both used to handle asynchronous tasks. The difference is `promise` involves chaining `.then` and `.catch` methods, whereas `Async` `Await` uses a `try-catch` block that looks more like synchronous code. So, it's easier to read code with `async` and `await`
 
 ## Common web securities
 
@@ -1277,7 +1296,7 @@ Có 3 loại scope: `global scope`, `local scope` (function) và `block scope` (
 
 `for-in`:
 
-- iterate over enumerable properties of an object. enumerable properties are the "key" of the property the Object or "index" of the Array.
+- iterate over enumerable properties of an object. enumerable properties are the "key" of the Object or "index" of the Array.
 If the propery is defined with the `enumerable` false, it is not interated
 
 ```javascript
@@ -1324,7 +1343,7 @@ const delay = (ms: number) => new Promise( res => setTimeout(res, ms, 'some valu
 - Nếu `reject` thì `await` throw 1 error.
 - Nếu `resolve` thì `await` trả về kết quả resolve
 
-## onChange và onInput khi sử dụng cho input
+## `onChange` và `onInput` khi sử dụng cho input
 
 `onChange` chỉ chạy khi mà user ra khỏi (`blur`) input đó
 `onInput` không chỉ chạy như `onChange` mà còn chạy khi gõ ('keystroke') hoặc paste
@@ -1470,14 +1489,14 @@ if ( typeof window !== undefined ) {
 
 ## Expressions and Statement
 
-- Expression is the code snippet that evaluates to a value, like: operator (+, -, ...) or assign a value to a variable (`a = 1`)
-- Statement is the code snippet that performs an action, like declare and assign a value to variable (`let a = 1`)
+- Expression is the code snippet that resolves to a value, like: operator (+, -, ...)
+- Statement is the code snippet that performs an action, like declare and assign a value to variable (`let a = 1`) or check condition (`if (a===1)`)
 
 The best way to distinguish them is using `console.log`, anything that can be passed to `console.log()` is an expression.
 
 ## `void`
 
-`void` is an **operator** that evaluates an expression to `undefined`. `void` is an operator, not a function, so that we don't need to wrap expression in parentheses
+`void` is an **operator** that evaluates an expression and returns `undefined`. `void` is an operator, not a function, so that we don't need to wrap expression in parentheses
 
 ```js
 void 0 === undefined

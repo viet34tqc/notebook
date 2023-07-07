@@ -1,5 +1,7 @@
 # Sass
 
+## Why use sass over css
+
 ## Use `@use` and `@foward` instead of `@import`
 
 <https://www.youtube.com/watch?v=CR-a8upNjJ0&list=PL4-IK0AVhVjNiZpLY-3ILQFyRF0Bs914J&index=3&ab_channel=KevinPowell>
