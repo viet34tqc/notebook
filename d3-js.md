@@ -1,12 +1,13 @@
 # D3.js
 
-### Reference
+## Reference
 
-**MUST READ**: <https://www.d3indepth.com/> 
-<https://blog.griddynamics.com/using-d3-js-with-react-js-an-8-step-comprehensive-manual/>
-<https://www.youtube.com/watch?v=2LhoCfjm8R4>
-<https://www.youtube.com/watch?v=2Y7qLPz4Iu4&list=PLzCAqE_rafAc_2QWK8ii16m2ju4qhYAJT>
-<https://www.youtube.com/watch?v=Y-ThTzB-Zjk&list=PLDZ4p-ENjbiPo4WH7KdHjh_EMI7Ic8b2B&index=2>
+- https://www.react-graph-gallery.com/
+- **MUST READ**: <https://www.d3indepth.com/>
+- <https://blog.griddynamics.com/using-d3-js-with-react-js-an-8-step-comprehensive-manual/>
+- <https://www.youtube.com/watch?v=2LhoCfjm8R4>
+- <https://www.youtube.com/watch?v=2Y7qLPz4Iu4&list=PLzCAqE_rafAc_2QWK8ii16m2ju4qhYAJT>
+- <https://www.youtube.com/watch?v=Y-ThTzB-Zjk&list=PLDZ4p-ENjbiPo4WH7KdHjh_EMI7Ic8b2B&index=2>
 
 ## What is d3.js library
 

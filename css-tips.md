@@ -119,9 +119,12 @@ button {
 
 ## Background image opacity
 
-Apply opacity to absolute psuedo element, parent element uses `isolation: isolate`, that will create a stacking context and prevent absolute children with negatives `z-index` to break out of parents
 <https://www.youtube.com/watch?v=lRPguPbovro>
 <https://www.youtube.com/watch?v=o1HzOJfgugE>
+
+By default, when you apply `z-index: -1` to the overlay which is a psudo element, the element lies behind every other elements in the DOM, even the relative parent element.
+
+Applying `isolation: isolate` to relative parent element (or a positive `z-index`) will create a stacking context and prevent absolute children with negatives `z-index` from lying behind other elements, just behind other child elements in the stacking context.
 
 ## Replace `position: absolute` with `display: grid`
 

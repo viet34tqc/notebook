@@ -31,6 +31,10 @@ Pros:
 
 Non-sensitive data because local storage can be access via XSS attack
 
+## Aria attriube, when to use, when not. Tool check accessibility
+
+## Quy chuẩn cho accessibility
+
 ## Process when taking a task
 
 - Read the requirement carefully. If not, ask the BA or PM or client for clarification
@@ -361,12 +365,13 @@ Normally, in React, state updates are queued. That means `setState` doesn't upda
 
 React uses `key` as a way to distinguish between any components. Let's say you have a list of items without `key`. Under the hood, React converts the items into React elements with the same type. There is no way to distinguish them. When we have an unique key for each item, React can differentiate and also track them when they get deleted, added or re-ordered.
 
-If the key of item retains between re-renders, React will reuse the component instead of re-create it => better perfomance.
+If the key of item retains between re-renders, React will just re-use the component instead of re-creating it => better perfomance.
 
-Key must be unique. And you shouldn't take index as key, as when you add or remove items (at the top of the list), the index (or key) of all items will be changed => bugs
+Key must be unique. You shouldn't take `index` as key, as when you add or remove items (at the top of the list), the index (or key) of all items will be changed => bugs
+
+Using `key` is a good idea when you have a list and the data of the list is changed on every render and you are not modifying the list, eg: pagination
   
 When the `key` props is changed, React unmount the previous instance, and mount a new one. This means that all state that had existed in the component at the time is completely removed and the component is reinitialized
-Khi 1 component bất kì có props key, khi key này bị thay đổi thì component sẽ bị unmount, state của nó cũng sẽ bị xóa bỏ và React sẽ mount lại 1 component mới
 
 ## API là gì
 
@@ -899,8 +904,6 @@ new Intl.DateTimeFormat('en-US').format(date)
 
 If you want to get the day, month, year, you can use `getDay`, `getMonth`, `getYear` from date object
 
-## Kiến thức bảo mật tối thiểu ở frontend
-
 ## Các cách check null và undefined
 
 ```js
@@ -1211,13 +1214,9 @@ Async function always return a promise. It's often used when we want to perform 
 <https://www.developerway.com/posts/positioning-and-portals-in-react>
 Normally, when you build a modal, you will set its position `fixed` and give it a high value of `z-index`. However, if you render your modal in a nested div, there will be a high chance that your modal will lie below other elements.
 
-The reason is because of stacking context. 
+The reason is because of `stacking context`. 
 
 Actually, fixed elements are relative to its containing block which is viewport by default. We can also create this containing block by adding `transfrom` property. So if the parent element of nested modal is a containing block, the `z-index` value of modal will be counted only inside its parent. And if modal's parent lie below other elements in DOM, the modal will lie below other element as well.
-
-## Difference between `async await` and promises
-
-They are both used to handle asynchronous tasks. The difference is `promise` involves chaining `.then` and `.catch` methods, whereas `Async` `Await` uses a `try-catch` block that looks more like synchronous code. So, it's easier to read code with `async` and `await`
 
 ## Common web securities
 
@@ -1278,7 +1277,7 @@ const b = JSON.parse(JSON.stringify(a));
 
 When there is an update action (ex: click event).
 
-- When you call the `setState`, it might trigger an re-render. However, `setState` doesn't update the state immediately. React waits for all the `setState` in the event handlers to be finished before re-rendering. In another way, it groups multiple state updates into a single update. This is called batching (<https://github.com/reactwg/react-18/discussions/21>)
+- When you call the `setState`, it might trigger an re-render. However, `setState` doesn't update the state immediately. React waits for all the `setState` in the event handlers to be finished before re-rendering. In another way, it groups multiple state updates into a single update. This is called `batching` (<https://github.com/reactwg/react-18/discussions/21>)
 - You can pass a value or an updated function to the `setState`. All of them are added to the queue.
 - When all the scheduled re-renders run
   - `useState` is called
@@ -1315,7 +1314,9 @@ Object.defineProperty(obj, 'flameWarTopic', {
 - can be used with built-in `String`, `Array`, array-like objects (e.g., arguments or `NodeList`), `TypedArray`, `Map`, `Set`
 - cannot be used with simple Object
 
-## Hiểu gì về async, await, promise, so sánh
+## Difference between `async, await` and `promise`
+
+They are both used to handle asynchronous tasks. The difference is `promise` involves chaining `.then` and `.catch` methods, whereas `Async` `Await` uses a `try-catch` block that looks more like synchronous code. So, it's easier to read code with `async` and `await`
 
 `Promise`:
 
@@ -1468,7 +1469,7 @@ It stores functions and variables in the memory before executing any code (creat
 `Object.freeze()` không cho phép thêm, sửa, xóa properties. Tuy nhiên, `Object.freeze()` chỉ shallowly freeze, nếu properties là 1 object khác thì vẫn có thể sửa được
 `Object.seal()` không cho phép thêm, xóa, nhưng vẫn cho sửa existing properties
 
-## useMemo và useCallback. Có thể chuyển từ useMemo sang useCallback được không
+## `useMemo` và `useCallback`. Có thể chuyển từ `useMemo` sang `useCallback` được không
 
 <https://kentcdodds.com/blog/usememo-and-usecallback>
 `useCallback` thường được dùng cho các event handler và event handler này là 1 prop của 1 child component và child component này dùng `React.memo`.
@@ -1515,7 +1516,7 @@ Atomic design
 - Templates: collections of Organism, like layouts. A site can have multiple layouts
 - Pages: a specific pages that can use one of templates
 
-## prefers-color-scheme
+## `prefers-color-scheme`
 
 Đây là 1 tính năng của CSS `@media` để check xem thiết bị của bạn (máy tính hoặc điện thoại) đang sử dụng dark theme hay light theme
 
@@ -1536,8 +1537,6 @@ const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-schem
 
 When present in a project, `.lock` file is the source of information about the current version of dependencies in the project. `yarn` or `npm` will compare dependencies version in the `.lock` file with the current version in the `package.json` and updates packages if needed.
 
-## counter
-
 ## `srcset` and `sizes`
 
 <https://blog.webdevsimplified.com/2023-05/responsive-images/>
@@ -1557,24 +1556,27 @@ First, we need to calculate the image size. For example, if the viewport < 400px
 
 If the viewport is 650px, the image size will be 325px. It tells browser to use the picture with minimum of 325px => the browser use <https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350>, which is the closest one
 
-## fr in grid
-
 ## min, max, clamp()
 
 <https://moderncss.dev/practical-uses-of-css-math-functions-calc-clamp-min-max/>
 <https://ishadeed.com/article/css-min-max-clamp/>
 
-- `min(value1, value2)`: thiết lập giá trị max cho selector (giống max-width). Nó sẽ chọn ra giá trị nhỏ nhất giữa value 1 và value 2 tùy theo viewport width. Thứ tự value không quan trọng. VD:
+- `min(value1, value2)`: thiết lập giá trị max cho selector (giống `max-width`). Nó sẽ chọn ra giá trị nhỏ nhất giữa value 1 và value 2 tùy theo viewport width. Thứ tự value không quan trọng. VD:
 
 ```css
-width: min(80ch, 100% - 2rem) // Ở màn hình nhỏ hơn thì 100% - 2rem < 80ch nên width = 100% - 2rem nhưng ở màn hình lớn hơn khi mà 100% - 2rem > 80ch thì width = 80ch;
+.container {
+  /*Ở màn hình nhỏ hơn thì 100% - 2rem < 80ch nên width = 100% - 2rem nhưng ở màn hình lớn hơn khi mà 100% - 2rem > 80ch thì width = 80ch;*/
+  width: min(80ch, 100% - 2rem) 
+}
 ```
 
-  CSS trên sẽ tương đương với
+CSS trên sẽ tương đương với
 
 ```css
+.container {
   width: 100% - 2rem;
   max-width: 80ch
+}
 ```
 
 - `max(value, value)`: ngược lại với min(), thiết lập giá trị nhỏ nhất cho selector (giống min-width) . VD: disable zoom trên safari khi focus vào input
@@ -1659,9 +1661,8 @@ params.toString()
 
 ## Create text on image with an overlay
 
-Set z-index for the container
-
-Using `background-blend-mode`: <https://www.smashingmagazine.com/2021/09/reducing-need-pseudo-elements/>
+- Set `z-index: 1; position: relative` to the container and `z-index: -1, position: absolute` to the overlay. When we do that, the container creates a new stacking context. Overlay element will lie only below other child elements in its stacking context.
+- Using `background-blend-mode`: <https://www.smashingmagazine.com/2021/09/reducing-need-pseudo-elements/>
 
 ## `vmin`, `vmax`
 

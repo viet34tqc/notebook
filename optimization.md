@@ -1,18 +1,18 @@
 # Performance optimization
 
-<https://evilmartians.com/chronicles/before-your-next-frontend-pull-request-use-this-checklist>
+<https://reacthandbook.dev/react-performance-optimization>
 <https://www.youtube.com/watch?v=0fONene3OIA>
 <https://pagespeedchecklist.com/>
 <https://xwp.co/how-to-build-a-rocket-best-practices-for-better-web-performance/>
 <https://10up.github.io/Engineering-Best-Practices/performance/#core-web-vitals>
 
-## Basic concepts
+## How browser works
 
 <https://developer.mozilla.org/en-US/docs/Web/Performance/How_browsers_work>
 
 ## Render-blocking resources
 
-JS, CSS, Fonts
+The first thing comes to mind when optimize FE is reduce render-blocking resourses. They are JS files, CSS files, and fonts
 
 ## Font
 
@@ -41,6 +41,7 @@ In summary, without font preloading, you might run into a situation where a brow
 - Self-host font
 
 <https://www.youtube.com/watch?v=zK-yy6C2Nck>
+
 Download google font => Upload to font squirell for optimization => Using variable font: <https://www.youtube.com/watch?v=0fVymQ7SZw0>, <https://www.browserstack.com/guide/variable-fonts-vs-static-fonts>
 
 Remember to preload this local font
@@ -68,6 +69,7 @@ Trong trường hợp phải dùng icon font thì phải optimize dùng `icomoon
 <https://pagespeedchecklist.com/eliminate-render-blocking-resources>
 
 - Load critcal CSS asap
+- Minify CSS
 - Load non-critical CSS asynchronously
 
 ```html
@@ -87,9 +89,9 @@ Trong trường hợp phải dùng icon font thì phải optimize dùng `icomoon
 
 ## JS
 
-Put JS in the `head` and use `defer` to download the scripts in the background and execute later
-
-Optimize Google Analytics
+- Minify JS
+- Put JS in the `head` and use `defer` to download the scripts in the background and execute later
+- Optimize Google Analytics scripts
 
 ```html
 <script defer src="anylytic-script.js"></script> <!-- contains formerly-inline snippet -->
