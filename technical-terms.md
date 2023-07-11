@@ -46,13 +46,16 @@ It is the api that helps client interact with server to exchange information via
 
 ## Hydration (Rehydration)
 
-<https://thanhle.blog/blog/server-side-rendering-voi-hydration-lang-phi-tai-nguyen-nhu-the-nao>
+- <https://www.youtube.com/watch?v=R-BKadZWYnQ&ab_channel=Builder>
+- <https://www.youtube.com/watch?v=ZKH3DLT4BKw&ab_channel=AddyOsmani>
+- <https://thanhle.blog/blog/server-side-rendering-voi-hydration-lang-phi-tai-nguyen-nhu-the-nao>
 
-Hydration is the process of using client-side JavaScript to recover application state and add interactivity to server-rendered HTML.
+Hydration is the process of using client-side JavaScript to recover application state and add interactivity to server-rendered HTML (which is static HTML)
 
 When a visitor requests their first URL from your site, the response contains static HTML along with linked JavaScript, CSS, and images. React then takes over and hydrates that HTML. React adds event listeners to the DOM created during HTML parsing, and turns your site into a full React application. Subsequent page requests are DOM updates managed by React.
 
-[https://www.joshwcomeau.com/react/the-perils-of-rehydration/](https://www.joshwcomeau.com/react/the-perils-of-rehydration/)
+<https://www.joshwcomeau.com/react/the-perils-of-rehydration/>
+
 Beside adding interactivity, React also builds up a mental picture of what the DOM should look like, by mounting all of your components. Then it compares the mounted DOM with the DOM nodes already on the page, and tries to fit the two together. If not there will be an error like this: "Expected server HTML to contain a matching <div> inside a <nav>" (only happens on development mode but you are warning because this is bug) 
 
 ## deploying:

@@ -18,6 +18,11 @@
 
 Pass children down (do this before you memo). Why does this work? Because components passed as children don’t re-render since they are just props. Note: don't pass a function as a child, since it'll still re-render because the func will be recreated on each render
 
+## Bundle
+
+- Reduce unnecessary packages from bundle
+- Dynamic import the scripts which are not necessary at first load, eg: scripts only needed when we make an interaction => increase TTI
+
 ## Use tailwind over CSS-in-JS
 
 ## Memoization
@@ -33,7 +38,7 @@ Use `debounce` from lodash library
 
 `import {debounce} from "lodash";`
 
-## use `React Window package` to virtualize long list
+## Use `React Window package` to virtualize long list
 
 ## Avoid named imports when importing third party libraries / components
 

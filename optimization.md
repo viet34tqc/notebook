@@ -12,11 +12,11 @@
 
 ## Render-blocking resources
 
-The first thing comes to mind when optimize FE is reduce render-blocking resourses. They are JS files, CSS files, and fonts
+The first thing comes to mind when optimize FE is reduce render-blocking resourses. They are JS files, CSS files, and fonts. Reduce render-blocking resources will improve Core Web Vitals
 
 ## Font
 
-- Use only `.woff2` if you are using self-host font and variable font
+- Use only `.woff2`
 - Don't use `@import` rule in CSS
 - Use font service (like Google fonts)
 - Use `preload` or `preconnect` to increase loading priority:
@@ -58,8 +58,8 @@ Trong trường hợp phải dùng icon font thì phải optimize dùng `icomoon
 ## Ảnh
 
 - Resize and compress image: <https://squoosh.app/>
-- Dùng webp cho ảnh, svg nếu ảnh dưới dạng vector
-- Thêm width và height cho ảnh để cải thiện điểm CLS
+- Using lighter image format like `.webp` and using svg if possible.
+- Add default `width` and `height` attribute to image to increase the `CLS` criteria
 - Lazy loading: only lazy load image below the fold, do not lazy load hero image
 - preload LCP background image like hero image: `<link rel="preload" as="image" imagesrcset=" image-400.jpg 400w, image-800.jpg 800w, image-1600.jpg 1600w" imagesizes="100vw" />.`
 - For image in the markup, combine preload with `fetchpriority`: <https://imkev.dev/fetchpriority-opportunity>
@@ -90,6 +90,8 @@ Trong trường hợp phải dùng icon font thì phải optimize dùng `icomoon
 ## JS
 
 - Minify JS
+- Reduce unnecessary packages from bundle
+- Dynamic import the scripts which are not necessary at first load, eg: scripts only needed when we make an interaction => increase TTI
 - Put JS in the `head` and use `defer` to download the scripts in the background and execute later
 - Optimize Google Analytics scripts
 
@@ -98,12 +100,14 @@ Trong trường hợp phải dùng icon font thì phải optimize dùng `icomoon
 <script defer src="https://www.google-analytics.com/analytics.js"></script>
 ```
 
-## Core web vitals
+## Networks
 
-**CÁI NÀY QUAN TRỌNG**
-TTFB -> FCP -> LCP -> TTI
+- Using CDN
+- Compress assets during transfer
+- Cache resources on client
+- Minimize number of HTTP requests
 
-### Slider ở đầu website
+## Slider ở đầu website
 
 Slider ở đầu sẽ ảnh hưởng đến `CLS`. Ta có thể ẩn các slide, trừ slide đầu tiên. Khi script slider được load, các class của script sẽ được thêm vào html và ta sẽ dùng class này để hiện lại các slide đó
 

@@ -1393,6 +1393,7 @@ console.log(info);
 <https://prateeksurana.me/blog/future-of-rendering-in-react/>
 <https://i.imgur.com/jqIBleM.png>
 <https://i.imgur.com/DCsCct2.png>
+<https://www.youtube.com/watch?v=ZKH3DLT4BKw&ab_channel=AddyOsmani>
 <https://indepth.dev/posts/1498/101-javascript-critical-rendering-path>
 <https://web.dev/learn-web-vitals/>
 
