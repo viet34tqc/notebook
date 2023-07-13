@@ -93,12 +93,46 @@ Trong trường hợp phải dùng icon font thì phải optimize dùng `icomoon
 - Reduce unnecessary packages from bundle
 - Dynamic import the scripts which are not necessary at first load, eg: scripts only needed when we make an interaction => increase TTI
 - Put JS in the `head` and use `defer` to download the scripts in the background and execute later
-- Optimize Google Analytics scripts
+- Optimize Google Analytics scripts:
 
 ```html
 <script defer src="anylytic-script.js"></script> <!-- contains formerly-inline snippet -->
 <script defer src="https://www.google-analytics.com/analytics.js"></script>
 ```
+
+- Delay scripts related to user interaction or live chat: <https://metabox.io/delay-javascript-execution-boost-page-speed/>. This method isn't recommended for script like tracking or  analyzing user data such as Google Analytics, Facebook Pixel, Google Tag Manager
+
+```html
+<script>
+const loadScriptsTimer = setTimeout(loadScripts, 5000);
+const userInteractionEvents = ["mouseover","keydown","touchmove","touchstart"
+];
+userInteractionEvents.forEach(function (event) {
+    window.addEventListener(event, triggerScriptLoader, {
+        passive: true
+    });
+});
+
+function triggerScriptLoader() {
+    loadScripts();
+    clearTimeout(loadScriptsTimer);
+    userInteractionEvents.forEach(function (event) {
+        window.removeEventListener(event, triggerScriptLoader, {
+            passive: true
+        });
+    });
+}
+function loadScripts() {
+    document.querySelectorAll("script[data-type='lazy']").forEach(function (elem) {
+        elem.setAttribute("src", elem.getAttribute("data-src"));
+    });
+    document.querySelectorAll("iframe[data-type='lazy']").forEach(function (elem) {
+        elem.setAttribute("src", elem.getAttribute("data-src"));
+    });
+}
+</script>
+```
+
 
 ## Networks
 

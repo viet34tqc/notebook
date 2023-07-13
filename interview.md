@@ -460,8 +460,8 @@ HTML tags are name of HTML elements
 
 ## Explain the difference between Async/Await and Promises.
 
-- Async await is syntactic sugar for promises. Making code looks like executed synchronously and easier to understand
-- Debugging is much easier with async/await using `try catch` block. In promise, we have to use `then catch` chaining. In case we have errors, if we don't handle, the script dies 
+- `Async await` is syntactic sugar for promises. Making code looks like executed synchronously and easier to understand
+- Debugging is much easier with `async/await` using `try catch` block. In promise, we have to use `then catch` chaining. In case we have errors, if we don't handle, the script dies 
 
 ## Explain how you can use JavaScript functions such as forEach, Map.
 
@@ -726,7 +726,7 @@ Your frontend is a JS application that run by browser, and it doesn't need to be
 Whereas, your backend can be WordPress or NodeJS and hosted on a server.
 If needed, frontend part will communicate to the backend end via API (using REST or GraphQL) to get the data or perform other actions such as sending email
 
-## Handle `setTimeout` this
+## Handle this in `setTimeout`
 
 <https://developer.mozilla.org/en-US/docs/Web/API/setTimeout#the_this_problem>
 
@@ -835,20 +835,6 @@ currentTarget = element that listens to event.
 ## Code splitting
 
 Code splitting is the splitting of the code into various of bundles or components which can be loaded on demand or in parallel
-
-## So sánh display: flex và display: grid
-
-- Grid: hiển thị layout theo 2 chiều
-- Flex: hiển thị layout theo 1 chiều
-
-Khi nào sử dụng `flex`
-
-- Các element con chia dựa theo content của chính các element đó
-
-Khi nào sử dụng `grid`
-
-- Các element được chia đều
-- Parent quản lý vị trí các element con (dùng `grid-template-area`)
 
 ## Display date as string in JS
 
@@ -1161,6 +1147,7 @@ REST is kind of convention of how you set up an API, how you transfer data betwe
 
 - Passing by value is about copying. When an argument is passed by value, the formal parameter receives a copy of the argument's value (argument is the variable that passed to function when the function is called)
 - In pass by reference, param would be an alias for argument, which means param values change will lead to change in argument value. But JS always **pass by value** (both primitive and non-primitive values) and doesn't pass by reference.
+
 Here we are passing a primitive value:
 
 ```js
@@ -1208,6 +1195,7 @@ Async function always return a promise. It's often used when we want to perform 
 ## Why we use arrow function over normal function
 
 - Less code to write
+- We can utilize `this` where the arrow function is defined because `this` in arrow function relates to the outer scope environment.
 
 ## Why you should put your modal outside of main area.
 
@@ -1217,6 +1205,12 @@ Normally, when you build a modal, you will set its position `fixed` and give it 
 The reason is because of `stacking context`. 
 
 Actually, fixed elements are relative to its containing block which is viewport by default. We can also create this containing block by adding `transfrom` property. So if the parent element of nested modal is a containing block, the `z-index` value of modal will be counted only inside its parent. And if modal's parent lie below other elements in DOM, the modal will lie below other element as well.
+
+## `nth-child` and `nth-last-child`
+
+You can simply understand that `nth-last-child` is reverse to `nth-child`. By using `nth-last-child`, we start with the last item instead of first item in `nth-child`.
+
+`nth-last-child` can be used with `:has()` to check if the container has minium amount of children (<https://ishadeed.com/article/conditional-css-has-nth-last-child/>)
 
 ## Common web securities
 

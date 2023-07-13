@@ -6,7 +6,7 @@
 
 Using handlebars `{{ variable_name }}`
 
-- In template, if we want to write JS like access state or execute function, we use string (`""`) instead of `{}` like in JSX. 
+- In template, if we want to write JS like accessing state or executing function, we use string (`""`) instead of `{}` like in JSX. Remember to use `v-model` if you are using a variable
 
 ```html
 <button @click="say('hello')">Say hello</button>

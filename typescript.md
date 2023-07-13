@@ -2,40 +2,38 @@
 
 ## Installation
 
-`npm i -g typescript`
+`npm i -D typescript`
 
 ## Command
 
-tsc -w: watch mode. Requires `tsconfig.json` file. It can Work without any configuration.
+`tsc -w`: watch mode. Requires `tsconfig.json` file. It can Work without any configuration.
 If you don't set the input files in `tsconfig.json`, Typescript will automatically find all the ts file in all folder, then compile `ts` files to `js` files in the same folder.
 
-## Type annotation (Explicit declartion)
+## Glossary
+
+<https://typescript.tv/glossary/index.html>
+
+## Assigning a type to a variable
 
 There are 4 ways of assigning a type to a variable
 
-- colon annotations
+- Type annotation
 - `satisfies`
-- `as` annotations
-- not annotating and letting TS infer it
+- `as` annotation
+- Type inference: not annotating and letting TS infer it
+
+### Type annotation
+
+A type annotation is when you explicitly define the type that a variable can take on:
 
 ```ts
 let names: string = 'viet'; // String
 let age: number = 3; // Number
 ```
 
-In fact, most of the time you don't need to type your variables on declartion at all, just let TS infer it
-However it's often to use type annotation when you declare an object
+### Type inference
 
-```ts
-const results = {}
-results.abc = 1 // you can't use string to index into result:
-
-// We need to annotate the type of results first
-const results: Record<string, unknown> = {}
-resuts.abc = 1
-```
-
-## Implicit declaration
+We are not annotating the type and letting TS infer it.
 
 With common primitive types(string, number, boolean), we can simply omit the type annotation
 
@@ -44,9 +42,84 @@ let name = 'viet'
 let age = 3
 ```
 
+In fact, most of the time you don't need to type your variables on declartion at all, just let TS infer it
+
+### `satisfies`
+
+- <https://typescript.tv/new-features/what-is-the-satisfies-operator-in-typescript/>
+- <https://blog.logrocket.com/getting-started-typescript-satisfies-operator>
+
+It's like the combination of type inference and type annotation. It help us validate the type of variable and also infer the type of variable based on its value
+
+```ts
+type TeamMembers = string | string[];
+
+type TeamNames = 'Bulletproof' | 'Iconic';
+
+type Teams = Record<TeamNames, TeamMembers>;
+
+const AllTeams = {
+  Bulletproof: ['Alex', 'Lara', 'Sofia'],
+  Iconic: 'Benny',
+}
+```
+
+Without `satisfies`, if we use type inference like the above, we don't have restrictions on the `TeamNames` and we can add whatever properties we want to `AllTeams`
+
+```ts
+const AllTeams = {
+  Bulletproof: ['Alex', 'Lara', 'Sofia'],
+  Iconic: 'Benny',
+  // Key is not part of "TeamNames"
+  IsNotAllowed: 'Bob',
+};
+```
+
+Without `satisfies`, if we use type annotation, we encounter a limitation in accessing specific methods based on the value types
+
+```ts
+const AllTeams: Teams = {
+  Bulletproof: ['Alex', 'Lara', 'Sofia'],
+  Iconic: 'Benny',
+};
+
+// The value of Teams can be string or array
+
+// TS2339: Property 'join' does not exist on type 'TeamMembers'.
+// We will need to use type guard to check the type of variable before using the methods
+// like: if (typeof AllTeams.Bulletproof === 'string')
+console.log(AllTeams.Bulletproof.join(', '));
+
+// TS 2339: Property 'toUpperCase' does not exist on type 'TeamMembers'.
+console.log(AllTeams.Iconic.toUpperCase());
+```
+
+With `satisfies`, TS will both validate the type and infer the `AllTeams` constant based on its value by automatically narrowing down `TeamMembers` union
+
+```ts
+type TeamMembers = string | string[];
+
+type TeamNames = 'Bulletproof' | 'Iconic';
+
+type Teams = Record<TeamNames, TeamMembers>;
+
+const AllTeams = {
+  Bulletproof: ['Alex', 'Lara', 'Sofia'],
+  Iconic: 'Benny',
+  // Ok, no other keys possible!
+} satisfies Teams;
+
+// ok!
+console.log(AllTeams.Bulletproof.join(', '));
+// ok!
+console.log(AllTeams.Iconic.toUpperCase());
+```
+
 ## Read-only type
 
-If you want to make your object and your array be read-only, you add the `as const` after the declaration
+<https://typescript.tv/new-features/how-to-use-const-assertions-in-typescript/>
+
+If you want to make your object and your array be read-only at design-time (not run time), add the keyword `as const` after the declaration
 
 ```ts
 const student = {
@@ -703,7 +776,7 @@ type Includes<T extends readonly any[], U> =
 
 ### Object to Union
 
-The technique below is called mapped type. When you call `K in keyof Values`, it will iterate through the union `keyof Value`. This is similar to distributive condition type.
+The technique below is called mapped type. `K in keyof Values` block will iterate through the union `keyof Value`. This is similar to distributive condition type.
 
 ```ts
 interface Values {
@@ -715,11 +788,23 @@ interface Values {
 type ValuesAsUnionOfTuples = {
   [K in keyof Values]: [K, Values[K]];
 }[keyof Values];
-```
 
-```ts
 // In case you want to extract specific keys from object, just use indexed type
 type emailOrFirstName = Values['email' | 'firstName'];
+```
+
+There is also a technique called remap mapped type where you can modify the key of mapped type
+
+```ts
+interface User {
+  age: number;
+  firstName: string;
+  lastName: string;
+}
+
+type UserValidation = {
+  [P in keyof User as `has${Capitalize<P>}`]: boolean
+};
 ```
 
 ### Union type to object
@@ -820,7 +905,6 @@ result[20].forEach((item) => {
 });
 
 ```
-
 
 ## Working with union
 
