@@ -373,20 +373,6 @@ Using `key` is a good idea when you have a list and the data of the list is chan
   
 When the `key` props is changed, React unmount the previous instance, and mount a new one. This means that all state that had existed in the component at the time is completely removed and the component is reinitialized
 
-## API là gì
-
-<https://www.youtube.com/watch?v=JUvsdFWL7WM>
-
-API là các phương thức (functions, protocols) giúp cho ứng dụng A có thể tương tác với ứng dụng B mà không cần quan tâm ứng dụng B được thực hiện thế nào
-
-VD:
-
-- ứng dụng B cung cấp 1 hàm tính tổng cho ứng dụng A.
-- React cung cấp hàm `useState` để ltv sử dụng
-- Backend xây dựng API để Frontend sử dụng để lấy data
-
-Có thể liên tưởng tới UI: user tương tác với giao diện (interface) của ứng dụng mà không cần quan tâm giao diện đấy được thực hiện sao
-
 ## How to approach a design
 
 
@@ -802,10 +788,12 @@ async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 ## Semantic version (SemVer)
 
 Syntax: `MAJOR.MINOR.PATCH`
-ví dụ:
+
+Ví dụ:
 Version 0.3.10 ra đời trước 0.10.3
 Version 0.1.1 1.0.0
 Version 1.100.100 10.10.10
+
 Thay đổi:
 
 - MAJOR: often refet to 'breaking change', which means the big update and can be incompatible with older version.
@@ -1136,9 +1124,25 @@ console.log(min) // 1
 console.log(items) // [1,4,7,9]
 ```
 
-## What is REST
+## API là gì
 
-REST is kind of convention of how you set up an API, how you transfer data between client and server
+<https://www.youtube.com/watch?v=JUvsdFWL7WM>
+
+API is the set of mechanism (functions, protocol, commands...) that enables two applications to talk to each other
+
+For example:
+
+- Application B provides a function to sum 2 numbers for Application A
+- React provides 'useState' functions
+- Backend provides API to let Frontend communicate with database.
+
+## What is RESTApi
+
+<https://www.youtube.com/watch?v=-mN3VyJuCjM&ab_channel=ByteByteGo>
+
+RESTApi is a common API standard that client uses to talk to server. Client interacts with server by making a request to an endpoint over HTTP protocol, which uses HTTP methods. HTTP methods are POST, GET, DELETE, PUT. Then server returns a response with a status code: 2xx is successful, 3xx means redirection, 4xx means client error (something wrong with our request), 5xx means server error.
+
+RestAPI should be stateless. It means client and server doesn't need to store information of each other. Every requests and responses is independent from each other.
 
 ## Pass by value and pass by reference
 

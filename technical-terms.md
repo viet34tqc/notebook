@@ -46,23 +46,26 @@ It is the api that helps client interact with server to exchange information via
 
 ## Hydration (Rehydration)
 
+- <https://demystifying-rsc.vercel.app/client-components/>
 - <https://www.youtube.com/watch?v=R-BKadZWYnQ&ab_channel=Builder>
 - <https://www.youtube.com/watch?v=ZKH3DLT4BKw&ab_channel=AddyOsmani>
 - <https://thanhle.blog/blog/server-side-rendering-voi-hydration-lang-phi-tai-nguyen-nhu-the-nao>
 
-Hydration is the process of using client-side JavaScript to recover application state and add interactivity to server-rendered HTML (which is static HTML)
+Hydration is the process of turning static SSR html into dynamic client-side (CSR) html. 
+
+What exactly it does is to use client-side JavaScript to recover application state and add interactivity to server-rendered HTML (which is static HTML)
 
 When a visitor requests their first URL from your site, the response contains static HTML along with linked JavaScript, CSS, and images. React then takes over and hydrates that HTML. React adds event listeners to the DOM created during HTML parsing, and turns your site into a full React application. Subsequent page requests are DOM updates managed by React.
 
 <https://www.joshwcomeau.com/react/the-perils-of-rehydration/>
 
-Beside adding interactivity, React also builds up a mental picture of what the DOM should look like, by mounting all of your components. Then it compares the mounted DOM with the DOM nodes already on the page, and tries to fit the two together. If not there will be an error like this: "Expected server HTML to contain a matching <div> inside a <nav>" (only happens on development mode but you are warning because this is bug) 
+Beside adding interactivity, React also builds up a mental picture of what the DOM should look like, by mounting all of your components. Then it compares the mounted DOM with the DOM nodes already on the page, and tries to fit the two together. If not there will be an error like this: "Expected server HTML to contain a matching <div> inside a <nav>" (only happens on development mode but you are warning because this is bug). This process can also be called *reconciliation*
 
-## deploying:
+## Deploying:
 
 the act of taking a website live on a server
 
-## Cookie:
+## Cookie flags:
 
 <https://prateeksurana.me/blog/javascript-developer-guide-to-browser-cookies/>
 
@@ -74,7 +77,21 @@ the act of taking a website live on a server
 
 ## Tree-shaking
 
-Remove unused code before bundling. This can be an issue when using barrel files: <https://github.com/vercel/next.js/issues/12557> <https://renatopozzi.me/articles/your-nextjs-bundle-will-thank-you>
+<https://dev.to/dianjuar/importing-modules-in-javascript-are-we-doing-it-right-nc>
+
+Is the term for removing unused code before bundling. This process prevents having dead code in the final bundle and make it lighter
+
+```js
+import * as lib from 'amazing-lib'
+import { foo } from 'amazing-lib'
+```
+
+In both cases all the library content is being imported. The first place is the easiest to spot, all the library's content is being assigned to the variable lib. In the second case, we are still importing all the library, we are just applying destructuring to the library's content to get what we need. Thanks to Tree Shaking all the unused code doesn't end up on our bundles.
+
+**Caveats**
+
+- Some packages that use module systems different than ES6 isn't tree shakable (eg: lodash). In this case, we need to use a technique called `cherry-picking` which require absolute path to the file that contains content we need: `import debounce from "lodash/debounce";`
+This can be an issue when using barrel files: <https://github.com/vercel/next.js/issues/12557> <https://renatopozzi.me/articles/your-nextjs-bundle-will-thank-you>
 
 ## Prototype chain
 

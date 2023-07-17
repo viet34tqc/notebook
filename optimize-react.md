@@ -36,13 +36,13 @@ Pass children down (do this before you memo). Why does this work? Because compon
 
 Use `debounce` from lodash library
 
-`import {debounce} from "lodash";`
+`import {debounce} from "lodash/debouce";`
 
 ## Use `React Window package` to virtualize long list
 
 ## Avoid named imports when importing third party libraries / components
 
-Instead of importing like above (we will import the whole library), we should do like this
+For some packages that doesn't use ES6 module for module system, instead of importing like above (we will import the whole library), we need to use a technique called cherry-picking
 
 `import debounce from "lodash/debounce";`
 
