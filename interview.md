@@ -68,8 +68,9 @@ The Virtual DOM in React is in fact a tree of React Elements, or objects, which 
 ## Redux and React Context
 
 <https://blog.isquaredsoftware.com/2021/01/context-redux-differences/>
+<https://formidable.com/blog/2021/stores-no-context-api/>
 
-Redux is like multiple React Context
+Redux is like using multiple React Context
 
 React Context doesn't manage any state at all. When we use Context, we manage the state via React hooks `useState` and `useReducer`. The only purpose of React Context is to avoid **prop-drilling**
 
@@ -695,6 +696,22 @@ p.getName();
 **Event handler** là 1 đoạn code, 1 hàm được chạy khi event xảy ra
 **Event handler** còn được gọi là ***event listener***
 
+## Concurrent mode in React
+
+<https://vercel.com/blog/how-react-18-improves-application-performance>
+
+Help to build components that render concurrently. It means they render simultaneously without blocking the user interface.
+
+Using concurrent features, React can pause and resume the rendering of components based on external events such as user interaction. When the user started interacting with ComponentTwo, React paused the current rendering, prioritized and render ComponentTwo, after which it resumed rendering ComponentOne (using Suspense)
+
+### `useTransition`
+
+<https://blog.bitsrc.io/understanding-transition-in-react-18-using-usetransition-hook-8639d6ced0f5>
+
+If you want to create a transition between two different components' rendering, this hook provides a way to handle that, allowing you to defer the next component's rendering until the previous one is complete. It's like debouncing the UI update when the state update or update the state without blocking the UI
+
+It tells React to keep the current UI interactive while preparing the new state in the background without committing the updates immediately (of course, you can display a loading when `isPending` is true)
+
 ## Màn bình thường và màn retina
 
 Màn thường: 1 CSS pixel tương đương 1 điểm ảnh vật lý
@@ -808,8 +825,8 @@ Range version:
 
 ## `target` and `currentTarget`
 
-target = element that triggered event;
-currentTarget = element that listens to event.
+- target = element that triggered event;
+- currentTarget = element that listens to event.
 
 ## Object.assign() and Object.create()
 
@@ -1169,7 +1186,7 @@ let y = 2;
 swap(x, y);
 
 // x and y do not swap, whereas a and b do locally.
-// If it did, then a would’ve been an alias for x and b would’ve been an alias for y. Any changes to a and b would have been reflected back to x and y
+// If it did, then a would've been an alias for x and b would've been an alias for y. Any changes to a and b would have been reflected back to x and y
 console.log(x); // 4
 console.log(y); // 2
 ```

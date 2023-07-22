@@ -255,7 +255,9 @@ Like React, we should never mutate the props object directly, props are read-onl
 
 ## `computed`
 
-Use when you want to return a value based on the defined state, like when you want a filterd value of an array.
+- Use when you want to return a value based on the defined state, like when you want a filterd value of an array.
+- The result is cached and only need to be re-evaluated once one of its reactive dependencies changes.
+- Lazy Evaluation: The callback function of computed will only be run once the computed's value is being read or being used
 
 ```html
 <script setup>

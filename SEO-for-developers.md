@@ -2,6 +2,7 @@
 
 ## Reference
 
+<https://dev.to/this-is-learning/top-20-must-know-tips-for-web-accessibility-452>
 <https://codefrontend.com/introduction-to-seo-for-react-developers/>
 <https://www.youtube.com/watch?v=JSm4aQl4w_U>
 
