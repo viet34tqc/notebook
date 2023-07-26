@@ -180,6 +180,14 @@ Here, value from input is trim automatically
 <input v-model.trim="msg" />
 ```
 
+### Using `v-model` with custom component
+
+<https://vuejs.org/guide/components/v-model.html>
+
+### Mutate props
+
+Vue doesn't have a `setState` function to modify the state. If we pass a state as props and we want to modify that state in child component, we should create another updater function and pass both the updater function and the state to child component
+
 ## Component
 
 ### Pass method (event) to child component
@@ -242,8 +250,8 @@ To render the content inside the `AlertBox` component, using slot
 Props need to register before using. We should declare type or validation for the props as well (<https://vuejs.org/guide/components/props.html#prop-validation>)
 
 ```html
-// This means the component has two Props. In React, we also has props object and pass to function component as a param.
 <script setup lang="ts">
+  // This means the component has two Props. In React, we also has props object and pass to function component as a param.
   defineProps<{
     title?: string
     likes?: number
@@ -252,6 +260,12 @@ Props need to register before using. We should declare type or validation for th
 ```
 
 Like React, we should never mutate the props object directly, props are read-only
+
+**Destructuring props**
+
+<https://dmitripavlutin.com/props-destructure-vue-composition/>
+
+We should not destructure props like React because the destructured property will lost reactivity and won't be updated when the props updates. To destructure props, you should use `toRefs`
 
 ## `computed`
 
@@ -398,9 +412,12 @@ router.beforeEach((to, from, next) => {
 
 - Vue doesn't have `setState` function and you can mutate the state directly, while React doesn't allow. For example, you can use `push()` to add item to array state, or you can assign state to the new value (`state = newState`)
 - Because of the direct mutation, you can also assign state to new value in Vue. **This could be dangerous** if we mutate one, the other mutate as well
+- Vue doesn't have a `setState` function to modify the state. If we pass a state as props and we want to modify that state in child component, we should create another updater function and pass both the updater function and the state to child
 - Data binding: Data binding is easier in Vue. For example, for checkbox value, you only need to define a state and assign it to element via `v-model`. Updating value is handled automatically. Wheareas, React handles it manually via a `setState`
 - List rendering: I prefer using array method (`map`, `filter`) to render a list in React because it's more like JS
 - Computed: React doesn't need API to calculate a state based on other state. Vue requires `computed()`
 - Method props: In React, prop as a method can be call directly, in Vue we need to `defineEmit` first and use `$emit()` to emit events from parent
 - Working with TS: React makes it easier to work with TS, at least for typing event handlers. Vue doens't have type for each kind of event.
+- You cannot destructure props in Vue like React as the destructured properties will lost its reactivity.
+- Using `v-model` for Custom component is not straighfoward
 - You might not need to declare a state to work with input, in case you are working with event handler [https://vuejs.org/examples/#todomvc](https://vuejs.org/examples/#todomvc)

@@ -31,6 +31,7 @@
 Use `it` or `test`
 
 **NOTE**: after each `it` block, rendered React component is unmounted => you need to re-render it in the next test
+
 ```jsx
 it('description of the test', () => {
 	render(<Counter defaultCount={0} description="My Counter" />); // Render the component with props'value
