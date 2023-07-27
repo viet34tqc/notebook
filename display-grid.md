@@ -1,5 +1,6 @@
 # Display: grid
 
+<https://www.coltsteele.com/tutorials/mastering-css-grid>
 <https://learncssgrid.com/>
 <https://www.coltsteele.com/tutorials/mastering-css-grid>
 
@@ -7,8 +8,10 @@
 
 Fr is fraction unit and 1fr is for 1 part of the remaining available space. So to calculate 1fr, we have to get the remaining space first.
 
-- If there is no static value, like `1fr 2fr 1fr`: the remaining space is full width
-- If there is static value, like `200px 1f 1fr` or `minmax(200px, 400px) 1fr 1fr`: the remaining space = full width - static value
+- If there is no static unit, like `1fr 2fr 1fr`: the remaining space is full width
+- If there is unit other than `fr`, like `200px 1f 1fr` or `minmax(200px, 400px) 1fr 1fr`: the remaining space = full width - static value. It means:
+  + Any length units that are not fractions will be allocated first.
+  + The fractions will apply to the remaining space.
 
 ## `minmax(min, max)`
 

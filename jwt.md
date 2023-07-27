@@ -17,6 +17,8 @@ JWT is used for authorization, a replacement for session-cookie model
 
 ## JWT components
 
+<https://blog.bytebytego.com/p/ep69-explaining-json-web-token-jwt>
+  
 JWT consists of three components:
 
 - `Header`: stores data of how to create a JWT. It's an object that has token type and the hashing algorithm type

@@ -89,7 +89,6 @@ Tạo 1 file `.dockerignore` để ignore `node_module`
 Để chạy Dockerfile, dùng lệnh: `docker build -t <docker_image_name> .`. `-t` hay `--tag` là đánh tag cho docker image
 Docker image name có thể là my_app:1.0. Sau khi build xong chạy `docker run` như trên để tạo ra container
 
-
 ## Commands
 
 - `docker ps`: liệt kê danh sách container đang chạy
@@ -132,6 +131,29 @@ docker volume create todo-db
 # `etc/todos` is where container store the db, we set this location in the code
 docker run -dp 3000:3000 -v todo-db:/etc/todos getting-started
 ```
+
+## How Docker works
+
+<https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc69f4fe6-2606-47c4-b093-3de6914d942b_1602x1536.jpeg>
+
+There are 3 components in Docker architecture:
+
+- Docker client
+The docker client talks to the Docker daemon.
+
+- Docker host
+The Docker daemon listens for Docker API requests and manages Docker objects such as images, containers, networks, and volumes.
+
+- Docker registry
+A Docker registry stores Docker images. Docker Hub is a public registry that anyone can use.
+
+Let's take the 'docker run' command as an example.
+
+- Docker pulls the image from the registry.
+- Docker creates a new container.
+- Docker allocates a read-write filesystem to the container.
+- Docker creates a network interface to connect the container to the default network.
+- Docker starts the container.
 
 ## Docker compose
 
