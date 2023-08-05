@@ -17,7 +17,7 @@ If you don't set the input files in `tsconfig.json`, Typescript will automatical
 
 There are 4 ways of assigning a type to a variable
 
-- Type annotation
+- Type annotation (or colon annotation)
 - `satisfies`
 - `as` annotation
 - Type inference: not annotating and letting TS infer it
@@ -46,10 +46,13 @@ In fact, most of the time you don't need to type your variables on declartion at
 
 ### `satisfies`
 
+- <https://www.totaltypescript.com/clarifying-the-satisfies-operator>
 - <https://typescript.tv/new-features/what-is-the-satisfies-operator-in-typescript/>
 - <https://blog.logrocket.com/getting-started-typescript-satisfies-operator>
 
-It's like the combination of type inference and type annotation. It help us validate the type of variable and also infer the type of variable based on its value
+It's like the combination of type inference and type annotation. It help us validate the type of variable and also infer the type of variable based on its value.
+
+Normally, When you use a colon, the type BEATS the value. But with `satisfies`, the value BEATS the type => use `satisfies` when You want the EXACT type of the variable, not the WIDER type.
 
 ```ts
 type TeamMembers = string | string[];
@@ -414,12 +417,21 @@ When to use: when we want to strictly define type for elements in array, like th
 
 **Must read**: <https://www.totaltypescript.com/mental-model-for-typescript-generics>
 
-Why:
+### Why
 
 - For types, interface, it turns them into a Javascript-alike function
 - For functions, it connects the type of params you pass in and the code in your function body. **If two params has connection to each other, you need to use generics**, e.g one param is object and the other one is its key
+- For object, you can pass value type of a property to another property's value type:
 
-When:
+```ts
+interface TableProps<T> {
+  rows: T[];
+  renderRow: (row: T) => ReactNode;
+}
+```
+
+### When
+
 When you don't know which type of input you pass into the function
 
 Let's say you have a function like this:
@@ -454,7 +466,7 @@ T is shorthand for 'Types' and can be set manually or automatically
 
 ### Syntax
 
-With function:
+- With function:
 
 ```tsx
 const foo = <T, >(x: T) => x;
@@ -463,14 +475,14 @@ function foo<T>(x: T): T {
 }
 ```
 
-With type: When we pass generic to a type, it's like we are tranforming the type to a function and the generic is the param of that type
+- With type: When we pass generic to a type, it's like we are tranforming the type to a function and the generic is the param of that type
 
 ```ts
 type foo<T> = {
 };
 ```
 
-With interface:
+- With interface:
 
 ```ts
 interface Resource<T> {
@@ -484,13 +496,41 @@ const resourceOne: Resource<string> = {
 }
 ```
 
-With array
+- With array
 
 ```tsx
 foo<T>[]
 ```
 
-### Generic extends
+- In `.tsx` file
+
+We need an additional comma.
+
+```tsx
+const Component = <T,>() => {};
+```
+
+- When calling React functional component
+
+```tsx
+interface User {
+  id: number;
+  name: string;
+  age: number;
+}
+
+<Table<User>
+    // @ts-expect-error rows should be User[]
+    rows={[1, 2, 3]}
+    renderRow={row => {
+      type test = Expect<Equal<typeof row, User>>;
+      return <td>{row.name}</td>;
+    }}
+/>
+```
+
+
+### Generic constrain
 
 The type can be restricted to a certain class family or interface, using the extends keyword:
 

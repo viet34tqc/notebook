@@ -7,6 +7,10 @@
 
 Convert the code so that older browser can also run it.
 
+## Waterfall
+
+The current request need to complete to let other requests continue.
+
 ## Babel
 
 Enable writing codes with JS features that are not supported by most browser yet. The modern code is transpiled back to vanilla JS so that every environment can understand it.

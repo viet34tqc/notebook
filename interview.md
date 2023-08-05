@@ -137,7 +137,7 @@ That's because when the outer component re-renders, it clears the previous outpu
 
 - Keep previous versions of the state, and reuse them later
 - Create pure components. Immutable data can determine if changes have been made, which helps to *determine when a component require re-rerendering*.
-If you mutate the data directly, the components might not re-render that could lead to bugs.
+To detect a state change, React shallow compare the old and new value state (similar to '==='). If you mutate the data (object and array) directly (using `Array.push` for example), React won't detect the change in state => won't re-render
 
 ## How do you scale large React component
 
@@ -153,6 +153,13 @@ If you mutate the data directly, the components might not re-render that could l
 
 - Controlled input: input data is controlled via state
 - Uncontrolled input: input data is accessed via DOM, which means using `ref`
+
+## Controlled and uncontrolled component
+
+<https://www.jameskerr.blog/posts/partially-controlled-react-components/>
+
+- Uncontrolled components manage changes within themselves, internally.
+- Controlled components have their changes managed for them, from the outside, externally.
 
 ## What is Temporary Dead Zone
 
@@ -801,6 +808,10 @@ async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
   debouncedSearch(e.target.value);
 }
 ```
+
+## Why is pnpm fast
+
+<https://dev.to/stackblitz/what-is-pnpm-and-is-it-really-so-fast-and-space-efficient-29la>
 
 ## Semantic version (SemVer)
 

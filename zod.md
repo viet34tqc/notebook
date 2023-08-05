@@ -19,6 +19,10 @@ const Comment = Base.merge(z.object({
 }))
 ```
 
+## Required field
+
+By default, all fields in zod schema are required. However, we can still submit field data with empty string because it's valid. To solve this problem, define schema with `min` like this: `name: z.string().min(1, 'Name field is required')`
+
 ## `transform`
 
 Use when you want to transform a piece of data after `parse`
