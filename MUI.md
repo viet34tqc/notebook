@@ -63,7 +63,7 @@ const GridContainer = styled(Grid)((props) => ({
 
 ## Styled component
 
-```jsx	
+```jsx
 import Grid from '@mui/material/Grid';
 
 // Theme here is the system theme. You can overide this system theme
@@ -102,7 +102,7 @@ const GridContainer = styled(Grid)(({theme}) => ({
 }))
 ```
 
-## Customize globally
+## Customize globally with MUI
 
 Create a theme using `createTheme`. For example, to customize `maxWidth` of `Container` component
 
@@ -113,7 +113,7 @@ declare module '@mui/material/styles' {
   interface Palette {
     accent: string;
   }
-  
+
   interface PaletteOptions {
     accent?: string;
   }
@@ -184,3 +184,11 @@ return (
 	</ThemeProvider>
 )
 ```
+
+## Customize with MUI Joy
+
+- Using `extendTheme` instead of `createTheme`
+- Using `CssVarsProvider` instead of `ThemeProvider`
+- Using `theme.vars.pallete.primary` instead of `theme.vars.primary`
+
+`CSSVarsProvider` is more efficient than `ThemeProvider` because we can modify the CSS variable and don't to change CSS for multiple nested components.
