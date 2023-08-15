@@ -146,7 +146,13 @@ const [createPost, createPostInfo] = useCreatePost()
   })
   ```
 
-  If the query to invalidated is on the same page as the current query and you want to invalidate the other query asap, you could use `setQueryData`. This is optimistic update. However, in the end we still want to invalidate the query in `onSettled`
+  If you want to invalidate the current query after mutating asap and the code for mutating is in different component from the component of `useQuery`, you could use `setQueryData`. This is optimistic update.
+
+  And if the mutating code and the query code is in the same component, you could use `refetch` which can be get from `useQuery`.
+
+  You can also invalidate other queries on other pages by `invalidateQueries` from `queryClient`. Then, when you navigate to that page, the `useQuery` is mounted again and returns the fresh data.
+
+  However, in the end we still want to invalidate the query in `onSuccess` or `onSettled`
 
   ```js
     onSuccess: (data) => {
