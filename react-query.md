@@ -116,7 +116,7 @@ export default function usePosts() {
 }
 ```
 
-## useMutation
+## `useMutation`
 
 - Used to create/delete/update data
 - Input: function for mutation and options ( which will utilize queryClient)
@@ -146,49 +146,49 @@ const [createPost, createPostInfo] = useCreatePost()
   })
   ```
 
-  If you want to invalidate the current query after mutating asap and the code for mutating is in different component from the component of `useQuery`, you could use `setQueryData`. This is optimistic update.
-
-  And if the mutating code and the query code is in the same component, you could use `refetch` which can be get from `useQuery`.
-
-  You can also invalidate other queries on other pages by `invalidateQueries` from `queryClient`. Then, when you navigate to that page, the `useQuery` is mounted again and returns the fresh data.
-
-  However, in the end we still want to invalidate the query in `onSuccess` or `onSettled`
-
-  ```js
-    onSuccess: (data) => {
-      // data is the response from mutationFn. If response doesn't return it, you need to find another way to get the ID
-    queryClient.setQueryData(discussionKeys.all(), (previous: any) =>
-      previous.filter((d: Discussion) => d.id !== data.id)
-    );
-  }
-  ```
-
-  If the query include a lot of params like a filters, your best bet is invalidate the whole query without any subkeys <https://tkdodo.eu/blog/effective-react-query-keys>
-
-  ```js
-  const { filters } = useFilterParams()
-
-  return useMutation(updateTitle, {
-    onSuccess: (newTodo) => {
-      queryClient.setQueryData(['todos', 'detail', newTodo.id], newTodo)
-
-      // ✅ update the list we are currently on instantly
-      queryClient.setQueryData(['todos', 'list', { filters }], (previous) =>
-        previous.map((todo) => (todo.id === newTodo.id ? newtodo : todo))
-      )
-
-      // 🥳 invalidate all the lists, but don't refetch the active one
-      queryClient.invalidateQueries({
-        queryKey: ['todos', 'list'],
-        refetchActive: false,
-      })
-    },
-  })
-  ```
-
   - `onError`: fires when the mutation encounters an error
 
-### useQueryClient
+### What to do after mutation
+
+You might want to `invalidateQueries`. Let's say you have a modal to add post and a list of post on the same page. Now you want to create a post and update the list asap. Then you need to `invalidateQueries` the query for `posts` after create post.
+
+When using `invalidateQueries`, it will call another API for the query to get the latest data, update the cached data and display screen. If the current component contains invalidated query, it will re-render
+
+You can also use `setQueryData` to manually update the cached data for the query. The advantage of `setQueryData` is that it doesn't make an additional API like `invalidateQueries`. However, in the end we still want to invalidate the query in `onSuccess` or `onSettled`
+
+```js
+  onSuccess: (data) => {
+    // data is the response from mutationFn. If response doesn't return it, you need to find another way to get the ID
+  queryClient.setQueryData(discussionKeys.all(), (previous: any) =>
+    previous.filter((d: Discussion) => d.id !== data.id)
+  );
+}
+```
+
+If the query include a lot of params like a filters, your best bet is invalidate the whole query without any subkeys <https://tkdodo.eu/blog/effective-react-query-keys>
+
+```js
+const { filters } = useFilterParams()
+
+return useMutation(updateTitle, {
+  onSuccess: (newTodo) => {
+    queryClient.setQueryData(['todos', 'detail', newTodo.id], newTodo)
+
+    // ✅ update the list we are currently on instantly
+    queryClient.setQueryData(['todos', 'list', { filters }], (previous) =>
+      previous.map((todo) => (todo.id === newTodo.id ? newtodo : todo))
+    )
+
+    // 🥳 invalidate all the lists, but don't refetch the active one
+    queryClient.invalidateQueries({
+      queryKey: ['todos', 'list'],
+      refetchActive: false,
+    })
+  },
+})
+```
+
+## useQueryClient
 
 This hook return the queryClient instance. This instance helps a lot with caching
 

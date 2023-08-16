@@ -428,6 +428,21 @@ interface TableProps<T> {
   rows: T[];
   renderRow: (row: T) => ReactNode;
 }
+
+const useApi = <TData, TQueryKey extends QueryKey>(
+  queryKey: TQueryKey,
+  queryFn: (
+    key: QueryFunctionContext<TQueryKey>,
+    token: string,
+  ) => Promise<TData>,
+) => {
+  const token = useAuthToken()
+
+  return useQuery({
+    queryFn: (ctx) => queryFn(ctx, token),
+    queryKey,
+  });
+};
 ```
 
 ### When

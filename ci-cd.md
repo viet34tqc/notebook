@@ -1,5 +1,6 @@
 # CI/CD
 
+<https://blog.bytebytego.com/i/135732871/cicd-pipeline-explained-in-simple-terms>
 <https://www.youtube.com/watch?v=R8_veQiYBjI>
 <https://www.youtube.com/watch?v=eB0nUzAI7M8>
 <https://levelup.gitconnected.com/basics-of-ci-cd-a98340c60b04>
@@ -17,6 +18,16 @@ There are many CI/CD tools on the market but if you are using github for hosting
 ## Why CI/CD
 
 It resolves the problem of manual deploying. Deploying manually is error-prone and time consuming: we have to build by hand, wait for the build then copy code to the server, restart the server, some code might be missing when we copy code to server by hand.
+
+## Typical CI/CD pipeline
+
+- Developer commits code changes to source control
+- CI server detects changes and triggers build
+- Code is compiled, tested (unit, integration tests)
+- Test results reported to developer
+- On success, artifacts are deployed to staging environments
+- Further testing may be done on staging before release
+- CD system deploys approved changes to production
 
 ## CI
 
