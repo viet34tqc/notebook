@@ -45,6 +45,14 @@ Variant styles based on component props
 />
 ```
 
+### `useTheme`
+
+If global theme is used everywhere in your component, you can use `useTheme` to get the global theme configuration
+
+```js
+const theme = useTheme()
+```
+
 ### Using `styled` function
 
 It works like styled component
