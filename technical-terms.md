@@ -69,15 +69,17 @@ Beside adding interactivity, React also builds up a mental picture of what the D
 
 the act of taking a website live on a server
 
-## Cookie flags:
+## Cookie attributes:
 
 <https://prateeksurana.me/blog/javascript-developer-guide-to-browser-cookies/>
 
-- `httpOnly`: prevent browser to read any cookies with the cookie API
-- `SameSite`: `SameSite=Strict`: Domain in URL bar equals the cookie's domain (first-party) AND the link to the request is on the same domain as well. `SameSite=Lax`: Domain in URL bar equals the cookie's domain (first-party), the link to the request can be from the other site that point to domain, like you click on the domain on google search result.
-- `domain`: tell browser which host are allowed to access a cookie, default to the same host that set the cookie. This attribute is used only when the current domain is a subdomain like abc.xyz.com. So the default domain is abc.xyz.com and if your client is hosted on another domain, not abc.xyz.com, the cookies are set in response header but they aren't existed on client site
+- `httpOnly`: prevent browser (client) from reading any cookies with the cookie API. Cookies are accessible only via server. This helps prevent XSS attacks
+- `SameSite`: (<https://andrewlock.net/understanding-samesite-cookies/>)
+  - `SameSite=Strict`: The cookie will be sent to the server when the current URL is same as the cookie's domain (first-party) and the request originates from the same domain 
+  - `SameSite=Lax` (default): Domain in URL bar equals the cookie's domain (first-party), the link to the request can be from the other sites that point to domain, like you click on the domain on google search result.
+- `domain`: tell browser which hosts are allowed to access a cookie, default to the same host that set the cookie. This attribute is used only when the current domain is a subdomain like 'abc.xyz.com'. So the default domain is abc.xyz.com and if your client is hosted on another subdomain, like 'def.xyz.com', the cookies are set in response header but they aren't existed on client site and won't be included in the next request to the server.
 - `path`: tell browser which path are allowed to access a cookie. A cookie with the path attribute as Path=/store would only be accessible on the path /store and its subpaths /store/cart, /store/gadgets
-- `secure`: A cookie with the Secure attribute is only sent to the server over the secure HTTPS protocol, so the domain of client must be HTTPS
+- `secure`: A cookie with the Secure attribute is only sent to the server over the secure HTTPS protocol, so the domain of client must be HTTPS. This helps in preventing Man in the Middle attacks by making the cookie inaccessible over unsecured connections
 
 ## Tree-shaking
 

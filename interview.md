@@ -136,7 +136,8 @@ That's because when the outer component re-renders, it clears the previous outpu
 ## Why react use immutability?
 
 - Keep previous versions of the state, and reuse them later
-- Create pure components. Immutable data can determine if changes have been made, which helps to *determine when a component require re-rerendering*.
+- Create pure components. Immutable data can determine if changes have been made, which helps to *determine when a component requires re-rerendering*. If we mutate the state as object or array directly, React still sees that object or array as the same one because JS compares objects and arrays by reference, not value.
+
 To detect a state change, React shallow compare the old and new value state (similar to '==='). If you mutate the data (object and array) directly (using `Array.push` for example), React won't detect the change in state => won't re-render
 
 ## How do you scale large React component
@@ -719,6 +720,10 @@ If you want to create a transition between two different components' rendering, 
 
 It tells React to keep the current UI interactive while preparing the new state in the background without committing the updates immediately (of course, you can display a loading when `isPending` is true)
 
+## React design patterns
+
+<https://blog.openreplay.com/applying-design-principles-in-react/>
+
 ## Màn bình thường và màn retina
 
 Màn thường: 1 CSS pixel tương đương 1 điểm ảnh vật lý
@@ -733,10 +738,12 @@ CDN (Content Delivery Network) tạm dịch là mạng phân phối nội dung. 
 
 Headless website is built with separated back-end and frontend. With headless, your frontend (head) is decoupled from the backend (body).
 Your frontend is a JS application that run by browser, and it doesn't need to be hosted on a server. You just need to put your code somewhere browser can download it (Often it's just on CDN)
+
 Whereas, your backend can be WordPress or NodeJS and hosted on a server.
+
 If needed, frontend part will communicate to the backend end via API (using REST or GraphQL) to get the data or perform other actions such as sending email
 
-## Handle this in `setTimeout`
+## Handle `this` in `setTimeout`
 
 <https://developer.mozilla.org/en-US/docs/Web/API/setTimeout#the_this_problem>
 
@@ -812,6 +819,11 @@ async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 ## Why is pnpm fast
 
 <https://dev.to/stackblitz/what-is-pnpm-and-is-it-really-so-fast-and-space-efficient-29la>
+<https://www.showwcase.com/show/36421/what-is-pnpm-and-why-you-should-use-it%255D>
+
+- PNPM: Utilizes a shared dependency mechanism that allows different projects to use the same copy of a package. It saves all its downloads to a global cache on your machine. That means you only ever download a package ONCE.
+- Requires less disk space due to its shared dependency model. Packages are stored centrally and linked to projects, eliminating the need for redundant copies.
+- Installation times are expedited
 
 ## Semantic version (SemVer)
 
