@@ -144,6 +144,8 @@ To detect a state change, React shallow compare the old and new value state (sim
 
 ## Benefit of `react-query` over `useEffect`
 
+<https://www.youtube.com/watch?v=Kjkx2BASAZA>
+
 ## What is the use of `generic` in TS
 
 ## Difference between `generic` and `unknown` in TS
@@ -175,6 +177,12 @@ With `useEffect`, we can control how the side effects run in the component. Norm
 ## Why the callback in `useEffect` mustn't be async function
 
 Because async function return promise. `useEffect` hook isn't expecting us to return a promise. It expects us to return either nothing or a cleanup function.
+
+## React folder structure
+
+<https://dev.to/josemukorivo/how-i-approach-and-structure-enterprise-frontend-applications-after-4-years-of-using-nextjs-2f5>
+
+<img src="https://i.imgur.com/oEhdERi.png">
 
 ## When react does not re-render
 
