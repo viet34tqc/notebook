@@ -302,14 +302,14 @@ function rect( width: number, height: number )
 - Define type of return, default is `void`:
 
 ```ts
-    function square( side: number ) : number
+function square( side: number ) : number
 ```
 
 - Function signature
 
 ```typescript
-    let greet: ( a: string, b: number ) => void // function signature
-    greet = (name: string, age: number ) => console.log(`${name}`)
+let greet: ( a: string, b: number ) => void // function signature
+greet = (name: string, age: number ) => console.log(`${name}`)
 ```
 
 ## Class
@@ -456,7 +456,9 @@ const makeArr = (x: number) => [x]
 ```
 
 But what if we didn't know if we wanted to passed in the number here, maybe say we wanted to pass in string or boolean. What will you do?
+
 At first, you might want to change the type Number to any. However, this is basically going to remove all of your type safety and TS type functionality becomes useless.
+
 This is where Generic comes in. You can use generic like this:
 
 ```ts
@@ -468,15 +470,15 @@ T is shorthand for 'Types' and can be set manually or automatically
 - Manually
 
 ```typescript
- makeArr<string>('3')
- makeArr<string>(3) // error
+makeArr<string>('3')
+makeArr<string>(3) // error
 ```
 
 - Automatically
 
 ```typescript
- makeArr(3) // T is number
- makeArr('3') // T is string
+makeArr(3) // T is number
+makeArr('3') // T is string
 ```
 
 ### Syntax
@@ -544,15 +546,14 @@ interface User {
 />
 ```
 
-
 ### Generic constrain
 
 The type can be restricted to a certain class family or interface, using the extends keyword:
 
 ```typescript
 const genericObject = <T extends {firstName: string, lastName: string}>( obj: T) => ({
-...obj,
-    fullname: 'abc'
+..obj,
+  fullname: 'abc'
 })
 const args = {firstName: 'viet', lastName: 'nguyen', age: 30} // args must have firstName and lastName
 const n3 = genericObject(args) // Now T has the type of args

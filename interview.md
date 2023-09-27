@@ -18,14 +18,14 @@ Cons:
 - Simple: It's easier to learn and to work with. JS can be run directly within browser, meaning that there's no need to compile the code before running it.
 - Flexibility: You can declare variables without type.
 - Popularity: JS is strongly supported and very popular
-- Rich API: JS provides lots of APIs to make interactions, which enhance UI and UX 
+- Rich API: JS provides lots of APIs to make interactions, which enhance UI and UX
 
 Pros:
 
 - Security Issues: JavaScript is client-side scripting language which means the code runs on the user's computer. This can lead to security issues if not implemented properly.
 - Too Flexible: JS is weak typed language => errors in run time. It doesn't even require any variable declaration. This is allowed due to hoisting.
 - JS is executed during runtime without a compiler, if your JS code has error => your app can be crashed.
-- Browser Support: The browser interprets JavaScript differently in different browsers. Thus, the code must be run on various platforms before publishing. 
+- Browser Support: The browser interprets JavaScript differently in different browsers. Thus, the code must be run on various platforms before publishing.
 
 ## Which data type to be stored in local storage
 
@@ -56,7 +56,7 @@ Non-sensitive data because local storage can be access via XSS attack
 
 - Like other JS frameworks, you can break your app into components that can be reuseable
 - It's declarative, we can describe how UI should look like by JS state. In vanilla JS, you need to handle both the state logic and UI interaction
-- It's faster by using Virtual DOM. Virtual DOM is just objects, React update the real DOM via virtual DOM. 
+- It's faster by using Virtual DOM. Virtual DOM is just objects, React update the real DOM via virtual DOM.
 
 ## Why use virtual DOM in React
 
@@ -150,12 +150,34 @@ To detect a state change, React shallow compare the old and new value state (sim
 
 ## Difference between `generic` and `unknown` in TS
 
+We use `unknown` when we doesn't know the type of the argument yet. We cannot use `unknown` value directly as `any`, so we need to use type-checking to narrow down the type of that argument
+
+With generic, the type is infer from value passed in the function
+
+```ts
+const Test = (a: unknown) => a
+const a = Test(123) // a is unknown, you need to do type checking to use it
+
+const Test2 = <T>(a: T) => a
+const a = Test(123) // a is number
+```
+
 ## Handle API in React
 
-## Controlled vs uncontrolled input
+## Controlled vs uncontrolled component
 
-- Controlled input: input data is controlled via state
-- Uncontrolled input: input data is accessed via DOM, which means using `ref`
+<https://phuoc.ng/collection/this-vs-that/controlled-vs-uncontrolled-components/>
+
+- Controlled component: the state of the component is managed by React. When a user interacts with the component, its state changes and React will re-render the component with the new state
+- Uncontrolled input: the state of the component is managed by the DOM. When a user interacts with the component, the DOM updates the state directly, bypassing React
+
+## `useEffect` and `useLayoutEffect`
+
+<https://phuoc.ng/collection/this-vs-that/react-use-effect-vs-react-use-layout-effect/>
+
+The key difference between `useEffect` and `useLayoutEffect` is their timing. `useEffect` runs after the component has rendered, while `useLayoutEffect` runs before the browser paints
+
+It's worth noting that `useLayoutEffect` runs synchronously, which means it can potentially slow down the browser painting if it takes too long to execute. In general, only use `useLayoutEffect` when you need to measure or modify something in the DOM before the browser painting
 
 ## Controlled and uncontrolled component
 
@@ -387,11 +409,10 @@ If the key of item retains between re-renders, React will just re-use the compon
 Key must be unique. You shouldn't take `index` as key, as when you add or remove items (at the top of the list), the index (or key) of all items will be changed => bugs
 
 Using `key` is a good idea when you have a list and the data of the list is changed on every render and you are not modifying the list, eg: pagination
-  
+
 When the `key` props is changed, React unmount the previous instance, and mount a new one. This means that all state that had existed in the component at the time is completely removed and the component is reinitialized
 
 ## How to approach a design
-
 
 ## Optimize React re-render
 
@@ -414,9 +435,9 @@ Benefits of using native ESM
 Vite divides the application modules into two categories: dependencies and source code.
 
 - Dependencies: Plain JavaScript that will not change much during development (e.g. component libraries such as MUI).
-  + Vite pre-bundles these dependencies using `esbuild`, which is 10-100x faster than JavaScript-based bundlers.
-  + Pre-bundling ensures that each dependency maps to only one HTTP request, avoiding HTTP overhead and network congestion.
-  + As dependencies do not change, they can also be cached and we can skip pre-bundling.
+  - Vite pre-bundles these dependencies using `esbuild`, which is 10-100x faster than JavaScript-based bundlers.
+  - Pre-bundling ensures that each dependency maps to only one HTTP request, avoiding HTTP overhead and network congestion.
+  - As dependencies do not change, they can also be cached and we can skip pre-bundling.
 - Source code: JSX, CSS, Vue/React and other components that require conversion. Vite serves source code using `native ESM`.
 
 Dependency pre-bundling only applies in development mode, and uses esbuild to convert dependencies to ESM. In production builds, @rollup/plugin-commonjs is used instead.
@@ -427,7 +448,7 @@ Side effect is anything that affects something outside the function scope, ex: n
 
 ## Is react re-render bad? When is it bad and when is isn't?
 
-Only optimize when the re-render makes your app slow. 
+Only optimize when the re-render makes your app slow.
 When re-render is bad?: when a component has complex calculation or includes charts.
 Why we shouldn't pre-optimize (with `useMemo` and `useCallback`)
 
@@ -461,12 +482,12 @@ HTML document is HTML file. When an HTML document is loaded into a web browser, 
 HTML elements are part of DOM which includes HTML opening tags, closing tags, attributes or text content
 HTML tags are name of HTML elements
 
-## Explain the difference between Async/Await and Promises.
+## Explain the difference between Async/Await and Promises
 
 - `Async await` is syntactic sugar for promises. Making code looks like executed synchronously and easier to understand
-- Debugging is much easier with `async/await` using `try catch` block. In promise, we have to use `then catch` chaining. In case we have errors, if we don't handle, the script dies 
+- Debugging is much easier with `async/await` using `try catch` block. In promise, we have to use `then catch` chaining. In case we have errors, if we don't handle, the script dies
 
-## Explain how you can use JavaScript functions such as forEach, Map.
+## Explain how you can use JavaScript functions such as forEach, Map
 
 - `map` is used to transform each element of an array. It returns an array without changing original array
 - `forEach` is used to run a function for each element. For example, we have a variable and we want to sum each element with that var. `forEach` returns undefined
@@ -608,12 +629,12 @@ To catch that, we need to use `await`
     try {
         await fails2();
     } catch (e) {
-        console.log("that failed", e); 
+        console.log("that failed", e);
     }
 })();
 ```
 
-`try...catch` cannot also catch error in the setTimeout because 
+`try...catch` cannot also catch error in the setTimeout because
 
 ## Difference between `throw Error()` and `reject(new Error())`
 
@@ -672,11 +693,11 @@ outer.call({x: 5});
 class Person {
   construtor() {
     this.name = 'viet'
-  } 
+  }
   getName() {
     setTimeout(() => {
       console.log(this.name); // return 'viet' because `this` in arrow function refers to where it's created which is the class
-    }, 1000) 
+    }, 1000)
 
     setTimeout(function() {
       console.log(this.name); // return 'undefined' because the callback is executed by window
@@ -766,12 +787,12 @@ myArray.myMethod = function (sProperty) {
 // USE A WRAPPER FUNCTION
 setTimeout(function () {
   myArray.myMethod();
-}, 2.0 * 1000); 
+}, 2.0 * 1000);
 
 // Or using bind
 setTimeout(
   myArray.myMethod.bind(myArray)
-, 2.0 * 1000); 
+, 2.0 * 1000);
 ```
 
 ## Cơ chế làm việc của session và JWT
@@ -980,13 +1001,13 @@ Why: <https://www.builder.io/blog/maps>
 - Gần giống như object, khác ở chỗ key có thể là bất cứ type nào, kể cả object, function
 - `Map` giữ nguyên order của key
 - Việc lặp qua các phần tử trong `Map` cũng đơn giản hơn, k cần sử dụng đến `Object.keys`, `Object.values`... để transform trước khi lặp
+
   ```js
   map1.forEach((value, key) => ...
   // Or
   for (const [key, value] of map1) {
   // Nếu muốn chỉ lặp qua key hoặc values thì có thể dùng `map1.keys()` hoặc `map1.values()`
   ```
-  
 
 Cú pháp:
 
@@ -1249,12 +1270,12 @@ Async function always return a promise. It's often used when we want to perform 
 - Less code to write
 - We can utilize `this` where the arrow function is defined because `this` in arrow function relates to the outer scope environment.
 
-## Why you should put your modal outside of main area.
+## Why you should put your modal outside of main area
 
 <https://www.developerway.com/posts/positioning-and-portals-in-react>
 Normally, when you build a modal, you will set its position `fixed` and give it a high value of `z-index`. However, if you render your modal in a nested div, there will be a high chance that your modal will lie below other elements.
 
-The reason is because of `stacking context`. 
+The reason is because of `stacking context`.
 
 Actually, fixed elements are relative to its containing block which is viewport by default. We can also create this containing block by adding `transfrom` property. So if the parent element of nested modal is a containing block, the `z-index` value of modal will be counted only inside its parent. And if modal's parent lie below other elements in DOM, the modal will lie below other element as well.
 
@@ -1267,15 +1288,15 @@ You can simply understand that `nth-last-child` is reverse to `nth-child`. By us
 ## Common web securities
 
 - Preventing XSS
-  + Don't save sensitive data in local storage
-  + Using cookie with `httpOnly` flag set to true
-  + Escape dynamic content when you read it from database
-  + Sanitize data before saving into db
+  - Don't save sensitive data in local storage
+  - Using cookie with `httpOnly` flag set to true
+  - Escape dynamic content when you read it from database
+  - Sanitize data before saving into db
 - Preventing CSRF
-  + Using cookie with `SameSite` flag set to `Lax` or `Strict` to prevent 
+  - Using cookie with `SameSite` flag set to `Lax` or `Strict` to prevent
 - SQL injection
 
-## What is responsive design, how to implement it.
+## What is responsive design, how to implement it
 
 Is a web design approach to make web pages render well on all screen sizes and resolutions while ensuring good usability
 
@@ -1613,7 +1634,7 @@ If the viewport is 650px, the image size will be 325px. It tells browser to use 
 ```css
 .container {
   /*Ở màn hình nhỏ hơn thì 100% - 2rem < 80ch nên width = 100% - 2rem nhưng ở màn hình lớn hơn khi mà 100% - 2rem > 80ch thì width = 80ch;*/
-  width: min(80ch, 100% - 2rem) 
+  width: min(80ch, 100% - 2rem)
 }
 ```
 
@@ -1751,7 +1772,7 @@ TLDR:
 - `dns-prefetch` & `preconnect` are for high priority resources from a domain but you don't know what exactly what it is, you just know that you are going to download them from that domain.
 - `preload` is for resources with high priority but loaded inside stylesheets or scripts like above-the-fold CSS background images or custom fonts. For image in the markup, preload has little effect
 - `prefetch` is for low priority files very likely needed soon, like HTML, CSS or images used on subsequent pages.
-- `dns-prefetch` & `preconnect` reference just the domain name, like 'https://example.com', whereas `preload` and `prefetch` reference a specific file, like header-logo.svg. `prerender` references an entire page, like blog.html.
+- `dns-prefetch` & `preconnect` reference just the domain name, like '<https://example.com>', whereas `preload` and `prefetch` reference a specific file, like header-logo.svg. `prerender` references an entire page, like blog.html.
 - `dns-prefetch` & `preconnect` should also be used sparingly as some web browsers may limit the number of preemptive connections.
 - Both `prefetch` and `prerender` should be used with care to avoid downloading files that aren't used, which can be costly on mobile networks. Avoid using `prefetch` and `prerender` unless files are certain to be used later or extra data download isn't an issue.
 - Resource hints for font files (even when self-hosted) and CORS enabled resources will also need the crossorigin attribute: `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`
@@ -1876,5 +1897,3 @@ function App() {
   );
 }
 ```
-
-
