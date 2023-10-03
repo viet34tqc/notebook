@@ -23,6 +23,7 @@ The first thing comes to mind when optimize FE is reduce render-blocking resours
 
 <https://wp-rocket.me/blog/font-preloading-best-practices>
 <https://pagespeedchecklist.com/asynchronous-google-fonts>
+<https://joyofcode.xyz/using-fonts-on-the-web>
 Why:
 
 By default, browser will delay font requests until after the render tree has already been constructed. When the browser is ready to display text on screen, it starts download the font and the displaying text is delay. That leads to FOIT, or Flash of Invisible Text and FOUT, or Flash of Unstyled Text.

@@ -1,6 +1,7 @@
 # Ubuntu command
 
-<https://github.com/jlevy/the-art-of-command-line#everyday-use>
+- <https://github.com/jlevy/the-art-of-command-line#everyday-use>
+- <https://i.imgur.com/xyGqGui.png>
 
 ## Commands
 

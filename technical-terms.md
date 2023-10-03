@@ -126,6 +126,7 @@ it's like webpack for CSS. There are variaty of postCSS plugins like minify, com
 
 ### What happens when you visit a website:
 
+<https://blog.bytebytego.com/p/a-crash-course-in-dns-domain-name?ref=dailydev>
 <https://www.youtube.com/watch?v=27r4Bzuj5NQ> (**Must read**)
 <https://www.cloudflare.com/learning/dns/what-is-a-dns-server/>
 <https://www.cloudflare.com/learning/dns/dns-server-types/#recursive-resolver>

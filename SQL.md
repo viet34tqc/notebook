@@ -39,3 +39,7 @@ Câu lệnh trên sẽ không chạy, nhưng mình tưởng tưởng nó sẽ th
 Giá trị `value` trong bảng `table` sẽ được gom lại theo id vào chung 1 ô. Kết quả trả về không thể hiện thị theo dạng `1000, 1000, 1000`  được nên mình phải dùng 1 aggregate function như `sum`. Câu lệnh đúng sẽ là: `select id, sum(value) from table group by id`
 
 Mình cũng có thể đếm số lần xuất hiện của id bằng câu lệnh: `select id, count(id) from table group by id`
+
+## `having` và `where`
+
+Trong câu lệnh sql dùng với aggregate function và `group by`, `where` dùng để lọc data truyền vào aggregate function còn `having` lọc data đầu ra của aggregate function
