@@ -2,6 +2,7 @@
 
 - **Must READ**: <https://github.com/coryhouse/reactjsconsulting/issues/77>
 - <https://reacthandbook.dev/react-performance-optimization>
+- <https://hackernoon.com/front-end-optimization-my-journey-to-accelerate-load-times-in-heavy-front-end>
 
 ## State
 
