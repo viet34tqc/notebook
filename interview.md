@@ -743,7 +743,8 @@ Using concurrent features, React can pause and resume the rendering of component
 
 ### `useTransition`
 
-<https://blog.bitsrc.io/understanding-transition-in-react-18-using-usetransition-hook-8639d6ced0f5>
+- <https://andreigatej.dev/blog/the-underlying-mechanisms-of-reacts-concurrent-mode/>
+- <https://blog.bitsrc.io/understanding-transition-in-react-18-using-usetransition-hook-8639d6ced0f5>
 
 If you want to create a transition between two different components' rendering, this hook provides a way to handle that, allowing you to defer the next component's rendering until the previous one is complete. It's like debouncing the UI update when the state update or update the state without blocking the UI
 

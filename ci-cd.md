@@ -23,7 +23,7 @@ It resolves the problem of manual deploying. Deploying manually is error-prone a
 
 - Developer commits code changes to source control
 - CI server detects changes and triggers build
-- Code is compiled, tested (unit, integration tests)
+- Code is bundled, tested (unit, integration tests)
 - Test results reported to developer
 - On success, artifacts are deployed to staging environments
 - Further testing may be done on staging before release
@@ -33,7 +33,7 @@ It resolves the problem of manual deploying. Deploying manually is error-prone a
 
 Is the automatic process before deployment which is triggered when developer makes an event. An event here could be a new issue, new pull request, a new merge into branch or a new commit.
 
-When CI starts, it will perform a combination of actions. Actions are seperated tasks like testings, building the code.
+When CI starts, it will perform a combination of actions. Actions are seperated tasks like testings, building (minification, bundling...) the code.
 
 ## CD
 
