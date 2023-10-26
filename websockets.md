@@ -20,6 +20,12 @@ The flow:
 
 If the connection is lost, because of, say, a network error, the browser immediately sends a new request.
 
+## Advantage of Websockets
+
+- WebSocket protocol uses persistent connections rather than a continuous HTTP request/response cycle. WebSockets require less bandwidth and provide lower latency compared to HTTP, reducing the load on both the client and the server.
+- WebSocket is an event-driven technology, data is pushed as soon as it becomes available, without any need for polling
+- WebSocket provides a full-duplex, bidirectional communication channel. This means that the server can send messages to the client, and both can send low-latency messages at the same time
+
 ## Websockets flow
 
 - First, server creates a hook and wait for the client to start the connection

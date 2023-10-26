@@ -1,6 +1,8 @@
 # Storybook
 
-<https://github.com/tnarla/nextjs-conf>
+- <https://formidable.com/blog/2023/unlocking-the-power-of-storybook/>
+- <https://github.com/tnarla/nextjs-conf>
+
 Here is the demo
 
 ```tsx
