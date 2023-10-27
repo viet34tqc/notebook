@@ -1,5 +1,7 @@
 # Websockets
 
+- <https://dev.to/ibrahzizo360/unlocking-the-potential-of-web-sockets-in-modern-web-development-5ef>
+
 ## Why use Websockets
 
 To have persistent connection with the server. Before Websockets, we use a technique called polling. There are 2 types of polling, **short polling** and **long polling**
@@ -24,11 +26,16 @@ If the connection is lost, because of, say, a network error, the browser immedia
 
 - WebSocket protocol uses persistent connections rather than a continuous HTTP request/response cycle. WebSockets require less bandwidth and provide lower latency compared to HTTP, reducing the load on both the client and the server.
 - WebSocket is an event-driven technology, data is pushed as soon as it becomes available, without any need for polling
-- WebSocket provides a full-duplex, bidirectional communication channel. This means that the server can send messages to the client, and both can send low-latency messages at the same time
+- WebSocket provides a full-duplex, bidirectional communication channel. This means once a Web Socket connection is established, both server and client can send low-latency messages at the same time (half-duplex means only one device can send message at a time)
 
-## Websockets flow
+## Websockets handshake
 
-- First, server creates a hook and wait for the client to start the connection
+- Client send a HTTP GET request with `Upgrade` header to upgrade from HTTP 1.1 to websockets
+- Server responses with 101 status to let the client know that server is switching protocol
+
+## Websockets code flow
+
+- First, server set up a listener and wait for the client to start the connection
 
 ```js
 ws.on('connection', (ws) => console.log('connection start')) // Each connection will have a `ws` instance

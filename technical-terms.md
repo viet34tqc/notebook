@@ -112,6 +112,17 @@ it's like webpack for CSS. There are variaty of postCSS plugins like minify, com
 - Encoding transforms data into another format using a scheme that is publicly available so that it can easily be reversed.
 - Encryption transforms data into another format in such a way that only specific individual(s) can reverse the transformation
 
+## Reverse proxy
+
+A reverse proxy is a server that accepts a request from the client, forwards the request to web servers, and returns the results to the client as if the proxy server had processed the request.
+
+A reverse proxy is good for:
+
+- Protecting servers
+- Load balancing
+- Caching static contents
+- Encrypting and decrypting SSL communications
+
 ## Nameservers and DNS:
 
 <https://www.bluehost.com/blog/the-low-down-what-is-a-nameserver-why-it-matters-for-your-website>
