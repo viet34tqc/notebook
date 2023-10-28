@@ -34,6 +34,11 @@ Side effect is anything that affects something outside the function scope, ex: n
 
 Two different requests 'raced' against each other and the result might come in a different order than you expected. <https://beta.reactjs.org/learn/you-might-not-need-an-effect>
 
+## Stateless and stateful
+
+- Stateless means after the initial request is done, the server-client communication is lost. Server doesn't keep the client's state (like HTTP)
+- Stateful keeps the client's state (like Websockets)
+
 ## Prefetch and preload
 
 - Prefetch tells browser that you are gonna need this resource in the future, and browser will load it when it's idle. Usecase: apply when user hovers on a link, it's a very high chance that he will click it so you prefetch this link in advance (like NextJS 13)

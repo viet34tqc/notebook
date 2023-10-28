@@ -1,24 +1,29 @@
 # Websockets
 
 - <https://dev.to/ibrahzizo360/unlocking-the-potential-of-web-sockets-in-modern-web-development-5ef>
+- <https://www.youtube.com/watch?v=8ARodQ4Wlf4>
 
 ## Why use Websockets
 
-To have persistent connection with the server. Before Websockets, we use a technique called polling. There are 2 types of polling, **short polling** and **long polling**
+To have persistent connection with the server like in games, chatting applications...
+
+Before Websockets, we use a technique called polling. There are 2 types of polling, **short polling** and **long polling**
 
 ### Short polling
 
-We will send periodic requests to the server, for example every 10 seconds.
+We will send periodic AJAX requests to the server, for example every 10 seconds.
 
 Downsides: Server need is bombed with requests every 10 seconds, even if there is no messages => bad performance.
 
 ### Long polling
 
+Send requests to the server and keep connection open ultil new data
+
 The flow:
 
 - A request is sent to the server.
 - The server doesn't close the connection until it has a data to send.
-- The browser makes a new request immediately.
+- The browser makes a new request immediately when it receives new data.
 
 If the connection is lost, because of, say, a network error, the browser immediately sends a new request.
 
@@ -31,7 +36,7 @@ If the connection is lost, because of, say, a network error, the browser immedia
 ## Websockets handshake
 
 - Client send a HTTP GET request with `Upgrade` header to upgrade from HTTP 1.1 to websockets
-- Server responses with 101 status to let the client know that server is switching protocol
+- Server responses with `101 switching protocol` status to let the client know that server is switching protocol
 
 ## Websockets code flow
 
