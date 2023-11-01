@@ -110,6 +110,32 @@ In react, it's a variable which whenever it updates, it will trigger a re-render
 - React component is a function (or class) that returns React element.
 - JSX (`<App />`) is syntax sugar of `React.createElement`. When we write JSX, we are just using `React.createElement`
 
+## Deep copy and shallow copy in JS
+
+- <https://stackoverflow.com/questions/61421873/object-copy-using-spread-syntax-actually-shallow-or-deep>
+- <https://anonystick.com/blog-developer/phong-van-su-khac-nhau-giua-shallow-copying-va-deep-copying-trong-object-javascript-2019112823755023>
+- <https://developer.mozilla.org/en-US/docs/Glossary/Deep_copy>
+
+To copy an oject in JS, we have some types of copy
+
+- Shallow Copy: the original object and the new one has the same memory address (same reference)
+  - Just assign old one to new one: `const newObj = oldObj`.
+  - `Object.assign()` and `Object.create()`
+- Deep copy: every value of the copied object gets a new memory address rather than the original object.
+  - `JSON.parse(JSON.stringify(object))`: **NOT RECOMMEDED**. The new object will have different memory address and any changes on old object doesn't affect new one. This medthod cannot clone un-serializable data (like `function`) and it will turn your `Date` object into string, `NaN` into null. Turn your `Set`, `Map` into regular Object
+  - `structuredClone`
+- Hybrid
+  - Spread operator: It deep copies if the object is not nested (the value of property must be primitive value). For nested data, it deep copies the topmost data and shallow copies the nested data. **The same goes for array**
+
+  ```js
+  const obj = {a:1,b:2,c:{d:3}};
+  const shallowClone = {...obj};
+  obj.c.d = 34;
+  console.log(obj);
+  console.log(shallowClone);
+  ```
+
+
 ## Why we shouldn't directly call React Components
 
 <https://dev.to/igor_bykov/react-calling-functional-components-as-functions-1d3l>
@@ -318,7 +344,7 @@ All React does is create a tree of elements (React elements are object that is t
 
 Once virtual DOM has updated, React compares the entire virtual DOM with a virtual DOM snapshot that was taken right before the update.
 It only finds the elements that has changed. If there are a lot of updates, React can batch them (collect the updates) for efficency.
-Then React sync the virtual DOM with the real DOM (this process is commit)
+Then React syncs the virtual DOM with the real DOM (this process is commit)
 
 ## React bailing out of updating states
 
@@ -484,7 +510,7 @@ HTML tags are name of HTML elements
 
 ## Explain the difference between Async/Await and Promises
 
-- `Async await` is syntactic sugar for promises. Making code looks like executed synchronously and easier to understand
+- `Async await` is syntactic sugar for `promises`. Making code looks like executed synchronously and easier to understand
 - Debugging is much easier with `async/await` using `try catch` block. In promise, we have to use `then catch` chaining. In case we have errors, if we don't handle, the script dies
 
 ## Explain how you can use JavaScript functions such as forEach, Map
@@ -501,8 +527,8 @@ If we want a more fixed layout (you create a layout and then you place items int
 
 ## What if we put anchor tag into `head` and put `title` or `link` tag into body
 
-When we put the tags used in `body` tag into `head`, they will be moved back to the very top of `body` tag
-When we put `title` or `link` tag in the body, it still works but not recommended.
+- When we put the tags used in `body` tag into `head`, they will be moved back to the very top of `body` tag
+- When we put `title` or `link` tag in the body, it still works but not recommended.
 
 ## Can you describe the key principles of accessibility in web development, and how you would apply these in a front-end project
 
@@ -553,26 +579,6 @@ The difference happens when the `success` callback returns a **rejected promise*
 
 `then(f,f)`: `error` callback is not invoked
 `then(f).catch(f)`: error callback is invoked
-
-## Shallow copy and deep copy
-
-<https://anonystick.com/blog-developer/phong-van-su-khac-nhau-giua-shallow-copying-va-deep-copying-trong-object-javascript-2019112823755023>
-
-Shallow copy cannot copy the nested object value. So, nested object in the original and in the copy still point to the same reference (same memory address)
-
-We have an object, like this:
-
-```js
-const obj = {a:1,b:2,c:{d:3}};
-const shallowClone = {...obj};
-obj.c.d = 34;
-console.log(obj);
-console.log(shallowClone);
-```
-
-**NOTE**
-
-Deep copy using `JSON.parse()` and `JSON.stringify()` can miss some properties with `NaN` or `undefined`
 
 ## Loop with promises
 
@@ -1309,31 +1315,6 @@ With CSS, for simple layout, we can use `flexbox` and `grid` to make responsive.
 ## CSS priority
 
 `!important` => inline style => id => class => tag name
-
-## Copy object
-
-- Normal copy: point to the same reference. If you change one of them, the other will change as well.
-
-```js
-const a = {x: 0};
-const b = a;
-```
-
-- Shallow copy: using object spread or `Object.assign({}, obj). However, if you modify the nested object property, the other will change as well
-
-```js
-const a = {x: 0, y: {z: 0}};
-const b = Object.assign({}, a); // or b = {...a}
-```
-
-- Deeper copy: this won't change the other object if you modify the nested object property. However, this doesn't work if the original object has property as method
-
-```js
-const a = { x: 0, y: { z: 0 } };
-const b = JSON.parse(JSON.stringify(a));
-```
-
-- Use `lodash.cloneDeep`
 
 ## Rules of hooks
 

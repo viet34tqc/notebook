@@ -11,6 +11,12 @@ Convert the code so that older browser can also run it.
 
 The current request need to complete to let other requests continue.
 
+## Serialization
+
+The process whereby an object or data structure is translated into a format suitable for transfer over a network
+
+In JavaScript, for example, you can serialize an object to a JSON string by calling the function JSON.stringify().
+
 ## Babel
 
 Enable writing codes with JS features that are not supported by most browser yet. The modern code is transpiled back to vanilla JS so that every environment can understand it.
@@ -47,7 +53,7 @@ Two different requests 'raced' against each other and the result might come in a
 ## Object reference (reference) in JS
 
 <https://www.aleksandrhovhannisyan.com/blog/javascript-pass-by-reference/#object-references-are-pointers>
-'Object references' in JavaScript are really pointers. A pointer is a variable that—instead of directly storing a primitive value like an int, bool, float, or char—stores the memory address where some data lives
+'Object references' in JavaScript are really pointers. A pointer is a variable that instead of directly storing a primitive value like an int, bool, float, or char, it stores the memory address where some data lives
 
 ## RESTful API:
 
