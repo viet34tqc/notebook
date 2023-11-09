@@ -33,6 +33,11 @@ Non-sensitive data because local storage can be access via XSS attack
 
 ## Aria attriube, when to use, when not. Tool check accessibility
 
+Tool check accessibility: 
+
+- https://webaim.org/resources/contrastchecker/
+- Chrome dev tool: check the contrast, also related to accessibility
+
 ## Quy chuẩn cho accessibility
 
 ## Process when taking a task
@@ -170,7 +175,8 @@ To detect a state change, React shallow compare the old and new value state (sim
 
 ## Benefit of `react-query` over `useEffect`
 
-<https://www.youtube.com/watch?v=Kjkx2BASAZA>
+- <https://www.youtube.com/watch?v=Kjkx2BASAZA>
+- <https://tkdodo.eu/blog/why-you-want-react-query>
 
 ## What is the use of `generic` in TS
 
