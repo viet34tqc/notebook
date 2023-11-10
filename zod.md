@@ -31,6 +31,16 @@ Use when you want to transform a piece of data after `parse`
 z.object({name: z.string().transform(val => `hello ${val}`)})
 ```
 
+## `coerce`
+
+coerce to another data type. Often used when the data type passed in is having a different data type from what we want. For example, the formData submitted from a form is always string and we need a a piece of data must be number
+
+```js
+z.object({
+  amount: z.coerce.number(),
+});
+```
+
 ## `refine`
 
 Validate using value from other field
@@ -59,6 +69,14 @@ const methods = useForm<TRegisterFormInputs>({
     password: '',
   },
 });
+```
+
+## `omit`
+
+Remove any fields from validation
+
+```js
+const CreateInvoice = InvoiceSchema.omit({ id: true, date: true });
 ```
 
 

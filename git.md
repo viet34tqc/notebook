@@ -39,7 +39,8 @@ git merge master
 
 <https://www.freecodecamp.org/news/how-to-use-git-rebase>
 
-If you prefer the project's histoy as a straight line, without such automatic merge commit, you can think of using rebase.
+If you prefer the project's histoy as a straight line, without such automatic merge commit, you can think of using rebase. The commits of current branch will be moved on top of the commits from the branch you want to integrate into.
+
 Let's say, you want to integrate the changes from `branch B` into `branch A`.
 
 - First, `branch A` will temporarily save all the latest commit on `branch A` that happened after the branching out point. It's like git stash

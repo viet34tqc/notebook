@@ -548,6 +548,13 @@ If we want a more fixed layout (you create a layout and then you place items int
 
 Document
 
+## How would you work through a new codebase at work?
+
+- Understand the product before looking into the code: learn how to use it first
+- Reading through codebase folder structure
+- Start reading through recent pull requests since it's a good way of understanding what the team has been working on lately.
+- After that, start with small ticket I can begin working on.
+
 ## Which resources are loaded first when accessing a website
 
 HTML loaded first. When it's parsed, resources in `<head>` tag are loaded, then resources in `body` tag
