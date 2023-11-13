@@ -196,6 +196,28 @@ let foo = () => 1 + 2; // foo delayed the calculation, foo is a thunk.
 
 ### Redux thunk
 
+There are 2 ways to create redux thunk: `createAsyncThunk` and manually.
+
+
+#### Manually
+
+```jsx
+export const incrementAsync =
+  (amount: number): AppThunk =>
+  async (dispatch, getState) => {
+    try {
+      const response = await fetchCount(amount)
+      dispatch(incrementByAmount(response.data))
+    } catch (error) {
+      console.log("error", error)
+    }
+  }
+
+// Usage
+
+<button onClick={() => dispatch(incrementAsync(amount))}>Increment Async</button>
+```
+
 - A Redux Middleware that looks at every actions, if it's a function, call that function.
 - Delay the dispatch of an action of dispatch only if a certain condition is met
 - Action creators now return a **function** instead of an object. That **Inner function** is a thunk:
@@ -204,7 +226,8 @@ let foo = () => 1 + 2; // foo delayed the calculation, foo is a thunk.
     - getState: to access the current state.
   - Output: void.
 
-`createAsyncThunk`
+#### `createAsyncThunk`
+
 When we make an API call, its progress can be in one of 4 states:
 
 - idle: The request hasn't started yet
@@ -229,9 +252,9 @@ Output: action creators and their action types:
 - fetchPosts.fulfilled: todos/fetchPosts/fulfilled
 - fetchPosts.rejected: todos/fetchPosts/rejected
 
-If success, createAsyncThunk will extract data from API response and pass that data returned from the payload creator into payload
+If success, `createAsyncThunk` will extract data from API response and pass that data returned from the payload creator into payload
 
-When we dispatch an asynchronous action that created by createAsyncThunk above
+When we dispatch an asynchronous action that created by `createAsyncThunk` above
 
 - Run async_action_name.pending reducer
 - If success, run async_action_name.fullfilled reducer
