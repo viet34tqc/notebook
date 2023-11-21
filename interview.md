@@ -754,11 +754,27 @@ p.getName();
 
 ## Concurrent mode in React
 
-<https://vercel.com/blog/how-react-18-improves-application-performance>
+- <https://3perf.com/talks/react-concurrency/>
+- <https://vercel.com/blog/how-react-18-improves-application-performance>
 
-Help to build components that render concurrently. It means they render simultaneously without blocking the user interface.
+Help to build components that render concurrently without blocking the user interface.
 
 Using concurrent features, React can pause and resume the rendering of components based on external events such as user interaction. When the user started interacting with ComponentTwo, React paused the current rendering, prioritized and render ComponentTwo, after which it resumed rendering ComponentOne (using Suspense)
+
+We mark the UI update as 'non-urgent'. What does 'a non-urgent update' mean?
+
+With React 17 and below, every update that happens in the app is considered urgent. If you click a button, React has to handle the update immediately. If you type into the text field, React has to rerender the list of notes immediately.
+
+With React 18, your updates now can have a priority. Every update you make in the app is still, by default, urgent.
+But what React now also supports is non-urgent updates. And non-urgent updates don't block the page – no matter how long they take. So what types of action are considered as 'non-urgent'.
+
+Let's say we have filter input and a list. When we type into the input it's urgent update, the re-render of the list is not. We don't want the input to be laggy but the list can because we can wait for the list to be re-rendered while we typing with a loading indicator
+
+**Drawbacks**
+
+- non-urgent updates take longer. This is because React has to yield the control back to the browser all the time, which introduces some delays.
+- Extra CPU cost
+- Doesn’t help with expensive components
 
 ### `useTransition`
 

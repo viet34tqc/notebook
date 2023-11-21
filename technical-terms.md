@@ -61,6 +61,7 @@ It is the api that helps client interact with server to exchange information via
 
 ## Hydration (Rehydration)
 
+- <https://3perf.com/talks/react-concurrency/#suspense>
 - <https://demystifying-rsc.vercel.app/client-components/>
 - <https://www.youtube.com/watch?v=R-BKadZWYnQ&ab_channel=Builder>
 - <https://www.youtube.com/watch?v=ZKH3DLT4BKw&ab_channel=AddyOsmani>
@@ -74,7 +75,7 @@ When a visitor requests their first URL from your site, the response contains st
 
 <https://www.joshwcomeau.com/react/the-perils-of-rehydration/>
 
-Beside adding interactivity, React also builds up a mental picture of what the DOM should look like, by mounting all of your components. Then it compares the mounted DOM with the DOM nodes already on the page, and tries to fit the two together. If not there will be an error like this: "Expected server HTML to contain a matching <div> inside a <nav>" (only happens on development mode but you are warning because this is bug). This process can also be called *reconciliation*
+React renders every components again and attaching generated event listeners to the already existing DOM. Then it compares the mounted DOM with the DOM nodes already on the page, and tries to fit the two together. If not there will be an error like this: "Expected server HTML to contain a matching <div> inside a <nav>" (only happens on development mode but you are warning because this is bug). This process can also be called *reconciliation*
 
 ## Deploying:
 
