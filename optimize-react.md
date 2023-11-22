@@ -19,6 +19,10 @@
 
 Pass children down (do this before you memo). Why does this work? Because components passed as children don’t re-render since they are just props. Note: don't pass a function as a child, since it'll still re-render because the func will be recreated on each render
 
+## Web workers
+
+<https://tropicolx.hashnode.dev/optimizing-performance-in-react-applications?ref=dailydev#heading-web-workers>
+
 ## Bundle
 
 - Reduce unnecessary packages from bundle

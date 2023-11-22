@@ -128,15 +128,15 @@ const { id } = router.query;
 - SSG: The data fetching happens at build time on the server side, not on client side
 - SSR:  The data fetching happens at run time on the server side, not on client side
 
-## getStaticProps
+## `getStaticProps`
 
 Allows us to fetch data from external API before component renders and pass that data as a prop to the component on build.
 Take a note that you shouldn't fetch data from NextJS's API route.
 
 When a page with `getStaticProps` is pre-rendered at **build time**, in addition to the HTML file, Next.js generates a JSON file holding the results of running `getStaticProps`.
 
-In development, `getStaticPath` runs on every requests
-In production, `getStaticPath` runs only at build time
+In development, `getStaticProps` runs on every requests
+In production, `getStaticProps` runs only at build time
 
 When you navigate to a page that's pre-rendered using `getStaticProps`, Next.js fetches this JSON file (pre-computed at build time) and uses it as the props for the page component. This means that client-side page transitions will not call getStaticProps as only the exported JSON is used.
 
@@ -158,7 +158,7 @@ Then we can get the country in the component like this:
 const Country = ({ country }) => {};
 ```
 
-## getStaticPath
+## `getStaticPath`
 
 This function helps NextJS know which dynamic pages to pre-render. For example, if you name your dynamic route as `[id].js`, it returns the array of possible value for the `[id]`
 

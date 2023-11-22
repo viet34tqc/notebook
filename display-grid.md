@@ -1,15 +1,19 @@
 # Display: grid
 
-<https://www.coltsteele.com/tutorials/mastering-css-grid>
-<https://learncssgrid.com/>
-<https://www.coltsteele.com/tutorials/mastering-css-grid>
+- <https://www.joshwcomeau.com/css/interactive-guide-to-grid/>
+- <https://www.coltsteele.com/tutorials/mastering-css-grid>
+- <https://learncssgrid.com/>
+- <https://www.coltsteele.com/tutorials/mastering-css-grid>
 
 ## fr
 
 Fr is fraction unit and 1fr is for 1 part of the remaining available space. So to calculate 1fr, we have to get the remaining space first.
 
-- If there is no static unit, like `1fr 2fr 1fr`: the remaining space is full width
-- If there is unit other than `fr`, like `200px 1f 1fr` or `minmax(200px, 400px) 1fr 1fr`: the remaining space = full width - static value. It means:
+fr-based columns are flexible, and so the column won't shrink below its minimum content size
+
+- First, column widths will be calculated based on their contents. If there's any leftover space, it'll be distributed based on the fr values
+- If there is no static unit, like `1fr 2fr 1fr`: the remaining space is full width - each element's content
+- If there is unit other than `fr`, like `200px 1f 1fr` or `minmax(200px, 400px) 1fr 1fr`: the remaining space = full width - each element's content - static value. It means:
   + Any length units that are not fractions will be allocated first.
   + The fractions will apply to the remaining space.
 

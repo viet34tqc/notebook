@@ -56,13 +56,13 @@ Remember to preload this local font
 Tốt nhất là dùng svg. Chú ý nếu như 1 svg được sử dụng lặp lại ở quá nhiều chỗ, ví dụ như mũi tên ở list item, thì không nên chèn svg đó vào trong html và dùng svg như là background image. Lí do là vì nhiều svg sẽ làm tăng dung lượng html lên.
 Trong trường hợp phải dùng icon font thì phải optimize dùng `icomoon`
 
-## Ảnh
+## Images
 
 - Resize and compress image: <https://squoosh.app/>
 - Using lighter image format like `.webp` and using svg if possible.
 - Add default `width` and `height` attribute to image to increase the `CLS` criteria
 - Lazy loading: only lazy load image below the fold, do not lazy load hero image
-- preload LCP background image like hero image: `<link rel="preload" as="image" imagesrcset=" image-400.jpg 400w, image-800.jpg 800w, image-1600.jpg 1600w" imagesizes="100vw" />.`
+- preload LCP image like hero image: `<link rel="preload" as="image" imagesrcset=" image-400.jpg 400w, image-800.jpg 800w, image-1600.jpg 1600w" imagesizes="100vw" />.`
 - For image in the markup, combine preload with `fetchpriority`: <https://imkev.dev/fetchpriority-opportunity>
 
 ## CSS
@@ -133,6 +133,15 @@ function loadScripts() {
 }
 </script>
 ```
+
+## DOM sizes
+
+<https://tropicolx.hashnode.dev/optimizing-performance-in-react-applications?ref=dailydev#heading-dom-size-optimization>
+
+Large and complex DOM trees can slow down rendering and increase memory usage.
+
+- Avoid complex nesting
+- Windowing/List virtualization
 
 ## Networks
 
