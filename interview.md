@@ -127,7 +127,7 @@ To copy an oject in JS, we have some types of copy
   - Just assign old one to new one: `const newObj = oldObj`.
   - `Object.assign()` and `Object.create()`
 - Deep copy: every value of the copied object gets a new memory address rather than the original object.
-  - `JSON.parse(JSON.stringify(object))`: **NOT RECOMMEDED**. The new object will have different memory address and any changes on old object doesn't affect new one. This medthod cannot clone un-serializable data (like `function`) and it will turn your `Date` object into string, `NaN` into null. Turn your `Set`, `Map` into regular Object
+  - `JSON.parse(JSON.stringify(object))`: **NOT RECOMMENDED**. The new object will have different memory address and any changes on old object doesn't affect new one. This medthod cannot clone un-serializable data (like `function`) and it will turn your `Date` object into string, `NaN` into null. Turn your `Set`, `Map` into regular Object
   - `structuredClone`
 - Hybrid
   - Spread operator: It deep copies if the object is not nested (the value of property must be primitive value). For nested data, it deep copies the topmost data and shallow copies the nested data. **The same goes for array**

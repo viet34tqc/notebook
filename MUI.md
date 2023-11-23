@@ -112,6 +112,8 @@ const GridContainer = styled(Grid)(({theme}) => ({
 
 ## Customize globally with MUI
 
+### using `createTheme` (NOT RECOMMENDED)
+
 Create a theme using `createTheme`. For example, to customize `maxWidth` of `Container` component
 
 ```tsx
@@ -193,10 +195,62 @@ return (
 )
 ```
 
-## Customize with MUI Joy
+### Using `extendTheme`
 
-- Using `extendTheme` instead of `createTheme`
+<https://mui.com/material-ui/experimental-api/css-theme-variables/usage/>
+
+## Customize JOY UI
+
+<https://mui.com/joy-ui/customization/approaches/>
+
+### Customize globally
+
+- Using `extendTheme` instead of `createTheme` to customize default styles of JOY UI's components and also other base CSS
+
+```jsx
+const joyTheme = extendTheme({
+  fontFamily: {
+    body: 'SuisseIntl,"Public Sans", var(--joy-fontFamily-fallback, var(--joy--apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"))',
+    display:
+      'SuisseIntl,"Public Sans", var(--joy-fontFamily-fallback, var(--joy--apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"))',
+  },
+  components: {
+    JoyBadge: {
+      styleOverrides: {
+        badge: ({ theme }) => ({
+          boxShadow: 'none',
+          backgroundColor: theme.vars.palette.danger[500],
+        }),
+      },
+    },
+    JoyChip: {
+      defaultProps: { size: 'sm' },
+    },
+  }
+})
+```
+
 - Using `CssVarsProvider` instead of `ThemeProvider`
 - Using `theme.vars.pallete.primary` instead of `theme.vars.primary`
 
-`CSSVarsProvider` is more efficient than `ThemeProvider` because we can modify the CSS variable and don't to change CSS for multiple nested components.
+`CSSVarsProvider` is more efficient than `ThemeProvider` because we can modify the CSS variable and don't have to change CSS for multiple nested components.
+
+### Customize each library's component
+
+- Using css variable (need to know the name of the variable in advance)
+
+```jsx
+<Input
+  size="md"
+  placeholder="email@mui.com"
+  endDecorator={
+    <Button variant="soft" size="sm">
+      Subscribe
+    </Button>
+  }
+  sx={{
+    '--Input-radius': `${radius}px`,
+    '--Input-decoratorChildHeight': `${childHeight}px`,
+  }}
+/>
+```
