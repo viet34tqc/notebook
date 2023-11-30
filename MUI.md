@@ -254,3 +254,19 @@ const joyTheme = extendTheme({
   }}
 />
 ```
+
+### Two component share the same styles
+
+<https://stackoverflow.com/questions/72805107/how-to-reuse-same-styles-across-different-elements-in-material-ui-styled>
+
+```jsx
+const StyledExpandableKeyboardArrow = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  borderRadius: '50%',
+  color: theme.palette.common.white,
+  fontSize: '1rem'
+}));
+
+<StyledExpandableKeyboardArrow as={KeyboardArrowRight} />
+<StyledExpandableKeyboardArrow as={KeyboardArrowDown} />
+```
