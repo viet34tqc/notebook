@@ -178,7 +178,20 @@ To detect a state change, React shallow compare the old and new value state (sim
 - <https://www.youtube.com/watch?v=Kjkx2BASAZA>
 - <https://tkdodo.eu/blog/why-you-want-react-query>
 
+Here are the reasons:
+
+- We don't have to handle loading, error, and data state manually
+- Caching data: the data returned from the request is cached until the `staleTime` has passed
+
+## When does clean up funciton run
+
+- When the component unmounts
+- When the dependancy changed => the `useEffect` runs again => then it runs the clean up function of the previous effect.
+
 ## What is the use of `generic` in TS
+
+- To enable types to act as parameters.
+- When you start needing a generic is when you truly don't know what type is going to be passed into the function or you have things inside the function that rely on knowing that type
 
 ## Difference between `generic` and `unknown` in TS
 
