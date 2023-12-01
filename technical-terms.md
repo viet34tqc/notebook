@@ -36,9 +36,25 @@ Bundle is the process of combining multiple pieces of JS code into one large fil
 
 Side effect is anything that affects something outside the function scope, ex: network request, updating the screen, starting an animation, changing data. They are things happens on the side, not during rendering
 
+## Event driven
+
+The event-driven is a programming model in which programs respond to external events
+
+Event-driven architectures have three key components: event producers, event routers, and event consumers. A producer publishes an event to the router, which filters and pushes the events to consumers.
+
+in Node.js, when it receives requests from users or needs to perform time-consuming tasks like reading files or making network requests, it doesn't wait for each request to finish before handling the next one. It quickly notes down what needs to be done and moves on to the next task. Once the time-consuming tasks are done, Node.js goes back and completes the work for each request one by one, efficiently managing multiple tasks concurrently without getting stuck waiting.
+
+This event-driven asynchronous approach in Node.js allows the program to handle many tasks or requests simultaneously, just like a chef managing and cooking multiple orders at once in a bustling restaurant. It makes Node.js highly responsive and efficient, making it a powerful tool for building fast and scalable applications.
+
+## Non-blocking I/O
+
+<https://www.educative.io/answers/what-is-the-event-driven-non-blocking-i-o-model-in-node-js>
+
+Traditional I/O operations, such as reading from files or making network requests, are often blocked, which stops the program's execution until the operation is completed. In contrast, Node JS employs non-blocking I/O, where the execution of the program continues without waiting for the I/O operation to finish. When the operation is completed, a callback is triggered to handle the result.
+
 ## Race condition
 
-Two different requests 'raced' against each other and the result might come in a different order than you expected. <https://beta.reactjs.org/learn/you-might-not-need-an-effect>
+Two different requests 'raced' against each other and the result might come in a different order than you expected. <https://beta.reactjs.org/learn/you-mig\ht-not-need-an-effect>
 
 ## Stateless and stateful
 

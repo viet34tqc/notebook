@@ -158,6 +158,10 @@ Let's say we have an `useState` in both parent and child component and calling `
 
 That's because when the outer component re-renders, it clears the previous output and mounts the new output of inner component => the inner component will be reset (unmount and mount again) and lose all of its state.
 
+## Micro Frontend
+
+- <https://newsletter.systemdesign.one/p/micro-frontends>
+
 ## How to build a good component
 
 - A "good component" is a component that I can easily read and understand what it does from the first glance.
