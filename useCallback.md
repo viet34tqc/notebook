@@ -41,18 +41,25 @@ That's when the `useCallback(callbackFun, [deps]` is helpful, given the same dep
 
 ## Good use case
 
-We use `useCallback` and `useMemo` when the parent component has multiple state. When one state changes, parent component re-renders, and other components re-render as well.
+Caching a function with `useCallback`  is only valuable in a few cases:
+
+- You pass it as a prop to a component wrapped in memo. You want to skip re-rendering if the value hasn’t changed. Memoization lets your component re-render only if dependencies changed.
+- The function or value you're passing is later used as a dependency of some Hook. For example, another function wrapped in useCallback depends on it, or you depend on this function from useEffect.
 
 Imagine you have two components. The first is a child component that render a big list of items:
-```javascript
+
+```jsx
 function BigList({term, onItemClick}) {
 	const items = getFromAPI(term)
 	const renderedItem = items.map( item => <div onClick={onItemClick}>{item}</div>)
 }
 export default React.memo(MyBigList);
 ```
-The list could be big, maybe hundred of items. To prevent useless list rendering, you wrap it into React.memo
+
+The list could be big, maybe hundred of items. To prevent useless list rendering, you wrap it into `React.memo`
+
 The `term` and `onItemClick` prop is passed from its parent components:
+
 ```javascript
 import {useCallback} from 'react'
 function Parent() {
@@ -68,11 +75,12 @@ function Parent() {
 	)
 }
 ```
-onItemClick is memorized by `useCallback`. As long as the `term` is the same, `useCallback` returns the same function
+`onItemClick` is memorized by `useCallback`. As long as the `term` is the same, `useCallback` returns the same function
 When Parent component re-renders, `onItemClick` remains the same and don't break the memoization of `BigList`
 
 There is another example you can consider here:
-```javascript
+
+```jsx
 const CountButton = React.memo(function CountButton({onClick, count}) {
   return <button onClick={onClick}>{count}</button>
 })
@@ -111,13 +119,16 @@ function MyChild ({ onClick }) {
 ```
 
 In this case, `MyChild` component is light and its re-rendering doesn't create performance issue. By using `useCallback` here, you increase code complexity:
+
 - You have to keep the deps of useCallback(..., deps) in sync with what you’re using inside the memoized callback.
 - You have to allocate additional memory for the dep, as well as calling the `useCallback` function
 
 ## Summary
+
 Any optimization add complexity. Any optimization added too early is a risk because the optimized code may change many times. The appropriate use case of `useCallback` is to memorize the callback functions that are supplied to memoized heavy child component.
 
 Last words, MOST OF THE TIME YOU SHOULD NOT BOTHER OPTIMIZING UNNECESSARY RERENDERS.
 
 ## Reference
+
 <https://kentcdodds.com/blog/usememo-and-usecallback>

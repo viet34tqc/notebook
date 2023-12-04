@@ -192,6 +192,16 @@ Here are the reasons:
 - When the component unmounts
 - When the dependancy changed => the `useEffect` runs again => then it runs the clean up function of the previous effect.
 
+## When to use `useCallback` and `useMemo`
+
+Caching a function or value with `useCallback` and `useMemo` is only valuable in a few cases:
+
+- You pass them as a prop to a component wrapped in memo. You want to skip re-rendering if the value hasn’t changed. Memoization lets your component re-render only if dependencies changed.
+- The function or value you're passing is later used as a dependency of some Hook. For example, another function wrapped in useCallback depends on it, or you depend on this function from useEffect.
+- The calculation of the value is slow
+
+The downside of this unnecessary `useMemo` and `useCallback` is making the code less readable
+
 ## What is the use of `generic` in TS
 
 - To enable types to act as parameters.
