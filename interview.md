@@ -187,7 +187,7 @@ Here are the reasons:
 - We don't have to handle loading, error, and data state manually
 - Caching data: the data returned from the request is cached until the `staleTime` has passed
 
-## When does clean up funciton run
+## When does clean up function of `useEffect` run
 
 - When the component unmounts
 - When the dependancy changed => the `useEffect` runs again => then it runs the clean up function of the previous effect.

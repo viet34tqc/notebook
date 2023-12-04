@@ -256,20 +256,20 @@ const handleClick = () ={
 <https://www.youtube.com/watch?v=loSqbCbH2xo&list=PL_-VfJajZj0UXjlKfBwFX73usByw3Ph9Q&index=39>
 <https://daveceddia.com/useeffect-vs-uselayouteffect/>
 
-This hook is very similar to `useEffect`. The difference is only the task order. Most of the time, we will use `useEffect`. Only use `useLayoutEffect` when we want to update the state before rendering UI to avoid flick in the UI. `useLayoutEffect` is synchronous a.k.a. blocking a.k.a. the app won’t visually update until your effect finishes running… it could cause performance issues like stuttering if you have slow code in your effect.
+This hook is very similar to `useEffect`. The difference is only the task order. Most of the time, we will use `useEffect`. Only use `useLayoutEffect` when we want to update the state before paiting UI to avoid flick in the UI. `useLayoutEffect` is synchronous a.k.a. blocking a.k.a. the app won't visually update until your effect finishes running… it could cause performance issues like stuttering if you have slow code in your effect.
 
 `useEffect`:
 
 1. Update state
-2. Update DOM (mutate the virtual DOM object) 
-3. Re-render UI
-4. Call cleanup function if deps change
+2. Update DOM (mutate the virtual DOM object), whwich is known as render phase
+3. Paint UI on the screen (commit phase)
+4. Call cleanup function
 5. Call `useEffect` callback
 
 `useLayoutEffect`:
 
 1. Update state
-2. Update DOM (mutate the virtual DOM object)
+2. Update DOM (mutate the virtual DOM object), which is known as render phase. At this phase, we can get access to the element. That's why we use `useLayoutEffect` to calculate the size of the element before displaying the component on the UI
 3. Call cleanup function (synchronously)
-4. Call `useLayoutEffect` callback (synchronously). Synchronously means the step must be finish before jumping to the next step. So, the callback will be called first before rendering UI.
-3. Re-render UI
+4. Call `useLayoutEffect` callback (synchronously). Synchronously means the step must finish before jumping to the next step. So, the callback will be called first before painting UI.
+3. Paint UI on the screen
