@@ -2,11 +2,12 @@
 
 ## Reference
 
-<https://www.youtube.com/watch?v=3c-iBn73dDE&t=1s> (must watch for beginner)
-<https://www.youtube.com/watch?v=pTFZFxd4hOI>
-<https://www.youtube.com/watch?v=pg19Z8LL06w>
-<https://devdojo.com/bobbyiliev/free-introduction-to-docker-ebook>
-<https://www.freecodecamp.org/news/how-to-remove-all-docker-images-a-docker-cleanup-guide/>
+- <https://www.youtube.com/watch?v=3c-iBn73dDE&t=1s> (must watch for beginner)
+- <https://www.youtube.com/watch?v=rgeQl_9Zw3I>
+- <https://www.youtube.com/watch?v=pTFZFxd4hOI>
+- <https://www.youtube.com/watch?v=pg19Z8LL06w>
+- <https://devdojo.com/bobbyiliev/free-introduction-to-docker-ebook>
+- <https://www.freecodecamp.org/news/how-to-remove-all-docker-images-a-docker-cleanup-guide/>
 
 ## Tại sao phải sử dụng docker
 

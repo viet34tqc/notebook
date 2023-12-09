@@ -119,8 +119,8 @@ button {
 
 ## Background image opacity
 
-<https://www.youtube.com/watch?v=lRPguPbovro>
-<https://www.youtube.com/watch?v=o1HzOJfgugE>
+- <https://www.youtube.com/watch?v=lRPguPbovro>
+- <https://www.youtube.com/watch?v=o1HzOJfgugE>
 
 By default, when you apply `z-index: -1` to the overlay which is a psudo element, the element lies behind every other elements in the DOM, even the relative parent element.
 
@@ -129,8 +129,9 @@ Applying `isolation: isolate` to relative parent element (or a positive `z-index
 ## Replace `position: absolute` with `display: grid`
 
 Set `grid-area: 1/-1` the same for all the child element
-<https://ishadeed.com/article/less-absolute-positioning-modern-css/>
-<https://www.youtube.com/watch?v=sKFW3wek21Q>
+
+- <https://ishadeed.com/article/less-absolute-positioning-modern-css/>
+- <https://www.youtube.com/watch?v=sKFW3wek21Q>
 
 ## Animate from `display: none`
 
@@ -150,7 +151,7 @@ Set `grid-area: 1/-1` the same for all the child element
 
 ## `z-index` without `position`
 
-We can use z-index on a grid or flex item. No need to add `position: relative` at all.
+We can use `z-index` on a grid or flex item. No need to add `position: relative` at all.
 
 ## `display: contents` to change the HTML order
 
@@ -224,3 +225,9 @@ function validateInput(el) {
   });
 }
 ```
+
+## Breakout element using css grid and grid columns name
+
+This method is too good to be true.
+
+<https://www.youtube.com/watch?v=c13gpBrnGEw>

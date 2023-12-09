@@ -463,13 +463,18 @@ Normally, in React, state updates are queued. That means `setState` doesn't upda
 
 React uses `key` as a way to distinguish between any components. Let's say you have a list of items without `key`. Under the hood, React converts the items into React elements with the same type. There is no way to distinguish them. When we have an unique key for each item, React can differentiate and also track them when they get deleted, added or re-ordered.
 
-If the key of item retains between re-renders, React will just re-use the component instead of re-creating it => better perfomance.
+When the `key` props is changed, React unmount the previous instance, and mount a new one. **The state of the component belong to the key**, so all states that have existed in the component at the time is completely removed and the component is reinitialized. So, when an list item has a state and we are using `index` as the `key`, then we re-order the list the state of the item will not re-ordered as well
 
-Key must be unique. You shouldn't take `index` as key, as when you add or remove items (at the top of the list), the index (or key) of all items will be changed => bugs
+In this example <https://www.developerway.com/posts/react-key-attribute#part3>, after re-order, the component with key='au' still takes 'Australia' for the country props as before. That's why when we use `memo`, this component isn't re-rendered because the props doesn't change. If we are not using `memo`, the list item still re-render no matter which type of `key` we use because the component re-renders
 
-Using `key` is a good idea when you have a list and the data of the list is changed on every render and you are not modifying the list, eg: pagination
+But if the key of item retains between re-renders, React will just re-use the component instead of re-creating it => better perfomance.
 
-When the `key` props is changed, React unmount the previous instance, and mount a new one. This means that all state that had existed in the component at the time is completely removed and the component is reinitialized
+Key must be unique. You shouldn't take `index` as key when you add or remove items (at the top of the list), the index (or key) of all items will be changed => bugs
+
+Using `index` as `key` is a good idea: 
+  
+  - When your list is static, we won't do anything on it
+  - When the data of the list is changed on every render and you are not modifying the list, eg: pagination
 
 ## How to approach a design
 

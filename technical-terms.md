@@ -22,6 +22,10 @@ In JavaScript, for example, you can serialize an object to a JSON string by call
 Enable writing codes with JS features that are not supported by most browser yet. The modern code is transpiled back to vanilla JS so that every environment can understand it.
 `babel-loader`: the loader used with Webpack to transpile JS
 
+## Cache
+
+<https://www.youtube.com/watch?v=qVQjGwm_mmw>
+
 ## Render tree
 
 is the combination of The CSSOM and DOM tree created in the parsing HTML step. Render tree is then used to compute the layout of every single element, which is then painted to the screen. <https://web.dev/howbrowserswork/>

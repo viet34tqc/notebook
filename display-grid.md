@@ -22,9 +22,10 @@ fr-based columns are flexible, and so the column won't shrink below its minimum 
 <https://ishadeed.com/article/css-grid-minmax/>
 <https://www.hongkiat.com/blog/css-grid-layout-minmax/>
 
-The returned value lies between `min` and `max` value
+The returned value depends on the the leftover space. If the leftover space is enough, it returns max value, otherwise min value
+
 - static value `minmax(100px, 200px)`: by default, if there is space, this returns `200px`, otherwise `100px` is the value (not less than 100px)
-- dynamic value `minmax(100px, 1fr) 1fr 1fr`: 1fr is calculated first, the static value is `100px`. If 1fr value is bigger than 100px, then it returns 1fr
+- dynamic value `minmax(100px, 1fr)`: 1fr is calculated first, the static value is `100px`. If 1fr value is bigger than 100px, then it returns 1fr
 
 ## `grid-auto-rows` and `grid-auto-columns`
 
