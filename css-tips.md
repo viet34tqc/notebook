@@ -17,8 +17,8 @@ Use `grid-template-area` instead of `grid-template-columns`
 
 ### Using `:has`
 
-<https://12daysofweb.dev/2022/css-has-selector/>
-<https://www.smashingmagazine.com/2023/01/level-up-css-skills-has-selector/>
+- <https://12daysofweb.dev/2022/css-has-selector/>
+- <https://www.smashingmagazine.com/2023/01/level-up-css-skills-has-selector/>
 
 ```css
 .other-field {
@@ -55,6 +55,9 @@ form:has(option[value="other"]:checked) .other-field {
 .grid > .content:only-child {
   grid-column: 1 / -1;
 }
+
+/* select prior siblings */
+li:has(+ li:hover) {}
 ```
 
 ## Height with transition
