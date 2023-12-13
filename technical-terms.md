@@ -40,6 +40,10 @@ Bundle is the process of combining multiple pieces of JS code into one large fil
 
 Side effect is anything that affects something outside the function scope, ex: network request, updating the screen, starting an animation, changing data. They are things happens on the side, not during rendering
 
+## SSH
+
+<https://dev.to/therubberduckiee/explaining-ssh-to-my-uber-driver-38a>
+
 ## Event driven
 
 The event-driven is a programming model in which programs respond to external events
