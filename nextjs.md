@@ -204,9 +204,7 @@ export const getStaticPaths = async () => {
   - The path is switch to server-side rendering. Browser has to wait until the page is generated. Future requests will serve the static file from the cache.
   - the path is statically generated **without loading state** (no fallback page) - new path will be cached in CDN (later requests will result in cached page)
 
-## Client-side rendering & Server-side rendering & Static-site generation & Pre-rendering
-
-### Client-side rendering (Plain React.js app)
+## Client-side rendering (Plain React.js app)
 
 All the rendering happens in the browser (client)
 
@@ -227,10 +225,20 @@ Cons:
 - Requires additional time once the JavaScript bundle have been loaded and could lead to a blocked user interface during that time. Hence, metrics like First Paint, First Contentful Paint, Largest Contentful Paint, and Time-to-Interactive require more time.
 - Not good for SEO because Google bot cannot crawl any data at first load because it can only sees a div
 
+## Pre-rendering HTML
+
+<https://www.webscope.io/blog/server-components-vs-ssr>
+
+Pre-rendering is the default mechanism for rendering page in NextJS. The HTML is dynamically pre-rendered on the server and then sent to the client along with JS bundle(s) and other assets. Then on the client, the HTML is hydrated with JS.
+
+There are two type of pre-rendering:
+
+- Static pre-rendering (Static-site generation)
+- Dynamic pre-rendering (Server-side rendering)
+
 ### Static-site generation
 
-This is one of two pre-rendering methods. Pre-rendering is the default mechanism for rendering page in NextJS
-The HTML is generated at build time and is reused for each request.
+In static-site generation, The HTML is generated at build time and is reused for each request.
 
 Why:
 Client-side rendering gives user a blank page at first. That's not good for UX. SSG gives the user something to look at while we download JS, parse, and hydrate the app

@@ -7,9 +7,17 @@
 ## What do React Server Components do?
 
 - <https://www.joshwcomeau.com/react/server-components/>
+- <https://www.webscope.io/blog/so-why-server-components>
 - <https://vercel.com/blog/understanding-react-server-components>
 
-Server components **fetch the data and render entirely on the server** (SSR only render the HTML on the server then we will send a nother request to fetch the data), and the resulting HTML is streamed into client-side component. This process eliminates the need for client-side re-rendering, thereby improving performance.
+TLDR
+
+- RSC reduces bundle size on the client, because the rendered Server Components are not included in the JS bundle (they never hydrate or re-render) => faster TTI
+- We will fetch the data in the RSC. Fetching data on server is much faster because the code is often deployed on the same VPS with DB
+- Help to prevent client-side data fetching waterfalls. If we fetching in the client components, it will lead to a data fetching waterfall
+- Better for security, we can hide the API keys and other secret keys from client
+
+Server components **fetch the data and render entirely on the server**, and the resulting HTML is streamed into client-side component. This process eliminates the need for client-side re-rendering, thereby improving performance.
 
 By moving the majority of your application code to the server, RSCs help to prevent client-side data fetching waterfalls, where requests stack up against each other and have to be resolved in serial before the user can continue. Server-side fetches have a much smaller overhead, as they don't block the whole client and they resolve much more quickly.
 

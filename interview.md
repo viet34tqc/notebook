@@ -478,6 +478,17 @@ Using `index` as `key` is a good idea:
 
 ## How to approach a design
 
+## Do client component render only on client
+
+<https://www.pronextjs.dev/do-client-components-render-during-ssr>
+
+Client components render both on client and server. Components would be run first on the server to generate the HTML that is sent back during server side rendering, then again on the client during client-side "hydration". And hooks like `useEffect` or `useLayoutEffect` will only run on the client.
+
+## Why not just fetch all the data from the client?
+
+- It's faster: NextJS servers are usually deployed in the same Virtual Private Cloud (VPC) as the microservices they call. This means that the network latency between the NextJS server and the microservices is very low
+- API Keys are hidden
+
 ## Optimize React re-render
 
 <https://kentcdodds.com/blog/optimize-react-re-renders>
