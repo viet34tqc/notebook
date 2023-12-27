@@ -156,6 +156,38 @@ const SecondPage = props => {
 };
 ```
 
+## Using `react-portal` with `ref`
+
+<https://jjenzz.com/avoid-global-state-colocate/>
+
+When you want to portal a component to another react component, the destination component must be inside the dom first. Normally, we portal the component to body. The body is always in the DOM in advanced and we can access it via `document.body`. Here, we portal to a React component, so we need to trigger it first
+
+```tsx
+const SidebarPortal = ({ children }: PropsWithChildren) => {
+  const [sidebar] = useContext(SidebarContext);
+  return sidebar ? ReactDOM.createPortal(children, sidebar) : null;
+};
+
+const Sidebar = () => {
+  const [, setSidebar] = useContext(SidebarContext);
+  return (
+    <aside
+      ref={setSidebar}
+      style={{
+        background: 'pink',
+        height: '100vh',
+      }}
+    ></aside>
+  );
+};
+
+// Use case
+<SidebarPortal>
+  {/*RectangleEditForm is the component that we want to portal to the sidebar*/}
+  <RectangleEditForm />
+</SidebarPortal>
+```
+
 ## Remove Contradicting State
 
 <https://profy.dev/article/react-usestate-pitfalls>
