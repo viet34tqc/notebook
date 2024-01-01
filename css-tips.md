@@ -58,6 +58,7 @@ form:has(option[value="other"]:checked) .other-field {
 
 /* select prior siblings */
 li:has(+ li:hover) {}
+h2:has( + h3) /*every h2 that has an adjacent sibling which is an h3*/
 ```
 
 ## Height with transition

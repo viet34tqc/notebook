@@ -1667,6 +1667,7 @@ When present in a project, `.lock` file is the source of information about the c
 
 ## `srcset` and `sizes`
 
+<https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images>
 <https://blog.webdevsimplified.com/2023-05/responsive-images/>
 <https://12daysofweb.dev/2021/image-display-elements/>
 <https://imagekit.io/responsive-images/>

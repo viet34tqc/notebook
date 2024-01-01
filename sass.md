@@ -12,7 +12,7 @@ The problem with `@import` is that the any variables defines in sass files is gl
 
 ```scss
 // If you aren't using `as` you need to use `variables` to access 
-// Or you can use `@use './variables' as var` to use $font-size without namespace
+// Or you can use `@use './variables' as *` to use $font-size without namespace
 @use './variables' as var
 .button {
 	font-size: var.$font-size

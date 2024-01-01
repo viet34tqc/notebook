@@ -6,6 +6,10 @@
 <https://xwp.co/how-to-build-a-rocket-best-practices-for-better-web-performance/>
 <https://10up.github.io/Engineering-Best-Practices/performance/#core-web-vitals>
 
+## Basic concept
+
+<https://www.htmhell.dev/adventcalendar/2023/14>
+
 ## How browser works
 
 <https://developer.mozilla.org/en-US/docs/Web/Performance/How_browsers_work>

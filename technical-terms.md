@@ -46,7 +46,9 @@ Side effect is anything that affects something outside the function scope, ex: n
 
 ## Event driven
 
-The event-driven is a programming model in which programs respond to external events
+The event-driven is a programming model in which programs respond to external events or user actions
+
+In this type of programming, the program listens for events, and when they occur, it executes some code/function that should run in response to that event.
 
 Event-driven architectures have three key components: event producers, event routers, and event consumers. A producer publishes an event to the router, which filters and pushes the events to consumers.
 
@@ -68,6 +70,35 @@ Two different requests 'raced' against each other and the result might come in a
 
 - Stateless means after the initial request is done, the server-client communication is lost. Server doesn't keep the client's state (like HTTP)
 - Stateful keeps the client's state (like Websockets)
+
+## Critical rendering path
+
+<https://web.dev/learn/performance/understanding-the-critical-path> **MUST READ THE POST**
+
+Is the sequence of steps the browser takes before performing the initial render of a webpage:
+
+- Constructing the Document Object Model (DOM) from the HTML.
+- Constructing the CSS Object Model (CSSOM) from the CSS.
+- Applying any JavaScript that alters the DOM or CSSOM.
+- Constructing the render tree from the DOM and CSSOM.
+- Perform style and layout operations on the page to see what elements fit where.
+- Paint the pixels of the elements in memory.
+- Composite the pixels if any of them overlap.
+- Physically draw all the resulting pixels to screen.
+
+The browser needs to wait for some critical resources to download before it can complete the initial render. These resources include:
+
+- Part of the HTML.
+- Render-blocking CSS in the <head> element.
+- Render-blocking JavaScript in the <head> element.
+
+Importantly, for the initial render, the browser will not typically wait for:
+
+- All of the HTML.
+- Fonts. Font are not blocking resources but Chrome set them as high priority 
+- Images.
+- Non-render-blocking JavaScript outside of the `<head>` element (for example, `<script>` elements placed at the end of the HTML).
+- Non-render-blocking CSS outside of the `<head>` element, or CSS with a media attribute value that does not apply to the current viewport.
 
 ## Prefetch and preload
 
@@ -141,7 +172,9 @@ The prototype chain is a mechanism that allows objects to inherit properties and
 
 ## postCSS:
 
-it's like webpack for CSS. There are variaty of postCSS plugins like minify, compile sass to css... <https://www.youtube.com/watch?v=Kn2SKUOaoT4>
+- <https://www.youtube.com/watch?v=Kn2SKUOaoT4>
+
+it's like webpack for CSS. There are variaty of postCSS plugins like minify, compile sass to css... 
 
 ## Encode and Encrypt
 
