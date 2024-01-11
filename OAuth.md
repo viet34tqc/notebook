@@ -1,22 +1,26 @@
 # OAuth
 
-<https://roadmap.sh/guides/oauth>
-<https://www.youtube.com/watch?v=L1PDqJkedZ0&ab_channel=LeDeng>
-<https://www.youtube.com/watch?v=CPbvxxslDTU&ab_channel=InterSystemsLearningServices>
+- <https://roadmap.sh/guides/oauth>
+- <https://www.permit.io/blog/differences-between-oauth-vs-jwt>
+- <https://www.youtube.com/watch?v=L1PDqJkedZ0&ab_channel=LeDeng>
+- <https://www.youtube.com/watch?v=CPbvxxslDTU&ab_channel=InterSystemsLearningServices>
 
 ## What is OAuth
 
-OAuth stands for open-standard for authorization that allow apps to request information from another application on behalf of a user. 
+OAuth stands for open-standard for authorization that allow apps to request information from another application on behalf of a user. Let's say we are wanting to login into A (client). We don't have an account on A. However, by using OAuth, we can can use our credentials from other services like Google, Facebook to login. Upon successfull authorization, A stored the user (resource owner) information into its database and we now can access to B with the users' credentials from other services
+
+<img src="https://i.imgur.com/T04A1ei.png" alt="https://media.graphassets.com/resize=width:2065,height:1436/DKZK2J9eTfSLEuaHzUUZ">
 
 ## Why
 
-By using OAuth, Third party applications can access resources from other applications for a user without exposing sensitive information such as password. For example, you can sign in to applications like Spotify with your Google account without sharing your password.
+By using OAuth, We can loggin an app (client) without exposing sensitive information such as password to the app. For example, you can sign in to applications like Spotify with your Google account
 
 ## Google login flow
 
-- First, we need to send request to Google Consent page (`https://accounts.google.com/o/oauth2/v2/auth`) with params (this is done on FE). The `redirect_uri` params must be match with the `redirect url` in Google Consent credentials. `redirect_uri` value is the backend route.
-- Secondly, if successfull, user would be redirected to `redirect_uri` with a `code` value. In the handler function of backend route (handler for Google Auth route), with that `code` we get GoogleOauth access token by sending POST request to `https://oauth2.googleapis.com/token`
-- Lastly, with that token, we get Google user data by sending GET request to `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`
+- First, we need to send request to Google Consent page (`https://accounts.google.com/o/oauth2/v2/auth`) with params (this is done on FE). The `redirect_uri` param is the backend route and it must be match with the `redirect url` in Google Consent credentials. In this step, Google consent asks the user consent and the user provide consent.
+- Secondly, after user has given consent, he would be redirected to `redirect_uri` with a `code` value (authorization code). In the handler function of backend route (handler for Google Auth route), with that `code` we get GoogleOauth access token by sending POST request to `https://oauth2.googleapis.com/token`
+- Thirdly, with that token, we get Google user data by sending GET request to `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`
+- Lastly, Server (client) insert user or update user with all his information into database, issue another JWT to user. Now user can access to 
 
 <https://voz.vn/t/oauth-cac-bac-giai-thich-giup-em-theo-kieu-nong-dan-voi.731978/>
 

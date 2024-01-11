@@ -2,10 +2,11 @@
 
 ## Reference
 
-<https://www.robinwieruch.de/git-team-workflow/>
-<https://www.git-tower.com/learn/git/ebook/en/desktop-gui/advanced-topics/rebase/>
-<https://www.atlassian.com/git/tutorials/merging-vs-rebasing>
-<https://dev.to/lydiahallie/cs-visualized-useful-git-commands-37p1>
+- <https://www.freecodecamp.org/news/gitting-things-done-book>
+- <https://www.robinwieruch.de/git-team-workflow/>
+- <https://www.git-tower.com/learn/git/ebook/en/desktop-gui/advanced-topics/rebase/>
+- <https://www.atlassian.com/git/tutorials/merging-vs-rebasing>
+- <https://dev.to/lydiahallie/cs-visualized-useful-git-commands-37p1>
 
 ## Merge:
 

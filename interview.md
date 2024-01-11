@@ -926,11 +926,10 @@ async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 
 ## Why is pnpm fast
 
-<https://dev.to/stackblitz/what-is-pnpm-and-is-it-really-so-fast-and-space-efficient-29la>
-<https://www.showwcase.com/show/36421/what-is-pnpm-and-why-you-should-use-it%255D>
+- <https://dev.to/stackblitz/what-is-pnpm-and-is-it-really-so-fast-and-space-efficient-29la>
+- <https://www.showwcase.com/show/36421/what-is-pnpm-and-why-you-should-use-it>
 
-- PNPM: Utilizes a shared dependency mechanism that allows different projects to use the same copy of a package. It saves all its downloads to a global cache on your machine. That means you only ever download a package ONCE.
-- Requires less disk space due to its shared dependency model. Packages are stored centrally and linked to projects, eliminating the need for redundant copies.
+- Utilizes a shared dependency mechanism that allows different projects to use the same copy of a package. Packages are stored centrally in a single content-addressable store on your machine and are hard-linked from this storage => you only ever download a package ONCE and require less disk space
 - Installation times are expedited
 
 ## Semantic version (SemVer)
