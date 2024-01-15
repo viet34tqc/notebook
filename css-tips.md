@@ -61,6 +61,29 @@ li:has(+ li:hover) {}
 h2:has( + h3) /*every h2 that has an adjacent sibling which is an h3*/
 ```
 
+## Sub grid
+
+Use `subgrid` when you want the size of the grid items to be the same between grid container and nested grid container: <https://12daysofweb.dev/2022/css-subgrid/#you-can-line-up-items-that-are-in-different-subgrids>
+
+Example: you have a layout of card, the title's length of the cards are not the same => the title are not aligned together and so do other components in the cards. Now you use `subgrid`, like so:
+
+```css
+.grid {
+  display: grid;
+}
+
+.card {
+  grid-row: auto / span 2;
+  display: grid;
+  grid-template-rows: subgrid;
+  gap: 1px;
+}
+```
+
+The container doesn't define the row size explicitly. This size is defined by the `grid-row` attribute in the grid item. So, each item will have 2 rows (auto min 1, from row 1, spans 2 rows). Then, we use `grid-template-rows: subgrid` => The row size in the parent container will apply into card, now the title in all the cards will have the same row size.
+
+When using this technique, we need to make sure the number in `grid-row: auto / span ${number};` must equal or greater than the number of component in the card. In the example above, we only have title and content in each card.
+
 ## Height with transition
 
 <https://www.youtube.com/watch?v=B_n4YONte5A>
