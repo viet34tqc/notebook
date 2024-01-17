@@ -27,6 +27,14 @@ Pros:
 - JS is executed during runtime without a compiler, if your JS code has error => your app can be crashed.
 - Browser Support: The browser interprets JavaScript differently in different browsers. Thus, the code must be run on various platforms before publishing.
 
+## Why you should put CSS in the `<head>` tag
+
+<https://web.dev/learn/performance/optimize-resource-loading>
+
+To avoid FOUC (A flash of unstyled content). The FOUC is you will see a flicker of page's content without any style. CSS is render-blocking by design. Placing any stylesheets in the <head> will block the HTML parser until the stylesheet is downloaded and parsed to construct CSSOM => so you will see the full HTML page with style
+
+If you put your CSS, for example, in the end of body. The HTML parser is not blocking => FOUC
+
 ## Which data type to be stored in local storage
 
 Non-sensitive data because local storage can be access via XSS attack

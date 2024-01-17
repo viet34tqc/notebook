@@ -1,5 +1,6 @@
 # Micro Frontend
 
+- <https://www.youtube.com/watch?v=w0GFyJs5wO4>
 - <https://newsletter.systemdesign.one/p/micro-frontends>
 - <https://www.linkedin.com/pulse/building-micro-frontends-vite-module-federation-practical/>
 - <https://www.linkedin.com/pulse/deep-dive-micro-frontend-architecture-homecreditvn/>
@@ -9,6 +10,11 @@ MicroFE slices the app into self-contained, domain-driven micro apps. The micro 
 Domain-driven design (DDD) is the key principle behind Micro Frontends. Put another way, each Micro Frontend represents a sub-domain.
 
 Micro Frontends are usually set up with the backend for frontend (BFF) pattern. BFF pattern creates tailored backends for each Micro Frontend. But there is no need for a dedicated backend if the Micro Frontend consumes only a simple API.
+
+## Problem with monolith
+
+- Multiple teams work on a codebase
+- More effort to build and deploy, even if with small change 
 
 ## Why
 
@@ -24,11 +30,20 @@ Micro Frontends are usually set up with the backend for frontend (BFF) pattern. 
 - Cost: more repos, servers, domains
 - Complex
 
+## Concepts
+
+- Host app: this app is like a wrapper and import all other modules that will do
+  - Routing
+  - Authentication
+  - Render all MicroFE app and communication between them
+  - Should not do microFE business logic
+- Remote apps: These apps are imported into host app.
+
 ## Sharing state between micro frontends
 
 Micro Frontends shouldn't share their state but communicate via messages or events. Besides communication between Micro Frontends should be kept minimal to prevent coupling. The ways Micro Frontends could communicate with each other are:
 
-- Custom events
+- Custom events: MicroFE A dispatch custom event and microFE B listen to that event
 - Passing callbacks
 - Routing by using the address bar as a communication mechanism
 - Web workers
@@ -63,10 +78,7 @@ The core concept of Module Federation revolves around differentiate between loca
 
 If you have a component that is used in three different applications in a monorepo and you want to ensure that a change to that component is deployed to all the applications you will need to redeploy all three applications from the monorepo. With Module Federation and runtime dependencies you deploy the component once and it is consumed by all three applications at runtime so the updating is instantaneous.
 
-### Module Federation concepts
-
-- Host app: this app is like a wrapper that will import all other modules
-- Remote apps: These apps are imported into host app.
+### Implement Module Federation
 
 Basically, each remote app will be build and deploy serperately. The most important file of remote app is the `remoteEntry.js`. This file is created when you build the remote app that wrapped all the exposed code
 

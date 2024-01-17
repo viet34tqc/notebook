@@ -254,8 +254,9 @@ If you change your domain's nameservers away from the default nameservers at you
 
 ### XSS attack
 
-XSS is a type of attack where an attacker injects his JavaScript that will run on your page and take control like retrieve, update the database or change the DOM. 
+XSS is a type of attack where an attacker injects his JavaScript that will run on your page and take control
 
+For example, an attacker could input JavaScript into a comment form that doesn't sanitize entries, in order to steal user cookies . When victims load the compromised page, the script executes to give the attacker access to user accounts.
 There are two types of XSS attack:
 
 - Stored XSS
