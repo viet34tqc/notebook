@@ -83,7 +83,7 @@ Use `screen` to query element
 - `getByRole`: query element by HTML tag: `screen.getByRole('button', {name: /confirm/i})`
 - `getByLabelText`: query input by label
 - `queryByText`: Returns the matching node for a query, and return null if no elements match. This is useful for asserting an element that is not present. Throws an error if more than one match is found. Use with `not.toBeInTheDocument`. If the element is disappears asynchronously, we can combine with `waitFor()`
-- `findByText`: use with asynchronous test.
+- `findBy*`: use with asynchronous test: `expect(await screen.findByRole('button', { name: /one up/i })).toBeInTheDocument()`
 
 For assertion
 
@@ -93,6 +93,7 @@ For assertion
 - `toBeInTheDocument()`
 - `toBeNull()`
 - `Function.toHaveBeenCalled()`
+- `toHaveStyle`: test the `style` attribute of element. Use case: when we change the `style` attribute via js. Remember to use findBy* if the test fails
 
 **RECAP**:
 
@@ -208,6 +209,8 @@ If you are working with Typescript, install these additional libraries
 
 ## Configuration files
 
+### Using Jest
+
 If you are using CRA, this configuration file won't work by default and you have to run `react-scripts test -- --config jest.config.js`. However, it's NOT RECOMMEND to have a seperate jest configuration file with CRA. If you need other settings, put it in the `package.json`
 
 If your project use JSX, you will need `babel` setup, otherwise, `ts-jest` will handle `ts, tsx` files
@@ -244,6 +247,49 @@ module.exports = {
 	"presets": ["@babel/preset-env", "@babel/preset-react"]
 }
 ```
+
+### Using Vitest
+
+```ts
+/// <reference types="vitest" />
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    globals: true, // So we can use function from vitest globally without importing it
+    environment: 'jsdom',
+    setupFiles: './setupTests.ts',
+    coverage: {
+      all: true,
+      provider: 'istanbul',
+      reporter: ['text', 'json', 'html'],
+      include: ['src/**/*.tsx'],
+      exclude: [],
+    },
+  },
+});
+
+// tsconfig.json
+"compilerOptions": {
+		"types": ["vitest/globals"],
+}
+
+// setupTests.ts
+import '@testing-library/jest-dom';
+import * as matchers from '@testing-library/jest-dom/matchers';
+import { cleanup } from '@testing-library/react';
+import { afterEach, expect } from 'vitest';
+
+expect.extend(matchers);
+
+afterEach(() => {
+  cleanup();
+});
+```
+
 
 ## Debug test
 
