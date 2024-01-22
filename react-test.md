@@ -290,7 +290,6 @@ afterEach(() => {
 });
 ```
 
-
 ## Debug test
 
 If you are stuck in the middle of the test and want to know what is rendered during this test, you could use `screen.debug()`
@@ -325,12 +324,12 @@ const value = {
 	setTodos: jest.fn(),
 };
 beforeEach(() => {
-		render(
-			<TodoContext.Provider value={value}>
-				<TodoForm />
-			</TodoContext.Provider>
-		);
-	});
+	render(
+		<TodoContext.Provider value={value}>
+			<TodoForm />
+		</TodoContext.Provider>
+	);
+});
 ```
 
 In case you are testing a component that **requires re-rendering**, you need to use the parent component of context provider
@@ -342,6 +341,10 @@ In case you are testing a component that **requires re-rendering**, you need to 
 If you pass only the context provider, the child component might not be re-rendered
 
 ### Async rendering component
+
+- <https://github.com/threepointone/react-act-examples/blob/master/sync.md>
+
+First method: Using `act()` to wrapped around the event handler. Explaination is from the above link. So everytime, your test involves a user action (click, fetch...), which alters the state, try wrapping the user action with `act()`
 
 This is the component that uses asynchronous code (fetch) to render. Normally, we call an API and update the state. When the state updates, the component re-renders.
 
