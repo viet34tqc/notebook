@@ -10,7 +10,21 @@ Prisma is an ORM (Object relational mapping). In simple words, ORM is something 
 
 `prisma.schema` file defines models. Model represents table in your DB. Each model includes fields which are columns in DB
 
-```prisma
+```bash
+# prisma/schema.prisma
+
+# This section defines the Prisma Client generator. 
+# The Prisma Client generator is responsible for generating the Prisma Client, a powerful API for accessing your database.
+generator client {
+  provider = "prisma-client-js"
+}
+
+# It specifies the database provider and the connection string. It use DATABASE_URL environment variable to connect to your database.
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
 model Post {
   id        Int     @id @default(autoincrement())
   title     String

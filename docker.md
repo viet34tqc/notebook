@@ -108,6 +108,7 @@ Docker image name có thể là my_app:1.0. Sau khi build xong chạy `docker ru
 
 - `docker run -it ubuntu`
 - `docker-compose up`: chạy tất cả các container
+- `docker-compose up -d`: chạy ngầm tất cả các container (kể cả khi tắt terminal đi thì container không bị mất đi)
 
 Update code
 
