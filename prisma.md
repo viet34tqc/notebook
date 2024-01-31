@@ -25,6 +25,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+# @id attribute, which tells Prisma that this field is the primary key. It also has the @default(autoincrement()) attribute, which tells Prisma to auto-increment this field.
 model Post {
   id        Int     @id @default(autoincrement())
   title     String
