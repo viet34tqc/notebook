@@ -38,6 +38,8 @@ Config file can be shareable, which means it can be published to npm with names 
 
 To use shareable configuration file, you need to install it from npm then load it in your `extends` section after adding the plugin in the `plugins` section. For example, plugin like `prettier`, has seperate config file named `eslint-config-prettier` and you need to install before using it. By extending from a plugin config, we can get recommended rules without adding them manually.
 
+In short, `plugins` provides rules but we have to add them manually, shareable config provides configurable rules in advanced for a plugin, so we don't have to add the rules by ourselves.
+
 On the other hand, some plugins provide config file already, then you can add that config to `extends` without installing it from npm, like so: 
 
 ```json
