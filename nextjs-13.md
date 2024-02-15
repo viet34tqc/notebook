@@ -3,6 +3,7 @@
 ## References
 
 - Concept: <https://demystifying-rsc.vercel.app/> and [official documentaion](https://nextjs.org/docs/getting-started/react-essentials)
+- Caching: <https://www.youtube.com/watch?v=VBlSe8tvg4U>
 
 ## What do React Server Components do?
 
@@ -22,6 +23,12 @@ Server components **fetch the data and render entirely on the server**, and the 
 By moving the majority of your application code to the server, RSCs help to prevent client-side data fetching waterfalls, where requests stack up against each other and have to be resolved in serial before the user can continue. Server-side fetches have a much smaller overhead, as they don't block the whole client and they resolve much more quickly.
 
 When an RSC needs to be re-rendered, due to state change, it refreshes on the server and seamlessly merges into the existing DOM without a hard refresh. As a result, the client state is preserved even as parts of the view are updated from the server.
+
+## Streaming
+
+When streaming, you can progressively send UI from server to client, without needing to wait until all of your data has been loaded
+
+Each component can be considered a chunk. Components that have higher priority (e.g. product information) or that don't rely on data can be sent first (e.g. layout), and React can start hydration earlier. Components that have lower priority (e.g. reviews, related products) can be sent in the same server request after their data has been fetched.
 
 ## Server actions
 

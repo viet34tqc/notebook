@@ -659,12 +659,11 @@ if(isAvailable(orders)) {
 
 ## `any` and `unknown`
 
-<https://thewebdev.info/2020/08/12/typescript-any-and-unknown-types/>
-<https://dev.to/arafat4693/5-mistakes-that-every-typescript-deverloper-should-avoid-33b>
+- <https://thewebdev.info/2020/08/12/typescript-any-and-unknown-types/>
+- <https://dev.to/arafat4693/5-mistakes-that-every-typescript-deverloper-should-avoid-33b>
 
-When we use `any`, we are telling TS to ignore type of the value
-
-On the other hand, using the `unknown` type tells the compiler that the type of a value is not known at the point where it is being declared, but that type will be checked at runtime. This allows the compiler to catch type-related errors at development time, while still allowing you to use the value in a type-safe way.
+When we use `any`, we are telling TS to ignore type checking. 
+On the other hand, `unknown` doesn't turn off type checking. It tells the compiler that the type of a value is not known yet, you need to check its type.
 
 **You can assign anything to an unknown type, but you have to do a type check to operate on unknown**
 
@@ -692,31 +691,6 @@ function myFunction(fn: unknown) {
 }
 
 invokeAnything(1);
-```
-
-### `any`
-
-The `any` type variables lets us assign anything to it
-
-```ts
-let bar: any;
-
-bar = null;
-bar = true;
-bar = {};
-```
-
-### `unknown`
-
-The `unknown` type is a safer version of `any`
-This is because `any` lets us do anything, but `unknown` has more restrictions.
-Before we can do anything with `unknown` value, we have to make the type known first by using type assertions, equality, type guards
-To add type assertions, we can use the `as` keyword.
-
-```ts
-function func(value: unknown) {
-  return (value as number).toFixed(2);
-}
 ```
 
 ## Type guard
@@ -751,9 +725,10 @@ fn({ b: 1 });
 
 Then we get the following error message:
 
+```bash
 No overload matches this call.
-
 Overload 1 of 2, '(a: { b: number; c: string; d: boolean; })
+```
 
 ## @types/* packages and .d.ts files
 

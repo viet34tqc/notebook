@@ -20,14 +20,15 @@ The first thing comes to mind when optimize FE is reduce render-blocking resours
 
 ## Font
 
+- <https://wp-rocket.me/blog/font-preloading-best-practices>
+- <https://pagespeedchecklist.com/asynchronous-google-fonts>
+- <https://joyofcode.xyz/using-fonts-on-the-web>
+
 - Use only `.woff2`
 - Don't use `@import` rule in CSS
 - Use font service (like Google fonts)
 - Use `preload` or `preconnect` to increase loading priority:
 
-<https://wp-rocket.me/blog/font-preloading-best-practices>
-<https://pagespeedchecklist.com/asynchronous-google-fonts>
-<https://joyofcode.xyz/using-fonts-on-the-web>
 Why:
 
 By default, browser will delay font requests until after the render tree has already been constructed. When the browser is ready to display text on screen, it starts download the font and the displaying text is delay. That leads to FOIT, or Flash of Invisible Text and FOUT, or Flash of Unstyled Text.
@@ -160,7 +161,7 @@ Help to set the high priority for the resources, because by default some resourc
 
 1. You have several above-the-fold images, but all of them need not have the same priority. For example, in an image carousel, only the first visible image needs a higher priority compared to the others.
 2. Hero images inside the viewport typically start at a "Low" priority (note a change in Chrome 117 sets the first five large images to "Medium" but this may or may not include your hero image). After the layout is complete, Chrome discovers they are in the viewport and boosts their priority. This usually adds a significant delay to loading the image. Providing the Fetch Priority in markup lets the image start at a "High" priority and start loading much earlier.
-Note that preload is still required for the early discovery of LCP images included as CSS backgrounds and can be combined with Fetch Priority by including the fetchpriority='high' on the preload, otherwise it will still start with a "Low" or "Medium" priority for images.
+Note that preload is still required for the early discovery of LCP images included as CSS backgrounds and can be combined with Fetch Priority by including the `fetchpriority='high'` on the preload, otherwise it will still start with a "Low" or "Medium" priority for images.
 3. Declaring scripts as async or defer tells the browser to load them asynchronously. However, as seen in the previous table, these scripts are also assigned a "Low" priority. You may want to bump up their priority while ensuring asynchronous download, particularly for any scripts that are critical for the user experience.
 
 ## Slider ở đầu website

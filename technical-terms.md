@@ -194,9 +194,9 @@ A reverse proxy is good for:
 
 ## Nameservers and DNS:
 
-<https://www.bluehost.com/blog/the-low-down-what-is-a-nameserver-why-it-matters-for-your-website>
-<https://kinsta.com/knowledgebase/what-is-a-nameserver/>
-<https://www.cloudflare.com/learning/dns/what-is-a-dns-server/>
+- <https://www.bluehost.com/blog/the-low-down-what-is-a-nameserver-why-it-matters-for-your-website>
+- <https://kinsta.com/knowledgebase/what-is-a-nameserver/>
+- <https://www.cloudflare.com/learning/dns/what-is-a-dns-server/>
 
 ### Concept
 
@@ -249,10 +249,12 @@ If you change your domain's nameservers away from the default nameservers at you
 
 ## CSRF and XSS
 
-<https://www.hacksplaining.com/>
-<https://jerrynsh.com/all-to-know-about-auth-and-cookies/>
+- <https://www.hacksplaining.com/>
+- <https://jerrynsh.com/all-to-know-about-auth-and-cookies/>
 
 ### XSS attack
+
+- <https://vercel.com/guides/understanding-xss-attacks>
 
 XSS is a type of attack where an attacker injects his JavaScript that will run on your page and take control
 

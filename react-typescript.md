@@ -164,6 +164,11 @@ function App() {
 		console.log(e);
 	};
 
+	// You can just hover over the handleChange attribute and assign the type as the returned type of event handler
+	const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+		console.log(e);
+	};
+
 	return (
 		<div className="App">
 			<TextField text="Hello" handleChange={handleChange} />

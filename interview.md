@@ -235,7 +235,7 @@ const a = Test(123) // a is number
 
 <https://phuoc.ng/collection/this-vs-that/controlled-vs-uncontrolled-components/>
 
-- Controlled component: the state of the component is managed by React. When a user interacts with the component, its state changes and React will re-render the component with the new state
+- Controlled component: the state of the component is managed by React state. When a user interacts with the component, its state changes and React will re-render the component with the new state
 - Uncontrolled input: the state of the component is managed by the DOM. When a user interacts with the component, the DOM updates the state directly, bypassing React
 
 ## `useEffect` and `useLayoutEffect`
@@ -275,8 +275,8 @@ Because async function return promise. `useEffect` hook isn't expecting us to re
 
 ## When react does not re-render
 
-<https://www.zhenghao.io/posts/react-rerender>
-<https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly-complete-guide-to-react-rendering-behavior/>
+- <https://www.zhenghao.io/posts/react-rerender>
+- <https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly-complete-guide-to-react-rendering-behavior/>
 
 If a react component returns exact the same element reference in its render output as it did in the last time, React will skip re-rendering that particular child (Explaination: <https://www.developerway.com/posts/react-elements-children-parents>)
 
@@ -329,16 +329,16 @@ function ChildC() {
 
 ## React re-render
 
-<https://www.zhenghao.io/posts/react-rerender>
-<https://www.developerway.com/posts/components-composition-how-to-get-it-right>
-<https://www.developerway.com/posts/how-to-write-performant-react-code>
-<https://www.developerway.com/posts/react-re-renders-guide>
-<https://www.joshwcomeau.com/react/why-react-re-renders/>
+- <https://www.zhenghao.io/posts/react-rerender>
+- <https://www.developerway.com/posts/components-composition-how-to-get-it-right>
+- <https://www.developerway.com/posts/how-to-write-performant-react-code>
+- <https://www.developerway.com/posts/react-re-renders-guide>
+- <https://www.joshwcomeau.com/react/why-react-re-renders/>
 
 - When props or state have changed
 - When parent component re-renders, even if the props pass to child component is memorized
-- When a component uses context and the value of its provider changes. Context is sorta like “invisible props”, or maybe "internal props".
-- Component use custom hook and the state of that hook changes or Context's value changes.
+- When a component uses context and the value of its provider changes. Context is sorta like "invisible props", or maybe "internal props".
+- Component use custom hook and the state of that hook changes
 
 How to prevent unnecessary re-renders
 
@@ -665,11 +665,13 @@ const promise2 = new Promise(res => {
 
 ## Can `catch` in `try...catch` catch errors using `throw Error()` or `reject()` in Promise
 
+**UPDATE**: I've tried in the latest version of chrome and firefox and it works 
+
 <https://catchjs.com/Docs/AsyncAwait>
 <https://javascript.info/try-catch>
 
 No.
-If we `throw` or `reject` an error in Promise or using `setTimeout`, `try...catch` cannot catch the error. Because the callback in promise and `setTimeout` is executed later in different call stack, when `try...catch` is already done.
+If we `throw` an error in Promise or using `setTimeout`, `try...catch` cannot catch the error. Because the callback in promise and `setTimeout` is executed later in different call stack, when `try...catch` is already done.
 
 ```js
 async function fails() {
@@ -710,7 +712,7 @@ To catch that, we need to use `await`
 
 <https://catchjs.com/Docs/AsyncAwait>
 
-`reject(new Error())` just a function call, so it doesn't break the execution flow like `throw` does. his means you can write code that both rejects and resolves, like this:
+`reject(new Error())` just a function call, so it doesn't break the execution flow like `throw` does. This means you can write code that both rejects and resolves, like this:
 
 ```js
 // Reject is call first because it lies above `resolve`
@@ -729,11 +731,12 @@ test()
 
 ## Rule for `this`
 
-<https://javascript.info/arrow-functions>
-<https://blog.tusharcodes.tech/5-rules-to-master-this-in-javascript>
-<https://i.imgur.com/tUjhc3r.png>
+- <https://javascript.info/arrow-functions>
+- <https://blog.tusharcodes.tech/5-rules-to-master-this-in-javascript>
+- <https://i.imgur.com/tUjhc3r.png>
+- <https://unicorn-utterances.com/posts/javascript-bind-usage>
 
-<https://unicorn-utterances.com/posts/javascript-bind-usage>
+**TLDR**
 By default, JavaScript looks at the class that uses the `this` keyword, not the class that creates the `this` keyword. Arrow function will bound `this` to original scope and cannot be modified (even if you use `bind`)
 
 - If the new keyword is used when calling the function, `this` inside the function is a all new empty object.
@@ -1188,8 +1191,8 @@ Khác origin:
   <li>It forms a HTTP request</li>
   <li>To reach the host, it first needs to translate the human readable host into an IP number, and it does this by doing a DNS lookup on the host</li>
   <li>Then a socket needs to be opened from the user's computer to that IP number, on the port specified (most often port 80)</li>
-  <li>When a connection is open, the HTTP request is sent to the host</li>
-  <li>The host forwards the request to the web server (most often Apache) configured to listen on the specified port
+  <li>When a connection is open, the HTTP request is sent to the server</li>
+  <li>server host forwards the request to the web server (most often Apache) configured to listen on the specified port
   The server inspects the request (most often only the path), and launches the server plugin needed to handle the request (corresponding to the server language you use, PHP, Java, .NET, Python?)</li>
   <li>The plugin gets access to the full request, and starts to prepare a HTTP response.</li>
   <li>To construct the response, a database is (most likely) accessed.</li>
@@ -1358,12 +1361,13 @@ Async function always return a promise. It's often used when we want to perform 
 
 ## Why you should put your modal outside of main area
 
-<https://www.developerway.com/posts/positioning-and-portals-in-react>
+- <https://www.developerway.com/posts/positioning-and-portals-in-react>
+
 Normally, when you build a modal, you will set its position `fixed` and give it a high value of `z-index`. However, if you render your modal in a nested div, there will be a high chance that your modal will lie below other elements.
 
 The reason is because of `stacking context`.
 
-Actually, fixed elements are relative to its containing block which is viewport by default. We can also create this containing block by adding `transfrom` property. So if the parent element of nested modal is a containing block, the `z-index` value of modal will be counted only inside its parent. And if modal's parent lie below other elements in DOM, the modal will lie below other element as well.
+Actually, fixed elements are relative to its containing block which is viewport by default. We can also create this containing block by adding `transfrom` property. So if the parent element of nested modal is a containing block, the `z-index` value of modal will be counted only inside its parent. And if modal's parent lie below other elements in DOM, the modal will lie below other elements as well.
 
 ## `nth-child` and `nth-last-child`
 
@@ -1477,12 +1481,7 @@ const delay = (ms: number) => new Promise( res => setTimeout(res, ms, 'some valu
 
 ## `import` and `export`
 
-### `export`
-
-- export 1 biến hoặc hàm: `export a`
-- export list: `export {a,b,c}`
-- export default:
-  - `export default ChildComponent`: chỉ 1 có 1 default export duy nhất. Khi import ta chỉ cần viết `import ChildComponent from './abc.js'`
+### `export`### `export`lt export duy nhất. Khi import ta chỉ cần viết `import ChildComponent from './abc.js'`
   - `export * from` hay còn gọi là re-export: `export {default} from './abc.js'`. Kĩ thuật này được sử dụng để gom các export từ các child component và export lại 1 lần nữa.  `*` ở đây là 1 object, chứa tất cả các export từ `./abc.js`, kể cả export thường lẫn export default. `{default}` là object destructure. `export * from` tương đương với `import * from` kết hợp với `export *`. Khi có nhiều child component cần re-export thì mình có thể viết như sau
 
   ```js
@@ -1589,7 +1588,7 @@ It's the process of moving the declaration of functions, variables, or classes t
 It stores functions and variables in the memory before executing any code (creation phase);
 
 - Functions are stored with the entire function. That's why you can invoke them before the line we declare them. However, if you declare function by assigning it to a variable, the hoisting rule for variable is applied.
-- Variables is different.
+- Variables are different.
   - Variables with the `var` keyword are stored with the value of `undefined`
   - Variables with the `let` and `const` keyword are stored `uninitialized`. If we try to access them before declare them, it will return `ReferenceError`
 
@@ -1600,7 +1599,8 @@ It stores functions and variables in the memory before executing any code (creat
 
 ## `useMemo` và `useCallback`. Có thể chuyển từ `useMemo` sang `useCallback` được không
 
-<https://kentcdodds.com/blog/usememo-and-usecallback>
+- <https://kentcdodds.com/blog/usememo-and-usecallback>
+
 `useCallback` thường được dùng cho các event handler và event handler này là 1 prop của 1 child component và child component này dùng `React.memo`.
 Mục đích dùng `React.memo` là child component không bị re-render khi parent component re-render. Tuy nhiên, nếu props của child component bị thay đổi thì nó vẫn bị render lại. Props đấy ở đây có thể là 1 event handler. Vì thế việc dùng `useCallback` ở đây là để child component hoàn toàn không bị re-render khi parent component re-render
 
@@ -1694,8 +1694,8 @@ If the viewport is 650px, the image size will be 325px. It tells browser to use 
 
 ## min, max, clamp()
 
-<https://moderncss.dev/practical-uses-of-css-math-functions-calc-clamp-min-max/>
-<https://ishadeed.com/article/css-min-max-clamp/>
+- <https://moderncss.dev/practical-uses-of-css-math-functions-calc-clamp-min-max/>
+- <https://ishadeed.com/article/css-min-max-clamp/>
 
 - `min(value1, value2)`: thiết lập giá trị max cho selector (giống `max-width`). Nó sẽ chọn ra giá trị nhỏ nhất giữa value 1 và value 2 tùy theo viewport width. Thứ tự value không quan trọng. VD:
 
@@ -1810,11 +1810,11 @@ params.toString()
 
 This is the doctype tag to let the browser know that this is HTML5 page and should be rendered as text/html
 
-## <meta charset="utf-8">
+## `<meta charset="utf-8">`
 
 This meta tag tells the browser which character encoding browser to use. UTF-8 is great because you can use all sorts of symbols and emoji
 
-## <meta name="viewport" content="width=device-width"
+## `<meta name="viewport" content="width=device-width"`
 
 `width=device-width` tells the browser to use 100% of the device's width as the viewport => there's no horizontal scrollbar. You can commbine this attribute with `initial-scale` to 1 to let the user zoom arond.
 
@@ -1828,12 +1828,12 @@ If you don't have a responsive mobile website, and you open it on a small screen
 
 ## Resource hint: preconnect, dns-prefetch, preload
 
-<https://imkev.dev/fetchpriority-opportunity>
-<https://3perf.com/blog/link-rels/> (**Must read**)
-<https://viblo.asia/p/thuat-ngu-trong-frontend-optimization-2oKLn2YgLQO>
-<https://webpack.js.org/guides/code-splitting/>
-<https://www.youtube.com/watch?v=6q75MVFLlok>
-<https://blog.dareboost.com/en/2020/05/preload-prefetch-preconnect-resource-hints/>
+- <https://imkev.dev/fetchpriority-opportunity>
+- <https://3perf.com/blog/link-rels/> (**Must read**)
+- <https://viblo.asia/p/thuat-ngu-trong-frontend-optimization-2oKLn2YgLQO>
+- <https://webpack.js.org/guides/code-splitting/>
+- <https://www.youtube.com/watch?v=6q75MVFLlok>
+- <https://blog.dareboost.com/en/2020/05/preload-prefetch-preconnect-resource-hints/>
 
 TLDR:
 
@@ -1873,14 +1873,15 @@ Không nên lạm dụng resource hint vì chúng vẫn làm tiêu tốn tài ng
 
 ## Race conditions
 
-<https://wanago.io/2022/04/11/abort-controller-race-conditions-react>
+- <https://wanago.io/2022/04/11/abort-controller-race-conditions-react>
+
 A race condition is when your application have a sequence of events and their order is uncontrollable. This might occur with asynchronous
 
 ## Node and element
 
-<https://thisthat.dev/element-vs-node/>
-<https://stackoverflow.com/questions/9979172/difference-between-node-object-and-element-object>
-<https://dmitripavlutin.com/dom-node-element/>
+- <https://thisthat.dev/element-vs-node/>
+- <https://stackoverflow.com/questions/9979172/difference-between-node-object-and-element-object>
+- <https://dmitripavlutin.com/dom-node-element/>
 
 - Node represents a single node in the DOM. DOM document consists of a hierarchy of nodes. Each node can have a parent and/or children.
 - There are many types of nodes (ELEMENT_NODE, TEXT_NODE, etc...). Node.ELEMENT_NODE represents an element node so DOM Element is one specific type of node (ELEMENT_NODE).
@@ -1902,7 +1903,7 @@ paragraph.children;   // HTMLCollection: [HTMLElement]
 
 ## `clientHeight`, `scrollY`, `scrollHeight` and more
 
-<https://htmldom.dev/determine-the-height-and-width-of-an-element/>
+- <https://htmldom.dev/determine-the-height-and-width-of-an-element/>
 
 - `clientHeight`: height + padding of element. `document.documentElement.clientHeight` returns the viewport height
 - `offsetHeight`: height + padding + border of element
