@@ -10,13 +10,16 @@
 - <https://www.joshwcomeau.com/react/server-components/>
 - <https://www.webscope.io/blog/so-why-server-components>
 - <https://vercel.com/blog/understanding-react-server-components>
+- <https://medusajs.com/blog/client-server-transition-learnings-nextjs-14-server-components/>
 
 TLDR
 
 - RSC reduces bundle size on the client, because the rendered Server Components are not included in the JS bundle (they never hydrate or re-render) => faster TTI
-- We will fetch the data in the RSC. Fetching data on server is much faster because the code is often deployed on the same VPS with DB
-- Help to prevent client-side data fetching waterfalls. If we fetching in the client components, it will lead to a data fetching waterfall
+- Decreasing data fetching time because the code is often deployed on the same VPS with DB
+- Reduce the number of client request and prevent client-side data fetching waterfalls. If we fetching in the client components, it will lead to a data fetching waterfall
 - Better for security, we can hide the API keys and other secret keys from client
+
+When to use: any component can be a Server Component, **unless** it needs client-side interactivity
 
 Server components **fetch the data and render entirely on the server**, and the resulting HTML is streamed into client-side component. This process eliminates the need for client-side re-rendering, thereby improving performance.
 
@@ -28,7 +31,9 @@ When an RSC needs to be re-rendered, due to state change, it refreshes on the se
 
 When streaming, you can progressively send UI from server to client, without needing to wait until all of your data has been loaded
 
-Each component can be considered a chunk. Components that have higher priority (e.g. product information) or that don't rely on data can be sent first (e.g. layout), and React can start hydration earlier. Components that have lower priority (e.g. reviews, related products) can be sent in the same server request after their data has been fetched.
+On a page, each component can be considered a chunk. Static components (e.g. layout, product information) that don't rely on data can be pre-rendered at build time and sent first, then React can start hydration earlier.
+
+Components that require data fetching (e.g. reviews, related products) can be sent in the same server request after their data has been fetched. This is done by wrapping the components that require dynamic data within `<Suspense>` boundaries and providing a fallback. As the user views the page, the server streams in the dynamic data, replacing the static fallbacks.
 
 ## Server actions
 
