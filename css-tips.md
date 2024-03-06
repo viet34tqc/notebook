@@ -17,6 +17,7 @@ Use `grid-template-area` instead of `grid-template-columns`
 
 ### Using `:has`
 
+- <https://ishadeed.com/article/css-has-guide/>
 - <https://12daysofweb.dev/2022/css-has-selector/>
 - <https://www.smashingmagazine.com/2023/01/level-up-css-skills-has-selector/>
 

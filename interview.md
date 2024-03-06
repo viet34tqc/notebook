@@ -504,7 +504,8 @@ Mỗi khi render 1 component nào đó, props object của component đó sẽ �
 
 ## Why use Vite over CRA, why it's fast
 
-<https://semaphoreci.com/blog/vite>
+- <https://semaphoreci.com/blog/vite>
+- <https://www.youtube.com/watch?v=M_edImKoEt8>
 
 CRA use webpack for bundling. Webpack bundles the entire application code before it can be served. With a large codebase, it takes more time to spin up the development server and reflecting the changes made takes a long time.
 
@@ -1662,13 +1663,14 @@ const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-schem
 
 ## `.lock` file
 
-<https://11sigma.com/blog/2021/09/03/yarn-lock-how-it-works-and-what-you-risk-without-maintaining-yarn-dependencies-deep-dive/>
+- <https://duthanhduoc.com/blog/tai-sao-package-lock-json-ton-tai-va-cach-no-hoat-dong>
+- <https://11sigma.com/blog/2021/09/03/yarn-lock-how-it-works-and-what-you-risk-without-maintaining-yarn-dependencies-deep-dive/>
 
 When you initialize a project and push to git, another team member clone and install packages. If you specified the `~` syntax and a patch release of a package has been released, that one is going to be installed.
 
 So your original project and the newly initialized project are actually different. Even if a patch or minor release should not introduce breaking changes, we all know bugs can (and so, they will) slide in.
 
-The `package-lock.json` sets your currently installed version of each package in stone. It ensures that every member in the team have the same version for each package.
+The `package-lock.json` sets your currently installed version of each package (all also the depandancies of that package) in stone. It ensures that every member in the team have the same version for each package.
 
 When present in a project, `.lock` file is the source of information about the current version of dependencies in the project. `yarn` or `npm` will compare dependencies version in the `.lock` file with the current version in the `package.json` and updates packages if needed.
 
