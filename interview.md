@@ -469,13 +469,13 @@ Normally, in React, state updates are queued. That means `setState` doesn't upda
 <https://kentcdodds.com/blog/understanding-reacts-key-prop>
 <https://www.youtube.com/watch?v=za2FZ8QCE18&ab_channel=FrontStart>
 
-React uses `key` as a way to distinguish between any components. Let's say you have a list of items without `key`. Under the hood, React converts the items into React elements with the same type. There is no way to distinguish them. When we have an unique key for each item, React can differentiate and also track them when they get deleted, added or re-ordered.
+React uses `key` as a way to distinguish between any components. It helps React identify which elements in the list have changed, been added, or been removed. If the key of item retains between re-renders, React will just re-use the component instead of re-creating it from scratch => better perfomance.
+
+Let's say you have a list of items. Under the hood, React converts the items into React elements with the same type. Without `key`, there is no way to distinguish them. When we have an unique key for each item, React can differentiate and also track them when they get deleted, added or re-ordered.
 
 When the `key` props is changed, React unmount the previous instance, and mount a new one. **The state of the component belong to the key**, so all states that have existed in the component at the time is completely removed and the component is reinitialized. So, when an list item has a state and we are using `index` as the `key`, then we re-order the list the state of the item will not re-ordered as well
 
 In this example <https://www.developerway.com/posts/react-key-attribute#part3>, after re-order, the component with key='au' still takes 'Australia' for the country props as before. That's why when we use `memo`, this component isn't re-rendered because the props doesn't change. If we are not using `memo`, the list item still re-render no matter which type of `key` we use because the component re-renders
-
-But if the key of item retains between re-renders, React will just re-use the component instead of re-creating it => better perfomance.
 
 Key must be unique. You shouldn't take `index` as key when you add or remove items (at the top of the list), the index (or key) of all items will be changed => bugs
 
@@ -485,6 +485,17 @@ Using `index` as `key` is a good idea:
   - When the data of the list is changed on every render and you are not modifying the list, eg: pagination
 
 ## How to approach a design
+
+## The problem with `Array.prototyp.includes()`
+
+`includes` will look for every single element in the array => the larger array, the longer it takes to find an element.
+
+Solution: use `new Set()` instead of array, then we use `has()`, which is the built-in method of `Set`
+
+```js
+const arr = new Set([1,2,3])
+arr.has(1) // return true
+```
 
 ## Do client component render only on client
 
@@ -740,10 +751,10 @@ test()
 **TLDR**
 By default, JavaScript looks at the class that uses the `this` keyword, not the class that creates the `this` keyword. Arrow function will bound `this` to original scope and cannot be modified (even if you use `bind`)
 
-- If the new keyword is used when calling the function, `this` inside the function is a all new empty object.
-- If apply, call, or bind is used, `this` inside the function is the object that is passed in as the argument.
+- If the `new` keyword is used when calling the function, `this` inside the function is a all new empty object.
+- If `apply`, `call`, or `bind` is used, `this` inside the function is the object that is passed in as the argument.
 - If a function is called as a method `this` is the object that the function is a property of.
-- If a method is assigned to a variable, then that method is detached from object and `this` is `undefined` in strict mode or `window` as global object. Example: `this` will be undefined in controller class because when you execute a method of that class in route, the method is detached from controller class <https://stackoverflow.com/questions/45643005/why-is-this-undefined-in-this-class-method>
+- If a method is assigned to a variable, then that method is detached from object and `this` is `undefined` in strict mode or `window` as global object. Example: `this` will be `undefined` in controller class because when you execute a method of that class in route, the method is detached from controller class <https://stackoverflow.com/questions/45643005/why-is-this-undefined-in-this-class-method>
 - If a function is invoked as a free function invocation, `this` is the global object.
 - If it's an arrow function, `this` value will be the context of its surrounding scope at the time it is created. Arrow function will try to resolve `this` inside it lexically just like any other variable and ask the Outer function - Do you have a `this`? And Outer Function will reply YES and gives inner function its own context to this
 
