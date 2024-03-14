@@ -1911,6 +1911,11 @@ paragraph.children;   // HTMLCollection: [HTMLElement]
 - `offsetHeight`: height + padding + border of element
 - `scrollY`: `window.scrollY` returns how long the scrollbar has scroll
 - `scrollHeight`: returns height + padding + content not visible of element . `document.documentElement.scrollHeight` returns the height of the whole document. `scrollHeight` > `clientHeight`
+
+Mouse event:
+
+These properties belongs to mouse events, like: `mousedown`, `mouseup`
+
 - `clientX`, `clientY`: returns the coordinate of mouse pointer relative to the viewport
 
 ## Get CSS styles (`padding`, `margin`) of an element
