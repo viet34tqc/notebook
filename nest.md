@@ -9,7 +9,7 @@
 
 NestJS runs in `Module` structure. You will have many modules in the app, ex: user module, authentication module...
 
-Each module has a seperate `Controller` to handle routing. For each route, the Controller will invoke a `Service` method to perform the logic. A service is a `Provider`, which can be injectable. So, before invoking a method from `Service` class, we have to add the service to the `providers` array of that module. 
+Each module has a seperate `Controller` to handle incoming request an return responses to the client. For each route, the Controller will invoke a `Service` method to perform the logic. A service is a `Provider`, which can be injectable. So, before invoking a method from `Service` class, we have to add the service to the `providers` array of that module. 
 
 ```ts
 // cats.module.ts
@@ -50,4 +50,22 @@ Then we applied `ValidationPipe` to where we need validation
     return this.usersService.create(createUserDto);
 }
 ```
+
+## Using a service from another service
+
+In order to use service in another service or module, you need to export it first in its module and import that module in where you want to use
+
+```ts
+// prisma.module.ts
+@Module({
+  exports: [PrismaService],
+})
+
+// And we want to use prisma service in auth.module.ts
+@Module({
+  imports: [PrismaModule],
+})
+```
+
+However, if you are finding that you are importing it in many places, you might want to make your imported module globally
 

@@ -28,9 +28,16 @@ Enable writing codes with JS features that are not supported by most browser yet
 
 ## Render tree
 
-is the combination of The CSSOM and DOM tree created in the parsing HTML step. Render tree is then used to compute the layout of every single element, which is then painted to the screen. <https://web.dev/howbrowserswork/>
+- <https://web.dev/howbrowserswork/>
+
+is the combination of The CSSOM and DOM tree created in the parsing HTML step. Render tree is then used to compute the layout of every single element, which is then painted to the screen. 
+## Repaint and reflow
+
+- <https://dev.to/gopal1996/understanding-reflow-and-repaint-in-the-browser-1jbg>
 
 `layout or reflow`: When the render tree is created, it does not have a position and size. Calculating these values is called layout or reflow
+
+`repaint`: paint the render tree on the screen
 
 ## Bundle
 

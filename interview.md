@@ -1536,7 +1536,6 @@ console.log(info);
 <https://indepth.dev/posts/1498/101-javascript-critical-rendering-path>
 <https://web.dev/learn-web-vitals/>
 
-- Critical Rendering Path: <https://indepth.dev/posts/1498/101-javascript-critical-rendering-path> is the sequences of steps of: convert the HTML, CSS, and JavaScript (images are not considered as critical resource) into pixels on the screen
 - DOMContentLoaded: the time for loading HTML before starting to load the content. The event does not wait for images, subframes or even stylesheets to be completely loaded. The only target is for the Document to be loaded
 - Load: when all the resources are loaded ( resources are parsed and get acknowledged off before DOMContentLoaded)
 - Speed Index: shows how quickly the contents of a page are visibly populated.
@@ -1569,12 +1568,28 @@ console.log(info);
 
 ## Critical Rending Path
 
-The critical rendering path includes the Document Object Model (DOM), CSS Object Model (CSSOM), Render tree, Layout, and Paint.
-The document object model is created as the HTML is parsed. The HTML may request JavaScript, which may, in turn, alter the DOM. The HTML includes or makes requests for styles, which in turn builds the CSS object model. The browser engine combines the two to create the Render Tree. Layout determines the size and location of everything on the page. Once the layout is determined, pixels are painted to the screen.
-Optimizing the critical render path improves render performance. Performance tips include:
+- <https://web.dev/learn/performance/understanding-the-critical-path>
+
+The critical rendering path refers to the steps involved until the web page starts rendering in the browser.
+
+The critical rendering path involves the following steps:
+
+- The DOM is created as the HTML is parsed. The HTML may request JavaScript, which may, in turn, alter the DOM. 
+- The HTML includes or makes requests for styles, which in turn builds the CSS object model (CSSOM). 
+- The browser engine combines the two to create the Render Tree. 
+- Layout (or reflow) determines the size and location of everything on the page. 
+- Once the layout is determined, pixels are painted to the screen. (Repaint)
+
+This process's length depends on the the critical resoucres:
+
+- Part of the HTML.
+- Render-blocking CSS in the <head> element.
+- Render-blocking JavaScript in the <head> element.
+
+Optimizing the critical render path involves reducing the time to receive the HTML (represented by the Time to First Byte (TTFB) metric) as detailed in the previous module, and reducing the impact of render-blocking resources. Here are some tips:
 
 - Minimizing the number of critical resources by deferring their download ( defer attribute), marking them as async (async attribute), or eliminating them altogether.
-- Optimizing the number of requests required along with the file size of each request.
+- Optimizing the number of requests as well as the file size of each request.
 - Optimizing the order in which critical resources are loaded by prioritizing the downloading critical assets, shorten the critical path length.
 
 ## `var` and `let`, `const`
@@ -1918,8 +1933,14 @@ paragraph.children;   // HTMLCollection: [HTMLElement]
 
 - <https://htmldom.dev/determine-the-height-and-width-of-an-element/>
 
+Element:
+
 - `clientHeight`: height + padding of element. `document.documentElement.clientHeight` returns the viewport height
 - `offsetHeight`: height + padding + border of element
+- `getBoundingClientRect()`: return the position of the element that is relative to the viewport. The viewport is the area that is being viewed. So the returned value of `getBoundingClientRect()` may vary depending on the place we are viewing.
+
+Scroll:
+
 - `scrollY`: `window.scrollY` returns how long the scrollbar has scroll
 - `scrollHeight`: returns height + padding + content not visible of element . `document.documentElement.scrollHeight` returns the height of the whole document. `scrollHeight` > `clientHeight`
 
