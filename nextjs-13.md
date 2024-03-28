@@ -2,6 +2,7 @@
 
 ## References
 
+- <https://focusreactive.com/breaking-down-next-js-14>
 - Concept: <https://demystifying-rsc.vercel.app/> and [official documentaion](https://nextjs.org/docs/getting-started/react-essentials)
 - Caching: <https://www.youtube.com/watch?v=VBlSe8tvg4U>
 

@@ -84,3 +84,23 @@ Run `npx prisma db push` or ` npx prisma db push --preview-feature`
 
 Delete a record will also delete other related records
 <https://www.prisma.io/docs/concepts/components/prisma-schema/relations/referential-actions>
+
+## Select fields to return when make query
+
+Using `select`:
+
+```ts
+// In this example, we want to remove the hash password from returned user
+const user = await this.prisma.user.create({
+    data: {
+      email: dto.email,
+      hash: hashedPassword,
+    },
+    select: {
+      id,
+      email
+    }
+});
+```
+
+Or just delete the property: `delete user.hash`

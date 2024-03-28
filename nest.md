@@ -26,6 +26,8 @@ export class CatsController {
 
 This is called Dependancy Injection. Without DI, in the Controller class, we have to intiate the Service class first => code is cumbersome
 
+In NestJS, if we want to inject other module into a class, we need to use the decorator `@Injectable()` at the top of the class. All the injectable class must be added into `providers` array of that module. 
+
 When the user send requests to `Controller`, you might want to validate or transform the data before it reachs the controller. This step is called `Pipe`. `Pipe` provides many methods via 2 packages: `class-validator` and `class-transformer`, which you need to install to use pipe in NestJS. We will apply this pipe in DTO class
 
 ```ts
@@ -51,9 +53,13 @@ Then we applied `ValidationPipe` to where we need validation
 }
 ```
 
-## Using a service from another service
+## Flows
 
-In order to use service in another service or module, you need to export it first in its module and import that module in where you want to use
+We often use services in modules. In services, we will inject other services
+
+## Export and import
+
+In order to use service in another module, you need to export it first in its module and import the module where you want to use, just like `import` and `export` js modules
 
 ```ts
 // prisma.module.ts
@@ -68,4 +74,15 @@ In order to use service in another service or module, you need to export it firs
 ```
 
 However, if you are finding that you are importing it in many places, you might want to make your imported module globally
+
+```ts
+// By using global, you don't need to import PrismaModule everywhere
+@Global()
+@Module({
+  providers: [PrismaService],
+  exports: [PrismaService],
+})
+export class PrismaModule {}
+```
+
 

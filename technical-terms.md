@@ -31,13 +31,24 @@ Enable writing codes with JS features that are not supported by most browser yet
 - <https://web.dev/howbrowserswork/>
 
 is the combination of The CSSOM and DOM tree created in the parsing HTML step. Render tree is then used to compute the layout of every single element, which is then painted to the screen. 
+
 ## Repaint and reflow
 
 - <https://dev.to/gopal1996/understanding-reflow-and-repaint-in-the-browser-1jbg>
+- <https://frontendmasters.com/blog/why-do-reflows-negatively-affect-performance/>
 
-`layout or reflow`: When the render tree is created, it does not have a position and size. Calculating these values is called layout or reflow
+- `layout or reflow`: 
+  - When the render tree is created, nodes don't have position and size. Calculating these values is called layout or reflow
+  - `reflow` can also happens when we change a layout-related property, such as an element's width, height, or margin
+- `repaint`: paint the render tree on the screen
 
-`repaint`: paint the render tree on the screen
+When we change a layout-related property (width, height, margin), we trigger the pixel pipeline. This is a series of steps that the browser's rendering engine performs to show the actual changes on the screen.
+
+- Layout (Reflow): The browser recalculates the geometry of elements affected by layout-related property changes. This calculation determines the positioning of elements in the browser window.
+- Paint: Following layout recalculations, the browser renders the visual features of each element, like colors, borders, and shadows.
+- Composite: The browser then combines the painted layers to produce the final image displayed on the screen.
+
+Reflows can be heavy on the CPU as they involve complex algorithms for processing CSS rules and determining element alignment and constraints within the page’s layout. 
 
 ## Bundle
 
@@ -251,7 +262,7 @@ If you change your domain's nameservers away from the default nameservers at you
 ### DNS record types
 
 - `A` Record: points a domain (or subdomain) to an IP address
-- `CNAME` Record (Canonical name record): points a domain to another domain. This is used when a site has subdomains, such as shop.myblog.com or donations.myblog.com. These are subdomains of myblog.com. Let’s say that each of these subdomains has a CNAME record containing the value “myblog.com.” Since the DNS is looking for an IP address, when the CNAME record is accessed, a further lookup is carried out at myblog.com (as this is the value contained in the CNAME file). It will then return the IP address stored in myblog.com’s A record. This means that these subdomains are aliases of the main domain, and the canonical name (or true name) of these subdomains is actually 'myblog.com'
+- `CNAME` Record (Canonical name record): points a domain to another domain. This is used when a site has subdomains, such as shop.myblog.com or donations.myblog.com. These are subdomains of myblog.com. Let's say that each of these subdomains has a CNAME record containing the value "myblog.com." Since the DNS is looking for an IP address, when the CNAME record is accessed, a further lookup is carried out at myblog.com (as this is the value contained in the CNAME file). It will then return the IP address stored in myblog.com's A record. This means that these subdomains are aliases of the main domain, and the canonical name (or true name) of these subdomains is actually 'myblog.com'
 - `MX` Record: point email to a particular mail server. Like a CNAME, MX Entries must point to a domain and never point directly to an IP address.
 
 ## CSRF and XSS
