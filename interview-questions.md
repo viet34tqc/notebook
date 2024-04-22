@@ -1,5 +1,9 @@
 # Interview questions
 
+## Common
+
+- Please tell me about an issue in your project and how did you solve it
+
 ## HTML
 
 - preconnect, dns-prefetch
@@ -23,6 +27,7 @@
 
 <https://www.youtube.com/watch?v=dYZLxhVHxrU>
 
+- How to handle the large list
 - Why use React over vanilla JS
 - What is state
 - What is state management (context) and the library

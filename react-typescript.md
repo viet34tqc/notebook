@@ -7,6 +7,8 @@
 - `React.ReactNode`: type for React component. You can set this type for `children`
 - `JSX.IntrinsicElement<T>`: object type for HTML element. It is like Record<[name_of_HTML_elements], [default_props_of_elements]>
 - `ElementType<T>`: is bigger than `JSX.IntrinsicElement`. It accepts React component
+- `<Component />` has the type of `JSX.Element`
+- Function component has the type of `() => JSX.Element`
 
 ## Component Props
 

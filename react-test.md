@@ -122,6 +122,19 @@ userEvent.type(screen.getByRole('input'), 'Oreos are delicious');
 
 ## Examples
 
+### Get an element from a rendered component
+
+```jsx
+it('should show correct action buttons on edit tab', async () => {
+	// Get the button inside ReportingActions component
+	// We can also use `screen.getByRole`
+	const { getByRole } = render(<ReportingActions />)
+	const editButton = getByRole('button', { name: 'Edit Tab' })
+	expect(editButton).toBeInTheDocument()
+})
+```
+
+
 ### Click a button then remove an element
 
 ```	jsx

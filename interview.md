@@ -1542,7 +1542,7 @@ console.log(info);
 - Time to first byte (TTFB): the time it takes the browsers to start receiving the first byte of a request. How to improve: use cache, Use a server that is suited for your needs, Use a content delivery network, Reduce queries
 - First paint (FP): Time for the first pixel to render on the screen after user navigates to web page
 - First Contentful Paint(FCP): the moment when the first element from the DOM appears in the browser. Element here includes text, images, non-white canvas, or scalable vector graphics (SVG). How to improve: Eliminate render-blocking resources, Minify CSS, Remove unused CSS, Remove unused JavaScript
-- Largest Contentful Paint (LCP): the time when the largest content element (text or images, svg) in the viewport becomes visible. It can be used to determine when the main content of the page has finished rendering on the screen.
+- Largest Contentful Paint (LCP): the time when the largest content element (text or images, video) in the viewport becomes visible. It can be used to determine when the main content of the page has finished rendering on the screen.
 - Time To (fully) Interactive (TTI): the amount of time it takes for the page to be fully interactive. Users might expect this is the same time as LCP, but this can be different. If TTI and LCP differ, users might assume the website is slow.
 - First Input Delay (FID): the time from when a user first interacts with a page to the time when the browser is actually able to respond to that interaction.
 - CLS (Cumulative Layout Shift) – it's a metric that measures the visual stability of a page layout. It's calculated as the sum of shifts that are visible during page loading. This includes unexpected shifts, i.e., those unrelated to user interaction.
@@ -1550,16 +1550,32 @@ console.log(info);
 
 ## Obtimize speed
 
-<https://towardsdev.com/website-performance-optimization-267b28b877df>
+- <https://focusreactive.com/deep-dive-into-web-performance-mastering-lcp-optimization-for-seo-success/>
+- <https://towardsdev.com/website-performance-optimization-267b28b877df>
+
+First, we need to understand the stages of how browser load a resource
+
+- TTFB is the time to first byte. This is a measure of how quickly your server can send an HTML document to a user upon request,
+- Load delay is a measure of the time between the TTFB and the start of loading of the LCP element,
+- Load time the time it takes to load resource,
+- Render delay time is the time between states when the browser has everything to render your LCP, but has not yet rendered it.
 
 - TTFB: <https://searchfacts.com/reduce-ttfb/>
-  - Fast web hosting
-  - Keep the server close to users
-  - Caching (the server wont need to build the page by fetching from database)
+  - Avoids redirect
+  - Optimimze server response time
+    - Fast web hosting
+    - Keep the server close to users using CDN
+    - Caching (the server wont need to build the page by fetching from database)
   - Fast DNS provider: reduce the DNS lookup times
   - CDN for static files (images, CSS, JS files)
+- Load delay: 
+  - Using resource hint (ex: `preload` for hero image,...)
 - Font: reduce webfont
-- Image: optimize and lazy load
+- Image: 
+  - Compress and resize the images
+  - Use responsive images using `srcset` and `sizes`
+  - Use modern image format: webp, avif
+  - lazy load for images below the fold
 - Caching:
   - Browser caching
   - Page caching
@@ -1863,9 +1879,13 @@ If you don't have a responsive mobile website, and you open it on a small screen
 - <https://www.youtube.com/watch?v=6q75MVFLlok>
 - <https://blog.dareboost.com/en/2020/05/preload-prefetch-preconnect-resource-hints/>
 
+**Why use resource hint**
+
+To start loading, the browser needs to scan (preload scanner) the page to understand what resources it needs to render in order to start loading them. And if you don't give the browser any hint, it will only find those resources when it encounters an img element or text node with a required web font.
+
 TLDR:
 
-- `dns-prefetch` & `preconnect` are for high priority resources from a domain but you don't know what exactly what it is, you just know that you are going to download them from that domain.
+- `dns-prefetch` & `preconnect` are for high priority resources from a domain but you don't know what exactly what the resources are, you just know that you are going to download them from that domain. (like google font)
 - `preload` is for resources with high priority but loaded inside stylesheets or scripts like above-the-fold CSS background images or custom fonts. For image in the markup, preload has little effect
 - `prefetch` is for low priority files very likely needed soon, like HTML, CSS or images used on subsequent pages.
 - `dns-prefetch` & `preconnect` reference just the domain name, like '<https://example.com>', whereas `preload` and `prefetch` reference a specific file, like header-logo.svg. `prerender` references an entire page, like blog.html.

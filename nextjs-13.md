@@ -28,6 +28,11 @@ By moving the majority of your application code to the server, RSCs help to prev
 
 When an RSC needs to be re-rendered, due to state change, it refreshes on the server and seamlessly merges into the existing DOM without a hard refresh. As a result, the client state is preserved even as parts of the view are updated from the server.
 
+## Server component and client component
+
+- A Server Component runs exclusively on the server. This code will not re-run on the user's device; the code won't even be included in the JavaScript bundle
+- A Client Component is a component that runs on both the server and client. It is pre-rendered on server and hydrated on client. Every React component you've ever written in 'traditional' (pre-RSC) React is a Client Component. It's a new name for an old thing.
+
 ## Streaming
 
 When streaming, you can progressively send UI from server to client, without needing to wait until all of your data has been loaded
