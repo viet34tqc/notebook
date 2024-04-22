@@ -1957,7 +1957,7 @@ Element:
 
 - `clientHeight`: height + padding of element. `document.documentElement.clientHeight` returns the viewport height
 - `offsetHeight`: height + padding + border of element
-- `getBoundingClientRect()`: return the position of the element that is relative to the viewport. The viewport is the area that is being viewed. So the returned value of `getBoundingClientRect()` may vary depending on the place we are viewing.
+- `getBoundingClientRect()`: return the position of the element that is relative to the **current** viewport. The viewport is the area that is being viewed. So the returned value of `getBoundingClientRect()` may vary depending on the place we are viewing, normally when you scroll down the `top` and `bottom` will be decreased
 
 Scroll:
 

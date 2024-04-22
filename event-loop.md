@@ -2,6 +2,7 @@
 
 ## References
 
+- <https://www.youtube.com/watch?v=eiC58R16hb8>
 - <https://www.lydiahallie.com/blog/promise-execution>
 - <https://blog.xnim.me/event-loop-and-render-queue>
 - <https://dmitripavlutin.com/javascript-promises-settimeout/>
@@ -17,22 +18,36 @@ In order to prevent blocking behavior, the browser has many Web APIs that are as
 
 ## Event loop
 
-Javascript can only execute one statement at a time. In order to do that, Javascript uses
-	- Call Stack
-		- What: is the place where statements run
-		- How:
-			- The statement is added to the stack
-			- statement run
-			- remove that statement from the stack
-			- Add another statement and so on...
-			- If `setTimeout` or `setInterval` exists:
-				- add `setTimeout` or `setInterval` to the stack
-				- run `setTimeout` or `setInterval`
-				- add callback function to the **web API**
-				- the timer runs for a period of time that equals to the second arguments then the callback functions is passed to the **task queue**.
-				- remove `setTimeout`
-				- Run other statements until the end of the script
-			- If promise exists, when promise resolves by running `resolve` or `reject`, the callback we pass to `then` or `catch` is pushed to **microtask** queue
-	- This is the time for the `event loop` to do its only task: **connect the queues to the call stack**.
-	- First it checks if the call stack is empty, then it adds the pending statement in the queues to call stack, starting from `mircotask` queue first. The statement in `mircotask` queue has higher priority than `macrotask` queue
+Javascript is single-threaded, it can only execute one statement at a time.
+
+- Call Stack
+- First, all the statements in the script are pushed into call stack. The call stack works as FIFO, that means the statements are pushed into the stack, executed, and removed from the stack one by one 
+- If `setTimeout` or `setInterval` exists:
+ - add `setTimeout` or `setInterval` to the stack
+ - run `setTimeout` or `setInterval`
+ - add callback function to the **web API** (`fetch` an URL is also pushed to the web API)
+ - the timer runs for a period of time that equals to the second arguments then the callback functions is passed to the **task queue**. So the delay is not the time the callback is pushed into the callstack, it's the time it's push into task queue
+ - remove `setTimeout`
+- If `promise` exists, when `promise` resolves by running `resolve` or `reject`, the callback we pass to `then` or `catch` or `finally()` is pushed to **microtask** queue
+- If `await` exists, the function body execution followed by `await` is pushed to **microtask** queue, only if the function we are awaiting is resolved or rejected.
+
+```ts
+const wait = () =>
+  new Promise(res => {
+    console.log('asyncFn');
+    setTimeout(() => console.log('123213'), 3000);
+  });
+const asyncFn = async () => {
+  await wait();
+  console.log('data', 'after await'); // This line is never called because the promise doesn't resolve anything. `wait` is always in pending state, then what is after `await wait()` will never be pushed into the microstask queue.
+};
+console.log('first');
+asyncFn();
+console.log('last');
+
+```
+
+- Remember that `async` function and the body of callback function of Promise behave the same as normal function when it comes to call stack execution. That means they run in the script orders
+- Then `event loop` to do its only task: **connect the queues to the call stack**.
+- First it checks if the call stack is empty, then it adds the pending statement in the queues to call stack, starting from `mircotask` queue first. The statement in `mircotask` queue has higher priority than `macrotask` queue
 

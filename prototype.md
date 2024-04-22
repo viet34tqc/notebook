@@ -1,17 +1,20 @@
 # Prototype
 
-<https://prateeksurana.me/blog/how-javascript-classes-work-under-the-hood/>
-<https://zellwk.com/blog/javascript-prototype/>
-<https://javascript.info/native-prototypes>
+## References
+
+- <https://prateeksurana.me/blog/how-javascript-classes-work-under-the-hood/>
+- <https://zellwk.com/blog/javascript-prototype/>
+- <https://javascript.info/native-prototypes>
 
 There are two ways to create an object: via function constructor and via `{}`
 
 ## Function constructor
 
 - All the functions (**not only function constructor**) have two default properties called `proptotype` and `__proto__` (arrow function doesn't have `prototype` attribute)
-- An instance of a function constructor access `F.prototype` via `__proto__`
+- Using `class` keyword is another way to define function constructor
+- An instance of a function constructor access `F.prototype` via `__proto__` (deprecated, we should use `Object.getPrototypeOf([instance])`). It can also access `F` via `constructor` property, which is inherited from `F.prototype`
 - **Arrow function doesn't have** `prototype` property
-- Default, f.prototype is an **object** like this:
+- Default, F.prototype is an **object** like this:
 
 ```javascript
 f.prototype = { constructor: f } // It has a property that points back to the function itself
