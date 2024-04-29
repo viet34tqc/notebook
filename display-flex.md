@@ -16,10 +16,10 @@ Phần tăng lên hay giảm đi của flex item sẽ được tính theo tỉ l
 
 Ví dụ: available space là 150px, item 1 có `flex-grow` là 1, item 2 có `flex-grow` là 2 => item 1 sẽ tăng 50px so với flex basis, item 2 sẽ tăng 100px so với flex basis. Tương tự với `flex-shrink`, khi container bị thu hẹp lại thì width của các item sẽ bị giảm theo tỉ lệ
 
-`flex-shrink: 1` sẽ không chạy đúng khi width của container giảm trong trường hợp
+`flex-shrink: 1` sẽ không shrink flex item xuống dưới kích thước tối thiểu của flex item đó.
 
 - item có default min-width, vd input có default min-width = 170px -> 200px tùy browser => set `min-width: 0` cho input thì sẽ chạy đúng
-- item có content dài
+- item có 1 đoạn text dài thì min-width của item đó chính là độ dài của content.
 
 `flex-wrap: wrap` sẽ tách row khi container width thu lại, từ 1 row sẽ thành 2, 3 row. `flex-grow` và `flex-shrink` sẽ tính toán theo từng row => width các item sẽ có thể bị thay đổi nếu row được tách ra
 
