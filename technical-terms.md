@@ -13,7 +13,7 @@ The current request need to complete to let other requests continue.
 
 ## Serialization
 
-The process whereby an object or data structure is translated into a format suitable for transfer over a network
+The process whereby an object or data structure is translated into a more suitable format for transfering over a network. This is an appropriate place for transforming and sanitizing data before sending it in request or response. For example, sensitive data like password should be excluded from the response. 
 
 In JavaScript, for example, you can serialize an object to a JSON string by calling the function JSON.stringify().
 

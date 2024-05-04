@@ -28,7 +28,28 @@ This is called Dependancy Injection. Without DI, in the Controller class, we hav
 
 In NestJS, if we want to inject a service into another service, we need to use the decorator `@Injectable()` at the top of the service. All the injectable class must be added into `providers` array of that module. 
 
+There is also another way to inject services is to use `token`.
+
+```ts
+// cats.module.ts
+@Module({
+  controllers: [CatsController],
+  providers: [{
+    provide: 'CATS_SERVICE',
+    useClass: 'CatsService'
+  }],
+})
+
+// cats.controller.ts
+export class CatsController {
+  constructor(@Inject('CATS_SERVICE') private readonly catsService: CatsService) {}
+  // other code
+}
+```
+
 ## Flows
+
+<https://i.stack.imgur.com/2lFhd.jpg>
 
 We often define services in modules as `providers`. In services, we will inject other services
 
@@ -133,6 +154,24 @@ However, if you are finding that you are importing it in many places, you might 
 export class PrismaModule {}
 ```
 
+## Exception
+
+Built-in exception
+
+```ts
+throw new HttpException('User not found', HttpStatus.BAD_REQUEST)
+```
+
+Custom exception: use when we don't want to duplicate the message
+
+```ts
+export class UserNotFoundException extends HttpException {
+  constructor(msg?: string, status?: HttpStatus) {
+    super(msg || 'User not found', status || HttpStatus.BAD_REQUEST)
+  }
+}
+```
+
 ## Guards
 
 Use to protect private route
@@ -150,3 +189,41 @@ Let's say we have a login strategy by JWT
 - In controller, if the protected route use the `guard` created above, it will includes the data we return from `strategy` in the request body.
 - We can also use a custom decorator to extract the data we want to send to the service
 - We pass that data to the service and implement our business
+
+## Middleware and interceptors
+
+- Interceptors have access to response/request before and after the route handler is called.
+- Middleware is called only before the route handler is called. You have access to the response object, but you don't have the result of the route handler
+
+The execution order is:
+Middleware -> Interceptors -> Route Handler -> Interceptors -> Exception Filter (if exception is thrown)
+
+## Websockets
+
+First, we define a websocket gateway. Websocket is now listening for the clients to connnect.
+
+```ts
+@WebSocketGateway()
+export class EventsGateway {}
+```
+
+At this time, clients can connect to websocket. Now, clients might want to send messages via an event and server need to listen to that event. In this example, server are listening to an event named 'events'. `body` will be the message body that clients send to server
+
+```ts
+@WebSocketGateway()
+export class EventsGateway {
+  @SubscribeMessage('events')
+  handleMessage(@MessageBody() body: any) {}
+}
+```
+
+Upon clients send messages, server might also want to broadcast messages to clients. Server will `emit` an event, named 'onMessage' in this example. All the clients that listen to this event will receive the message from server.
+
+```ts
+handleMessage(@MessageBody() body: any) {
+  this.server.emit('onMessage', {
+    msg: 'New message',
+    content: body,
+  });
+}
+```
