@@ -63,14 +63,14 @@ Tại sao cần dùng Dockerfile: Sau khi dev xong, chúng ta mong muốn deploy
 
 Commands:
 
-- `FROM`: khai báo rằng image này được tạo từ 1 parent image or base image. Với app js thì sẽ là node
-- `COPY {files_in_host} {dest_folder_in_container}`: copy file từ host (local machine) vào container
-- `WORKDIR`: working directory. Đây là thư mục để chạy các command bên dưới, thường là trùng với destination folder ở trong lệnh `COPY`. Khi khai báo `WORKDIR /app` là ta `cd` đến thư mục `app`
-- `RUN`: chạy 1 command nào đó trong môi trường base image
-- `CMD`: chạy command này khi Docker container start. Chỉ có 1 `CMD` trong 1 Dockerfile
+- `FROM`: set the base image. In the js app, this shoud be nodejs
+- `WORKDIR`: set the working directory.
+- `COPY {files_in_host} {dest_folder_in_container}`: copy file from host (local machine) into working directory of container
+- `RUN`: Run a command during the build process of docker image
+- `CMD`: Run a command when container is started from the image. There is only one `CMD` in a Dockerfile
 
-```code
-FROM node:18-alpine              // Download node image về
+```
+FROM node:18-alpine       // Download node image về
 
 WORKDIR /app              // CD đến thư mục app
 
@@ -80,15 +80,34 @@ RUN npm install           // Nếu dùng yarn thì chạy yarn install
 
 COPY . .                  // Copy tất cả code trong repo vào thư mục app. Nhớ tạo file .dockerignore để ignore node_module
 
-EXPOSE 8080
+EXPOSE 8080               // Optional. It 's kind of a documentation between the person who builds the image and the person who runs the container, about which ports are intended to be published. To publish the port when running the container, use the -p flag on docker run to publish
 
 CMD [ "npm", "start" ]    // Khi setup xong thì chạy lệnh
 ```
 
-Tạo 1 file `.dockerignore` để ignore `node_module`
+Tạo 1 file `.dockerignore` để ignore `node_module`, file markdown...
 
-Để chạy Dockerfile, dùng lệnh: `docker build -t <docker_image_name> .`. `-t` hay `--tag` là đánh tag cho docker image
-Docker image name có thể là my_app:1.0. Sau khi build xong chạy `docker run` như trên để tạo ra container
+```
+node_modules
+Dockerfile
+docker-compose.yml
+test
+dist
+.gitignore
+.prettierrc
+.git
+*.md
+```
+
+### How to build and run a Dockerfile
+
+- First you need to build the image by running: `docker build -t ${docker_image_name} .`
+  - `-t` or `--tag`: setting name for the docker image. It could be `my_app:1.0` or smt else.
+  - `.`: the current directory
+- Then run your image to build container: `docker run -p ${HOST_PORT}:${CONTAINER_PORT} ${CONTAINER_NAME}`: 
+  - `HOST` is the operating system in which the Docker client is running. `${HOST_PORT}` is the port that help us to connect to the `${CONTAINER_PORT}`. It's like when we access the `${HOST_PORT}`, it will be redirected to the `${CONTAINER_PORT}`
+  - `${CONTAINER_PORT}` is the port that the container exposes
+  - `-p`: maps the port in host to the port in container
 
 ## Commands
 
@@ -164,6 +183,11 @@ Why:
 - In practice, our app will have multiple containers, like: container for FE, container for BE, container for DB. We need these containers connect to each other.
 - Each container requires a single Dockerfile => hard to maintain.
 
+**Can we remove Dockerfile, and only use Docker compose**: maybe, but most of the time you need to have seperate `Dockerfile` and `docker-compose.yml` file
+
+- Dockerfile: this is how to build my image
+- Docker-compose: this is how to run my image(s)
+
 By using Docker compose, we set up all the docker containers in only one `.yml` file (set up name, volumes...)
 
 An example of `docker-compose.yml`
@@ -201,11 +225,33 @@ volumes:
 
 After create docker-compose file, run this command: `docker compose up -d`
 
+**Wait for db run first**:
+
+App can run already while db needs time to set up => we need to wait for db run first before running app
+
+```yml
+# POSTGRES
+dev-db:
+    image: postgres:13
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready pg_isready -d nest -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# MYSQL
+mysql:
+    image: mysql:8.0
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-uroot', '-ppass']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+```
+
 ## Doker ARG, ENV and .env
 
 [https://vsupalov.com/docker-arg-env-variable-guide/](https://vsupalov.com/docker-arg-env-variable-guide/)
-
-
 
 ## Optimize docker image size
 

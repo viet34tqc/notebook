@@ -174,7 +174,9 @@ export class UserNotFoundException extends HttpException {
 
 ## Guards
 
-Use to protect private route
+It's like interceptor and sit before route handler to determine a request can be handled by the route handler or not
+
+**Use cases**: Authorization, use to protect private route
 
 `Guard` often need `strategy` to implement
 
