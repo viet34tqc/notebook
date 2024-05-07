@@ -1360,6 +1360,10 @@ changeName(bob);
 console.log(bob) // bob is still {name: 'Bob'}
 ```
 
+## What is asynchronous in JS
+
+Asynchronous means the program can handle multiple task simultaneously rather than excecuting them one by one.
+
 ## Regular function and async function. When to use async function
 
 Async function always return a promise. It's often used when we want to perform some asynchronous action inside the function.
