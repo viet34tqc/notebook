@@ -77,7 +77,11 @@ When the input is controlled, we should pass initial value as empty string rathe
 
 <https://tkdodo.eu/blog/avoiding-use-effect-with-callback-refs>
 
+We often use callback Ref when we want to access the DOM Element or React Component at a specific point of time, such as when the component mounts or unmounts
+This can be particularly useful when you're working with third-party libraries that require direct DOM access, or when you need to perform complex DOM manipulations, or when you need to <https://react.dev/learn/manipulating-the-dom-with-refs#how-to-manage-a-list-of-refs-using-a-ref-callback>[manage a list of refs].
+
 Passing a ref from `useRef` (a RefObject) to a React element is just syntactic sugar for:
+
 ```js
 <input
   ref={(node) => {
