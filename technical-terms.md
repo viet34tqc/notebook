@@ -74,6 +74,24 @@ in Node.js, when it receives requests from users or needs to perform time-consum
 
 This event-driven asynchronous approach in Node.js allows the program to handle many tasks or requests simultaneously, just like a chef managing and cooking multiple orders at once in a bustling restaurant. It makes Node.js highly responsive and efficient, making it a powerful tool for building fast and scalable applications.
 
+## Asynchronous in JS
+
+Asynchronous means the program can handle multiple task simultaneously rather than excecuting them one by one.
+
+## `process.nextTick()` and `setImmediate`
+
+<https://nodejs.org/en/learn/asynchronous-work/understanding-setimmediate>
+
+A function passed to `process.nextTick()` is going to be executed on the current iteration of the event loop, after the current operation ends. This means it will always execute before `setTimeout` and `setImmediate`.
+
+A `process.nextTick` callback is added to `process.nextTick` queue. A `Promise.then()` callback is added to promises microtask queue. A `setTimeout`, `setImmediate` callback is added to macrotask queue.
+
+Event loop executes tasks in `process.nextTick` queue first, and then executes promises microtask queue, and then executes macrotask queue.
+
+## I/O operation
+
+In Node.js, I/O often refers to reading/writing files or network operations. Network operations get external information into your application, or send data from your application out to something else
+
 ## Non-blocking I/O
 
 <https://www.educative.io/answers/what-is-the-event-driven-non-blocking-i-o-model-in-node-js>

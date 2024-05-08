@@ -1,5 +1,10 @@
 # Nest Framework
 
+## Why use
+
+- Modular architechture => easier to organize your code and reuse code
+- Use DI => easier to manage dependancies, ensure your app is modular
+
 ## Common commands
 
 - `nest new <PROJECT_NAME>`: create new Nest project. You will need to install `@nest/cli` first
