@@ -183,7 +183,41 @@ It's like interceptor and sit before route handler to determine a request can be
 
 **Use cases**: Authorization, use to protect private route
 
-`Guard` often need `strategy` to implement
+Here is the basic implementation of `guard`
+
+```ts
+// auth.guard.ts
+@Injectable()
+export class AuthGuard implements CanActivate {
+  // The returned value of this method indicates whether or not the request is allow to proceed
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+  }
+}
+
+// user.controller.ts
+@Get()
+@UseGuards(AuthGuard)
+getUser() {
+  return {
+    name: 'test',
+  };
+}
+```
+
+There are 3 scopes where you can apply your guard: route handler, controller and global. Here is an example of global guard
+
+```ts
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalGuards(new AuthGuard())
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+`Guard` often needs `strategy` to implement
 
 What `strategy`'s `validation` method returns is pass to the request body
 
@@ -196,6 +230,57 @@ Let's say we have a login strategy by JWT
 - In controller, if the protected route use the `guard` created above, it will includes the data we return from `strategy` in the request body.
 - We can also use a custom decorator to extract the data we want to send to the service
 - We pass that data to the service and implement our business
+
+## Authentication
+
+In NestJS, we often use Passport for authentication. Basically, what it does are:
+
+- Authenticate user's credentials (like username/password, JWT)
+- Issue JWT token
+- Attach user information in the next request (`Guard` sits in front of route handler, then what we return from `validation` method in strategy is returned for the next request if it pass the guard) for further use
+
+When using Passport with NestJs, we need to create a strategy, then we pass it to `AuthGuard` from `Passport`. For example, if we need to implement an authentication mechanism using Jwt and Passport, first, we need to create `JwtStrategy` that extends `PassportStrategy`
+
+```ts
+import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor() {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: 'abc123',
+    });
+  }
+
+  validate(payload: any) {
+    // The payload includes jwt payload (such as username, email...) and other jwt information (iat, exp)
+    return payload;
+  }
+}
+```
+
+Add this `JwtStrategy` to `providers`
+
+Then we will attach it to `AuthGuard` from `Passport`. When put a bearer jwt token in the request header, `AuthGuard` calls `JwtStrategy` validation method. For best practice, we will create a `JwtGuard`. 
+
+```ts
+import { ExecutionContext, Injectable } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class JwtAuthGuard extends AuthGuard('jwt') {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    return super.canActivate(context);
+  }
+}
+```
 
 ## Middleware and interceptors
 
