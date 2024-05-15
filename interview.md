@@ -756,7 +756,7 @@ By default, JavaScript looks at the class that uses the `this` keyword, not the 
 - If a function is called as a method `this` is the object that the function is a property of.
 - If a method is assigned to a variable, then that method is detached from object and `this` is `undefined` in strict mode or `window` as global object. Example: `this` will be `undefined` in controller class because when you execute a method of that class in route, the method is detached from controller class <https://stackoverflow.com/questions/45643005/why-is-this-undefined-in-this-class-method>
 - If a function is invoked as a free function invocation, `this` is the global object.
-- If it's an arrow function, `this` value will be the context of its surrounding scope at the time it is created. Arrow function will try to resolve `this` inside it lexically just like any other variable and ask the Outer function - Do you have a `this`? And Outer Function will reply YES and gives inner function its own context to this
+- If it's an arrow function, `this` value will be the context of its surrounding scope at the time it is created (closest parent function). Arrow function will try to resolve `this` inside it lexically just like any other variable and ask the Outer function - Do you have a `this`? And Outer Function will reply YES and gives inner function its own context to this
 
 ```js
 function outer() {
@@ -772,16 +772,16 @@ outer.call({x: 5});
 
 ## Normal function and arrow function
 
-- `this` keyword: in arrow function, `this` value depends on the context where the function is created. Meanwhile, in normal function, `this` value depends on the object that call the function
+- `this` keyword: in arrow function, `this` value equal to the value of `this` in the context where the arrow function is created. Meanwhile, in normal function, `this` value depends on the object that call the function
 
 ```js
 class Person {
-  construtor() {
+  constructor() {
     this.name = 'viet'
   }
   getName() {
     setTimeout(() => {
-      console.log(this.name); // return 'viet' because `this` in arrow function refers to where it's created which is the class
+      console.log(this.name); // return 'viet' because `this` in arrow function refers to the definition of `this` in the closest parent function
     }, 1000)
 
     setTimeout(function() {
@@ -792,7 +792,23 @@ class Person {
 
 const p = new Person();
 p.getName();
+
+const person = {
+  wrapper() {
+    return () => {
+      console.log(this);
+      return () => {
+        console.log(this);
+      };
+    };
+  },
+};
+
+person.wrapper()()(); // return person
 ```
+
+- Cannot call `new` with arrow function
+- There is no `argument` variable in arrow function
 
 ## Stack and heap
 
@@ -1621,13 +1637,15 @@ Optimizing the critical render path involves reducing the time to receive the HT
 
 - Creation phase
 
-This is the very first phase when JS setting up memory for the data. No code is executed at this point.
-Variable declared with `let` and `const` are stored `uninitialized`
-Variable declared with `var` are stored with the default value of `undefined`
+This is the very first phase when JS setting up memory for the data. No code is executed at this point. Both variable declarations are hoisted, and their memory space have all been set up. However:
+
+- Variable declared with `let` and `const` have no default value (`uninitialized`)
+- Variable declared with `var` are stored with the default value of `undefined`
 
 Then if we try to access the variables before its declaration:
-When variable declared with `var`, it returns `undefined`
-When variable declared with `let` and `const`, it returns `ReferenceError`
+
+- When variable declared with `var`, it returns `undefined`
+- When variable declared with `let` and `const`, it returns `ReferenceError`
 
 ## Hoisting
 

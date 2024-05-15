@@ -104,7 +104,7 @@ Two different requests 'raced' against each other and the result might come in a
 
 ## Stateless and stateful
 
-- Stateless means after the initial request is done, the server-client communication is lost. Server doesn't keep the client's state (like HTTP)
+- Stateless means after the initial request is done, the server-client communication is lost. Server doesn't keep the client's state (like HTTP) => the next request won't have any information about the previous one (like data about the logged in user)
 - Stateful keeps the client's state (like Websockets)
 
 ## Critical rendering path
@@ -177,12 +177,13 @@ the act of taking a website live on a server
 <https://prateeksurana.me/blog/javascript-developer-guide-to-browser-cookies/>
 
 - `httpOnly`: prevent browser (client) from reading any cookies with the cookie API. Cookies are accessible only via server. This helps prevent XSS attacks
-- `SameSite`: (<https://andrewlock.net/understanding-samesite-cookies/>)
-  - `SameSite=Strict`: The cookie will be sent to the server when the current URL is same as the cookie's domain (first-party) and the request originates from the same domain 
-  - `SameSite=Lax` (default): Domain in URL bar equals the cookie's domain (first-party), the link to the request can be from the other sites that point to domain, like you click on the domain on google search result.
-- `domain`: tell browser which hosts are allowed to access a cookie, default to the same host that set the cookie. This attribute is used only when the current domain is a subdomain like 'abc.xyz.com'. So the default domain is abc.xyz.com and if your client is hosted on another subdomain, like 'def.xyz.com', the cookies are set in response header but they aren't existed on client site and won't be included in the next request to the server.
-- `path`: tell browser which path are allowed to access a cookie. A cookie with the path attribute as Path=/store would only be accessible on the path /store and its subpaths /store/cart, /store/gadgets
+- `SameSite`: (<https://andrewlock.net/understanding-samesite-cookies/>) Why we need this attribute: to prevent CSRF. When user send POST request from a malicious website to your original website to something evil, like transfer all your money, Browsers automatically send the cookies for the application when the page does a full form post, and the banking app has no way of knowing that this is a malicious request. 
+  - `SameSite=Strict`: The cookie will be sent to the server when the current URL (client) is same as the cookie's domain (first-party) and the request originates from the same domain 
+  - `SameSite=Lax` (default): same as 'strict', Domain in URL bar equals the cookie's domain (first-party), but the link to the request can be from the other sites that point to domain, like you click on the domain on google search result. (GET request also send cookies)
+- `domain`: server tells browser which hosts are allowed to access a cookie server, default to the same host that set the cookie. However, any subdomains of that host won't have the cookie that was set on the main domain. That means 'test.abc.com' cannot access cookies on 'abc.com', the same goes for 'test2.abc.com'. (Note that you still see the cookie from main domain in the browser dev tool, however you won't get access to them). So if your backend is hosted on 'abc.xyz.com' (so the default domain of the cookies will be 'abc.xyz.com') and your client is hosted on another subdomain, like 'def.xyz.com', the cookies are set in response header but they aren't existed on client site and won't be included in the next request to the server. In this case, your cookie's `domain` attribute should be something like '.abc.com' 
+- `path`: server tells browser which path are allowed to access and send a cookie to server. A cookie with the path attribute as Path=/store would only be accessible on the path /store and its subpaths /store/cart, /store/gadgets
 - `secure`: A cookie with the Secure attribute is only sent to the server over the secure HTTPS protocol, so the domain of client must be HTTPS. This helps in preventing Man in the Middle attacks by making the cookie inaccessible over unsecured connections
+- Expires: default to `Session`. That means when you close the browser, those cookies will be removed (this is only true if your browser doesn't set On startup as 'Continue where you left off')
 
 ## Tree-shaking
 
