@@ -17,6 +17,14 @@ The process whereby an object or data structure is translated into a more suitab
 
 In JavaScript, for example, you can serialize an object to a JSON string by calling the function JSON.stringify().
 
+## Escaping data
+
+Escaping output is the process of securing output data by stripping out unwanted data, like malformed HTML or script tags. This process helps secure your data prior to rendering it for the end user. If output data has HTML, it will convert to `&amp; or &lt;`
+
+## Sanitizing data
+
+Sanitizing data is the process of securing/cleaning/filtering input data before saving it into database
+
 ## Babel
 
 Enable writing codes with JS features that are not supported by most browser yet. The modern code is transpiled back to vanilla JS so that every environment can understand it.

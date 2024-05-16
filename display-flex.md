@@ -5,7 +5,9 @@
 
 giá trị mặc định của flex item: `flex-grow: 0; flex-shrink: 1; flex-basis: auto;`
 
-`flex-basis`: giá trị desired width của flex item và giá trị này có thể tăng hoặc giảm. Nếu flex-item có width thì `flex-basis` sẽ override width đấy. Note: `max-width` và `max-height` sẽ override `flex-basis`. `min-width` và `max-width` cũng ngăn chặn item bị shrink hoặc grow
+`flex-basis`: giá trị desired width của flex item và giá trị này có thể tăng hoặc giảm. Nếu flex-item có width thì `flex-basis` sẽ override width đấy. 
+
+**Note**: `max-width` và `max-height` sẽ override `flex-basis`. `min-width` và `max-width` cũng ngăn chặn item bị shrink hoặc grow
 
 `flex-shrink` và `flex-grow`: tính toán sự tăng giảm width của flex items
 
@@ -15,6 +17,8 @@ giá trị mặc định của flex item: `flex-grow: 0; flex-shrink: 1; flex-ba
 Phần tăng lên hay giảm đi của flex item sẽ được tính theo tỉ lệ `flex-grow` hoặc `flex-shrink` giữa các item và available space
 
 Ví dụ: available space là 150px, item 1 có `flex-grow` là 1, item 2 có `flex-grow` là 2 => item 1 sẽ tăng 50px so với flex basis, item 2 sẽ tăng 100px so với flex basis. Tương tự với `flex-shrink`, khi container bị thu hẹp lại thì width của các item sẽ bị giảm theo tỉ lệ
+
+2 items có `flex-grow: 1` không đồng nghĩa là 2 item có cùng độ lớn, nó chỉ có nghĩa là kích thước các items tăng cùng tỉ lệ. Nếu 2 items ban đầu có kích thước khác nhau thì khi tăng lên với cùng 1 tỉ lệ thì kích thước của chúng vẫn khác nhau. Trong trường hợp này mình phải dùng `flex: 1` vì `flex: 1` tương đương với `flex-basis: 0` 
 
 `flex-shrink: 1` sẽ không shrink flex item xuống dưới kích thước tối thiểu của flex item đó.
 
