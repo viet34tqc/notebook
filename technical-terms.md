@@ -149,6 +149,15 @@ Importantly, for the initial render, the browser will not typically wait for:
 - Prefetch tells browser that you are gonna need this resource in the future, and browser will load it when it's idle. Usecase: apply when user hovers on a link, it's a very high chance that he will click it so you prefetch this link in advance (like NextJS 13)
 - Preload tells browser that this resource is very important, please load it asap. Usecase: apply for important resource in the first render, ex: font, hero image.
 
+## Webhooks
+
+Are a way for an app to send real time data to another app, typically triggered by an event (ex: sending a message). When an event is triggered, the webhook send a POST request to other application with relevant data.
+
+Compare with API: 
+
+- API is also a way for 2 applications to communicate with each other. However, API is request driven, that means 2 application communicate when client sends the request and server responses
+- Webhooks is event-driven, clients don't need to send the request to server, server will automatically send payload as a POST request to client’s webhook URL when specified event occurs
+
 ## Object reference (reference) in JS
 
 <https://www.aleksandrhovhannisyan.com/blog/javascript-pass-by-reference/#object-references-are-pointers>
