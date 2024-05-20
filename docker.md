@@ -99,6 +99,27 @@ dist
 *.md
 ```
 
+## Docker cache
+
+Every command in Dockerfile is a layer
+
+When you run a build, the builder attempts to reuse layers from earlier builds. If a layer of an image is unchanged, then the builder picks it up from the build cache. If a layer has changed since the last build, that layer, and all layers that follow, must be rebuilt. 
+
+Therefore, we typically copy the package*.json file first and run the installation. Then we copy the remaining files from 'src' folder. By this way, we can utilize the cache mechanism because unlike 'src' folder, packages change less frequently and we can cached the process of installing them.
+
+```
+FROM node:18-alpine    
+WORKDIR /app           
+
+COPY package*.json ./  
+
+RUN npm install        // We copy and install
+
+COPY . .               
+
+// Other commands...
+```
+
 ### How to build and run a Dockerfile
 
 - First you need to build the image by running: `docker build -t ${docker_image_name} .`
