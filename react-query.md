@@ -116,6 +116,12 @@ export default function usePosts() {
 }
 ```
 
+## Checking status
+
+<https://github.com/TanStack/query/discussions/6297>
+
+Check `isPending` first, then `isError`, now the data is guaranteed to be available
+
 ## `useMutation`
 
 - Used to create/delete/update data

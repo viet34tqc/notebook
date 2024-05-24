@@ -8,6 +8,7 @@
 
 ## What do React Server Components do?
 
+- <https://www.mux.com/blog/what-are-react-server-components>
 - <https://www.joshwcomeau.com/react/server-components/>
 - <https://www.webscope.io/blog/so-why-server-components>
 - <https://vercel.com/blog/understanding-react-server-components>
