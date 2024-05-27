@@ -1740,10 +1740,10 @@ When present in a project, `.lock` file is the source of information about the c
 
 ## `srcset` and `sizes`
 
-<https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images>
-<https://blog.webdevsimplified.com/2023-05/responsive-images/>
-<https://12daysofweb.dev/2021/image-display-elements/>
-<https://imagekit.io/responsive-images/>
+- <https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images>
+- <https://blog.webdevsimplified.com/2023-05/responsive-images/>
+- <https://12daysofweb.dev/2021/image-display-elements/>
+- <https://imagekit.io/responsive-images/>
 
 ```html
 <img src="https://ik.imgkit.net/ikmedia/women-dress-1.jpg"
@@ -1757,6 +1757,22 @@ When present in a project, `.lock` file is the source of information about the c
 First, we need to calculate the image size. For example, if the viewport < 400px, let's say 350px, the image size will be 100vw, which is 350px. Then, the browser will use this image <https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350>
 
 If the viewport is 650px, the image size will be 325px. It tells browser to use the picture with minimum of 325px => the browser use <https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350>, which is the closest one
+
+## Difference between using `srcset` and `sizes` and using `<picture>` and `<source>` tag
+
+In HTML, both the srcset attribute and the <picture> element are used for responsive images, but they serve slightly different purposes and are used in different ways. 
+
+- `srcset` and `size`: you have only one image with different sizes and you give hints to the browser to choose the most appropriate size based on the current viewport size and device pixel density.
+- `<picture>` and `<source>`: you have multiple image sources for different conditions (like different layout, different screen sizes...). `source` element is more like a command than a suggestion.
+
+```
+<picture>
+  <source srcset="large.png" media="(min-width: 75em)">
+  <source srcset="medium.png" media="(min-width: 40em)">
+  <img src="small.png" alt="A description of the image." 
+    width="300" height="200" loading="lazy" decoding="async">
+</picture>
+```
 
 ## min, max, clamp()
 

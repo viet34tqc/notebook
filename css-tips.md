@@ -231,8 +231,9 @@ By default, the input doesn't take the whole width of its parents. Then, we can 
 
 ## Alternative to input number
 
-<https://css-tricks.com/finger-friendly-numerical-inputs-with-inputmode/>
-<https://codepen.io/kevinpowell/pen/dyjwWEY>
+- <https://css-tricks.com/finger-friendly-numerical-inputs-with-inputmode/>
+- <https://codepen.io/kevinpowell/pen/dyjwWEY>
+
 Use in case `input="number"` is inapropriate like credit-card number
 
 `<input inputmode="numeric" pattern="[0-9]*" type="text" name="creditcard">`
@@ -259,3 +260,16 @@ function validateInput(el) {
 This method is too good to be true.
 
 <https://www.youtube.com/watch?v=c13gpBrnGEw>
+
+## Child element breaks out parent element
+
+<https://archive.hankchizljaw.com/wrote/creating-a-full-bleed-css-utility/>
+
+```css
+.full-bleed-image {
+  width: 100vw;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+```
+
