@@ -43,10 +43,23 @@ z.object({
 
 ## `refine`
 
+Allow us to do custom validation to enhance Zod validation
+
+```js
+// In this example, first we check if the value is string, then we check its length.
+z.string().refine((val) => val.length <= 255, {
+  // You can also pass in a string instead of object: "String can't be more than 255 characters"
+  message: "String can't be more than 255 characters", 
+});
+```
+
 Validate using value from other field
 
 ```js
-z.object({}).refine( data => data.password === data.confirmPassword, {
+const schema = z.object({
+    password: z.string(),
+    confirm: z.string(),
+  }).refine( data => data.password === data.confirmPassword, {
   message: 'Not match',
   path: ['confirmPassword']
 })

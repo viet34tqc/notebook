@@ -5,7 +5,7 @@
 
 Storybook is a tool for creating, testing and showcasing the UI of the component in isolation.
 
-Why: Let's say we have two components: parent and child. The parent passes down some data to the child component via props. To test the UI of the child component, we need to do some interaction on the parent first by doing some interaction like clicking or fetching data => make it harder for testing
+Why: Let's say we have two components: parent and child. The parent passes down some data to the child component via props. To test the UI of the child component, we need to do some interaction on the parent first like clicking or fetching data => testing the child component depends on the parent.
 
 ## Concepts
 

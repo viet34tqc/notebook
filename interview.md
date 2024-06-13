@@ -76,7 +76,7 @@ Tool check accessibility:
 <https://www.youtube.com/watch?v=za2FZ8QCE18&ab_channel=FrontStart>
 
 React uses Virtual DOM because of perfomance
-The Virtual DOM in React is in fact a tree of React Elements, or objects, which is the results of calling `React.createElement`. Creating a few hundred or thousands of JS objects is faster and cheaper than writing directly to the DOM.
+The Virtual DOM in React is in fact a tree of React Elements, or objects, which is the results of calling `React.createElement`. React identifies the exact modified elements by comparing the current Virtual DOM snapshot with the previous one, so it updates only the necessary objects rather than creating a new DOM every time.
 
 ## Redux and React Context
 
@@ -1111,12 +1111,14 @@ console.log( config.language ) // ['VN']
 
 ## `Map` trong javascript
 
+<https://phuoc.ng/collection/this-vs-that/object-vs-map/>
+
 Why: <https://www.builder.io/blog/maps>
 
 - `Map` sửa xóa property nhanh hơn so với object => Sử dụng `Map` nếu cần sửa xóa nhiều property, còn lại nếu chỉ có đọc data thì có thể dùng object
 - Object có built-in properties và các properties này có thể bị override
 - Gần giống như object, khác ở chỗ key có thể là bất cứ type nào, kể cả object, function
-- `Map` giữ nguyên order của key
+- `Map` giữ nguyên order của key. Object chỉ giữ nguyên order khi key là string hay symbol. Nếu key dạng số thì order sẽ có thể bị thay đổi
 - Việc lặp qua các phần tử trong `Map` cũng đơn giản hơn, k cần sử dụng đến `Object.keys`, `Object.values`... để transform trước khi lặp
 
   ```js
@@ -1176,7 +1178,9 @@ const [[firstKey, firstValue]] = myMap
 const copied = new Map(myMap);
 ```
 
-`Weakmap` tương tự như `Map` nhưng có thể được gabage collected nếu không có tham chiếu nào đến nó => tránh hiện tượng memory leak.
+<https://phuoc.ng/collection/this-vs-that/map-vs-weak-map/>
+
+`Weakmap` tương tự như `Map` nhưng key của Weakmap có thể được gabage collected nếu không có tham chiếu nào đến nó => tránh hiện tượng memory leak.
 
 ## Else if using operation tenerry
 
