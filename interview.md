@@ -749,14 +749,19 @@ test()
 - <https://unicorn-utterances.com/posts/javascript-bind-usage>
 
 **TLDR**
-By default, JavaScript looks at the class that uses the `this` keyword, not the class that creates the `this` keyword. Arrow function will bound `this` to original scope and cannot be modified (even if you use `bind`)
+By default, for normal function, JavaScript looks at the class that uses the `this` keyword, not the class that creates the `this` keyword. On the other hand, Arrow function will bound `this` to original scope (original class) and cannot be modified (even if you use `bind`)
+
+For normal function:
 
 - If the `new` keyword is used when calling the function, `this` inside the function is a all new empty object.
 - If `apply`, `call`, or `bind` is used, `this` inside the function is the object that is passed in as the argument.
 - If a function is called as a method `this` is the object that the function is a property of.
 - If a method is assigned to a variable, then that method is detached from object and `this` is `undefined` in strict mode or `window` as global object. Example: `this` will be `undefined` in controller class because when you execute a method of that class in route, the method is detached from controller class <https://stackoverflow.com/questions/45643005/why-is-this-undefined-in-this-class-method>
 - If a function is invoked as a free function invocation, `this` is the global object.
-- If it's an arrow function, `this` value will be the context of its surrounding scope at the time it is created (closest parent function). Arrow function will try to resolve `this` inside it lexically just like any other variable and ask the Outer function - Do you have a `this`? And Outer Function will reply YES and gives inner function its own context to this
+
+For arrow function:
+
+`this` value in arrow function will ignore all the rules above and be the context of its surrounding scope at the time it is created (closest parent function or the class that has the method using `this` value). Arrow function will try to resolve `this` inside it lexically just like any other variable and ask the Outer function - Do you have a `this`? And Outer Function will reply YES and gives inner function its own context to this
 
 ```js
 function outer() {
@@ -809,6 +814,7 @@ person.wrapper()()(); // return person
 
 - Cannot call `new` with arrow function
 - There is no `argument` variable in arrow function
+- We can use arrow function to preserve the `this` value of that function, because `this` value inside the function can be unpredictable because it is determined by the execution context. Using `bind()` does the same 
 
 ## Stack and heap
 

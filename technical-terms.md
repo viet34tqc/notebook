@@ -56,7 +56,11 @@ When we change a layout-related property (width, height, margin), we trigger the
 - Paint: Following layout recalculations, the browser renders the visual features of each element, like colors, borders, and shadows.
 - Composite: The browser then combines the painted layers to produce the final image displayed on the screen.
 
-Reflows can be heavy on the CPU as they involve complex algorithms for processing CSS rules and determining element alignment and constraints within the page’s layout. 
+Reflows can be heavy on the CPU as they involve complex algorithms for processing CSS rules and determining element alignment and constraints within the page’s layout.
+
+## JS context
+
+In technical terms, context refers to the object which a function belongs or is bound to. We can say that it refers to the `this` value inside a function
 
 ## Bundle
 
