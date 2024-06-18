@@ -18,3 +18,43 @@ Why: Let's say we have two components: parent and child. The parent passes down 
   - component: the component itself
   - parameters layout: story layout, the position of the stories when display on the Canvas tab 
   - `argsTypes`: defines the type of the `args` in each story (<https://storybook.js.org/docs/api/arg-types>)
+
+## Create a story
+
+```ts
+const meta: Meta = {
+  component: AlertDialog,
+};
+
+const DemoButton = (args: ComponentProps<typeof Button>) => {
+  return <div><Button /></div>
+}
+
+export const Default: Story = {
+  args: {
+    children: 'Button',
+    variant: 'default',
+    size: 'default',
+  },
+  // By default, `render` will render the component which is passed in as the value of `component` property in `meta` object
+  // Here, we can create a custom rendered component
+  // `args` is the args define above
+  render: args => <Button {...args} />
+};
+```
+
+By using custom `render` like in the example above, we can create a template of the component that will be reuse in all stories
+
+```ts
+const ButtonTemplate: Story = {
+  render: args => <Button {...args} />
+};
+
+export const RedButton: Story = {
+  ...ButtonTemplate,
+  args: {
+    color: 'red'
+  }
+}
+```
+
