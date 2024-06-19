@@ -12,11 +12,117 @@
 
 <https://github.com/react-hookz/web>
 
-## Tools
+## Packages to install:
 
-- Jest: provides API for testing
-- Jest Preview: preview the HTML without imagining the layout in your head (<https://github.com/nvh95/jest-preview>)
+If we are not using vite (CRA, NextJS), we can use `jest`. Otherwise, vitest is recommended rather than vite (<https://github.com/CodingGarden/react-ts-starter>)
+t
+Required packages:
+
+- Test runner
+  - Jest: provides API for testing
+  - Vitest: faster
+- @testing-library/jest-dom: <https://github.com/testing-library/jest-dom#usage>
 - @testing-library/react: testing DOM manipulation, provides `render` for rendering a component, `fireEvent` for stimulating an event (such as 'click')
+- @testing-library/user-event: simulate the real events, `userEvent.click` simulates the event more realistically than `fireEvent`.
+- eslint-plugin-testing-library
+
+If you use Jest:
+
+- ts-jest (typescript project)
+- @types/jest (typescript project)
+- jest-environment-jsdom: By default, Jest uses node for testing. This package creates browser env for UI tests
+- eslint-plugin-jest-dom: provides a set of custom jest matchers, like `toBeInTheDocument`, `toHaveClass`...
+- jest-scss-transform (if you are using SCSS import)
+- jest-svg-transformer (for svg)
+
+Optional:
+
+- identity-obj-proxy (css modules)
+- Jest Preview: preview the HTML without imagining the layout in your head (<https://github.com/nvh95/jest-preview>)
+- ts-node (optional)
+
+## Configuration files
+
+### Using Jest
+
+If you are using CRA, this configuration file won't work by default and you have to run `react-scripts test -- --config jest.config.js`. However, it's NOT RECOMMEND to have a seperate jest configuration file with CRA. If you need other settings, put it in the `package.json`
+
+If your project use JSX, you will need `babel` setup, otherwise, `ts-jest` will handle `ts, tsx` files
+
+- `jest.config.js`
+
+```js
+module.exports = {
+	preset: 'ts-jest',
+	testEnvironment: 'jsdom',
+	globals: {
+		'ts-jest': {
+			tsconfig: './tsconfig.json',
+		},
+	},
+	transform: {
+		'^.+\\.jsx?$': 'babel-jest',
+		'^.+\\.scss$': 'jest-scss-transform',
+	},
+	moduleNameMapper: {
+    '^.+\\.svg$': 'jest-svg-transformer',
+    '^.+\\.css$': 'identity-obj-proxy',
+  },
+	setupFilesAfterEnv: ['./jest.setup.ts'],
+};
+```
+- `jest.setup.ts`
+
+`import '@testing-library/jest-dom';`
+
+- `babelrc`
+```
+{
+	"presets": ["@babel/preset-env", "@babel/preset-react"]
+}
+```
+
+### Using Vitest
+
+```ts
+/// <reference types="vitest" />
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    globals: true, // So we can use function from vitest globally without importing it
+    environment: 'jsdom',
+    setupFiles: './setupTests.ts',
+    coverage: {
+      all: true,
+      provider: 'istanbul',
+      reporter: ['text', 'json', 'html'],
+      include: ['src/**/*.tsx'],
+      exclude: [],
+    },
+  },
+});
+
+// tsconfig.json
+"compilerOptions": {
+		"types": ["vitest/globals"],
+}
+
+// setupTests.ts
+import '@testing-library/jest-dom';
+import * as matchers from '@testing-library/jest-dom/matchers';
+import { cleanup } from '@testing-library/react';
+import { afterEach, expect } from 'vitest';
+
+expect.extend(matchers);
+
+afterEach(() => {
+  cleanup();
+});
+```
 
 ## Type of testing
 
@@ -198,110 +304,6 @@ describe('Test AvatarGroup', () => {
 `jest.spyOn(object, methodName)`: mock a *method of object*
 <https://jestjs.io/docs/jest-object#jestspyonobject-methodname>
 `jest.mock()`: mock a *module*
-
-## Packages to install:
-
-If we are not using vite (CRA, NextJS), we can use `jest`. Otherwise, vitest is recommended rather than vite (<https://github.com/CodingGarden/react-ts-starter>)
-
-- jest or vitest
-- jest-environment-jsdom: By default, Jest uses node for testing. This package creates browser env for UI tests
-- @testing-library/jest-dom: <https://github.com/testing-library/jest-dom#usage>
-- @testing-library/react
-- @testing-library/user-event
-- eslint-plugin-jest-dom
-- eslint-plugin-testing-library
-- jest-scss-transform (if you are using SCSS import)
-- jest-svg-transformer (for svg)
-- identity-obj-proxy (css modules)
-
-If you are working with Typescript, install these additional libraries
-
-- ts-jest
-- ts-node
-- @types/jest
-
-## Configuration files
-
-### Using Jest
-
-If you are using CRA, this configuration file won't work by default and you have to run `react-scripts test -- --config jest.config.js`. However, it's NOT RECOMMEND to have a seperate jest configuration file with CRA. If you need other settings, put it in the `package.json`
-
-If your project use JSX, you will need `babel` setup, otherwise, `ts-jest` will handle `ts, tsx` files
-
-- `jest.config.js`
-
-```js
-module.exports = {
-	preset: 'ts-jest',
-	testEnvironment: 'jsdom',
-	globals: {
-		'ts-jest': {
-			tsconfig: './tsconfig.json',
-		},
-	},
-	transform: {
-		'^.+\\.jsx?$': 'babel-jest',
-		'^.+\\.scss$': 'jest-scss-transform',
-	},
-	moduleNameMapper: {
-    '^.+\\.svg$': 'jest-svg-transformer',
-    '^.+\\.css$': 'identity-obj-proxy',
-  },
-	setupFilesAfterEnv: ['./jest.setup.ts'],
-};
-```
-- `jest.setup.ts`
-
-`import '@testing-library/jest-dom';`
-
-- `babelrc`
-```
-{
-	"presets": ["@babel/preset-env", "@babel/preset-react"]
-}
-```
-
-### Using Vitest
-
-```ts
-/// <reference types="vitest" />
-import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
-
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  test: {
-    globals: true, // So we can use function from vitest globally without importing it
-    environment: 'jsdom',
-    setupFiles: './setupTests.ts',
-    coverage: {
-      all: true,
-      provider: 'istanbul',
-      reporter: ['text', 'json', 'html'],
-      include: ['src/**/*.tsx'],
-      exclude: [],
-    },
-  },
-});
-
-// tsconfig.json
-"compilerOptions": {
-		"types": ["vitest/globals"],
-}
-
-// setupTests.ts
-import '@testing-library/jest-dom';
-import * as matchers from '@testing-library/jest-dom/matchers';
-import { cleanup } from '@testing-library/react';
-import { afterEach, expect } from 'vitest';
-
-expect.extend(matchers);
-
-afterEach(() => {
-  cleanup();
-});
-```
 
 ## Debug test
 
