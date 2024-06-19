@@ -87,7 +87,7 @@ overrides: [
 ],
 ```
 
-## Setup
+## Setup ESlint
 
 To install ESLint:
 
@@ -146,6 +146,13 @@ Create a `.eslintrc` file and paste this code
 }
 ```
 
+Touch `.eslintignore`
+
+```json
+node_modules
+dist
+```
+
 ## Prettier
 
 How does Prettier compare to ESLint/TSLint/stylelint, etc.?
@@ -170,27 +177,6 @@ To install Prettier:
 
 Some other tutorials tell you to use `eslint-plugin-prettier`, but according to <https://stackoverflow.com/questions/44690308/whats-the-difference-between-prettier-eslint-eslint-plugin-prettier-and-eslint/44690309#44690309>[this] and <https://prettier.io/docs/en/integrating-with-linters.html>[this], that prettier plugin takes care the linting as well by adding prettier rules to eslint, meanwhile we should let prettier do the formatting only.
 
-After installing you have to create the prettierc file:
-
-`touch .prettierrc`
-
-At this point you have a blank .prettierrc file and a default eslintrc file, so the next step is to configure the eslintrc file.
-
-Open your eslintrc file.
-
-If you are going to use or you intend to use Jest in your project add the next lines to your 'env':
-
-```json
-{
-    "env": {
-        "browser": true,
-        "es2021": true,
-	"jest": true // Add this line!
-    },
-	...
-}
-```
-
 To use prettier alongside with eslint you need to change the extends object (Implemented as above)
 
 ```json
@@ -206,41 +192,9 @@ To use prettier alongside with eslint you need to change the extends object (Imp
 }
 ```
 
-The main part of ESLint is the rules objects. Here you can put any rule you think is good for your project and team.
+After installing you have to create the prettierc file:
 
-My basic configuration is this:
-
-```json
-{
-	...
-	"rules": {
-        "react/react-in-jsx-scope": "off",
-        "camelcase": "error",
-        "spaced-comment": "error",
-        "quotes": ["error", "single"],
-        "no-duplicate-imports": "error"
-  },
-	...
-}
-```
-
-If you want to learn more about ESLint rules you can check out rules page.
-
-**This is optional**
-The last thing to set up in ESLint is the eslint-import-resolver-typescript. Just add the settings key in the eslint configuration file.
-
-```json
-{
-	...
-	"settings": {
-    "import/resolver": {
-      "typescript": {}
-    }
-  }
-}
-```
-
-Lastly, we are going to set up the `.prettierrc` file created at the begging of the article.
+`touch .prettierrc`
 
 My basic configuration for `.prettierrc` file is:
 
@@ -256,14 +210,12 @@ My basic configuration for `.prettierrc` file is:
 }
 ```
 
-But if you want to learn more check out the options page.
-
 Finally, we have to add the scripts in the package.json:
 
 ```json
 {
 	"scripts": {
-	  "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
+	    "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
       "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx,json}",
       "format": "prettier --write src/**/*.{js,jsx,ts,tsx,css,md,json} --config ./.prettierrc"
     },
@@ -277,6 +229,59 @@ Basically:
 - format: will call prettier to fix the code style.
 
 At this point, you probably have a fully working ReactJS project with linting. If you encounter some error or problem don't hesitate in commenting below.
+
+## Setup husky
+
+<https://typicode.github.io/husky/get-started.html>
+
+Allow us to do some tasks like testing, lint, format before commit
+
+- First, Install husky: `pnpm add --save-dev husky`
+- Run `pnpm exec husky init` or `npx husky init`. It creates a pre-commit script in .husky/ and updates the prepare script in package.json
+
+**Project Not in Git Root Directory**
+
+For example, you have a folder `backend` and `frontend` in the root folder and `frontend` has a husky setup
+
+In `package.json` in frontend: `"prepare": "cd .. && husky frontend/.husky"`
+In your hook script, change the directory back to the relevant subdirectory:
+```
+# frontend/.husky/pre-commit
+cd frontend
+npm test
+```
+
+## Setup `lint-staged` with `husky`
+
+Do something with the staged files only. Combining `lint-staged` with `husky` allows us to implement some task for *staged files* right *before commit*
+
+- Install `lint-staged`: `pnpm i lint-staged`
+- Create `lint-staged.config.mjs` or `lint-staged.config.js`, depending on if your project supports ESM or not
+
+```js
+const config = {
+  '*.{js,jsx,ts,tsx}': ['pnpm lint', 'pnpm format', 'git add .'], // If your `pnpm lint` command also fixed some bug, we should staged all the fixed file by using `git add .` 
+}
+export default config
+```
+
+`NextJS` using `next lint` that requires a little bit different config
+
+```js
+import path from 'path'
+
+const buildEslintCommand = (filenames) =>
+  `next lint --fix --file ${filenames
+    .map((f) => path.relative(process.cwd(), f))
+    .join(' --file ')}`
+
+const config = {
+  '*.{js,jsx,ts,tsx}': [buildEslintCommand, 'pnpm format', 'git add .'],
+}
+export default config
+```
+
+In `pre-commit` file in `.husky` folder, we add this comand `pnpm lint-staged`
 
 ## Using eslint with Vite
 
