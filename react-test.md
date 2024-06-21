@@ -85,6 +85,9 @@ module.exports = {
 ### Using Vitest
 
 ```ts
+
+// vite.config.ts or vitest.config.ts
+
 /// <reference types="vitest" />
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
@@ -92,6 +95,11 @@ import { defineConfig } from 'vite';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'), // Add this if your components use folder alias
+    },
+  },
   test: {
     globals: true, // So we can use function from vitest globally without importing it
     environment: 'jsdom',
@@ -239,7 +247,6 @@ it('should show correct action buttons on edit tab', async () => {
 	expect(editButton).toBeInTheDocument()
 })
 ```
-
 
 ### Click a button then remove an element
 
