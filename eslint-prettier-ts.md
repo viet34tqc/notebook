@@ -237,7 +237,8 @@ At this point, you probably have a fully working ReactJS project with linting. I
 Allow us to do some tasks like testing, lint, format before commit
 
 - First, Install husky: `pnpm add --save-dev husky`
-- Run `pnpm exec husky init` or `npx husky init`. It creates a pre-commit script in .husky/ and updates the prepare script in package.json
+- Run `pnpm exec husky init` or `npx husky init`. It creates a `pre-commit` file in `.husky/` folder 
+- Update `pre-commit` file with your scripts
 
 **Project Not in Git Root Directory**
 
