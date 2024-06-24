@@ -36,7 +36,6 @@ Commands:
 - `docker ps`: list các container đang chạy
 - `docker ps -a`: list các container đang chạy và đang bị stop
 - `docker rm -f <id>`: remove container
-- `docker run -dp {HOST_PORT}:{CONTAINER_PORT} {name}:{tag}`: run image, create new container và expose container port to host, `{HOST_PORT}` tùy chọn nhưng nên giống với `{CONTAINER_PORT}`, `{CONTAINER_PORT}` xem từ `docker ps`. `{CONTAINER_PORT}` bắt buộc phải chính xác
 
 ## Image
 
@@ -50,8 +49,7 @@ Commands:
 
 - `docker images`: liệt kê tất cả các images hiện có
 - `docker run {name}:{tag}`: run 1 image với tag của nó, nếu nó không tìm thấy trong máy local, docker sẽ tự động pull về từ DockerHub
-- `docker run -d {name}:{tag}`: `-d` means detach, which means docker runs in the background without block terminal
-- `docker run -d --name {container_name} {name}:{tag}`: thêm tên cho container cho dễ nhớ
+- `docker run -d -p {HOST_PORT}:{CONTAINER_PORT} {name}:{tag}`: run image, create new container và expose container port to host
 
 ## Dockerfile
 
