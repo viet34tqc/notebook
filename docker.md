@@ -97,7 +97,23 @@ dist
 *.md
 ```
 
-## Docker cache
+### How to build and run a Dockerfile
+
+- First you need to build the image by running: `docker build -t ${docker_image_name} .`
+  - `-t` or `--tag`: setting name for the docker image. It could be `my_app:1.0` or smt else.
+  - `.`: the current directory
+- Then run your image to build container: `docker run -p ${HOST_PORT}:${CONTAINER_PORT} ${CONTAINER_NAME}`: 
+  - `-p`:  means port mapping, port on host machine is map to port in the container. Then all the requests that are made to the host port can be redirected into the Docker container.
+  - `HOST` is the operating system in which the Docker client is running. `${HOST_PORT}` is the port that help us to connect to the `${CONTAINER_PORT}`. It's like when we access the `${HOST_PORT}`, it will be redirected to the `${CONTAINER_PORT}`
+  - `${CONTAINER_PORT}` is the port that the container exposes
+  - `-p`: maps the port in host to the port in container
+  
+**Why Use Port Mapping?**
+
+- Access Services: If you run a web server inside a Docker container, you need to map the container's web server port to a port on the host to access it from your browser or network.
+- Port Conflicts: If the default port used by the service inside the container is already in use on the host, you can map it to a different port on the host.
+
+### Dockerfile cache
 
 Every command in Dockerfile is a layer
 
@@ -118,17 +134,7 @@ COPY . .
 // Other commands...
 ```
 
-### How to build and run a Dockerfile
-
-- First you need to build the image by running: `docker build -t ${docker_image_name} .`
-  - `-t` or `--tag`: setting name for the docker image. It could be `my_app:1.0` or smt else.
-  - `.`: the current directory
-- Then run your image to build container: `docker run -p ${HOST_PORT}:${CONTAINER_PORT} ${CONTAINER_NAME}`: 
-  - `HOST` is the operating system in which the Docker client is running. `${HOST_PORT}` is the port that help us to connect to the `${CONTAINER_PORT}`. It's like when we access the `${HOST_PORT}`, it will be redirected to the `${CONTAINER_PORT}`
-  - `${CONTAINER_PORT}` is the port that the container exposes
-  - `-p`: maps the port in host to the port in container
-
-## Commands
+## Common commands
 
 - `docker ps`: liệt kê danh sách container đang chạy
 - `docker ps -a`: liệt kê danh sách container đang chạy và đang dừng
