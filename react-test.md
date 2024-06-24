@@ -190,14 +190,34 @@ describe('Test counter', () => {
 
 ### Query selector and assertion function
 
+**TLDR**:
+
+- If you want to assert an element that is rendered after an asynchronous operation, use the `findBy*` or `findByAll*` variants.
+- If you want to assert that an element should not be in the DOM, combine `queryBy*` or `queryByAll*` with `not.toBeInTheDocument` or `toBeNull`. If this assertion happens after a asynchronous operation, you should await for it or put it in the `waitFor` block (the first method is preferred)
+- Otherwise, use `getBy*` and `getByAll*` variants (for asynchronous operation, we can still combine `getBy*` with `waitFor` instead of `findBy*`, however `findBy*` is shorter because it uses `getBy*` and `waitFor` under the hood)
+
 Use `screen` to query element
 
 - `getByText`: query element by the inner text: `screen.getByText('/confirm/i)`
 - `getAllBy*()[0]`: query the first element
-- `getByRole`: query element by HTML tag: `screen.getByRole('button', {name: /confirm/i})`
+- `getByRole`: query element by `role` attribute: `screen.getByRole('button', {name: /confirm/i})`. For native HTML like `button`, `role` attribute is equal to name of tag.
 - `getByLabelText`: query input by label
-- `queryByText`: Returns the matching node for a query, and return null if no elements match. This is useful for asserting an element that is not present. Throws an error if more than one match is found. Use with `not.toBeInTheDocument`. If the element is disappears asynchronously, we can combine with `waitFor()`
-- `findBy*`: use with asynchronous test: `expect(await screen.findByRole('button', { name: /one up/i })).toBeInTheDocument()`
+- `queryByText`: Returns the matching node for a query, and return null if no elements match. The difference between this and `getBy` is that it doesn't throw any error if there is no element. This is useful for asserting an element that is not present. Throws an error if more than one match is found. Use with `not.toBeInTheDocument`. If the element is disappears asynchronously (like after we do perform an click event), we can combine with `waitFor()` or we can just await the click event
+
+	```js
+	// Method 1: 
+ 	await user.click(cancelButton)
+  expect(screen.queryByText(titleText)).not.toBeInTheDocument()
+
+  // Method 2:
+  user.click(cancelButton)
+
+  await waitFor(() =>
+    expect(screen.queryByText(titleText)).not.toBeInTheDocument()
+  )
+	```
+	
+- `findBy*`: query an element asynchronously: `expect(await screen.findByRole('button', { name: /one up/i })).toBeInTheDocument()`
 
 For assertion
 
@@ -208,11 +228,6 @@ For assertion
 - `toBeNull()`
 - `Function.toHaveBeenCalled()`
 - `toHaveStyle`: test the `style` attribute of element. Use case: when we change the `style` attribute via js. Remember to use findBy* if the test fails
-
-**RECAP**:
-
-- If you want to select an element that is rendered after an asynchronous operation, use the `findBy*` or `findByAll*` variants.
-- If you want to assert that an element should not be in the DOM (combine `queryBy*` or `queryByAll*` with `not.toBeInTheDocument` or `toBeNull`) - Otherwise, use `getBy*` and `getByAll*` variants.
 
 ### Event
 
@@ -324,7 +339,7 @@ Using `msw` packages. The requests are sent to `msw` instead of the real server.
 
 - Test with CRA
 
-When we do asynchonous test using creat-react-app, we need to run `yarn test` which runs `react-scripts test`. The reason is react-scripts will run polyfill for `fetch` (Jest run in NodeJS environment where `fetch` is not available). Otherwise, we might encounter error `ReferenceError: fetch is not defined`
+When we do asynchronous test using creat-react-app, we need to run `yarn test` which runs `react-scripts test`. The reason is react-scripts will run polyfill for `fetch` (Jest run in NodeJS environment where `fetch` is not available). Otherwise, we might encounter error `ReferenceError: fetch is not defined`
 
 In case we don't use CRA, then we will have to import `fetch` polyfill by ourselves.
 
