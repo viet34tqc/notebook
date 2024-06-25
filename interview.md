@@ -761,7 +761,7 @@ For normal function:
 
 For arrow function:
 
-`this` value in arrow function will ignore all the rules above and be the context of its surrounding scope at the time it is created (closest parent function or the class that has the method using `this` value). Arrow function will try to resolve `this` inside it lexically just like any other variable and ask the Outer function - Do you have a `this`? And Outer Function will reply YES and gives inner function its own context to this
+`this` value in arrow function will ignore all the rules above and be the context of its surrounding scope at the time it is created (closest parent function). Arrow function will try to resolve `this` inside it lexically just like any other variable and ask the Outer function - Do you have a `this`? And Outer Function will reply YES and gives inner function its own context to this
 
 ```js
 function outer() {
