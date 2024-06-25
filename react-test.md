@@ -82,11 +82,10 @@ module.exports = {
 }
 ```
 
-### Using Vitest
+### Using Vitest with vite
 
 ```ts
-
-// vite.config.ts or vitest.config.ts
+// vite.config.ts 
 
 /// <reference types="vitest" />
 import react from '@vitejs/plugin-react';
@@ -101,7 +100,7 @@ export default defineConfig({
     },
   },
   test: {
-    globals: true, // So we can use function from vitest globally without importing it
+    globals: true, // So we can use function from vitest globally without importing it (like `describe`, `it`)
     environment: 'jsdom',
     setupFiles: './setupTests.ts',
     coverage: {
@@ -116,7 +115,7 @@ export default defineConfig({
 
 // tsconfig.json
 "compilerOptions": {
-		"types": ["vitest/globals"],
+		"types": ["vitest/globals"], // IMPORTANT
 }
 
 // setupTests.ts
@@ -131,6 +130,14 @@ afterEach(() => {
   cleanup();
 });
 ```
+
+### Using Vitest with NextJS
+
+<https://nextjs.org/docs/app/building-your-application/testing/vitest>
+
+- Install `@vitejs/plugin-react`
+- Create a `vitest.config.ts|js`. The content is the same as `vite.config.ts` above
+- The rest is like above
 
 ## Type of testing
 
