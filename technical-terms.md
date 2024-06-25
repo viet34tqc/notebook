@@ -126,7 +126,7 @@ Two different requests 'raced' against each other and the result might come in a
 Is the sequence of steps the browser takes before performing the initial render of a webpage:
 
 - Constructing the Document Object Model (DOM) from the HTML.
-- Constructing the CSS Object Model (CSSOM) from the CSS.
+- Constructing the CSS Object Model (CSSOM) from the stylesheets.
 - Applying any JavaScript that alters the DOM or CSSOM.
 - Constructing the render tree from the DOM and CSSOM.
 - Perform style and layout operations on the page to see what elements fit where.
@@ -193,13 +193,20 @@ React renders every components again and attaching generated event listeners to 
 
 the act of taking a website live on a server
 
+## Site and origin
+
+<https://zellwk.com/blog/fetch-credentials/>
+
+- Site is domain name. Subdomains are considered to be the same site.
+- Origin is defined with scheme (http or https), domain, and port. Changing any of these values is considered a change in origin.
+
 ## Cookie attributes:
 
 <https://prateeksurana.me/blog/javascript-developer-guide-to-browser-cookies/>
 
 - `httpOnly`: prevent browser (client) from reading any cookies with the cookie API. Cookies are accessible only via server. This helps prevent XSS attacks
 - `SameSite`: (<https://andrewlock.net/understanding-samesite-cookies/>) Why we need this attribute: to prevent CSRF. When user send POST request from a malicious website to your original website to something evil, like transfer all your money, Browsers automatically send the cookies for the application when the page does a full form post, and the banking app has no way of knowing that this is a malicious request. 
-  - `SameSite=Strict`: The cookie will be sent to the server when the current URL (client) is same as the cookie's domain (first-party) and the request originates from the same domain 
+  - `SameSite=Strict`: The cookie will be sent to the server when the current domain in the URL bar equals the cookie's domain (first-party) and the request originates from the same domain as well.
   - `SameSite=Lax` (default): same as 'strict', Domain in URL bar equals the cookie's domain (first-party), but the link to the request can be from the other sites that point to domain, like you click on the domain on google search result. (GET request also send cookies)
 - `domain`: server tells browser which hosts are allowed to access a cookie server, default to the same host that set the cookie. However, any subdomains of that host won't have the cookie that was set on the main domain. That means 'test.abc.com' cannot access cookies on 'abc.com', the same goes for 'test2.abc.com'. (Note that you still see the cookie from main domain in the browser dev tool, however you won't get access to them). So if your backend is hosted on 'abc.xyz.com' (so the default domain of the cookies will be 'abc.xyz.com') and your client is hosted on another subdomain, like 'def.xyz.com', the cookies are set in response header but they aren't existed on client site and won't be included in the next request to the server. In this case, your cookie's `domain` attribute should be something like '.abc.com' 
 - `path`: server tells browser which path are allowed to access and send a cookie to server. A cookie with the path attribute as Path=/store would only be accessible on the path /store and its subpaths /store/cart, /store/gadgets
@@ -342,13 +349,34 @@ Attacker tricks user into submitting a malicious request, execute unwanted actio
 
 The request must originate from another website, which gives it the name "Cross-Site". This request also impersonates an authenticated user, which gives it the name "Request Forgery".
 
+There are 2 types of CSRF attack
+
+- Through GET request
+
 For example: Attacker send a picture with malicious website URL to user email. This website includes an unwanted request to user bank website, like send attacker money and it is run automatically when the user visit website. Luckily, the user has just logged into bank account which means the cookie is stored in browser. Then he is tricked to visit the malicious website and the unwanted request is made because the cookie is still available.
 
-How to prevent
+- Through POST request
 
+Attacker can disguise a form as a button, like this
+
+```html
+<form action="https://bank.com/transfer" method="POST">
+  <input type="hidden" name="acct" value="Attacker" />
+  <input type="hidden" name="amount" value="9999" />
+  <button>View my pictures</button>
+</form>
+```
+
+People who click this misrepresented form will send the POST request without them knowing.
+
+How to prevent: 
+
+- Create CSRF token and place them in the browser’s cookies. 
+  - Then insert CSRF token in the submit form as the hidden input. After, we compare the CSRF token in cookies and in the hidden input 
+  - Or attach the CSRF token in the request header when you submit
 - Using cookie with `SameSite` flag set to `Lax` or `Strict`
 
 ## Artifacts in devops
 
-Pipeline artifact: files that are produced by a step in the pipeline, which can be used as the input for next step)
-Build artifact: files that created by build process.
+- Pipeline artifact: files that are produced by a step in the pipeline, which can be used as the input for next step)
+- Build artifact: files that created by build process.

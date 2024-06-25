@@ -1615,15 +1615,17 @@ First, we need to understand the stages of how browser load a resource
 ## Critical Rending Path
 
 - <https://web.dev/learn/performance/understanding-the-critical-path>
+- <https://www.toptal.com/web/website-performance-critical-rendering-path>
 
-The critical rendering path refers to the steps involved until the web page starts rendering in the browser.
+The critical rendering path refers to the steps from when the browser sends the request until the web page starts rendering in the browser.
 
 The critical rendering path involves the following steps:
 
-- The DOM is created as the HTML is parsed. The HTML may request JavaScript, which may, in turn, alter the DOM. 
-- The HTML includes or makes requests for styles, which in turn builds the CSS object model (CSSOM). 
-- The browser engine combines the two to create the Render Tree. 
-- Layout (or reflow) determines the size and location of everything on the page. 
+- Once the browser gets the HTML, it starts parsing it. When it encounters a resource (CSS or JS), it tries to download it.
+  - If it's a stylesheet file, the browser will have to parse it completely before rendering the page (and that's why CSS is said to be render blocking). Then the CSS object model (CSSOM) is built.
+  - If it's a script (with no `async` and `defer`), the browser has to: stop parsing, download the script, and run it. Only after that can it continue parsing, because JavaScript programs can alter the contents of a web page (HTML, in particular). And that's why JS is called parser blocking.
+- Once all the parsing is done, the browser has the Document Object Model (DOM) and Cascading Style Sheets Object Model (CSSOM). It combines the two to create the Render Tree. 
+- Next, layout (or reflow) happens to calculate the size and position of every nodes on the page. 
 - Once the layout is determined, pixels are painted to the screen. (Repaint)
 
 This process's length depends on the the critical resoucres:
@@ -1632,11 +1634,12 @@ This process's length depends on the the critical resoucres:
 - Render-blocking CSS in the <head> element.
 - Render-blocking JavaScript in the <head> element.
 
-Optimizing the critical render path involves reducing the time to receive the HTML (represented by the Time to First Byte (TTFB) metric) as detailed in the previous module, and reducing the impact of render-blocking resources. Here are some tips:
+Optimizing the critical render path involves reducing the time to receive the HTML (represented by the Time to First Byte (TTFB) metric), and reducing the impact of render-blocking resources. Here are some tips:
 
-- Minimizing the number of critical resources by deferring their download ( defer attribute), marking them as async (async attribute), or eliminating them altogether.
-- Optimizing the number of requests as well as the file size of each request.
-- Optimizing the order in which critical resources are loaded by prioritizing the downloading critical assets, shorten the critical path length.
+- Minimize the number of critical resources by deferring their download (defer attribute), marking them as async (async attribute), or just remove them.
+- Optimize the file size of each request.
+- Caching the resources
+- Optimize the order in which critical resources are loaded by prioritizing the downloading critical assets, shorten the critical path length.
 
 ## `var` and `let`, `const`
 
@@ -1734,6 +1737,12 @@ Atomic design
 ```JS
 const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; // true if system is using dark theme
 ```
+
+## `color-scheme`
+
+<https://zellwk.com/blog/understanding-color-scheme/>
+
+`color-scheme` tells the browser to render **user-agent stylesheets** (the built-in stylesheets of each browser) according to the user’s preferred color scheme (which is set in their operating system).
 
 ## `.lock` file
 
