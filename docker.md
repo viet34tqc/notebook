@@ -213,9 +213,7 @@ Why:
 - Dockerfile: this is how to build my image
 - Docker-compose: this is how to run my image(s)
 
-By using Docker compose, we set up all the docker containers in only one `.yml` file (set up name, volumes...)
-
-An example of `docker-compose.yml`
+An example of `docker-compose.yml`. Here we are not using a Dockerfile, all the configuration are in the `docker-compose`
 
 ```bash
 # Declare container
@@ -248,6 +246,39 @@ volumes:
 
 ```
 
+And here is how we use `Dockerfile` in `docker-compose` (this way is preferred). When we run `docker compose up`, we are actually building the image using `Dockerfile` first. It's the same as running `docker build`. Then we run this image with other params like `ports`, `environment`, just like running `docker run`
+
+```bash
+services:
+  db:
+    image: postgres:13
+    restart: always
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: nest
+    volumes:
+      - postgres:/var/lib/postgresql/data
+  app:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3000
+    environment:
+      - DATABASE_URL=postgresql://postgres:123@host.docker.internal:5434/nest?schema=public
+      - JWT_SECRET=super-secret
+    volumes:
+      - ./src:/app/src
+volumes:
+  postgres:
+    name: nest-prisma-docker-db
+```
+
 After create docker-compose file, run this command: `docker compose up -d`
 
 **Wait for db run first**:
@@ -274,9 +305,68 @@ mysql:
       retries: 20
 ```
 
-## Doker ARG, ENV and .env
+## Docker ARG, ENV and .env
 
 [https://vsupalov.com/docker-arg-env-variable-guide/](https://vsupalov.com/docker-arg-env-variable-guide/)
+
+In Docker and Docker Compose, you have flexibility in how you manage environment variables, but it depends on your specific needs and the structure of your application.
+
+**Dockerfile**:
+
+- Purpose: The Dockerfile is primarily used to define how your Docker image is built. It's where you specify what gets installed, what files are copied into the image, and how the application is configured.
+- Environment Variables: You can set environment variables directly in the `Dockerfile` using the ENV instruction. These variables are used only when you build the image
+
+Example:
+
+```bash
+FROM node:14
+
+WORKDIR /app
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV PORT=3000
+
+# Copy package.json and install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose the port
+EXPOSE $PORT
+
+# Command to run the application
+CMD ["npm", "start"]
+```
+
+**`docker-compose.yml:`**
+
+- Purpose: Docker Compose is used to define and run multi-container Docker applications. It allows you to specify services, networks, volumes, and other configurations related to your application's runtime environment.
+- Environment Variables: You can set environment variables in the environment section of your docker-compose.yml file. These variables are used when you run the container (runtime)
+
+Example:
+
+```yaml
+Copy code
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      API_KEY: your_api_key
+```
+
+**Best Practices and Considerations**
+
+- `Dockerfile`: Use the `Dockerfile` to define environment variables that are fundamental to the image itself, such as default configurations or API keys that are required for the application to function.
+- `docker-compose.yml`: Use the environment section in `docker-compose.yml` to override or provide additional environment variables that are specific to the deployment environment or that may change between deployments (e.g., database credentials, runtime configurations).
+- Managing Secrets: Avoid hardcoding sensitive information like passwords or API keys directly in Dockerfiles or `docker-compose.yml` files. Instead, use environment variables or Docker secrets for sensitive data.
+- Flexibility: Docker Compose allows you to override environment variables defined in the Dockerfile, providing flexibility when deploying in different environments (development, staging, production).
 
 ## Optimize docker image size
 
