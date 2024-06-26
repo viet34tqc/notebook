@@ -146,7 +146,7 @@ COPY . .
 
 - `docker pull <docker_image>`: pull docker image từ docker hub.
 - `docker run <docker_image>`: tạo và start 1 container từ 1 docker image, nếu image này chưa có trên local thì nó sẽ được pull về từ docker hub.
-- `docker run <docker_image> -p<host_port>:<container_port>`: tạo container từ 1 docker image, bind container đó với port của host (máy của mình). Điều này cho phép 2 container có cùng port nhưng vẫn có thể cùng chạy với 2 host_port khác nhau <https://youtu.be/3c-iBn73dDE?t=3287>
+- `docker run -p <host_port>:<container_port> <docker_image>`: tạo container từ 1 docker image, bind container đó với port của host (máy của mình). Điều này cho phép 2 container có cùng port nhưng vẫn có thể cùng chạy với 2 host_port khác nhau <https://youtu.be/3c-iBn73dDE?t=328-p <host_port>:<container_port> 7>
 - `docker image ls`: liệt kê danh sách images
 - `docker build -t <docker_image_name>` .: build image từ Dockerfile. Dấu chấm ở cuối để nói với Docker là chạy Dockerfile ở thư mục hiện tại
 
