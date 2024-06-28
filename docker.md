@@ -45,12 +45,6 @@ Docker image sẽ được lấy lấy từ `docker registries`, e.g DockerHub. 
 
 Ngoài các image có sẵn, ta có thể tự tạo custom image bằng `Dockerfile`
 
-Commands:
-
-- `docker images`: liệt kê tất cả các images hiện có
-- `docker run {name}:{tag}`: run 1 image với tag của nó, nếu nó không tìm thấy trong máy local, docker sẽ tự động pull về từ DockerHub
-- `docker run -d -p {HOST_PORT}:{CONTAINER_PORT} {name}:{tag}`: run image, create new container và expose container port to host
-
 ## Dockerfile
 
 Chứa hướng dẫn để setup môi trường và build ra *Docker Image*
@@ -99,19 +93,88 @@ dist
 
 ### How to build and run a Dockerfile
 
-- First you need to build the image by running: `docker build -t ${docker_image_name} .`
+- First you need to build the image by running: `docker build -t ${docker_image_name} .` (`.` means the current directory). To find your images, run `docker images`
   - `-t` or `--tag`: setting name for the docker image. It could be `my_app:1.0` or smt else.
   - `.`: the current directory
-- Then run your image to build container: `docker run -p ${HOST_PORT}:${CONTAINER_PORT} ${CONTAINER_NAME}`: 
+- Then run your image to build container: `docker run -dp ${HOST_PORT}:${CONTAINER_PORT} ${CONTAINER_NAME}`: 
+  - `-d`: run in the background (optional)
   - `-p`:  means port mapping, port on host machine is map to port in the container. Then all the requests that are made to the host port can be redirected into the Docker container.
-  - `HOST` is the operating system in which the Docker client is running. `${HOST_PORT}` is the port that help us to connect to the `${CONTAINER_PORT}`. It's like when we access the `${HOST_PORT}`, it will be redirected to the `${CONTAINER_PORT}`
+  - `HOST` is the operating system in which the Docker client is running. `${HOST_PORT}` is the port that help us to connect to the `${CONTAINER_PORT}`. When we access the `${HOST_PORT}`, it will be redirected to the `${CONTAINER_PORT}`
   - `${CONTAINER_PORT}` is the port that the container exposes
-  - `-p`: maps the port in host to the port in container
   
 **Why Use Port Mapping?**
 
-- Access Services: If you run a web server inside a Docker container, you need to map the container's web server port to a port on the host to access it from your browser or network.
-- Port Conflicts: If the default port used by the service inside the container is already in use on the host, you can map it to a different port on the host.
+- To Access services: Containers are designed to be isolated from the host system. If you want to access a web server inside a Docker container from your browser, you need to map the container's web server port to a port on the host
+- Avoid port conflicts: If the default port used by the service inside the container is already in use on the host, you can map it to a different port on the host.
+
+### `ARG`, `ENV` in Dockerfile
+
+[https://vsupalov.com/docker-arg-env-variable-guide/](https://vsupalov.com/docker-arg-env-variable-guide/)
+
+- `ARG` 
+  - Defines build-time variables that you can pass to the Docker build process.
+  - is only available during the build of a Docker image
+- `ENV` 
+  - Sets environment variables that are available to the running container.
+  - is available during the build of a Docker image and also when we run the container. So its variable in build process and running container can be different.
+  
+**Why we use `ENV` in Dockerfile**
+
+By default, you don't need to declare `ENV` variables in Dockerfile cause it's only being used when running container. However, setting `ENV` in Dockerfile can have some benefits:
+
+- provide default values for `ENV` during build process, using both of `ARG` and `ENV`. By this way, you can ensure that an `ENV` value is not empty when no values are provided during runtime.
+
+```bash
+ARG name
+ENV env_name $name
+```
+
+- you want to do something in a shell script defined in Dockerfile, like all your command to run in Docker is actually or is started by a shell script.
+
+```bash
+# Dockerfile
+FROM alpine:latest
+
+ENV MY_VAR John
+
+COPY setup.sh .
+
+RUN chmod +x /setup.sh
+CMD ["/setup.sh"]
+
+# setup.sh
+#!/bin/sh
+echo "The value of MY_VAR is: $MY_VAR"
+```
+
+When build, it will print 'The value of MY_VAR is: John'
+
+Remember that this wont work if you are using multi-stage build, like this
+
+```bash
+FROM alpine:latest
+
+ENV MY_VAR John
+
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install nginx -y
+
+COPY setup.sh .
+
+RUN chmod +x /setup.sh
+CMD ["/setup.sh"]
+
+```
+
+### Passing value when build image
+
+`docker build --build-arg VERSION=2.0 -t myimage .`
+
+### Passing value when running container
+
+- Using `-e`: `docker run -e MY_VAR=my_value my_image`
+- Using `.env` file: `docker run --env-file env.list my_image`
 
 ### Dockerfile cache
 
@@ -304,21 +367,6 @@ mysql:
       timeout: 5s
       retries: 20
 ```
-
-## Docker `ARG`, `ENV` and .env
-
-[https://vsupalov.com/docker-arg-env-variable-guide/](https://vsupalov.com/docker-arg-env-variable-guide/)
-
-- `ARG` is only available during the build of a Docker image
-- `ENV` is available during the build of a Docker image and also when we run the container
-
-We can set dynamic `ENV` by using both of `ARG` and `ENV`
-
-```bash
-ARG name
-ENV env_name $name
-```
-When we want to set this argument, we'll pass it with the –build-arg flag: `docker build -t image_name --build-arg name=test .`
 
 ## Optimize docker image size
 
