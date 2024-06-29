@@ -977,6 +977,15 @@ async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 - Utilizes a shared dependency mechanism that allows different projects to use the same copy of a package. Packages are stored centrally in a single content-addressable store on your machine and are hard-linked from this storage => you only ever download a package ONCE and require less disk space
 - Installation times are expedited
 
+## `npm install` and `npm ci`
+
+- `npm install`
+  - When you run `npm install`, it compares the list of dependencies in `package.json` and `package-lock.json`. If they are not the same, `npm install` will update the `package-lock.json` to match the dependency specifications in `package.json`. Otherwise, it installs the dependencies as specified in `package-lock.json` 
+- `npm ci`
+  - Installs exact dependencies and versions listed in `package-lock.json`, without updating lock file. This means `npm ci` always installs a project with a clean slate
+  - It removes the `node_modules` folder before installing dependencies, ensuring a clean slate.
+  - It's faster, and often used in CI/CD environments to ensure consistent. The reason is when developer changes the `package.json` without running `npm install` and push it to repository. `package.json` is modified but not `package-lock.json`. When the CI/CD runs, the CI/CD server pulls the code and run `npm install` and updates lock file. Now the version of `package-lock.json` on git and on server is different. So, the next time CI/CD runs, it cannot pull the code anymore because there is conflict in `package-lock.json`. When we use `npm ci` for CI/CD pipeline, it install exactly what is listed in `package-lock.json`
+
 ## Semantic version (SemVer)
 
 Syntax: `MAJOR.MINOR.PATCH`

@@ -217,6 +217,13 @@ COPY . .
 - `docker-compose up`: chạy tất cả các container
 - `docker-compose up -d`: chạy ngầm tất cả các container (kể cả khi tắt terminal đi thì container không bị mất đi)
 
+**Clean Docker storage**
+
+- `docker system prune`.
+- `docker system prune -a`: cleaner
+
+We can replace `docker system` with `docker volume` or `docker container`, etc.
+
 Update code
 
 - Re-build lại docker image: phải xóa docker image cũ đi rồi build lại cái mới dùng lệnh `docker build -t` ở trên
