@@ -1,6 +1,7 @@
 # JWT
 
-<https://www.youtube.com/watch?v=67mezK3NzpU&t=2493s>
+- <https://duthanhduoc.com/blog/p3-giai-ngo-authentication-jwt>
+- <https://www.youtube.com/watch?v=67mezK3NzpU&t=2493s>
 
 JWT is used for authorization, a replacement for session-cookie model
 
@@ -12,7 +13,11 @@ JWT is used for authorization, a replacement for session-cookie model
 
 ## Downside of JWT
 
-- Token can be stolen
+- <https://redis.com/blog/json-web-tokens-jwt-are-dangerous-for-user-sessions>
+- <https://duthanhduoc.com/blog/p3-giai-ngo-authentication-jwt>
+
+- Token can be stolen => expiration time of access token should be short => use refresh token
+- Token might not be revoked, for example: when we want to log out an user because we cannot delete the token stored in user browser
 - Token might be stale, for example if the user role is updated, he can still use the old token to access to the page with the old role
 
 ## JWT components
@@ -23,7 +28,7 @@ JWT consists of three components:
 
 - `Header`: stores data of how to create a JWT. It's an object that has token type and the hashing algorithm type
 - `Payload`: stores data we want to send to the server. You might want to include as little detail as possible, your best bet is just provide `userID`. Firstly, the data might be stale. Secondly, it's more secure
-- `Signature`: calculated from `Header` and `Payload`
+- `Signature`: calculated from `Header` and `Payload` using HMACSHA256 algorithm by default
 
 Here is an psuedo code of `Signature` calculation
 
@@ -44,9 +49,28 @@ Besides `header` and `payload`, we also have a `secret` string which is provided
 
 JWT only encoded data, not encrypted data. So, the encoded data can be reversed. A 'man-in-the-middle' attack can extract the JWT and decode to get the user information. Please make sure that you are using HTTPS for sensitive data
 
-## How to use JWT token in FE request
+## Two types of JWT token in authentication
 
-Conventionally, you need to prefix the token with `Bearer ` and put in `Authorization` header. This is recommendation from JWT team <https://jwt.io/introduction/>
+- Access Token: An access token is a short-lived token created by the server, stored on the client, and attached to HTTP requests when the client sends a request to the server. It helps the server authenticate the client.
+- Refresh Token: A refresh token has a longer lifespan such as 1 week, 1 month, or 1 year..., is stored in the server's database and on the client, and is used to generate a new access token whenever the access token expires.
+
+A Refresh Token is a different token generated simultaneously with an Access Token. The Refresh Token has a longer validity period than the Access Token, 
+
+- The authentication flow with Access Token and Refresh Token will be updated as follows:
+- The client sends a request to the protected resource on the server. If the client is not authenticated, the server returns a 401 Authorization error. The client then sends their username and password to the server.
+- The server verifies the provided credentials against the user database. If the credentials match, the server generates two different JWTs: an Access Token and a Refresh Token, containing a payload such as user_id (or another identifier for the user). The Access Token has a short lifespan (around 5 minutes). The Refresh Token has a longer lifespan (about 1 year). The Refresh Token will be stored in the database, while the Access Token will not.
+- The server returns the Access Token and Refresh Token to the client.
+- The client stores the Access Token and Refresh Token in device memory (cookie, local storage, etc.).
+- For subsequent requests, the client includes the Access Token in the request header.
+- The server verifies the Access Token using a secret key to check if the Access Token is valid.
+- If valid, the server grants access to the requested resource.
+- When the Access Token expires, the client sends the Refresh Token to the server to obtain a new Access Token.
+- The server checks if the Refresh Token is valid and exists in the database. If valid, the server deletes the old Refresh Token and creates a new Refresh Token with the same expiration date as the old one (e.g., if the old one expires on 10/5/2023, the new one will also expire on 10/5/2023) and stores it in the database, and generates a new Access Token.
+- The server returns the new Access Token and new Refresh Token to the client.
+- The client stores the new Access Token and Refresh Token in device memory (cookie, local storage, etc.).
+- The client can make subsequent requests with the new Access Token (the refresh token process happens silently, so the client will not be logged out).
+- When the user wants to log out, they call the logout API, and the server will delete the Refresh Token from the database. Simultaneously, the client must delete the Access Token and Refresh Token from device memory.
+- If the Refresh Token expires (or is invalid), the server will deny the client's request, and the client will delete the Access Token and
 
 ## Working with `jsonwebtoken` package
 
@@ -76,10 +100,6 @@ jwt.verify(token, jwtSecret, (err, decoded) => {
     next();
 });
 ```
-
-## JWT downside
-
-<https://redis.com/blog/json-web-tokens-jwt-are-dangerous-for-user-sessions>
 
 ## Where to store JWT on client-side
 

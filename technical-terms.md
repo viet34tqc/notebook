@@ -190,14 +190,31 @@ the act of taking a website live on a server
 
 ## Site and origin
 
+<https://jub0bs.com/posts/2021-01-29-great-samesite-confusion/>
 <https://zellwk.com/blog/fetch-credentials/>
 
-- Site is defined with scheme and domain name. Different subdomains are also considered to be the same site.
 - Origin is defined with scheme (http or https), domain, and port. Changing any of these values is considered a change in origin.
+- The site of an origin simply corresponds to the registrable domain (if any) of the origin’s host. Different subdomains are also considered to be the same site.
+  - The site of `https://viet.github.io` is `viet.github.io`, because `github.io` is the host’s most specific public suffix 
+  - The site of `https://foo.example.org` and `https://bar.example.org` is `example.org`
+
+## Cookies
+
+- <https://duthanhduoc.com/blog/p2-giai-ngo-authentication-session>
+
+A cookie (also known as a web cookie or browser cookie) is a small piece of data a server sends to a user's web browser when you visit them. 
+
+When you access a website at https://abc.com, and the server returns cookies, your browser will store those cookies for the domain abc.com.
+
+When you send a request to https://abc.com (including entering the URL into the address bar or sending an API request), your browser will look for any cookies associated with https://abc.com and send them to the server at https://abc.com.
+
+However, if you access https://google.com, Google will not be able to read the cookies from https://abc.com because the browser does not send them.
+
+**Note**: By default, if you are on the page https://google.com and send a request to https://abc.com, the browser will automatically send the cookies from https://abc.com to the server at https://abc.com. This is a vulnerability that hackers can exploit for CSRF attacks. To learn more about these attack techniques and how to mitigate them, please read the sections below.
 
 ## Cookie attributes:
 
-<https://prateeksurana.me/blog/javascript-developer-guide-to-browser-cookies/>
+- <https://prateeksurana.me/blog/javascript-developer-guide-to-browser-cookies/>
 
 - `httpOnly`: prevent browser (client) from reading any cookies with the cookie API. Cookies are accessible only via server. This helps prevent XSS attacks
 - `SameSite`: (<https://andrewlock.net/understanding-samesite-cookies/>) Why we need this attribute: to prevent CSRF. When user send POST request from a malicious website to your original website for something evil, like transfer all your money, browsers automatically send the cookies for the application when the page does a full form post, and the banking app has no way of knowing that this is a malicious request. To access a website, you can type in the domain in URL bar or click on a link
@@ -367,8 +384,9 @@ People who click this misrepresented form will send the POST request without the
 
 How to prevent: 
 
-- Create CSRF token and place them in the browser’s cookies. 
-  - Then insert CSRF token in the submit form as the hidden input. After, we compare the CSRF token in cookies and in the hidden input 
+- Create CSRF token. 
+  - When user request for the first time, server send this CSRF token as a cookie to user.
+  - On the client, get CSRF from cookie and insert CSRF token in the submit form as the hidden input. When user send the next request, on server-side, we compare the CSRF token in cookies and in the submitted form.
   - Or attach the CSRF token in the request header when you submit
 - Using cookie with `SameSite` flag set to `Lax` or `Strict`
 
