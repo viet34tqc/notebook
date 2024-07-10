@@ -89,25 +89,22 @@ overrides: [
 
 ## Setup ESlint
 
-To install ESLint:
+**NOTE**: In the latest version of ESLint, `eslintrc.js` is deprecated. Instead, we will use `eslint.config.js` or `eslint.config.mjs`
 
-`yarn add -D eslint`
+There are two ways to setup ESLint:
 
-After installing the ESLint we can initialize the config file:
+- Using cli: `pnpm create @eslint/config@latest`
+- Manually:
 
-`npx eslint --init`
+### Version < 8.21.0
 
-Or just install these packages:
+Install these packages: `pnpm install -D eslint eslint-plugin-react @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-react-hooks`
 
-`yarn add -D eslint-plugin-react@latest @typescript-eslint/eslint-plugin@latest @typescript-eslint/parser@latest  eslint-plugin-react-hooks`
+Create a `eslintrc.js` or `eslintrc.mjs` file based on your project and paste this code
 
-**This is optional**
-`yarn add -D eslint-plugin-import eslint-import-resolver-typescript`
-
-Create a `.eslintrc` file and paste this code
-
-```json
-{
+```js
+const config = {
+  "root": true,
   "env": {
     "browser": true, // Enables browser global variables (like window, document, etc.)
     "es2021": true // Enables ES2021 globals and syntax.
@@ -116,14 +113,8 @@ Create a `.eslintrc` file and paste this code
     "eslint:recommended", // Uses the recommended rules from ESLint
     "plugin:react/recommended", // Uses the recommended rules for React.
     "plugin:@typescript-eslint/recommended", // Allow ESLint understand TS files. It contains a parser and a bunch of recommended rules for working with Typescript
-    "prettier" // Turns off all rules that are unnecessary or might conflict with Prettier, that could be formatting-related ESLint rules. 
+    "prettier" // Turns off all rules that are unnecessary or might conflict with Prettier, that could be formatting-related ESLint rules.
   ],
-  // Specified react version.
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  },
   "parser": "@typescript-eslint/parser", // This specifies the parser to use for linting TypeScript code. @typescript-eslint/parser parses TypeScript code so ESLint can understand it.
   "parserOptions": {
     "ecmaFeatures": {
@@ -139,11 +130,13 @@ Create a `.eslintrc` file and paste this code
   // This section specifies custom rules and their settings.
   "rules": {
     "react/react-in-jsx-scope": "off", // No longer need to import React from 'react'
-    "@typescript-eslint/no-unused-vars": ["warn"],
+    "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-explicit-any": "off", // Temporarily disabled variable that has any type
     "react-hooks/exhaustive-deps": "warn" // This rule is disabled by default
   }
 }
+
+export default config
 ```
 
 Touch `.eslintignore`
@@ -151,6 +144,39 @@ Touch `.eslintignore`
 ```json
 node_modules
 dist
+```
+
+### Version 8.23.0 and 9.x
+
+Install these packages: `pnpm install -D eslint eslint-plugin-react typescript-eslint eslint-plugin-react-hooks`
+
+Create a `eslint.config.mjs` or `eslint.config.js` file based on your project and paste this code
+
+```js
+import pluginJs from '@eslint/js'
+import pluginReactConfig from 'eslint-plugin-react/configs/recommended.js'
+import tseslint from 'typescript-eslint'
+
+export default [
+  { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
+  { languageOptions: { parserOptions: { ecmaFeatures: { jsx: true } } } },
+  pluginJs.configs.recommended,
+  ...tseslint.configs.recommended,
+  pluginReactConfig,
+  {
+    rules: {
+      'react/react-in-jsx-scope': 'off', // No longer need to import React from 'react'
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-explicit-any': 'off', // Temporarily disabled variable that has any type
+    },
+  },
+  {
+    ignores: [
+      'dist',
+      'node_module',
+    ],
+  },
+]
 ```
 
 ## Prettier
@@ -238,7 +264,7 @@ Allow us to do some tasks like testing, lint, format before commit
 
 - First, Install husky: `pnpm add --save-dev husky`
 - Run `pnpm exec husky init` or `npx husky init`. It creates a `pre-commit` file in `.husky/` folder 
-- Update `pre-commit` file with your scripts
+- Update `pre-commit` file with your scripts like: `pnpm lint-staged`
 
 **Project Not in Git Root Directory**
 
@@ -246,6 +272,7 @@ For example, you have a folder `backend` and `frontend` in the root folder and `
 
 In `package.json` in frontend: `"prepare": "cd .. && husky frontend/.husky"`
 In your hook script, change the directory back to the relevant subdirectory:
+
 ```
 # frontend/.husky/pre-commit
 cd frontend

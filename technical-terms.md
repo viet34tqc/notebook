@@ -19,11 +19,11 @@ In JavaScript, for example, you can serialize an object to a JSON string by call
 
 ## Escaping data
 
-Escaping output is the process of securing output data by stripping out unwanted data, like malformed HTML or script tags. This process helps secure your data prior to rendering it for the end user. If output data has HTML, it will convert to `&amp; or &lt;`
+Escaping output is the process of securing output data by converting unwanted character like '<', '>' to its escape sequence. This process helps secure your data prior to rendering it for the end user. If output data has HTML, it will convert to `&amp; or &lt;`
 
 ## Sanitizing data
 
-Sanitizing data is the process of securing/cleaning/filtering input data before saving it into database
+Sanitizing data is the process of stripping out unwanted character in input data before saving it into database. For example: `<script>content</script>` will be convert to 'content' only
 
 ## Babel
 
@@ -38,7 +38,12 @@ Enable writing codes with JS features that are not supported by most browser yet
 
 - <https://web.dev/howbrowserswork/>
 
-is the combination of The CSSOM and DOM tree created in the parsing HTML step. Render tree is then used to compute the layout of every single element, which is then painted to the screen. 
+is the combination of The CSSOM and DOM tree created in the parsing HTML step. Render tree is then used to compute the layout of every single element, which is then painted to the screen.
+
+## `params` and search params
+
+- params is a part of URL, often defined as the dynamic parameters, such as: `product/1`
+- `search params` or `URL parameters` or `query strings` provide additional data for the URL: `product?id=1&user=2`
 
 ## Repaint and reflow
 

@@ -1092,21 +1092,25 @@ console.log(Object.is(firstName, null)); // true
 console.log(Object.is(lastName, null)); // false
 ```
 
-## getter, setter trong javascript. Có ưu điểm gì so với hàm bình thường
+## Object `getter`, `setter` in JS
+
+JavaScript object getters and setters are used to control access to an object's private/internal properties.
+
+Setters can also be used to validate the values being assigned to a property, ensuring data integrity and consistency.
 
 ```javascript
 const config = {
-  languages: [],
+  _languages: [],
   get language() {
-    return this.languages
+    return this._languages
   },
   set language(lang) {
-    return this.languages.push(lang);
+    return this._languages.push(lang);
   },
 };
 
 // Set the languages
-config.language = 'VN';
+config._language = 'VN';
 // Get the languages
 console.log( config.language ) // ['VN']
 ```
@@ -1782,7 +1786,7 @@ When present in a project, `.lock` file is the source of information about the c
      sizes="(max-width: 400px) 100vw, (max-width: 700px) 50vw, (max-width: 900px) 33vw, 225px">
 ```
 
-First, we need to calculate the image size. For example, if the viewport < 400px, let's say 350px, the image size will be 100vw, which is 350px. Then, the browser will use this image <https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350>
+First, we need to calculate the image size from 'sizes' attribute. For example, if the viewport < 400px, let's say 350px, the image size will be 100vw, which is 350px. Then, the browser will use this image <https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350>
 
 If the viewport is 650px, the image size will be 325px. It tells browser to use the picture with minimum of 325px => the browser use <https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350>, which is the closest one
 
