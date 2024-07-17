@@ -109,11 +109,7 @@ Event loop executes tasks in `process.nextTick` queue first, and then executes p
 
 In Node.js, I/O often refers to reading/writing files or network operations. Network operations get external information into your application, or send data from your application out to something else
 
-## Non-blocking I/O
-
-<https://www.educative.io/answers/what-is-the-event-driven-non-blocking-i-o-model-in-node-js>
-
-Traditional I/O operations, such as reading from files or making network requests, are often blocked, which stops the program's execution until the operation is completed. In contrast, Node JS employs non-blocking I/O, where the execution of the program continues without waiting for the I/O operation to finish. When the operation is completed, a callback is triggered to handle the result.
+Instead of using V8 engine to handle I/O operation, NodeJs use `libuv` for asynchronous I/O
 
 ## Race condition
 
@@ -123,6 +119,16 @@ Two different requests 'raced' against each other and the result might come in a
 
 - Stateless means after the initial request is done, the server-client communication is lost. Server doesn't keep the client's state (like HTTP) => the next request won't have any information about the previous one (like data about the logged in user)
 - Stateful keeps the client's state (like Websockets)
+
+## Memory leak
+
+Memory leak occurs when a computer program allocate memory incorrectly, leading to memory that is no longer needed is not released back to the operating system. Here are some common causes of memory leaks:
+
+- Global Variables: Excessive use of global variables that remain in memory for the lifetime of the application.
+- Timers and Intervals: Timers and intervals that are not cleared properly.
+- Event Listeners: Event listeners that are not properly removed after use.
+- Unused Objects: Objects that are no longer needed but are still referenced somewhere in the program.
+- Closures: Variables captured by closures that are not released properly.
 
 ## Critical rendering path
 
@@ -226,8 +232,9 @@ However, if you access https://google.com, Google will not be able to read the c
   - `SameSite=Strict`: The cookie will be sent to the server when the current domain in the URL bar equals the cookie's domain (first-party) and the request originates from the same domain as well.
   - `SameSite=Lax` (default): same as 'strict', the current domain in URL bar equals the cookie's domain (first-party), but the link to the request can be from the other sites that point to domain, like you click on the domain on google search result or you submit data from a form embedded on another site to your website using the GET action.
   - `SameSite=None`: cookies are always sent, regardless of whether you're in a same-site or cross-site scenario. You can do POST, GET requests on another domain to your website and the cookies are sent along
-- `domain`: server tells browser which hosts are allowed to access a cookie server, default to the same host that set the cookie. However, any subdomains of that host won't have the cookie that was set on the main domain. That means 'test.abc.com' cannot access cookies on 'abc.com', the same goes for 'test2.abc.com'. (Note that you still see the cookie from main domain in the browser dev tool, however you won't get access to them). So if your backend is hosted on 'abc.xyz.com' (so the default domain of the cookies will be '123.abc.com') and your client is hosted on another subdomain, like 'def.abc.com', the cookies are set in response header but they aren't existed on client site and won't be included in the next request to the server. In this case, your cookie's `domain` attribute should be something like '.abc.com' 
+- `domain`: server tells browser which domains are allowed to access a cookie server, default to the exact domain that set the cookie. That means 'test.abc.com' cannot access cookies on 'abc.com', the same goes for 'test2.abc.com'. (Note that you still see the cookie from main domain in the browser dev tool, however you won't get access to them). So if your backend is hosted on 'abc.xyz.com' (so the default domain of the cookies will be '123.abc.com') and your client is hosted on another subdomain, like 'def.abc.com', the cookies are set in response header but they aren't existed on client site and won't be included in the next request to the server. In this case, your cookie's `domain` attribute should be something like 'abc.com' 
 - `path`: server tells browser which path are allowed to access and send a cookie to server. A cookie with the path attribute as Path=/store would only be accessible on the path /store and its subpaths /store/cart, /store/gadgets
+- `expire`: default to 0, that means the cookie is treated as session cookie by default. So as long as the user has opened a browser and stuff that, will this cookie live.
 - `secure`: A cookie with the Secure attribute is only sent to the server over the secure HTTPS protocol, so the domain of client must be HTTPS. This helps in preventing Man in the Middle attacks by making the cookie inaccessible over unsecured connections
 - Expires: default to `Session`. That means when you close the browser, those cookies will be removed (this is only true if your browser doesn't set On startup as 'Continue where you left off')
 
@@ -357,6 +364,7 @@ As you can see XSS exploit storage (session or local) and cookie that `httpOnly`
 How to prevent:
 
 - Using cookie with `httpOnly` flag set to true
+- USing CSP: `Content-Security-Policy: script-src 'self'`
 - Escape dynamic content from database so the malicious script will be escape when rendered on page.
 
 ### CSRF attack
@@ -394,6 +402,7 @@ How to prevent:
   - On the client, get CSRF from cookie and insert CSRF token in the submit form as the hidden input. When user send the next request, on server-side, we compare the CSRF token in cookies and in the submitted form.
   - Or attach the CSRF token in the request header when you submit
 - Using cookie with `SameSite` flag set to `Lax` or `Strict`
+- USing CSP: `<meta http-equiv="Content-Security-Policy" content="default-src 'self'">`
 
 ## Artifacts in devops
 

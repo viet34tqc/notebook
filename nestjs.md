@@ -132,7 +132,10 @@ getUsers(@Query('sortBy') sortBy: string) {}
 
 ## Export and import
 
-In order to use service in another module (not that service's module), you need to export it first in its module and import the module where you want to use, just like `import` and `export` js modules
+- `exports`: exports the current features (services,...) so that other modules can import to use 
+- `imports`: allows us to import other modules' features into our module
+
+You need to export the service in its module first, and then import that module wherever you want to use the service, similar to how you import and export JavaScript modules.
 
 ```ts
 // prisma.module.ts

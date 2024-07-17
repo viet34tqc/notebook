@@ -104,8 +104,11 @@ dist
   
 **Why Use Port Mapping?**
 
+By default, Docker uses bridge network, that means the port in container isn't exposed to the host and we cannot access the container using container's port via host's domain or ip (let's say the container's port is 80 and domain of host is localhost, we cannot connect to http://localhost:80) Of course, we can use `host` network to make the container port the same as host port, but using port mapping brings offers many benefits:
+
 - To Access services: Containers are designed to be isolated from the host system. If you want to access a web server inside a Docker container from your browser, you need to map the container's web server port to a port on the host
 - Avoid port conflicts: If the default port used by the service inside the container is already in use on the host, you can map it to a different port on the host.
+- Run multiple container that has the same container port: we might have 2 web services that runs on port 3000. To access them all, we need to map their port to 2 different host port
 
 ### `ARG`, `ENV` in Dockerfile
 
@@ -167,14 +170,42 @@ CMD ["/setup.sh"]
 
 ```
 
-### Passing value when build image
+### Passing args value when build image
 
 `docker build --build-arg VERSION=2.0 -t myimage .`
 
-### Passing value when running container
+### Passing environment variables'value when running container
 
 - Using `-e`: `docker run -e MY_VAR=my_value my_image`
 - Using `.env` file: `docker run --env-file env.list my_image`
+
+### Passing environment variables'value when running docker compose
+
+- Using `environment` attribute:
+
+You can define the value directly
+
+```bash
+services:
+  webapp:
+    environment:
+      POSTGRES_USER: postgres
+```
+
+Or you can use interpolation to dynamically passing variable when you run your container using docker compose. This value is from a '.env' file in the container directory or from your host machine that runs docker or when you run cli: `docker compose run -e POSTGRES_USER=abc webapp`
+
+```bash
+environment:
+  POSTGRES_USER: ${POSTGRES_USER}
+```
+
+- Using `env_file` attribute to set multiple variables
+
+```bash
+services:
+  webapp:
+    env_file: ".env"
+```
 
 ### Dockerfile cache
 
@@ -231,7 +262,9 @@ Update code
 
 ## Docker volume
 
-Why: If your container has the feature to store user data in database, this data will be gone when you start another container from the same image. To make it persist, we use docker volume to store our data because docker volume is separated from docker container. This docker volume is store on host file. If you are using Docker desktop, its location is `\\wsl$\docker-desktop-data\data\docker\volumes` (<https://stackoverflow.com/questions/43181654/locating-data-volumes-in-docker-desktop-windows>)
+To Synchronize files between host and docker container
+
+Why: If your container has the feature to store user data in database, this data will be gone when you start another container from the same image. To make it persist, we use docker volume to store our data because docker volume is separated from docker container. This docker volume is store on host machine. If you are using Docker desktop, its location is `\\wsl$\docker-desktop-data\data\docker\volumes` (<https://stackoverflow.com/questions/43181654/locating-data-volumes-in-docker-desktop-windows>)
 
 How:
 We create a volume, then mount that volume to the directory where we store db in container. When we run container, do something and update db, our volume will be synchronized. So, if we create another container using this volume, the db still remains and is ready to use.
