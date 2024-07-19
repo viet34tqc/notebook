@@ -181,6 +181,7 @@ CMD ["/setup.sh"]
 
 ### Passing environment variables'value when running docker compose
 
+- Define `ENV` in Dockerfile.
 - Using `environment` attribute:
 
 You can define the value directly

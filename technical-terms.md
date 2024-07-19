@@ -61,7 +61,7 @@ When we change a layout-related property (width, height, margin), we trigger the
 - Paint: Following layout recalculations, the browser renders the visual features of each element, like colors, borders, and shadows.
 - Composite: The browser then combines the painted layers to produce the final image displayed on the screen.
 
-Reflows can be heavy on the CPU as they involve complex algorithms for processing CSS rules and determining element alignment and constraints within the page’s layout.
+Reflows can be heavy on the CPU as they involve complex algorithms for processing CSS rules and determining element alignment and constraints within the page's layout.
 
 ## JS context
 
@@ -70,6 +70,33 @@ In technical terms, context refers to the object which a function belongs or is 
 ## Bundle
 
 Bundle is the process of combining multiple pieces of JS code into one large file
+
+## CORS
+
+<https://www.devsecurely.com/blog/2024/06/cors-the-ultimate-guide>
+
+When a website performs an AJAX request to another website (Cross Origin Request), the browser checks the CORS policy to see how to handle that AJAX request.
+
+The browser has to make 2 decisions:
+
+- Should the browser perform the HTTP request as defined by the Javascript code?
+  - For simple request like GET or POST with no custom HTTP header (X-RequestedBy, for example) and standard content-type, browser doesnt check CORS
+  - Other cases, browser makes a preflight request and it will then check the CORS policy before deciding to send the request:
+- If the browser performs the request, should it let the Javascript code access the response? It also check CORS policy from the response, and see if the AJAX request conforms to the CORS policy.
+
+Below are CORS policy and the best practice:
+
+- `Access-Control-Allow-Origin`: The value of this header must be the origin that is allowed to call the website. For example, suppose you have an API hosted under https://api.example.com, and a front part that calls that API, hosted under https://www.example.com. In this scenario, the header `Access-Control-Allow-Origin` should always have the value https://www.example.com.
+  - If multiple websites should be able to call your website, then you need to define a whitelist of allowed websites. For all requests, check if the request header Origin contains one of the whitelisted origins.
+    - If so, return the value of the request header Origin as the value of the response header `Access-Control-Allow-Origin`.
+    - If not, return a default value for the header `Access-Control-Allow-Origin`.
+  - If your website is not supposed to be called by other origins (for example, your whole website is hosted under https://www.example.com), then don't define this header.
+- `Access-Control-Allow-Credentials`: If your website uses cookies to authenticate users (for example session cookies), then set the value of this header to 'true'.
+  - If your website is not supposed to be called by other origins, then don't define this header.
+- `Access-Control-Allow-Headers`: If you require a custom HTTP header in your requests, then you should add it to this response header. If you require multiple HTTP headers, add them as a comma separated list.
+  - If your website is not supposed to be called by other origins, then don't define this header.
+- `Access-Control-Allow-Methods`: If your website treats PUT or DELETE HTTP methods, then you should add them to this header as a comma separated list.
+  - If your website is not supposed to be called by other origins, then don't define this header.
 
 ## Side effect
 
@@ -171,7 +198,7 @@ Are a way for an app to send real time data to another app, typically triggered 
 Compare with API: 
 
 - API is also a way for 2 applications to communicate with each other. However, API is request driven, that means 2 application communicate when client sends the request and server responses
-- Webhooks is event-driven, clients don't need to send the request to server, server will automatically send payload as a POST request to client’s webhook URL when specified event occurs
+- Webhooks is event-driven, clients don't need to send the request to server, server will automatically send payload as a POST request to client's webhook URL when specified event occurs
 
 ## Object reference (reference) in JS
 
@@ -205,8 +232,8 @@ the act of taking a website live on a server
 <https://zellwk.com/blog/fetch-credentials/>
 
 - Origin is defined with scheme (http or https), domain, and port. Changing any of these values is considered a change in origin.
-- The site of an origin simply corresponds to the registrable domain (if any) of the origin’s host. Different subdomains are also considered to be the same site.
-  - The site of `https://viet.github.io` is `viet.github.io`, because `github.io` is the host’s most specific public suffix 
+- The site of an origin simply corresponds to the registrable domain (if any) of the origin's host. Different subdomains are also considered to be the same site.
+  - The site of `https://viet.github.io` is `viet.github.io`, because `github.io` is the host's most specific public suffix 
   - The site of `https://foo.example.org` and `https://bar.example.org` is `example.org`
 
 ## Cookies
