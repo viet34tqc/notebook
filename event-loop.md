@@ -20,7 +20,7 @@ In order to prevent blocking behavior, the browser has many Web APIs that are as
 
 Javascript is single-threaded, it can only execute one statement at a time.
 
-- First, all the statements in the script are pushed into call stack. The call stack works as LIFO, that means that the last function that gets pushed into the stack is the first to be popped out when the function returns.
+- First, all the statements in the script are pushed into call stack. The call stack works as LIFO, that means that the last statement that gets pushed into the stack is the first to be popped out when the function returns. When a statement is pushed in call stack, it is run immediately. If it's a function, the function remains in the call stack until all the statements in its body are removed from call stack.
 - If call stack encounters asynchronous task like `setTimeout`:
  - add `setTimeout` to the stack
  - run `setTimeout`
@@ -28,8 +28,14 @@ Javascript is single-threaded, it can only execute one statement at a time.
  - the timer runs for a period of time that equals to the second arguments then the callback functions is passed to the **macrotask** queue. So the delay is not the time the callback is pushed into the callstack, it's the time it's pushed into task queue
  - remove `setTimeout`
 - If `fetch` exists, the operation of `fetch` is handled by Web API. It creates a promise object which by default is pending with `undefined` result. It also initiates a background network request that is handled by browser. When server returns some data, it passes that data to the callback in `then` and moves it to the **microtask** queue.
-- If `promise` exists, when `promise` resolves by running `resolve` or `reject`, the callback we pass to `then` or `catch` or `finally()` is pushed to **microtask** queue
-- If `await` exists, the function body execution followed by `await` is pushed to **microtask** queue, only if the function we are awaiting is resolved or rejected.
+- If `promise` exists
+  - The body of promise is run immediately, like we are calling a normal function 
+  - when `promise` resolves by running `resolve` or `reject`, the callback we pass to `then` or `catch` or `finally()` is pushed to **microtask** queue. If the promise is not resolved or rejected => the promise will be in pending status forever and callback of then will never be run.
+- If we execute `async` function, 
+  - it runs like normal function, that means its body are push into call stack
+  - If `await` exists inside `async`,
+    - run the promise that we are awaiting 
+    - the rest of function body is pushed to **microtask** queue, only if the function we are awaiting is resolved or rejected. In this example: `await asyncFunc(); console.log(2)`, `console.log(2)` is pushed to `microtask` queue
 
 ```ts
 const wait = () =>
@@ -47,7 +53,22 @@ console.log('last');
 
 ```
 
-- Remember that `async` function and the body of callback function of Promise behave the same as normal function when it comes to call stack execution. That means they run in the script orders
+```js
+async async1() {
+  console.log(1)
+}
+
+async1()
+
+console.log('start')
+
+new Promise((resolve, reject) => {
+  console.log(2)
+})
+
+// Print 1 -> 'start' -> 2
+```
+
 - Then `event loop` to do its only task: **connect the queues to the call stack**.
 - First it checks if the call stack is empty, then it adds the pending statement in the queues to call stack, starting from `mircotask` queue first. The statement in `mircotask` queue has higher priority than `macrotask` queue. If call stack and `microtask` queue is empty, then the tasks in macrotask queue are pushed into callstack
 
