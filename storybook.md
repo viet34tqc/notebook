@@ -1,6 +1,10 @@
 # Storybook
 
 - <https://formidable.com/blog/2023/unlocking-the-power-of-storybook/>
+
+Examples: 
+
+- <https://github.com/carbon-design-system/ibm-products>
 - <https://github.com/tnarla/nextjs-conf>
 
 Storybook is a tool for creating, testing and showcasing the UI of the component in isolation.
