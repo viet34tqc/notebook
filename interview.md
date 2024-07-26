@@ -1092,6 +1092,10 @@ console.log(Object.is(firstName, null)); // true
 console.log(Object.is(lastName, null)); // false
 ```
 
+## What is functional programming
+
+Divive problem into small function. Each function must be pure function.
+
 ## Object `getter`, `setter` in JS
 
 JavaScript object getters and setters are used to control access to an object's private/internal properties.
