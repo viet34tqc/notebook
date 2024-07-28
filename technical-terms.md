@@ -300,14 +300,23 @@ it's like webpack for CSS. There are variaty of postCSS plugins like minify, com
 
 ## Reverse proxy
 
-A reverse proxy is a server that accepts a request from the client, forwards the request to web servers, and returns the results to the client as if the proxy server had processed the request.
+<https://www.youtube.com/watch?v=F2FmTdLtb_4>
+
+A reverse proxy is a server that 
+
+- sits in front of server to hide the server's identity. Clients only interact with the reverse proxy and may not know about the real server
+- accepts a request from the client, forwards the request to web servers, and returns the results to the client as if the proxy server had processed the request.
 
 A reverse proxy is good for:
 
 - Protecting servers
 - Load balancing
-- Caching static contents
+- Caching static contents like CDNs
 - Encrypting and decrypting SSL communications
+
+## Foward proxy
+
+- Sits in front of client to hide the client identity (ip)
 
 ## Nameservers and DNS:
 
