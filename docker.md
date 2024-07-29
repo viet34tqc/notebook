@@ -208,11 +208,11 @@ services:
     env_file: ".env"
 ```
 
-### Dockerfile cache
+### Dockerfile layer caching
 
 Every command in Dockerfile is a layer
 
-When you run a build, the builder attempts to reuse layers from earlier builds. If a layer of an image is unchanged, then the builder picks it up from the build cache. If a layer has changed since the last build, that layer, and all layers that follow, must be rebuilt. 
+When build an image, the builder reruns all the layers and attempts to reuse layers from earlier builds. If a layer of an image is unchanged, then the builder picks it up from the build cache. If a layer has changed since the last build, that layer, and all layers that follow, must be rebuilt. 
 
 Therefore, we typically copy the package*.json file first and run the installation. Then we copy the remaining files from 'src' folder. By this way, we can utilize the cache mechanism because unlike 'src' folder, packages change less frequently and we can cached the process of installing them.
 

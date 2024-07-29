@@ -52,6 +52,7 @@ Tool check accessibility:
 
 - Read the requirement carefully. If not, ask the BA or PM or client for clarification
 - If the task is too big, break it into smaller chunks
+- Make a plan or steps for each task: with input X, which steps we need for output Y (<https://2coffee.dev/bai-viet/archimedes-cung-loi-suy-nghi-dau-vao-dau-ra-trong-lap-trinh>)
 - If the task requires a technology you've never done before, research or discuss with your team member to see if you can do it or you can meet the deadline
 - Write test case
 - Code
@@ -147,7 +148,6 @@ To copy an oject in JS, we have some types of copy
   console.log(obj);
   console.log(shallowClone);
   ```
-
 
 ## Why we shouldn't directly call React Components
 
