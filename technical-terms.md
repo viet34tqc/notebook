@@ -132,11 +132,41 @@ A `process.nextTick` callback is added to `process.nextTick` queue. A `Promise.t
 
 Event loop executes tasks in `process.nextTick` queue first, and then executes promises microtask queue, and then executes macrotask queue.
 
+## Process
+
+A process is an instance of a program that is currently being executed. Each process runs independently of others. Processes have several substantial resources:
+
+- Execution code;
+- Data Segment — contains global and static variables that needs to be accessible from any part of the program;
+- Heap — dynamic memory allocation;
+- Stack — local variables, function arguments and function calls;
+- Registers — small, fast storage locations directly within CPU used to hold data temporarily during execution of programs (like program pointer and stack pointer).
+
+## Thread
+
+A thread is a single unit of execution within a process. There might be multiple threads within the process performing different operations simultaneously. The process share execution code, data and heap with threads, but stack and registers are allocated separately for each thread.
+
+<img src="https://i.imgur.com/bY8N3td.png">
+
 ## I/O operation
 
-In Node.js, I/O often refers to reading/writing files or network operations. Network operations get external information into your application, or send data from your application out to something else
+<https://medium.com/@tkachenko.hello/node-js-is-not-single-threaded-1383594dbd17>
+
+In Node.js, I/O often refers to reading/writing data to the disk or doing network operations. Network operations get external information into your application, or send data from your application out to something else
 
 Instead of using V8 engine to handle I/O operation, NodeJs use `libuv` for asynchronous I/O
+
+This is what happens when we call an I/O operation:
+
+- The Node.js interpreter scans the code and puts every operation into the call stack;
+- Node.js sequentially executes operations in the call stack. However, for I/O operations, Node.js sends them to **Event Demultiplexer** (libuv) in a non-blocking way. This approach ensures that the I/O operation does not block the thread, allowing other operations to be executed concurrently.
+- The Event Demultiplexer identifies the source of the I/O operation and registers the operation in the **Tasks Queue**
+- The Thread Pool continuously monitors the Tasks Queue for new tasks
+- When a new task is placed in the Tasks Queue, the Thread Pool reacts by handling it with one of the pre-defined threads asynchronously. By default, there are 4 threads
+- When the I/O operation completes, Thread Pool signals and sends I/O result and associated I/O callback to the event queue
+- The Event Loop continuously checks the Event Queue and processes the event callback.
+
+<img src="https://i.imgur.com/jLEW6Df.png">
 
 ## Race condition
 
