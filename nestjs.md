@@ -12,9 +12,36 @@
 
 ## Concepts
 
-NestJS runs in `Module` structure. You will have many modules in the app, ex: user module, authentication module...
+### Module
 
-Each module has a seperate `Controller` to handle incoming request an return responses to the client. For each route, the Controller will invoke a `Service` method to perform the logic. A service is a `Provider`, which can be injectable. So, before invoking a method from `Service` class, we have to add the service to the `providers` array of that module. 
+NestJS runs in `Module` structure. You will have a root module and many other modules in the app, ex: user module, authentication module, etc. Root module imports other modules.
+
+### Controller
+
+Each module has a seperate `Controller` to handle incoming request an return responses to the client. Controllers are classes that are anotated with `Controller` decorator. 
+
+The methods in the Controller are used to handle incoming requests. Those methods are anotated HTTP method decorator like `Get()` or `Post()` decorator...
+
+```ts
+@Controller()
+
+class CatsController {
+  @Get()
+  getCats() {
+    retrun 'List of cats'
+  }
+}
+```
+
+### Provider
+
+Most of the code we will be using in NestJs is within providers. Provider is simply a class that can be injected in other classes as dependancy. They are anotated with `Injectable()` decorator
+
+### Services
+
+Normally, for each route, `Controller` will invoke a `Service` method to perform the logic. A `Service` is a `Provider`, which can be injectable. 
+
+In order to inject a service into a controller, we have to add that service to the `providers` array of the module. 
 
 ```ts
 // cats.module.ts
@@ -29,7 +56,7 @@ export class CatsController {
 }
 ```
 
-This is called Dependancy Injection. Without DI, in the Controller class, we have to intiate the Service class first => code is cumbersome
+The pattern that we using above with Service is called `Dependancy Injection`. Without DI, in the Controller class, we have to intiate the Service class first => code is cumbersome
 
 In NestJS, if we want to inject a service into another service, we need to use the decorator `@Injectable()` at the top of the service. All the injectable class must be added into `providers` array of that module. 
 
@@ -186,7 +213,7 @@ It's like interceptor and sits before route handler to determine if a request ca
 
 **Use cases**: Authorization, use to protect private route
 
-Here is the basic implementation of `guard`
+Here is the basic implementation of `guard`. Basically, when using guard, we can get access to ExecutionContext, that allows us to inspect some details about the request.
 
 ```ts
 // auth.guard.ts
@@ -195,10 +222,8 @@ export class AuthGuard implements CanActivate {
   // The returned value of this method indicates whether or not the request is allow to proceed
   canActivate(
     context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    // switchToHttp tells this guard we are using HTTP request. 
-    const request = context.switchToHttp().getRequest();
-    return false;
+  ): boolean | Promise<boolean> | Observable<boolean> { 
+    return true // Or false.
   }
 }
 

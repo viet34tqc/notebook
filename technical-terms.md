@@ -237,7 +237,13 @@ Compare with API:
 
 ## RESTful API:
 
-It is the api that helps client interact with server to exchange information via HTTP methods (GET, POST, PUT, DELETE)
+It is the api that conforms to the constraints of REST architecture. Basically it helps client interact with server to exchange information via HTTP methods (GET, POST, PUT, DELETE)
+
+REST is a set of architectural constraints. In order for an API to be considered RESTful, it has to conform to these criteria:
+
+- A client-server architecture made up of clients, servers, and resources, with requests managed through HTTP.
+- Stateless client-server communication, meaning no client information is stored between get requests and each request is separate and unconnected.
+- Data within a response to a request must be labeled as cacheable or non-cacheable.
 
 ## Hydration (Rehydration)
 
