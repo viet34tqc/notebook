@@ -11,6 +11,10 @@
 - It's easier to start with, you can see your result immediately on the browser
 - Every app needs UI, you can have an app without any backend at all, but you cannot have an app with only database.
 
+## What is clean architecture
+
+Clean architecture means we can divide the application into different layer and have seperation of concern between them
+
 ## What do you think about JS, compares to other language (cons and pros)
 
 Cons:

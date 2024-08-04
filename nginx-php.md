@@ -37,6 +37,7 @@ test nginx
 **NOTES: If you are using oracle, don't use ufw** <https://stackoverflow.com/questions/62326988/cant-access-oracle-cloud-always-free-compute-http-port>
 
 Use this instead
+
 ```bash
 sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
 sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 443 -j ACCEPT
@@ -44,6 +45,7 @@ sudo netfilter-persistent save
 ```
 
 If you are using something else, here is how to turn on uwf
+
 ```shell
 sudo ufw enable
 sudo ufw status
@@ -70,6 +72,14 @@ Upgrade to php 8: change the 7.4 to 8.0
 `sudo apt install mariadb-server -y`
 `sudo mysql_secure_installation`: create new password for root
 `sudo mariadb`
+
+### Create new user with all privileges
+
+```mssql
+create database DATABASE_NAME;
+grant all privileges on DATABASE_NAME.* TO 'USER_NAME'@'localhost' identified by 'PASSWORD';
+flush privileges;
+```
 
 ## Create sites-available and enable
 
@@ -103,3 +113,25 @@ Then you need to enable that site:
 `sudo ln -s /etc/nginx/sites-available/demo-node.vietnguyenwp.com /etc/nginx/sites-enabled/demo-node.vietnguyenwp.com`
 
 Then restart nginx: `sudo systemctl reload nginx`
+
+## SSL using Certbot
+
+<https://certbot.eff.org/instructions?ws=nginx&os=ubuntufocal>
+
+**MAKE SURE YOU HAVE POINT YOUR DOMAIN TO YOUR VPS**
+
+```bash
+sudo apt update
+sudo apt install snapd
+
+sudo apt-get remove certbot
+
+sudo snap install --classic certbot
+
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+
+sudo certbot --nginx
+
+# Test renew certificate
+sudo certbot renew --dry-run
+```

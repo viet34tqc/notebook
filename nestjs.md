@@ -110,6 +110,25 @@ export class CreateUserDTO {
 }
 ```
 
+Then, we apply the validation using `ValidationPipe` class
+
+```ts
+@UsePipes(new ValidationPipe())
+@Controller('polls')
+export class CatsController {}
+```
+
+Or we can apply validation for each route
+
+```ts
+@Post()
+async create(
+  @Body(new ValidationPipe()) createCatDto: CreateCatDto,
+) {
+  this.catsService.create(createCatDto);
+```
+
+
 We can also transform the data before sending request. We have two type of transform: auto transformation and explicit transformation
 
 Here is auto transformation. The payload will be transform automatically into the types that matches the DTO. For example, if the `age` in the payload is string, it will be converted into number, according to the `CreateUserDTO` above
@@ -350,3 +369,7 @@ handleMessage(@MessageBody() body: any) {
   });
 }
 ```
+
+### Adapter
+
+This is like the interceptor of the gateway and run before the gateway. We might want to handle authentication or get access to the `ConfigService` to access the environment variable
