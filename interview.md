@@ -512,6 +512,20 @@ Client components render both on client and server. Components would be run firs
 - It's faster: NextJS servers are usually deployed in the same Virtual Private Cloud (VPC) as the microservices they call. This means that the network latency between the NextJS server and the microservices is very low
 - API Keys are hidden
 
+## Return a promise inside `fetch` = `await`
+
+Return a promise here is equal to `await wait(1000)`
+```js
+wait(1000)
+  .then(() => {
+    console.log('2');
+    return wait(1000);
+  }).then(() => {
+    console.log('1');
+    return wait(1000);
+  })
+```
+
 ## Optimize React re-render
 
 <https://kentcdodds.com/blog/optimize-react-re-renders>

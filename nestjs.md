@@ -93,7 +93,11 @@ DTO - Data transfer object is basically a schema and defines how the data is sen
 createUser(@Body userData: CreateUserDto)
 ```
 
-## Validation and transform data
+## Pipes
+
+NestsJs use pipes for validation and transform data
+
+<img src="https://i.imgur.com/MTuZ1An.png">
 
 When the user send requests to `Controller`, you might want to validate or transform the data before it reachs the controller. This step is called `Pipe`. `Pipe` provides many methods via 2 packages: `class-validator` and `class-transformer`, which you need to install to use pipe in NestJS. 
 
@@ -127,7 +131,6 @@ async create(
 ) {
   this.catsService.create(createCatDto);
 ```
-
 
 We can also transform the data before sending request. We have two type of transform: auto transformation and explicit transformation
 
@@ -208,7 +211,11 @@ However, if you are finding that you are importing it in many places, you might 
 export class PrismaModule {}
 ```
 
-## Exception
+## Exception filter
+
+NestJs uses Exception filter to catch and process errors from routes and return it to client
+
+<img src="https://i.imgur.com/eG9eniZ.png">
 
 Built-in exception
 
