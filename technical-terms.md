@@ -342,6 +342,8 @@ Is the server that redirects client requests to other servers
 
 <https://www.youtube.com/watch?v=F2FmTdLtb_4>
 
+<img src="https://i.imgur.com/5CyJPOc.png">
+
 A reverse proxy is a server that 
 
 - sits in front of server to hide the server's identity. Clients only interact with the reverse proxy and may not know about the real server

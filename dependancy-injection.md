@@ -8,7 +8,7 @@ The high and low-level modules, should be written in a way so they both can be u
 
 ## Inversion of Control
 
-Inversion of Control (IoC) is a principle used to address the dependency inversion problem. It states that dependencies of a module should be provided by an external entity or framework. That way, the module itself only has to use the dependency, it never has to create the dependency or manage it in any way.
+Inversion of Control (IoC) is a principle used to address the dependency inversion problem. It states that dependencies of a module should be provided by an external entity or framework. That way, the module itself only has to import and use the dependency, it never has to create the dependency from scratch or manage it in any way.
 
 ## Dependancy injection
 
@@ -16,11 +16,54 @@ Inversion of Control (IoC) is a principle used to address the dependency inversi
 
 Dependancy injection is a common way to implement IoC. It remove hardcoded dependancy between module in an application. The aim of this technique is to make our code more flexible and scalable
 
-So what's hardcoded dependancy?
-Hardcode dependancy means class A is tightly coupled to class B, class B is called inside class A. There are some issue with this:
+So what's hardcoded dependancy? Hardcode dependancy means class A is tightly coupled to class B or method B, class B/method B is initiated and called inside a method of class A. There are some issue with this:
 
 - It's harder for testing: Let's say we want to test class A. And because class A is using class B, it's really hard to mock class B
 - It violate the Open-Closed principle: when we don't want to use class B, we need to change the code in class A. And this adjustment could be complicated if the class B implementation in class A is complicated as well. 
+
+Here is an example:
+
+```ts
+class Counter {
+  public state: number = 0;
+  
+  public increase(): void {
+    this.state += 1;
+    console.log(`State increased. Current state is ${this.state}.`);
+  }
+  
+  public decrease(): void {
+    this.state -= 1;
+    console.log(`State decreased. Current state is ${this.state}.`;
+  }
+}
+```
+
+Logging in the methods is coupled to `console.log`. In case we want to use another log method, we need to change in all methods and that's not ideal. Here is the code using DIP
+
+```ts
+interface Logger {
+  log(message: string): void;
+}
+
+class Counter {
+  constructor(private logger: Logger) {}
+  
+  public state: number = 0;
+  
+  public increase(): void {
+    this.state += 1;
+    this.logger.log(`State increased. Current state is ${this.state}.`);
+  }
+  
+  public decrease(): void {
+    this.state -= 1;
+    this.logger.log(`State increased. Current state is ${this.state}.`);
+  }
+}
+```
+
+
 
 Here are some examples of not using dependancy injection that make it harder to change the business in the future
 

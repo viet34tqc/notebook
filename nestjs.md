@@ -36,6 +36,9 @@ class CatsController {
 ### Provider
 
 Most of the code we will be using in NestJs is within providers. Provider is simply a class that can be injected in other classes as dependancy. They are anotated with `Injectable()` decorator
+`@Injectable()` can also be applied for normal class. By this way, you are telling Nest this is a class that can have dependencies that should be instantiated by Nest and its DI system
+
+In other words, **`@Injectable()` allows class to be injected in other class and also to inject other class into it**
 
 ### Services
 
@@ -263,16 +266,11 @@ getUser() {
 }
 ```
 
-There are 3 scopes where you can apply your guard: route handler, controller and global. Here is an example of global guard
+There are 3 scopes where you can apply your guard: route handler, controller and global. 
 
-```ts
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.useGlobalGuards(new AuthGuard())
-  await app.listen(3000);
-}
-bootstrap();
-```
+- Global guard: apply for the whole app. An example of global guard is package @nestjs/throttler, which limit the number of request in a period of time
+- Controller guard: apply for the controller class. We often use controller guard for JWT authentication. Only user with JWT token can access to controller's route
+- Route guard: apply for a specific route in controller. For example, only the user that create the entry can access to delete entry route.
 
 `Guard` often needs `strategy` to implement
 
@@ -349,14 +347,14 @@ Middleware -> Interceptors -> Route Handler -> Interceptors -> Exception Filter 
 
 ## Websockets
 
-First, we define a websocket gateway. Websocket is now listening for the clients to connnect.
+First, we define a websocket gateway.
 
 ```ts
 @WebSocketGateway()
 export class EventsGateway {}
 ```
 
-At this time, clients can connect to websocket. Now, clients might want to send messages via an event and server need to listen to that event. In this example, server are listening to an event named 'events'. `body` will be the message body that clients send to server
+At this time, the gateway is now listening and clients might want to send messages via an event and server need to listen to that event. In this example, server are listening to an event named 'events'. `body` will be the message body that clients send to server
 
 ```ts
 @WebSocketGateway()
@@ -379,4 +377,6 @@ handleMessage(@MessageBody() body: any) {
 
 ### Adapter
 
-This is like the interceptor of the gateway and run before the gateway. We might want to handle authentication or get access to the `ConfigService` to access the environment variable
+In a NestJS Gateway, an adapter serves as a bridge between the NestJS WebSocket gateway and the underlying WebSocket server implementation (like Socket.IO, WebSocket, etc.). It allows you to customize Websocket server implementation or switch between different WebSocket servers without changing your application logic.
+
+This is like the middleware and run before the gateway. We use adapters to handle authentication or get access to the `ConfigService` to get the environment variables
