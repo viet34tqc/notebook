@@ -6,8 +6,10 @@
 
 Nginx is a server that 
 
-- sits in front of server to hide the server's identity. Clients only interact with the reverse proxy and may not know about the real server
-- accepts a request from the client, forwards the request to web servers, and returns the results to the client as if the proxy server had processed the request.
+- serve content directly when there is a request
+- Behave as reverse proxy
+  - sits in front of server to hide the server's identity. Clients only interact with the reverse proxy and may not know about the real server
+  - accepts a request from the client, forwards the request to web servers, and returns the results to the client as if the proxy server had processed the request.
 
 Nginx is used for:
 
@@ -68,21 +70,57 @@ http {
 Inside `server` block, we can set a location block to define a route
 
 ```bash
-http {
-	// Setup nginx server
-	server {
-		listen 8080 // The server listens to port 8080
-		root path_to_your_directory // the path to the directory where we want to serve when we go to the port above
+location URI {}
+```
 
-		location /your-route {
-			root the_same_as_root_path // nginx automatically adds /your-route to the path here
+There are 3 ways to config URI
 
-			// If you use another file instead of index file, nginx will look for it here
-			// index.html here serves as the last fallback which is the index.html in the root folder.
-			// Otherwise, it returns 404
-			try_files another_path_of_your_file/not_index.html index.html =404;
-		}
-	}
+- Regex match
+
+```bash
+location ~ /count/[0-9] {
+	root path;
+}
+```
+
+`~` means that you will be using regex here
+
+- Prefix match: `location /test` will match /testing or /tested
+- Exact match : `location = /test`
+
+There are also 2 ways to response when user access the route
+
+- **Using `return`**
+
+```bash
+location /test {
+	# return HTTP_STATUS_CODE "response content"
+	return 200 "Response content";
+}
+
+location /not-found {
+	return 404 "Response not found";
+}
+```
+
+- Using `root`
+
+```bash
+location /test {
+	root /var/www/home;
+}
+```
+
+When user access '/test', we are telling nginx to find the `index.html` (default) in `/var/www/home + /test = /var/www/home/test` directory. In case, there is no `index.html` in the directory, we can use `try_files`
+
+```bash
+location /test {
+	root /var/www/home;
+
+	// If you use another file instead of index file, nginx will look for it here
+	// index.html here serves as the last fallback which is the index.html in the root folder.
+	// Otherwise, it returns 404
+	try_files /var/www/home/test.html index.html =404;
 }
 ```
 
@@ -101,3 +139,19 @@ http {
 	}
 }
 ```
+
+## Reverse proxy
+
+For simplicity, reverse proxy is the server that client will interact with, rather than the web server. All the requests and response are passed through proxy
+
+Here is the basic setup of a reverse proxy
+
+```bash
+location /test {
+  proxy_pass 'http://localhost:7777/';
+}
+```
+
+If we remove the slash in the end, nginx will redirect to `http://localhost:7777/test`
+
+

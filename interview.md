@@ -31,6 +31,18 @@ Pros:
 - JS is executed during runtime without a compiler, if your JS code has error => your app can be crashed.
 - Browser Support: The browser interprets JavaScript differently in different browsers. Thus, the code must be run on various platforms before publishing.
 
+## Good and bad refactoring
+
+<https://www.builder.io/blog/good-vs-bad-refactoring>
+
+- Changing the coding style, ie using a new library that makes the coding style harder to understand
+- Unnecessary abstractions: make the code more complex with a lot more abstractions
+- Not understanding the code and the business before refactoring that the apps can works wrongly, slower. For example: refactor an heavily-SEO app using SPA
+
+Good refactoring:
+
+<img src="https://i.imgur.com/GoHF5ov.png">
+
 ## Why you should put CSS in the `<head>` tag
 
 <https://web.dev/learn/performance/optimize-resource-loading>
@@ -49,6 +61,9 @@ Tool check accessibility:
 
 - https://webaim.org/resources/contrastchecker/
 - Chrome dev tool: check the contrast, also related to accessibility
+
+- Don't Use ARIA Labels for native HTML elements cause they already have accessibility built in, and adding unnecessary ARIA labels can break accessibility.
+- Do not change native semantics
 
 ## Quy chuẩn cho accessibility
 
@@ -1604,48 +1619,58 @@ console.log(info);
 - DOMContentLoaded: the time for loading HTML before starting to load the content. The event does not wait for images, subframes or even stylesheets to be completely loaded. The only target is for the Document to be loaded
 - Load: when all the resources are loaded ( resources are parsed and get acknowledged off before DOMContentLoaded)
 - Speed Index: shows how quickly the contents of a page are visibly populated.
-- Time to first byte (TTFB): the time it takes the browsers to start receiving the first byte of a request. How to improve: use cache, Use a server that is suited for your needs, Use a content delivery network, Reduce queries
+- Time to first byte (TTFB): the time it takes the browsers to start receiving the first byte of a request. How to improve: 
+  - Caching
+  - Avoids redirect
+  - Use CDN
+  - Reduce queries
 - First paint (FP): Time for the first pixel to render on the screen after user navigates to web page
-- First Contentful Paint(FCP): the moment when the first element from the DOM appears in the browser. Element here includes text, images, non-white canvas, or scalable vector graphics (SVG). How to improve: Eliminate render-blocking resources, Minify CSS, Remove unused CSS, Remove unused JavaScript
-- Largest Contentful Paint (LCP): the time when the largest content element (text or images, video) in the viewport becomes visible. It can be used to determine when the main content of the page has finished rendering on the screen.
+- First Contentful Paint(FCP): the moment when the first element from the DOM appears in the browser. Element here includes text, images, non-white canvas, or scalable vector graphics (SVG). How to improve: 
+  - Eliminate render-blocking resources
+  - Minify CSS and JS
+  - Remove unused CSS, unused JavaScript
+- Largest Contentful Paint (LCP): the time when the largest content element (text or images, video) in the viewport becomes visible. It can be used to determine when the main content of the page has finished rendering on the screen. How to improve:
+  - Implement effective image compression (consider using WebP or AVIF formats)
+  - Remove non-critical third-party scripts (like unused analytics or ad scripts)
+  - Upgrade server resources or implement a CDN
 - Time To (fully) Interactive (TTI): the amount of time it takes for the page to be fully interactive. Users might expect this is the same time as LCP, but this can be different. If TTI and LCP differ, users might assume the website is slow.
 - First Input Delay (FID): the time from when a user first interacts with a page to the time when the browser is actually able to respond to that interaction.
+  - Minimize JavaScript execution time (use async/defer attributes)
+  - Implement code splitting to reduce the initial bundle size
+  - Use a web worker for heavy computations
 - CLS (Cumulative Layout Shift) – it's a metric that measures the visual stability of a page layout. It's calculated as the sum of shifts that are visible during page loading. This includes unexpected shifts, i.e., those unrelated to user interaction.
+  - Set explicit width and height for media elements
+  - Avoid dynamically injecting content above existing elements
+  - Use CSS transform for animations instead of properties that trigger reflow
 - Total Blocking Time (TTB): total amount of time between First Contentful Paint (FCP) and Time to Interactive (TTI) where the main thread was blocked for long enough to prevent input responsiveness.
 
 ## Obtimize speed
 
+- <https://www.builder.io/m/explainers/seo-core-web-vitals>
 - <https://focusreactive.com/deep-dive-into-web-performance-mastering-lcp-optimization-for-seo-success/>
 - <https://towardsdev.com/website-performance-optimization-267b28b877df>
 
-First, we need to understand the stages of how browser load a resource
-
-- TTFB is the time to first byte. This is a measure of how quickly your server can send an HTML document to a user upon request,
-- Load delay is a measure of the time between the TTFB and the start of loading of the LCP element,
-- Load time the time it takes to load resource,
-- Render delay time is the time between states when the browser has everything to render your LCP, but has not yet rendered it.
-
-- TTFB: <https://searchfacts.com/reduce-ttfb/>
-  - Avoids redirect
-  - Optimimze server response time
-    - Fast web hosting
-    - Keep the server close to users using CDN
-    - Caching (the server wont need to build the page by fetching from database)
-  - Fast DNS provider: reduce the DNS lookup times
-  - CDN for static files (images, CSS, JS files)
-- Load delay: 
-  - Using resource hint (ex: `preload` for hero image,...)
 - Font: reduce webfont
 - Image: 
   - Compress and resize the images
   - Use responsive images using `srcset` and `sizes`
   - Use modern image format: webp, avif
   - lazy load for images below the fold
+- Code optimization:
+  - Minify and compress CSS/JS
+  - Implement tree shaking to eliminate dead code
+  - Use code splitting for large applications (e.g., React.lazy() and Suspense)
 - Caching:
   - Browser caching
-  - Page caching
-- Gzip compression: compresses Web pages, CSS, and JavaScript at the server level before sending them over to the browser. On the user side, a browser unzips the files and presents the contents.
-- Reduce redirect: because they can create additional HTTP request
+  - server-side caching (e.g., Redis or Memcached)
+- Server:
+  - Fast web hosting
+  - CDN for static files (images, CSS, JS files)
+  - Optimize database queries (use indexing, avoid N+1 queries)
+  - Gzip compression: compresses Web pages, CSS, and JavaScript at the server level before sending them over to the browser. On the user side, a browser unzips the files and presents the contents.
+- Critical rendering path optimization
+  - Defer non-critical JavaScript using async or defer attributes
+  - Preload key resources with `<link rel="preload">` (ex: `preload` for hero image,...)
 
 ## Critical Rending Path
 
