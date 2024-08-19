@@ -1,5 +1,7 @@
 # Dependancy injection
 
+<https://codedrivendevelopment.com/posts/dependency-injection-in-react>
+
 ## Dependency Inversion
 
 Dependency Inversion Principle (DIP) says that high-level modules should not import anything from low-level modules, both should depend on abstractions. What this means, is that any high level module, which naturally could be dependent on implementation details of modules it uses, shouldn't have that dependency.
@@ -14,7 +16,7 @@ Inversion of Control (IoC) is a principle used to address the dependency inversi
 
 <https://blog.codeminer42.com/di-with-some-context/>
 
-Dependancy injection is a common way to implement IoC. It remove hardcoded dependancy between module in an application. The aim of this technique is to make our code more flexible and scalable
+Dependancy injection is a common way to implement IoC. It allows you to inject variables, objects, or services into your code rather than hard-coding or instantiating them within your code directly, remove hardcoded dependancy between module in an application. The aim of this technique is to make our code more flexible and scalable
 
 So what's hardcoded dependancy? Hardcode dependancy means class A is tightly coupled to class B or method B, class B/method B is initiated and called inside a method of class A. There are some issue with this:
 
@@ -72,7 +74,24 @@ Here are some examples of not using dependancy injection that make it harder to 
 
 ## Dependancy injection in React
 
+In a React app, your components should generally just deal with the 'view' part - how it looks and setting up event handlers (onClick etc).
+
+Things with side effects (e.g. making API calls, or interacting with browser web APIs such as localStorage) or business logic generally shouldn't be part of your React components and should be abstracted away.
+
 Remember that the aim of using DI is to avoid tightly coupled between components and easier testing. So, what code smell when we want to use DI in our component:
 
-- There are hardcoded values, like an API call => using Props as dependancies to inject into the component. 
+- There are hardcoded values, like an API call => using Props as dependancies to inject into the component or use `React.context`
 - Import a lot of child components => using composition component with `children` prop 
+- `window.localStorage`, `window.sessionStorage` 
+- configuration or environment variables. You can use DI to inject in variables - not just services/functions
+- logging - useful to have a injected in logger which could send the data to your logging service
+
+## What are the benefits of using dependency injection?
+
+- Easier to maintain code and reusable code
+- Making testing easier: you can use tools such as Storybook to preview your individual components and easily inject in mock services/objects (potentially without doing real API calls for example).
+- Clear of separtion of concern
+
+## Difficulties with dependency injection
+
+- Complexity: If you use data fetching libraries (such as tanstack query, RTK Query etc) then injecting in your provided objects/services can be quite complex.
