@@ -91,9 +91,11 @@ export default defineConfig({
     react(),
     federation({
       name: 'root-app',
-      filename: 'root-app-entry.js',
+      filename: 'root-app-entry.js', // This file will be created on build
+      // These are the packages that will be used in all the modules
+      // We share them so we won't load them multiple times
       shared: ['react', 'react-dom', 'react-router-dom', 'zustand'],
-      // Use product from product module
+      // remotes are the remotes modules that host app needs to import
       remotes: {
         // 'product-app' is the name of product module defined in the federation config of product app
         'product-app': 'http://localhost:3001/dist/assets/product-app-entry.js',
