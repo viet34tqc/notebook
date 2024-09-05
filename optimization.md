@@ -20,6 +20,7 @@ The first thing comes to mind when optimize FE is reduce render-blocking resours
 
 ## Font
 
+- <https://www.debugbear.com/blog/website-font-performance> **MUST READ**
 - <https://wp-rocket.me/blog/font-preloading-best-practices>
 - <https://pagespeedchecklist.com/asynchronous-google-fonts>
 - <https://joyofcode.xyz/using-fonts-on-the-web>
@@ -33,20 +34,20 @@ Why:
 
 By default, browser will delay font requests until after the render tree has already been constructed. When the browser is ready to display text on screen, it starts download the font and the displaying text is delay. That leads to FOIT, or Flash of Invisible Text and FOUT, or Flash of Unstyled Text.
 
-In summary, without font preloading, you might run into a situation where a browser is ready to load your site’s text, but it can’t because the font isn’t available yet. That is, it needs to download the font before it can paint the text.
+In summary, without font preloading, you might run into a situation where a browser is ready to load your site's text, but it can't because the font isn't available yet. That is, it needs to download the font before it can paint the text.
 
 ```html
 <!-- Preconnect font files -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Preload Google font CSS file -->
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" >
-<!-- Initiate a low-priority, asynchronous fetch that gets applied to the page only after it’s arrived -->
+<!-- Initiate a low-priority, asynchronous fetch that gets applied to the page only after it's arrived -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 ```
 
 - Self-host font
-
-<https://www.youtube.com/watch?v=zK-yy6C2Nck>
+  - <https://gwfh.mranftl.com/fonts>
+  - <https://www.youtube.com/watch?v=zK-yy6C2Nck>
 
 Download google font => Upload to font squirell for optimization => Using variable font: <https://www.youtube.com/watch?v=0fVymQ7SZw0>, <https://www.browserstack.com/guide/variable-fonts-vs-static-fonts>
 

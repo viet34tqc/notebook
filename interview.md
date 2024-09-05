@@ -1609,17 +1609,18 @@ console.log(info);
 
 ## Core Web Vital
 
-<https://prateeksurana.me/blog/future-of-rendering-in-react/>
-<https://i.imgur.com/jqIBleM.png>
-<https://i.imgur.com/DCsCct2.png>
-<https://www.youtube.com/watch?v=ZKH3DLT4BKw&ab_channel=AddyOsmani>
-<https://indepth.dev/posts/1498/101-javascript-critical-rendering-path>
-<https://web.dev/learn-web-vitals/>
+- <https://www.debugbear.com/docs/metrics/core-web-vitals> **MUST READ**
+- <https://prateeksurana.me/blog/future-of-rendering-in-react/>
+- <https://i.imgur.com/jqIBleM.png>
+- <https://i.imgur.com/DCsCct2.png>
+- <https://www.youtube.com/watch?v=ZKH3DLT4BKw&ab_channel=AddyOsmani>
+- <https://indepth.dev/posts/1498/101-javascript-critical-rendering-path>
+- <https://web.dev/learn-web-vitals/>
 
 - DOMContentLoaded: the time for loading HTML before starting to load the content. The event does not wait for images, subframes or even stylesheets to be completely loaded. The only target is for the Document to be loaded
 - Load: when all the resources are loaded ( resources are parsed and get acknowledged off before DOMContentLoaded)
 - Speed Index: shows how quickly the contents of a page are visibly populated.
-- Time to first byte (TTFB): the time it takes the browsers to start receiving the first byte of a request. How to improve: 
+- Time to first byte (TTFB): the time it takes the browsers to start receiving the first byte of a request. It includes four components:DNS lookup, TCP connection, SSL connection, HTTP request time. How to improve: 
   - Caching
   - Avoids redirect
   - Use CDN

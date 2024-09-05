@@ -216,6 +216,20 @@ Importantly, for the initial render, the browser will not typically wait for:
 - Non-render-blocking JavaScript outside of the `<head>` element (for example, `<script>` elements placed at the end of the HTML).
 - Non-render-blocking CSS outside of the `<head>` element, or CSS with a media attribute value that does not apply to the current viewport.
 
+## Concurrent and parallel
+
+- <https://www.leohuynh.dev/blog/does-promise-all-run-in-parallel-or-sequential/>
+- <https://stackoverflow.com/a/59586421>
+
+Concurrent programming is about dealing with a lot of things at once, while parallel programming is about doing a lot of things at once. For example:
+
+- Concurrency: 2 lines of customers ordering food from a single cashier (lines take turns ordering).
+- Parallelism: 2 lines of customers ordering food at the same time from 2 cashiers.
+
+Let's take `Promise.all()` as example. It stacks the promises function in the appropriate queue and running them concurrently. All promises execute almost at the same time, but not in parallel. `Promise.all` waits for each result, then resolving with all the promises results.
+
+In conclusion, in concurrent execution, promises run one after another but don't have to wait for previous ones to end. They are independent and make progress at the same time. In contrast, parallel execution runs promises at the exact same time in separate processes. This allows them to progress completely separately at their own speed.
+
 ## Prefetch and preload
 
 - Prefetch tells browser that you are gonna need this resource in the future, and browser will load it when it's idle. Usecase: apply when user hovers on a link, it's a very high chance that he will click it so you prefetch this link in advance (like NextJS 13)
