@@ -4,7 +4,20 @@
 - <https://reacthandbook.dev/react-performance-optimization>
 - <https://hackernoon.com/front-end-optimization-my-journey-to-accelerate-load-times-in-heavy-front-end>
 
+Optimize React app is all about optimizing bundle size and reducing unnecessary re-renders
+
+## Packages
+
+In an react app, we often use many packages that could lead to heavy bundle size. So we should use them carefully by:
+
+- Reduce unnecessary packages from bundle
+- Use tree shaking packages
+- Dynamic import the scripts which are not necessary at first load, eg: scripts only needed when we make an interaction => increase TTI
+- Use tailwind over CSS-in-JS 
+
 ## State
+
+We need to use state carefully because state change makes component re-render
 
 - Keep state as local as possible. Start by declaring state in the component that uses it. Lift as needed.
 - Store data that doesn't need to render in refs
@@ -12,7 +25,7 @@
 
 ## Context
 
-- Place context providers as low as possible
+- Place context providers as low as possible. Only wrap the components that need the context to avoid unnecessary renders.
 - Separate contexts based on types of state
 
 ## Using composition
@@ -22,13 +35,6 @@ Pass children down (do this before you memo). Why does this work? Because compon
 ## Web workers
 
 <https://tropicolx.hashnode.dev/optimizing-performance-in-react-applications?ref=dailydev#heading-web-workers>
-
-## Bundle
-
-- Reduce unnecessary packages from bundle
-- Dynamic import the scripts which are not necessary at first load, eg: scripts only needed when we make an interaction => increase TTI
-
-## Use tailwind over CSS-in-JS
 
 ## Memoization
 

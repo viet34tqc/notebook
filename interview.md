@@ -43,6 +43,34 @@ Good refactoring:
 
 <img src="https://i.imgur.com/GoHF5ov.png">
 
+## You have a slow website. Which steps will you take to identify the problem
+
+- Run Basic Speed Tests: Use tools like Google PageSpeed Insights, GTmetrix, or WebPageTest to get an overview of your website’s performance.
+- Analyze network performance: 
+  - Use Browser Developer Tools: Inspect network requests in Chrome DevTools to see if there are any slow-loading resources, large files, or numerous HTTP requests.
+  - Check for Redirects: Ensure that there aren’t unnecessary redirects adding to the load time.
+- Evaluate Frontend Performance
+  - Open the console tab to see if there is any errors
+  - Optimze assets (html, fonts, images), resize and reduce js and css files
+  - Check if there is any unnecessary package in the bundler 
+  - Leverage browser caching
+- Evaluate Backend Performance
+  - Database Optimization
+  - Evaluate Server Configuration
+  
+## Code review
+
+- Understand the Context
+  - Read the Description: Make sure you understand the purpose of the changes.
+  - Understand the Requirements: Know what the code is supposed to achieve.
+- Review the Code for Functionality. Verify that the code does what it's supposed to do and doesn't break any existing functionality.
+- Check for Code Quality
+  - Check if the code is not so hard to understand
+  - Make sure the code follow the coding convention of the project
+  - Check for Code Duplication
+- If there are any issues that need to discuss, discuss it with the one who make the MR or bring it up to the team
+- In case the code still has minor issues but the ticket is urgent, we should merge it first then create a TODO list or technical debt to address it later  
+
 ## Why you should put CSS in the `<head>` tag
 
 <https://web.dev/learn/performance/optimize-resource-loading>
