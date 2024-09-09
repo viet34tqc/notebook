@@ -278,13 +278,20 @@ the act of taking a website live on a server
 
 ## Site and origin
 
-<https://jub0bs.com/posts/2021-01-29-great-samesite-confusion/>
-<https://zellwk.com/blog/fetch-credentials/>
+- <https://portswigger.net/web-security/csrf/bypassing-samesite-restrictions>
+- <https://jub0bs.com/posts/2021-01-29-great-samesite-confusion/>
+- <https://zellwk.com/blog/fetch-credentials/>
 
-- Origin is defined with scheme (http or https), domain, and port. Changing any of these values is considered a change in origin.
-- The site of an origin simply corresponds to the registrable domain (if any) of the origin's host. Different subdomains are also considered to be the same site.
+- Origin is defined with scheme (http or https), domain, and port. Changing any of these values is considered a change in origin. Two URLs are considered to have the same origin if they share the exact same scheme, domain name, and port. Although note that the port is often inferred from the scheme.
+- A site is defined as the top-level domain (TLD), usually something like .com or .net, plus one additional level of the domain name. Different subdomains are also considered to be the same site.
   - The site of `https://viet.github.io` is `viet.github.io`, because `github.io` is the host's most specific public suffix 
   - The site of `https://foo.example.org` and `https://bar.example.org` is `example.org`
+  
+When determining whether a request is same-site or not, the URL scheme is also taken into consideration. This means that a link from http://app.example.com to https://app.example.com is treated as cross-site by most browsers.
+  
+<img src="https://i.imgur.com/zOZNQ7h.png">
+
+So, the term "site" is much less specific as it only accounts for the scheme and last part of the domain name, while origin includes the scheme, the whole domain and the port. Crucially, this means that a cross-origin request can still be same-site, but not the other way around.
 
 ## Cookies
 
@@ -298,16 +305,18 @@ When you send a request to https://abc.com (including entering the URL into the 
 
 However, if you access https://google.com, Google will not be able to read the cookies from https://abc.com because the browser does not send them.
 
-**Note**: By default, if you are on the page https://google.com and send a request to https://abc.com, the browser will automatically send the cookies from https://abc.com to the server at https://abc.com. This is a vulnerability that hackers can exploit for CSRF attacks. To learn more about these attack techniques and how to mitigate them, please read the sections below.
+**Note**: By default, if you are on the page https://google.com and send a request to https://abc.com, the browser will automatically send the cookies from https://abc.com to the server at https://abc.com. This is a vulnerability that hackers can exploit for CSRF attacks.
 
 ## Cookie attributes:
 
 - <https://prateeksurana.me/blog/javascript-developer-guide-to-browser-cookies/>
 
 - `httpOnly`: prevent browser (client) from reading any cookies with the cookie API. Cookies are accessible only via server. This helps prevent XSS attacks
-- `SameSite`: (<https://andrewlock.net/understanding-samesite-cookies/>) Why we need this attribute: to prevent CSRF. When user send POST request from a malicious website to your original website for something evil, like transfer all your money, browsers automatically send the cookies for the application when the page does a full form post, and the banking app has no way of knowing that this is a malicious request. To access a website, you can type in the domain in URL bar or click on a link
-  - `SameSite=Strict`: The cookie will be sent to the server when the current domain in the URL bar equals the cookie's domain (first-party) and the request originates from the same domain as well.
-  - `SameSite=Lax` (default): same as 'strict', the current domain in URL bar equals the cookie's domain (first-party), but the link to the request can be from the other sites that point to domain, like you click on the domain on google search result or you submit data from a form embedded on another site to your website using the GET action.
+- `SameSite`: (<https://andrewlock.net/understanding-samesite-cookies/>) Why we need this attribute: to prevent CSRF. By default, browsers sent cookies in every request to the domain that issued them, even if the request is cross-site which means it was triggered by an unrelated third-party website
+  - `SameSite=Strict`: cross-site request is not allowed, the request must be originates from the destination domain.
+  - `SameSite=Lax` (default): cross-site request is allowed, but only if both of the following conditions are met:
+    -  The request resulted from a top-level navigation which changes the URL in your address bar., such as you click on the domain on google search result. Resources that are loaded by iframe, img tags, and script tags do not change the URL in the address bar so none of them cause TOP LEVEL navigation.
+    -  The request uses `GET` method
   - `SameSite=None`: cookies are always sent, regardless of whether you're in a same-site or cross-site scenario. You can do POST, GET requests on another domain to your website and the cookies are sent along
 - `domain`: server tells browser which domains are allowed to access a cookie server, default to the exact domain that set the cookie. That means 'test.abc.com' cannot access cookies on 'abc.com', the same goes for 'test2.abc.com'. (Note that you still see the cookie from main domain in the browser dev tool, however you won't get access to them). So if your backend is hosted on 'abc.xyz.com' (so the default domain of the cookies will be '123.abc.com') and your client is hosted on another subdomain, like 'def.abc.com', the cookies are set in response header but they aren't existed on client site and won't be included in the next request to the server. In this case, your cookie's `domain` attribute should be something like 'abc.com' 
 - `path`: server tells browser which path are allowed to access and send a cookie to server. A cookie with the path attribute as Path=/store would only be accessible on the path /store and its subpaths /store/cart, /store/gadgets
