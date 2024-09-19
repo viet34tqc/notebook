@@ -1,6 +1,7 @@
 # React Typescript
 
-<https://www.freecodecamp.org/news/typescript-for-react-developers/>
+- <https://www.freecodecamp.org/news/typescript-for-react-developers/>
+- <https://weser.io/blog/clean-react-with-typescript>
 
 ## Special type
 
