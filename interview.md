@@ -123,8 +123,14 @@ Tool check accessibility:
 
 <https://www.youtube.com/watch?v=za2FZ8QCE18&ab_channel=FrontStart>
 
-React uses Virtual DOM because of perfomance
-The Virtual DOM in React is in fact a tree of React Elements, or objects, which is the results of calling `React.createElement`. React identifies the exact modified elements by comparing the current Virtual DOM snapshot with the previous one, so it updates only the necessary objects rather than creating a new DOM every time.
+The Virtual DOM in React is a lightweight copy of the actual DOM kept in memory. In fact, it's a tree of React Elements, or objects, which is the results of calling `React.createElement`. 
+
+React uses Virtual DOM to enable the declarative styling of React. We tells React what UI we want through state, without having to directly manipulate the DOM. When there is change, React identifies the exact modified elements by comparing the current Virtual DOM snapshot with the previous one, so it updates only the necessary objects rather than creating a new DOM every time.
+
+Using Virtual DOM, we can avoid two problems if we use the real DOM directly:
+
+- When the DOM Tree structure becomes larger, it becomes difficult to manage. For example, there is now a large form component, and when changing a value, it may be necessary to traverse all the form component nodes and operate the DOM to change the value, which can easily result in unnoticed bugs during this process.
+- Low efficiency. Although DOM operations may be fast, during rendering and reflow stages, frequent direct DOM operations are often the main cause of frame stuttering, so the more you directly manipulate the DOM, the more likely you are to hit performance bottlenecks.
 
 ## Redux and React Context
 
@@ -544,6 +550,10 @@ const arr = new Set([1,2,3])
 arr.has(1) // return true
 ```
 
+## Why the result of setState is not sync
+
+Because React use batch updating. That means React groups all the setStates, put them into queues, execute them together within only one re-render. If setState is sync, we cannot batch them in only one re-render
+
 ## Do client component render only on client
 
 <https://www.pronextjs.dev/do-client-components-render-during-ssr>
@@ -709,6 +719,14 @@ Cho phép render 1 component vào 1 DOM node nằm ngoài root.
 Why: để tạo ra các component mà không bị ảnh hưởng bởi style của component cha vì component cha có thể bị overflow hidden
 Trong 1 App react thông thường, toàn bộ UI (components) sẽ được render trong 1 the div với id là root `<div id="root"><div>`
 Giả sử ta muốn tạo 1 cái modal và thẻ div bọc lấy modal này nằm ngoài root. Và vì thẻ div này nằm ngoài root, ta không thể tạo component và render bình thường được mà phải dùng React Portal.
+
+## Why you shouldn't put refs in a dependency array
+
+<https://www.epicreact.dev/why-you-shouldnt-put-refs-in-a-dependency-array>
+
+The purpose of a dependency array is to trigger the `useEffect` callback when there are changes in the values provided each time the component renders. However, React can't know that the value has changed if that change doesn't trigger a render. `ref` value doesn't trigger re-render, so it doesn't trigger the `useEffect` callback as well
+
+Here is the rule for `useEffect` dependency array: Anything you use in your effect callback that won't trigger a re-render when updated should not go into the dependency array.
 
 ## JavaScript Promises: then(f,f) vs then(f).catch(f)
 

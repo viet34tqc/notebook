@@ -91,25 +91,6 @@ dist
 *.md
 ```
 
-### How to build and run a Dockerfile
-
-- First you need to build the image by running: `docker build -t ${docker_image_name} .` (`.` means the current directory). To find your images, run `docker images`
-  - `-t` or `--tag`: setting name for the docker image. It could be `my_app:1.0` or smt else.
-  - `.`: the current directory
-- Then run your image to build container: `docker run -dp ${HOST_PORT}:${CONTAINER_PORT} ${CONTAINER_NAME}`: 
-  - `-d`: run in the background (optional)
-  - `-p`:  means port mapping, port on host machine is map to port in the container. Then all the requests that are made to the host port can be redirected into the Docker container.
-  - `HOST` is the operating system in which the Docker client is running. `${HOST_PORT}` is the port that help us to connect to the `${CONTAINER_PORT}`. When we access the `${HOST_PORT}`, it will be redirected to the `${CONTAINER_PORT}`
-  - `${CONTAINER_PORT}` is the port that the container exposes
-  
-**Why Use Port Mapping?**
-
-By default, Docker uses bridge network, that means the port in container isn't exposed to the host and we cannot access the container using container's port via host's domain or ip (let's say the container's port is 80 and domain of host is localhost, we cannot connect to http://localhost:80) Of course, we can use `host` network to make the container port the same as host port, but using port mapping brings offers many benefits:
-
-- To Access services: Containers are designed to be isolated from the host system. If you want to access a web server inside a Docker container from your browser, you need to map the container's web server port to a port on the host
-- Avoid port conflicts: If the default port used by the service inside the container is already in use on the host, you can map it to a different port on the host.
-- Run multiple container that has the same container port: we might have 2 web services that runs on port 3000. To access them all, we need to map their port to 2 different host port
-
 ### `ARG`, `ENV` in Dockerfile
 
 [https://vsupalov.com/docker-arg-env-variable-guide/](https://vsupalov.com/docker-arg-env-variable-guide/)
@@ -167,9 +148,49 @@ COPY setup.sh .
 
 RUN chmod +x /setup.sh
 CMD ["/setup.sh"]
-
 ```
 
+### How host connect to container, port mapping, host port, container port, and
+
+- Host machine connects to container
+
+By default, Docker uses `bridge` network, that means the port in container isn't exposed to the host and we cannot access the container using container's port and host's domain or ip. For example, let's say the container's port is 80 and domain of host is localhost, we cannot connect to the container via 'http://localhost:80'. 
+
+Of course, we can use `host` network to make the container port the same as host port, then we can access the container via their port directly without mapping. However, using port mapping brings offers many benefits:
+
+- Isolation: By nature, containers are designed to be isolated from the host system. If you want to access a web server inside a Docker container from your browser, you should map the container's web server port to a port on the host
+- Avoid port conflicts: If the default port used by the service inside the container is already in use on the host, you can map it to a different port on the host.
+- Run multiple container that has the same container port: we might have 2 web services that runs on port 3000. To access them all, we need to map their port to 2 different host port
+
+### How containers connects to each other
+
+Unlike the situation where host machine connects to container, in Docker environment, 2 containers have to use container name to connect to each other directly. Docker sets up a internal DNS system where service names in the `docker-compose` file can be used as hostname
+
+Let's say we have 3 services: client (port: 5173), server (port: 3000) and redis (port: 6379). Client needs to connect to server and server needs to connect to redis. 
+The client-side code runs in the browser on host machine, not inside a Docker container. So when it makes requests to `localhost:3000`, it's using your host machine's networking, not Docker's internal networking. Client can also connect to redis using 'localhost:6379' if it wants
+
+However, 'server' and 'redis' are isolated and can only communicate with each other using their service names (like `server:3000` or `redis:6379` within the Docker network).
+
+Here's a simplified view of what's happening:
+
+- Browser on Host -> localhost:3000 -> Docker Port Mapping -> Server Container
+- Server Container -> redis:6379 -> Redis Container (within Docker network)
+
+If you were running your client in a Docker container (instead of serving it via nginx and accessing it through the browser), and you wanted it to connect to the server container, you would indeed use server:3000 in your client code.
+
+**NOTE**: if service A connects to multiple ports in service B, you need to expose all of them. For example, you backend service has 2 port: 3000 for Rest API and 8000 for Websocket, you need to expose both 3000 and 8000 in `docker-compose` file.
+
+### How to build and run a Dockerfile
+
+- First you need to build the image by running: `docker build -t ${docker_image_name} .` (`.` means the current directory). To find your images, run `docker images`
+  - `-t` or `--tag`: setting name for the docker image. It could be `my_app:1.0` or smt else.
+  - `.`: the current directory
+- Then run your image to build container: `docker run -dp ${HOST_PORT}:${CONTAINER_PORT} ${CONTAINER_NAME}`: 
+  - `-d`: run in the background (optional)
+  - `-p`:  means port mapping, port on host machine is map to port in the container. Then all the requests that are made to the host port can be redirected into the Docker container.
+  - `HOST` is the operating system in which the Docker client is running. `${HOST_PORT}` is the port that help us to connect to the `${CONTAINER_PORT}`. When we access the `${HOST_PORT}`, it will be redirected to the `${CONTAINER_PORT}`
+  - `${CONTAINER_PORT}` is the port that the container exposes
+  
 ### Passing args value when build image
 
 `docker build --build-arg VERSION=2.0 -t myimage .`

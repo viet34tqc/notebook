@@ -62,12 +62,10 @@ There are lots of tools to implement MicroFE. The most popular among them is **M
 
 ## Module Federation
 
-Module Federation is an official feature of Webpack that enables the dynamic loading of modules from multiple independent build systems.
+Module Federation is an official feature of Webpack that allows loading remote modules from a web app shell. These modules
 
-The core concept of Module Federation revolves around differentiate between local and remote modules
-
-- Local modules refer to the modules within your application
-- Remote modules are external modules that are loaded at runtime
+- Web app shell is like a wrapper and imported all the remote modules.
+- Remote modules are external modules and can be anything: component, class or the whole app..., can be deployed anywhere and are loaded at runtime. Besides imported into web app shell, they can also be imported into each other.
 
 <img src="https://i.imgur.com/fMPhlgs.png">
 

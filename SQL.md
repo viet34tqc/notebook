@@ -1,5 +1,13 @@
 # SQL
 
+## `JOIN` and `INTERCEP`, `UNION`, `EXCEPT`
+
+- `JOIN`: to connect two table
+- `INTERCEPT`, `UNION`, `EXCEPT`: connect two queries. the queries result must have the same column structure
+	- `INTERCEPT`: the result must match both queries, like `AND` condition
+	- `UNION`: the result matches either two queries, like `OR` condition. The result is the combination of both queries
+	- `EXCEPT`: the result matches first query, but not the second query.
+
 ## `group by`
 
 Bản chất câu lệnh `group by`: nếu trong data trả về có các giá trị trùng lặp thì mình có thể nhóm dữ liệu theo giá trị đó (group by), ví dụ như trùng id.
