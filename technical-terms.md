@@ -49,17 +49,23 @@ is the combination of The CSSOM and DOM tree created in the parsing HTML step. R
 
 - <https://dev.to/gopal1996/understanding-reflow-and-repaint-in-the-browser-1jbg>
 - <https://frontendmasters.com/blog/why-do-reflows-negatively-affect-performance/>
+- <https://web.dev/articles/rendering-performance>
 
-- `layout or reflow`: 
-  - When the render tree is created, nodes don't have position and size. Calculating these values is called layout or reflow
-  - `reflow` can also happens when we change a layout-related property, such as an element's width, height, or margin
-- `repaint`: paint the render tree on the screen
+First, the browser runs 3 steps:
 
+- Process HTML markup and build the DOM tree.
+- Process CSS markup and build the CSSOM tree.
+- Combine the DOM and CSSOM into a render tree.
+
+- `reflow (layout)`: 
+  - When the render tree is created, nodes don't have position and size. Reflow is the process of calculating these values
+  - This is triggered again when the size, position, or layout of elements on the page change, causing the browser to recalculate the layout. This can cause a subsequent `repaint`.
+- `repaint`: 
+  - When layout is complete, the browser issues "Paint Setup" and "Paint" events, which convert the render tree to pixels on the screen.
+  - This is triggered again when visual parts of the page are updated without affecting the layout, such as changing background color or updating text color.
+- `Composite`: The browser then combines the painted layers to produce the final image displayed on the screen.
+  
 When we change a layout-related property (width, height, margin), we trigger the pixel pipeline. This is a series of steps that the browser's rendering engine performs to show the actual changes on the screen.
-
-- Layout (Reflow): The browser recalculates the geometry of elements affected by layout-related property changes. This calculation determines the positioning of elements in the browser window.
-- Paint: Following layout recalculations, the browser renders the visual features of each element, like colors, borders, and shadows.
-- Composite: The browser then combines the painted layers to produce the final image displayed on the screen.
 
 Reflows can be heavy on the CPU as they involve complex algorithms for processing CSS rules and determining element alignment and constraints within the page's layout.
 

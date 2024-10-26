@@ -234,11 +234,18 @@ By default, the input doesn't take the whole width of its parents. Then, we can 
 - <https://css-tricks.com/finger-friendly-numerical-inputs-with-inputmode/>
 - <https://codepen.io/kevinpowell/pen/dyjwWEY>
 
-Use in case `input="number"` is inapropriate like credit-card number
+The problem with `input type="number"`:
+
+- It has arrows that is inappropriate when we want a credit-card number input
+- We can type text when using Firefox
 
 `<input inputmode="numeric" pattern="[0-9]*" type="text" name="creditcard">`
 
 ```js
+numericsInput.forEach((e) => {
+  validateInput(e)
+})
+
 function validateInput(el) {
   el.addEventListener("beforeinput", function (e) {
     let beforeValue = el.value;

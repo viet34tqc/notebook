@@ -9,6 +9,10 @@
 - <https://devdojo.com/bobbyiliev/free-introduction-to-docker-ebook>
 - <https://www.freecodecamp.org/news/how-to-remove-all-docker-images-a-docker-cleanup-guide/>
 
+## Best practice
+
+- <https://dev.to/idsulik/dockerfile-best-practices-how-to-create-efficient-containers-4p8o>
+
 ## Tại sao phải sử dụng docker
 
 <https://dev.to/techworld_with_nana/what-problems-does-docker-really-solve-496a>
