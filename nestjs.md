@@ -63,7 +63,7 @@ The pattern that we using above with Service is called `Dependancy Injection`. W
 
 In NestJS, if we want to inject a service into another service, we need to use the decorator `@Injectable()` at the top of the service. All the injectable class must be added into `providers` array of that module. 
 
-There is also another way to inject services is to use `token`.
+We can also inject services by using `token`.
 
 ```ts
 // cats.module.ts
@@ -71,7 +71,7 @@ There is also another way to inject services is to use `token`.
   controllers: [CatsController],
   providers: [{
     provide: 'CATS_SERVICE',
-    useClass: 'CatsService'
+    useClass: CatsService
   }],
 })
 
@@ -81,6 +81,27 @@ export class CatsController {
   // other code
 }
 ```
+
+The injected service can be dynamic, when we use `useFactory`
+
+```ts
+const devConfig = {port: 3000};
+const prodConfig = {port: 3001};
+
+@Module({
+  controllers: [CatsController],
+  providers: [{
+    provide: 'CONFIG',
+    useFactory: () => process.env.NODE_ENV === 'development' ? devConfig : prodConfig
+  }],
+})
+
+export class ConfigController {
+  constructor(@Inject('CONFIG') private readonly config: {port: string}) {}
+  // other code
+}
+```
+
 
 ## Flows
 
@@ -102,7 +123,7 @@ NestsJs use pipes for validation and transform data
 
 <img src="https://i.imgur.com/MTuZ1An.png">
 
-When the user send requests to `Controller`, you might want to validate or transform the data before it reachs the controller. This step is called `Pipe`. `Pipe` provides many methods via 2 packages: `class-validator` and `class-transformer`, which you need to install to use pipe in NestJS. 
+When the user send requests to `Controller`, you might want to validate or transform the data before it reaches the controller. This step is called `Pipe`. `Pipe` provides many methods via 2 packages: `class-validator` and `class-transformer`, which you need to install to use pipe in NestJS. 
 
 Here, we are using `class-validator` to validate the data of the DTO
 
@@ -135,6 +156,16 @@ async create(
   this.catsService.create(createCatDto);
 ```
 
+Lastly, we can apply the validation pipe globally in main.ts
+
+```ts
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
+  await app.listen(3000);
+}
+```
+
 We can also transform the data before sending request. We have two type of transform: auto transformation and explicit transformation
 
 Here is auto transformation. The payload will be transform automatically into the types that matches the DTO. For example, if the `age` in the payload is string, it will be converted into number, according to the `CreateUserDTO` above
@@ -160,6 +191,19 @@ findOne(
   return 'This action returns a user';
 }
 ```
+
+You can even customize the http status code when the type of param is invalid, for example, you pass the id as a string like `abc`
+
+```ts
+@Get(':id')
+findOne(
+  @Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number,
+) {
+  console.log(typeof id === 'number'); // true
+  return 'This action returns a user';
+}
+```
+
 
 ## Common Decorators
 
@@ -339,11 +383,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
 ## Middleware and interceptors
 
-- Interceptors have access to response/request before and after the route handler is called.
-- Middleware is called only before the route handler is called. You have access to the response object, but you don't have the result of the route handler
+- Interceptors have access to response/request data after or before the route handler is called, accordingly.
+- Middleware is called only before the route handler is called.
 
 The execution order is:
-Middleware -> Interceptors -> Route Handler -> Interceptors -> Exception Filter (if exception is thrown)
+Browser -> Middleware -> Interceptors -> Route Handler -> Interceptors -> Exception Filter (if exception is thrown)
 
 ## Websockets
 

@@ -1,10 +1,23 @@
 # Performance optimization
 
-<https://reacthandbook.dev/react-performance-optimization>
-<https://www.youtube.com/watch?v=0fONene3OIA>
-<https://pagespeedchecklist.com/>
-<https://xwp.co/how-to-build-a-rocket-best-practices-for-better-web-performance/>
-<https://10up.github.io/Engineering-Best-Practices/performance/#core-web-vitals>
+- <https://xmind.ai/share/2PNf3Dge?xid=29BOzXD5> <https://www.youtube.com/watch?v=D7VOGwGNjQw> (Vietnamese) **MUST READ**
+- <https://reacthandbook.dev/react-performance-optimization>
+- <https://www.youtube.com/watch?v=0fONene3OIA>
+- <https://pagespeedchecklist.com/>
+- <https://xwp.co/how-to-build-a-rocket-best-practices-for-better-web-performance/>
+- <https://10up.github.io/Engineering-Best-Practices/performance/#core-web-vitals>
+
+## Basic Priciple
+
+- Only load necessary resources on the website and try to load them as fast as possible
+
+## Common techniques for all resources
+
+- Size
+    - reduce size via minify and compress
+    - code splitting
+    - tree shaking
+- Network: caching, using CDN
 
 ## Basic concept
 
@@ -17,6 +30,76 @@
 ## Render-blocking resources
 
 The first thing comes to mind when optimize FE is reduce render-blocking resourses. They are JS files, CSS files, and fonts. Reduce render-blocking resources will improve Core Web Vitals
+
+## CSS
+
+<https://pagespeedchecklist.com/eliminate-render-blocking-resources>
+
+- Load critcal CSS asap
+- Minify CSS
+- Load non-critical CSS asynchronously
+
+```html
+<head>
+<!-- other <head> stuff like critical CSS -->
+
+<!-- very small file for critical CSS (or optionally inlined with a <style> block) -->
+<link rel="stylesheet" href="critical.css">
+
+<!-- optionally increase loading priority -->
+<link rel="preload" as="style" href="non-critical.css">
+
+<!-- core asynchronous functionality -->
+<link rel="stylesheet" media="print" onload="this.onload=null;this.removeAttribute('media');" href="non-critical.css">
+</head>
+```
+
+## JS
+
+- Minify JS
+- Reduce unnecessary packages from bundle
+- Dynamic import the scripts which are not necessary at first load, eg: scripts only needed when we make an interaction => increase TTI
+- Put JS in the `head` and use `defer` to download the scripts in the background and execute later
+- Optimize long tasks: <https://web.dev/articles/optimize-long-tasks> Move non-related-ui tasks into `setTimeout` (https://i.imgur.com/cm6bi1n.png)
+- Optimize Google Analytics scripts:
+
+```html
+<script defer src="anylytic-script.js"></script> <!-- contains formerly-inline snippet -->
+<script defer src="https://www.google-analytics.com/analytics.js"></script>
+```
+
+- Delay scripts related to user interaction or live chat: <https://metabox.io/delay-javascript-execution-boost-page-speed/>. This method isn't recommended for script like tracking or  analyzing user data such as Google Analytics, Facebook Pixel, Google Tag Manager
+
+```html
+<script>
+const loadScriptsTimer = setTimeout(loadScripts, 5000);
+const userInteractionEvents = ["mouseover","keydown","touchmove","touchstart"
+];
+userInteractionEvents.forEach(function (event) {
+    window.addEventListener(event, triggerScriptLoader, {
+        passive: true
+    });
+});
+
+function triggerScriptLoader() {
+    loadScripts();
+    clearTimeout(loadScriptsTimer);
+    userInteractionEvents.forEach(function (event) {
+        window.removeEventListener(event, triggerScriptLoader, {
+            passive: true
+        });
+    });
+}
+function loadScripts() {
+    document.querySelectorAll("script[data-type='lazy']").forEach(function (elem) {
+        elem.setAttribute("src", elem.getAttribute("data-src"));
+    });
+    document.querySelectorAll("iframe[data-type='lazy']").forEach(function (elem) {
+        elem.setAttribute("src", elem.getAttribute("data-src"));
+    });
+}
+</script>
+```
 
 ## Font
 
@@ -71,82 +154,14 @@ Trong trường hợp phải dùng icon font thì phải optimize dùng `icomoon
 - preload LCP image like hero image: `<link rel="preload" as="image" imagesrcset=" image-400.jpg 400w, image-800.jpg 800w, image-1600.jpg 1600w" imagesizes="100vw" />.`
 - For image in the markup, combine preload with `fetchpriority`: <https://imkev.dev/fetchpriority-opportunity>
 
-## CSS
-
-<https://pagespeedchecklist.com/eliminate-render-blocking-resources>
-
-- Load critcal CSS asap
-- Minify CSS
-- Load non-critical CSS asynchronously
-
-```html
-<head>
-<!-- other <head> stuff like critical CSS -->
-
-<!-- very small file for critical CSS (or optionally inlined with a <style> block) -->
-<link rel="stylesheet" href="critical.css">
-
-<!-- optionally increase loading priority -->
-<link rel="preload" as="style" href="non-critical.css">
-
-<!-- core asynchronous functionality -->
-<link rel="stylesheet" media="print" onload="this.onload=null;this.removeAttribute('media');" href="non-critical.css">
-</head>
-```
-
-## JS
-
-- Minify JS
-- Reduce unnecessary packages from bundle
-- Dynamic import the scripts which are not necessary at first load, eg: scripts only needed when we make an interaction => increase TTI
-- Put JS in the `head` and use `defer` to download the scripts in the background and execute later
-- Optimize Google Analytics scripts:
-
-```html
-<script defer src="anylytic-script.js"></script> <!-- contains formerly-inline snippet -->
-<script defer src="https://www.google-analytics.com/analytics.js"></script>
-```
-
-- Delay scripts related to user interaction or live chat: <https://metabox.io/delay-javascript-execution-boost-page-speed/>. This method isn't recommended for script like tracking or  analyzing user data such as Google Analytics, Facebook Pixel, Google Tag Manager
-
-```html
-<script>
-const loadScriptsTimer = setTimeout(loadScripts, 5000);
-const userInteractionEvents = ["mouseover","keydown","touchmove","touchstart"
-];
-userInteractionEvents.forEach(function (event) {
-    window.addEventListener(event, triggerScriptLoader, {
-        passive: true
-    });
-});
-
-function triggerScriptLoader() {
-    loadScripts();
-    clearTimeout(loadScriptsTimer);
-    userInteractionEvents.forEach(function (event) {
-        window.removeEventListener(event, triggerScriptLoader, {
-            passive: true
-        });
-    });
-}
-function loadScripts() {
-    document.querySelectorAll("script[data-type='lazy']").forEach(function (elem) {
-        elem.setAttribute("src", elem.getAttribute("data-src"));
-    });
-    document.querySelectorAll("iframe[data-type='lazy']").forEach(function (elem) {
-        elem.setAttribute("src", elem.getAttribute("data-src"));
-    });
-}
-</script>
-```
-
-## DOM sizes
+## HTML
 
 <https://tropicolx.hashnode.dev/optimizing-performance-in-react-applications?ref=dailydev#heading-dom-size-optimization>
 
-Large and complex DOM trees can slow down rendering and increase memory usage.
+Large and complex DOM trees can slow down rendering and increase memory usage
 
-- Avoid complex nesting
+- Reduce DOM size
+- Avoid complex nesting DOM
 - Windowing/List virtualization
 
 ## Networks

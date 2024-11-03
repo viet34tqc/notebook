@@ -471,14 +471,14 @@ As you can see XSS exploit storage (session or local) and cookie that `httpOnly`
 How to prevent:
 
 - Using cookie with `httpOnly` flag set to true
-- USing CSP: `Content-Security-Policy: script-src 'self'`
+- USing CSP: `Content-Security-Policy: script-src 'self'`. This ensures that you can only load JS code from actual JS files that are sent from specific sources, in this case is from the current website
 - Escape dynamic content from database so the malicious script will be escape when rendered on page.
 
 ### CSRF attack
 
 <https://zellwk.com/blog/understanding-csrf-attacks/>
 
-Attacker tricks user into submitting a malicious request, execute unwanted actions to a website where they are authenticated
+Attacker tricks user into submitting a malicious request, execute unwanted actions from attacker's website to the website where user is authenticated
 
 The request must originate from another website, which gives it the name "Cross-Site". This request also impersonates an authenticated user, which gives it the name "Request Forgery".
 
@@ -508,6 +508,7 @@ How to prevent:
   - When user request for the first time, server send this CSRF token as a cookie to user.
   - On the client, get CSRF from cookie and insert CSRF token in the submit form as the hidden input. When user send the next request, on server-side, we compare the CSRF token in cookies and in the submitted form.
   - Or attach the CSRF token in the request header when you submit
+  - If a user is tricked into submitting a request on an attacker's website, the request will fail because the attacker's site cannot generate a valid CSRF token, which will cause the server to invalidate the request.
 - Using cookie with `SameSite` flag set to `Lax` or `Strict`
 - USing CSP: `<meta http-equiv="Content-Security-Policy" content="default-src 'self'">`
 
