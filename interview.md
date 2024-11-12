@@ -1401,7 +1401,8 @@ Khác origin:
 
 ## Rendering a web page
 
-<https://blogs.halodoc.io/how-does-a-browser-actually-work/>
+- <https://abhisaha.com/blog/exploring-browser-rendering-process>
+- <https://blogs.halodoc.io/how-does-a-browser-actually-work/>
 
 <ol>
   <li>You type an URL into address bar in your preferred browser.</li>

@@ -283,7 +283,7 @@ npm test
 
 Do something with the staged files only. Combining `lint-staged` with `husky` allows us to implement some task for *staged files* right *before commit*
 
-- Install `lint-staged`: `pnpm i lint-staged`
+- Install `lint-staged`: `pnpm i -D lint-staged`
 - Create `lint-staged.config.mjs` or `lint-staged.config.js`, depending on if your project supports ESM or not
 
 ```js

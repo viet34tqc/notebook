@@ -1,5 +1,6 @@
 # OAuth
 
+- <https://pilcrowonpaper.com/blog/oauth-guide/>
 - <https://duthanhduoc.com/blog/p5-giai-ngo-authentication-OAuth2>
 - <https://roadmap.sh/guides/oauth>
 - <https://www.permit.io/blog/differences-between-oauth-vs-jwt>
