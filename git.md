@@ -40,9 +40,11 @@ git merge master
 
 <https://www.freecodecamp.org/news/how-to-use-git-rebase>
 
-If you prefer the project's histoy as a straight line, without such automatic merge commit, you can think of using rebase. The commits of current branch will be moved on top of the commits from the branch you want to integrate into.
+Rebasing is changing the base of your branch from one commit to another making it appear as if you'd created your branch from a different commit. The commits of current branch will be moved on top of the commits from the branch you want to integrate into.
 
-Let's say, you want to integrate the changes from `branch B` into `branch A`.
+The primary reason for rebasing is to maintain a linear project history, without such automatic merge commit. For example, consider a situation where the main branch has progressed since you started working on a feature branch. You want to get the latest updates to the main branch in your feature branch, but you want to keep your branch's history clean so it appears as if you've been working off the latest main branch.
+
+Here is the flow. Let's say, you want to integrate the changes from `branch B` into `branch A`.
 
 - First, `branch A` will temporarily save all the latest commit on `branch A` that happened after the branching out point. It's like git stash
 - Next, it applies all commits from `branch B` that we want to integrate. At this point, `branch A` and B look exactly the same
