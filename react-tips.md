@@ -37,6 +37,14 @@ function UsersManagement({ users, isNewAPI }) {
 }
 ```
 
+## Conditional custom hook
+
+<https://www.youtube.com/watch?v=HLhn6dDu88I>
+
+Use a flag variable to turn it on or off
+
+<img src="https://i.imgur.com/o6ojSuL.png">
+
 ## Working with multiple states
 
 Case 1: States are input state. However, this only works for jsx file because we don't know which type of event handler
@@ -204,6 +212,7 @@ Solution: using `useReducer`, put all states in a wrapper state and update that 
 ### The latest ref
 
 <https://tkdodo.eu/blog/refs-events-and-escape-hatches>
+
 ```jsx
 export const useDebouncedState = (callback, delay) => {
   const [value, setValue] = React.useState('')
