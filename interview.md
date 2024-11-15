@@ -1969,6 +1969,12 @@ First, we need to calculate the image size from 'sizes' attribute. For example, 
 
 If the viewport is 650px, the image size will be 325px. It tells browser to use the picture with minimum of 325px => the browser use <https://ik.imgkit.net/ikmedia/women-dress-1.jpg?tr=w-350>, which is the closest one
 
+## Difference between `{}`, `Object`, `Record<string, unknown>` in Typescript
+
+- `{}` includes most of the type, including primative types, but not `null` and `undefined`
+- `object` does not include primitive types, `null`, `undefined`
+- `Record<string, unknown>`: only accepts plain object with pairs of key, value (not accept array, function)
+
 ## Difference between using `srcset` and `sizes` and using `<picture>` and `<source>` tag
 
 In HTML, both the srcset attribute and the <picture> element are used for responsive images, but they serve slightly different purposes and are used in different ways. 
