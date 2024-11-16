@@ -282,6 +282,15 @@ const Test2 = <T>(a: T) => a
 const a = Test(123) // a is number
 ```
 
+## Difference between `.ts` file and `.d.ts` file
+
+- `.ts`: 
+  - Code implementation + type definitions
+  - Compiled into js file, even if there are only type definitions in the file (in this case the js file is empty and can be tree-shakeable) 
+- `.d.ts`:
+  - Only type definitions
+  - Not compiled into js file
+
 ## Handle API in React
 
 ## Controlled vs uncontrolled component
