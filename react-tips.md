@@ -11,10 +11,64 @@ It could lead to infinite loop. Update the state like this is the same as callin
 
 ## Avoid using props as initial state of useState
 
-<https://sentry.io/answers/using-props-to-initialize-state/>
-<https://prateeksurana.me/blog/why-you-should-avoid-using-state-for-computed-properties/>
+- <https://sentry.io/answers/using-props-to-initialize-state/>
+- <https://prateeksurana.me/blog/why-you-should-avoid-using-state-for-computed-properties/>
 
 When we use props as initial state, that state won't react to props update. The reason is because `useState` called only once when the component mounts.
+
+## Stop passing setter function to child component
+
+<https://matanbobi.dev/posts/stop-passing-setter-functions-to-components>
+
+```jsx
+function Form() { 
+    const [formData, setFormData] = useState({ name: '' }); 
+    return (
+        <Input name={formData.name} setFormData={setFormData} />
+    ); 
+};
+```
+
+Why: An abstraction leak occurs when a component knows too much about the internal implementation of another component. In this case, the Input component assumes:
+
+- The parent component is using useState.
+- The state contains a name field directly, alongside other data.
+- The parent will always maintain the same state structure.
+
+These assumptions make the child component tightly coupled to the parent, so any change in the parent's state structure or management mechanism requires updates to the child. And this lead to:
+
+- Fragility: Changes to the parent's logic break the child component, creating a maintenance headache.
+- Reduced Reusability: The child is tied to a specific parent implementation, limiting its use in other contexts.
+- Loss of Clarity: Passing raw `setState` makes it 
+
+Instead, define the setter function in the parent component
+
+```jsx
+// Form.jsx 
+function Form() { 
+    const [formData, setFormData] = useState({ name: '' }); 
+    const handleNameChange = (name) => { 
+        setFormData((prevState) => ({...prevState, name}));
+    };
+    
+    return (
+        <Input name={formData.name} onChange={handleNameChange} />
+    ); 
+};
+
+
+// Input.jsx 
+function Input({ name, onChange }) { 
+    const handleInputChange = (event) => { 
+        onChange(event.target.value);
+    }; 
+    
+    return ( 
+        <input type="text" value={name} onChange={handleInputChange} /> 
+    ); 
+};
+```
+  
 
 ## Conditionally swap component
 
