@@ -159,6 +159,17 @@ When to create a new state
 - Status state (loading, error status while loading data from API)
 - State relates to event (boolean state when click on a button...);
 
+## React hooks in simplest defination
+
+- `useState`: create a value that is preserved across renders and triggers a re-render when it changes
+- `useEffect`: synchronize a component with some external system
+- `useRef`: create a value that is preserved across renders, but won't trigger a re-render when it changes
+- `useContext`: get access to what was passed to a Context's Provider
+- `useReducer`: create a value that is preserved across renders and triggers a re-render when it changes, using the reducer pattern
+- `useMemo`: cache the result of a calculation between renders
+- `useCallback`: cache a function between renders
+- `useLayoutEffect`: synchronize a component with some external system, *before* the browser paints the screen
+
 ## What is state in React
 
 It's the data that represents UI
@@ -251,7 +262,7 @@ Here are the reasons:
 ## When does clean up function of `useEffect` run
 
 - When the component unmounts
-- When the dependancy changed => the `useEffect` runs again => then it runs the clean up function of the previous effect.
+- When the `useEffect` runs again (because the dependancy changed or there is no dependency) => then it runs the clean up function of the previous effect.
 
 ## When to use `useCallback` and `useMemo`
 
