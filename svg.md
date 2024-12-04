@@ -52,6 +52,7 @@ Let's say we have to draw a group of houses. The houses can have different color
 ```
 
 The houses are not rendered yet. We will use `use` to display the the element defined in `defs`
+
 ```html
 <svg width="280px" height="120px" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -62,6 +63,7 @@ The houses are not rendered yet. We will use `use` to display the the element de
     <use xlink:href="#house" x="70" y="0" style="fill: yellow;" />
 </svg>
 ```
+
 Now we have 2 houses with different colors.
 
 ## `textPath`

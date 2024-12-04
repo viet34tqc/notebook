@@ -76,7 +76,8 @@ Upgrade to php 8: change the 7.4 to 8.0
 ### Create new user with all privileges
 
 ```mssql
-create database DATABASE_NAME;
+CREATE DATABASE DATABASE_NAME;
+CREATE USER 'ltc'@'localhost' IDENTIFIED BY 'ltc@123'
 grant all privileges on DATABASE_NAME.* TO 'USER_NAME'@'localhost' identified by 'PASSWORD';
 flush privileges;
 ```
@@ -130,6 +131,7 @@ sudo snap install --classic certbot
 
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 
+# Run this command to add new certificate if you already have certbot
 sudo certbot --nginx
 
 # Test renew certificate

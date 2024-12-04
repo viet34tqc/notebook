@@ -1,4 +1,4 @@
-# Canva
+# Canvas
 
 First, create a context
 
@@ -9,6 +9,8 @@ const context = canvas.getContext('2d');
 
 Start to draw: `context.beginPath()`
 Stop draw: `context.endPath()`
+
+**Note**: canvas uses methods from context to draw, ex: `beginPath()`, `stroke()`, `fill()`
 
 ## Add outline
 
@@ -25,6 +27,23 @@ context.fillStyle = 'yellow'
 context.fill();
 ```
 
+## Add text
+
+```js
+context.fillText('Hello', 200, 200);
+context.strokeText('Hello', 200, 200);
+```
+
+## Rectangular
+
+Use `fillRect`
+
+```js
+// Square
+context.fillStyle = "#FFCC00";
+context.fillRect(50, 100, 100, 100);
+```
+
 ## Arc
 
 ```js
@@ -37,7 +56,7 @@ arc(centerX, centerY, radius, startAngle, endAngle, isAntiClockwise);
 ```js
 context.beginPath();
 context.arc(200, 200, 93, 0, Math.PI * 2, true);
-context.fillStyle = '#FF6A6A';
+context.fillStyle = 'hsl(9, 83%, 70%)';
 context.fill();
 
 context.lineWidth = 20;
@@ -61,5 +80,14 @@ context.lineWidth = 10;
 context.strokeStyle = '#666666';
 context.lineJoin = "round"; // Draw rectangle with rounded corner
 context.stroke();
+```
+
+## Transformation
+
+- Rotate:
+
+```js
+// Transform
+context.rotate(45 * Math.PI / 180);
 ```
 

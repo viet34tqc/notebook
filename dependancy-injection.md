@@ -10,7 +10,9 @@ The high and low-level modules, should be written in a way so they both can be u
 
 ## Inversion of Control
 
-Inversion of Control (IoC) is a principle used to address the dependency inversion problem. It states that dependencies of a module should be provided by an external entity or framework. That way, the module itself only has to import and use the dependency, it never has to create the dependency from scratch or manage it in any way.
+Inversion of Control (IoC) is a principle used to address the dependency inversion problem. It states that dependencies of a module should be provided by an external entity or framework. 
+
+Why: the module itself only has to import and use the dependency, it never has to create the dependency from scratch or manage it in any way.
 
 ## Dependancy injection
 
@@ -64,10 +66,6 @@ class Counter {
   }
 }
 ```
-
-
-
-Here are some examples of not using dependancy injection that make it harder to change the business in the future
 
 - <https://dev.to/itshugo/applying-design-patterns-in-react-strategy-pattern-enn>
 - axios: we can create an axiosInstance, then use it everywhere in the project like: `axiosInstance.get()` and `axiosInstance.post()`. That should be fine if we use axios for this project. But in the future, we might want to replace axios with other library or using fetch, then we will need to remove all `axiosInstance` code. For best practice, we will use a `httpClient` class to handle APIs request. If we use other library just change the code in `httpClient` class

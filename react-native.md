@@ -8,6 +8,10 @@ Using Expo
 - Then follow: <https://docs.expo.dev/get-started/set-up-your-environment/>. Installing Android Simulator to preview our app on a simulator device or download Expo Go on mobile to preview on our own device.
 - We can also preview app in web version.
 
+## Clear the previous build
+
+`npx expo start --clear`
+
 ## Component
 
 - `View`: like a div, default is `display: flex`
@@ -33,7 +37,7 @@ Using Expo
 ```
 
 - `TouchableOpacity`, `Pressable`: like a div but with `onPress`. We can't set `onPress` on `View`
-- 'ConfirmationDialog': using Alert
+- 'ConfirmationDialog': using `Alert` class
 
 ```tsx
 onPress = () => Alert.alert('Alert Title', 'My Alert Msg', [
@@ -121,7 +125,6 @@ export default function RootLayout() {
 />
 ```
 
-
 ## Navigation
 
 If your app is using Expo, please use `expo-router`
@@ -142,6 +145,49 @@ You can use drawer or tabs for navigations
 	<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 	<Stack.Screen name="+not-found" />
 </Stack>
+```
+
+Think of `(tabs)` as a route. By default, each screen within `<Stack.Screen>` above show its `name` value at the top of the page. If you want to hide this header, simply set `headerShown` to `false`
+
+Then, create a `(tabs)` folder, and also a `_layout.tsx` file inside it. 
+
+```tsx
+import { Tabs } from 'expo-router';
+
+const TabsLayout = () => {
+  return <Tabs></Tabs>;
+};
+
+export default TabsLayout;
+
+```
+
+In the `(tabs)` folder, each file represents a tab. The `index.tsx` file acts as the default tab.
+
+Now adding your tabs. Like `<Stack.Screen>`, we have `<Tab.Screen>` and by default, tab show header
+
+```tsx
+<Tabs>
+  <Tabs.Screen
+    name="index"
+    options={{
+      tabBarLabel: 'Explore',
+      tabBarIcon: ({ size, color }) => (
+        <Ionicons name="search" size={size} color={color} />
+      ),
+    }}
+  />
+  <Tabs.Screen
+    name="profile"
+    options={{
+      tabBarLabel: 'Profile',
+      headerShown: false,
+      tabBarIcon: ({ size, color }) => (
+        <Ionicons name="person-circle-outline" size={size} color={color} />
+      ),
+    }}
+  />
+</Tabs>
 ```
 
 ### Navigate between pages

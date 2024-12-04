@@ -45,15 +45,14 @@ Good refactoring:
 
 ## You have a slow website. Which steps will you take to identify the problem
 
-- Run Basic Speed Tests: Use tools like Google PageSpeed Insights, GTmetrix, or WebPageTest to get an overview of your website’s performance.
+- Run Basic Speed Tests: Use tools like Google PageSpeed Insights, GTmetrix, or WebPageTest to get an overview of your website's performance
 - Analyze network performance: 
   - Use Browser Developer Tools: Inspect network requests in Chrome DevTools to see if there are any slow-loading resources, large files, or numerous HTTP requests.
   - Check for Redirects: Ensure that there aren’t unnecessary redirects adding to the load time.
-- Evaluate Frontend Performance
+- Look into the FE code to evaluate Frontend Performance
   - Open the console tab to see if there is any errors
   - Optimze assets (html, fonts, images), resize and reduce js and css files
   - Check if there is any unnecessary package in the bundler 
-  - Leverage browser caching
 - Evaluate Backend Performance
   - Database Optimization
   - Evaluate Server Configuration
@@ -134,8 +133,8 @@ Using Virtual DOM, we can avoid two problems if we use the real DOM directly:
 
 ## Redux and React Context
 
-<https://blog.isquaredsoftware.com/2021/01/context-redux-differences/>
-<https://formidable.com/blog/2021/stores-no-context-api/>
+- <https://blog.isquaredsoftware.com/2021/01/context-redux-differences/>
+- <https://formidable.com/blog/2021/stores-no-context-api/>
 
 Redux is like using multiple React Context
 
@@ -150,9 +149,15 @@ React + Redux have middleware support using Redux Thunk
 
 if you get past 2-3 state-related contexts in an application, you're re-inventing a weaker version of React-Redux and should just switch to using Redux.
 
+## What is state in React
+
+It's the data that represents UI
+In react, it's a variable which whenever it updates, it will trigger a re-renders of the component.
+
 ## Handle state
 
 TLDR: Check if that state can be calculated from other state, if not, create new state.
+
 When to create a new state
 
 - State to save data from API
@@ -184,7 +189,7 @@ In react, it's a variable which whenever it updates, it will trigger a re-render
 
 ## React element and React component
 
-- React element is an JS object that describes a DOM node and its attributes or properties. It's created by calling `React.createElement`
+- React element is a JS object that describes a DOM node and its attributes or properties. It's created by calling `React.createElement`
 - React component is a function (or class) that returns React element.
 - JSX (`<App />`) is syntax sugar of `React.createElement`. When we write JSX, we are just using `React.createElement`
 
@@ -215,8 +220,8 @@ To copy an oject in JS, we have some types of copy
 
 ## Why we shouldn't directly call React Components
 
-<https://dev.to/igor_bykov/react-calling-functional-components-as-functions-1d3l>
-<https://kentcdodds.com/blog/dont-call-a-react-function-component>
+- <https://dev.to/igor_bykov/react-calling-functional-components-as-functions-1d3l>
+- <https://kentcdodds.com/blog/dont-call-a-react-function-component>
 
 When a functional component is used with JSX (or `React.createElement`), it will have a lifecycle and can have a state.
 
@@ -245,7 +250,7 @@ That's because when the outer component re-renders, it clears the previous outpu
 - Keep previous versions of the state, and reuse them later
 - Create pure components. Immutable data can determine if changes have been made, which helps to *determine when a component requires re-rerendering*. If we mutate the state as object or array directly, React still sees that object or array as the same one because JS compares objects and arrays by reference, not value.
 
-To detect a state change, React shallow compare the old and new value state (similar to '==='). If you mutate the data (object and array) directly (using `Array.push` for example), React won't detect the change in state => won't re-render
+To detect a state change, React shallowly compares the old and new value state (similar to '==='). If you mutate the data (object and array) directly (using `Array.push` for example), React won't detect the change in state => won't re-render
 
 ## How do you scale large React component
 
@@ -440,7 +445,7 @@ How to prevent unnecessary re-renders
 
 - Trigger a render: there are two reasons for a component to render
   - Initial render: calling `ReactDOM.render` to render the root component. This is the initial render
-  - Re-render: the component's states has been update via event, etc...
+  - Re-render: the component's states has been updated via event, etc...
 - Render: React calls your components to figure out what should be on the screen.
   - During the initial render, React will create the DOM nodes.
   - During the re-render, React will compare the previous Virtual DOM with the current Virtual DOM side by side, line by line [https://www.youtube.com/watch?v=za2FZ8QCE18&ab_channel=FrontStart](https://www.youtube.com/watch?v=za2FZ8QCE18&ab_channel=FrontStart). It won't do anything with that information until the next phase, the commit phase.
@@ -630,7 +635,7 @@ React uses `key` as a way to distinguish between any components. It helps React 
 
 Let's say you have a list of items. Under the hood, React converts the items into React elements with the same type. Without `key`, there is no way to distinguish them. When we have an unique key for each item, React can differentiate and also track them when they get deleted, added or re-ordered.
 
-When the `key` props is changed, React unmount the previous instance, and mount a new one. **The state of the component belong to the key**, so all states that have existed in the component at the time is completely removed and the component is reinitialized. So, when an list item has a state and we are using `index` as the `key`, then we re-order the list the state of the item will not re-ordered as well
+When the `key` props is changed, React unmount the previous instance, and mount a new one. **The state of the component belongs to the key**, so all states that have existed in the component at the time is completely removed and the component is reinitialized. So, when an list item has a state and we are using `index` as the `key`, then we re-order the list the state of the item will not re-ordered as well
 
 In this example <https://www.developerway.com/posts/react-key-attribute#part3>, after re-order, the component with key='au' still takes 'Australia' for the country props as before. That's why when we use `memo`, this component isn't re-rendered because the props doesn't change. If we are not using `memo`, the list item still re-render no matter which type of `key` we use because the component re-renders
 
@@ -638,8 +643,8 @@ Key must be unique. You shouldn't take `index` as key when you add or remove ite
 
 Using `index` as `key` is a good idea: 
   
-  - When your list is static, we won't do anything on it
-  - When the data of the list is changed on every render and you are not modifying the list, eg: pagination
+- When your list is static, we won't do anything on it
+- When the data of the list is changed on every render and you are not modifying the list, eg: pagination
 
 ## How to approach a design
 
@@ -654,9 +659,9 @@ const arr = new Set([1,2,3])
 arr.has(1) // return true
 ```
 
-## Why the result of setState is not sync
+## Why the result of `setState` is not sync
 
-Because React use batch updating. That means React groups all the setStates, put them into queues, execute them together within only one re-render. If setState is sync, we cannot batch them in only one re-render
+Because React use batch updating. That means React groups all the `setStates`, put them into queues, execute them together within only one re-render. If `setState` is sync, we cannot batch them in only one re-render
 
 ## Do client component render only on client
 
