@@ -63,7 +63,9 @@ The pattern that we using above with Service is called `Dependancy Injection`. W
 
 In NestJS, if we want to inject a service into another service, we need to use the decorator `@Injectable()` at the top of the service. All the injectable class must be added into `providers` array of that module. 
 
-We can also inject services by using `token`.
+There are other ways to implement DI in NestJS
+
+- using `useClass`.
 
 ```ts
 // cats.module.ts
@@ -82,7 +84,34 @@ export class CatsController {
 }
 ```
 
-The injected service can be dynamic, when we use `useFactory`
+- using value provider: The `useValue` syntax is useful for injecting a constant value, putting an external library
+into the Nest container, or replacing a real implementation with a mock object. 
+
+```ts
+const mockSongsService = {
+  findAll() {
+    return [
+      {
+        id: 1,
+        title: 'Lasting lover',
+      },
+    ];
+  },
+};
+
+@Module({
+  controllers: [SongsController],
+  providers: [
+    SongsService,
+    {
+      provide: SongsService,
+      useValue: mockSongsService,
+    },
+  ],
+})
+```
+
+- `useFactory`: inject dynamic value
 
 ```ts
 const devConfig = {port: 3000};
