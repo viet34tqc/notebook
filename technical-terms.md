@@ -34,6 +34,45 @@ Enable writing codes with JS features that are not supported by most browser yet
 
 <https://www.youtube.com/watch?v=qVQjGwm_mmw>
 
+- To cache an assest, we only need two headers
+  - `cache-control: max-age=3600, must revalidate` for caching
+  - `etag: "random_string"` for revalidation
+- things never need to be revlidated: <https://i.imgur.com/dErZjKc.png>
+  - paths with dynamic content (/my-account, /dashboard)
+  - files that never change 
+
+## FPS
+
+<https://tigerabrodi.blog/i-finally-understand-requestanimationframe>
+
+FPS means frame per second. The reason we see things moving on a screen is because the browser is painting an entirely new image. It's not actually moving. Throughout a single second, each frame is a completely new image drawn on the screen.
+
+The lower the FPS, the more gap between the motions before we draw the next frame on the screen.
+
+40 FPS timeline:
+0ms    [Frame 1]
+25ms   [Frame 2]
+50ms   [Frame 3]
+75ms   [Frame 4]
+
+100 FPS timeline:
+0ms    [Frame 1]
+10ms   [Frame 2]
+20ms   [Frame 3]
+30ms   [Frame 4]
+
+The amount of FPS depends on the Hz of your screen and the complexity of the frame
+
+Hz indicates how many times the screen can refresh its image each second.
+And yes, the more complex frame, the longer browser needs to take to draw the frame. By default, to draw an image (frame) browser has to go through these steps
+
+- Run JavaScript (process any animations/changes)
+- Calculate layout (figure out where everything goes)
+- Paint (determine what colors each pixel should be)
+- Composite (combine all layers into final image)
+- Send to display
+
+
 ## Render tree
 
 - <https://web.dev/howbrowserswork/>

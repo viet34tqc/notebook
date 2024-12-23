@@ -628,10 +628,11 @@ Implementing security for a website involves multiple layers, from client-side p
 
 ## Why list item need a unique `key`
 
-<https://kentcdodds.com/blog/understanding-reacts-key-prop>
-<https://www.youtube.com/watch?v=za2FZ8QCE18&ab_channel=FrontStart>
+- <https://kentcdodds.com/blog/understanding-reacts-key-prop>
+- <https://www.youtube.com/watch?v=za2FZ8QCE18&ab_channel=FrontStart>
+- <https://tigerabrodi.blog/key-optimization-in-react>
 
-React uses `key` as a way to distinguish between any components. It helps React identify which elements in the list have changed, been added, or been removed. If the key of item retains between re-renders, React will just re-use the component instead of re-creating it from scratch => better perfomance.
+React uses `key` to keep track of which items have changed, are added, or are removed. If the key of item retains between re-renders, React will just re-use the component instead of re-creating it from scratch => better perfomance.
 
 Let's say you have a list of items. Under the hood, React converts the items into React elements with the same type. Without `key`, there is no way to distinguish them. When we have an unique key for each item, React can differentiate and also track them when they get deleted, added or re-ordered.
 
@@ -820,7 +821,7 @@ Load balancing is the process of distributing traffic among multiple servers to 
 ## Should we set props value as initial state
 
 <https://vhudyma-blog.eu/react-antipatterns-props-in-initial-state>
-This is anti pattern because `useState` hook initializes the state only once - when the child component is rendered. So, the state in child component will not be updated when prop value from parent updates
+This is anti pattern because `useState` hook initializes the state only once - when the child component is rendered for the first time. So, the state in child component will not be updated when prop value from parent updates
 
 ## React Portal
 
@@ -887,7 +888,7 @@ function fails2() {
 }
 
 try {
-  fails();
+  fails2();
 } catch (error) {
   // Error here cannot catch
   console.log('error', error);
@@ -937,7 +938,7 @@ test()
 - <https://unicorn-utterances.com/posts/javascript-bind-usage>
 
 **TLDR**
-By default, for normal function, JavaScript looks at the class that uses the `this` keyword, not the class that creates the `this` keyword. On the other hand, Arrow function will bound `this` to original scope (original class) and cannot be modified (even if you use `bind`)
+By default, for method in class using normal function, JavaScript looks at the class that uses the `this` keyword, not the class that creates the `this` keyword. On the other hand, Arrow function method will bound `this` to original scope (original class) and cannot be modified (even if you use `bind`)
 
 For normal function:
 
@@ -1403,7 +1404,14 @@ const copied = new Map(myMap);
 
 ## CORS
 
-Là cơ chế của server cho phép các origin khác (origin = scheme(protocol) + domain + port) ngoài chính nó gửi request.
+CORS (Cross-Origin Resource Sharing) is a security feature in web browsers that controls how resources (like APIs or files) can be requested from a different domain than the one where your web page is running.
+
+**Why is CORS needed?**
+
+By default, browsers block requests to a different origin (domain, protocol, or port) for security reasons. This is called the Same-Origin Policy. CORS allows servers to explicitly permit requests from trusted origins by adding specific HTTP headers.
+
+If client app at `https://myapp.com` tries to fetch data from `https://api.external.com`, server at `https://api.external.com` must include CORS headers (`Access-Control-Allow-Origin: https://myapp.com`)
+
 Cùng origin: cùng scheme, domain và port
 
 - Cùng scheme và cùng domain
@@ -1996,8 +2004,8 @@ If the viewport is 650px, the image size will be 325px. It tells browser to use 
 
 ## Difference between `{}`, `Object`, `Record<string, unknown>` in Typescript
 
-- `{}` includes most of the type, including primative types, but not `null` and `undefined`
-- `object` does not include primitive types, `null`, `undefined`
+- `{}` includes most of the type, including primative types and non-primitive types, but not `null` and `undefined`
+- `object` represents all non-primative values (array, function, object) and does not include primitive types (number, string, boolean), `null`, `undefined`,
 - `Record<string, unknown>`: only accepts plain object with pairs of key, value (not accept array, function)
 
 ## Difference between using `srcset` and `sizes` and using `<picture>` and `<source>` tag
@@ -2241,8 +2249,11 @@ Element:
 
 Scroll:
 
-- `scrollY`: `window.scrollY` returns how long the scrollbar has scroll
-- `scrollHeight`: returns height + padding + content not visible of element . `document.documentElement.scrollHeight` returns the height of the whole document. `scrollHeight` > `clientHeight`
+- `scrollY`: `window.scrollY` returns how long the scrollbar has scrolled
+- `scrollTop`: returns how long the element has scrolled
+- `scrollHeight`: returns height + padding + content not visible of element . 
+  - `document.documentElement.scrollHeight` returns the height of the whole document. `scrollHeight` > `clientHeight`
+  - Determine if an element has been totally scrolled: `Math.abs(element.scrollHeight - element.clientHeight - element.scrollTop) <= 1` => `element.scrollHeight ~ element.clientHeight + element.scrollTop`
 
 Mouse event:
 

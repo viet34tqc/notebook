@@ -11,13 +11,18 @@
 
 - Only load necessary resources on the website and try to load them as fast as possible
 
-## Common techniques for all resources
+## Common techniques optimization for all resources
 
 - Size
-    - reduce size via minify and compress
-    - code splitting
-    - tree shaking
+  - reduce js, css assets' size via minify and compress
+  - reduce image size 
+  - code splitting
+  - tree shaking
 - Network: caching, using CDN
+- Wait: reduce the waiting time for the assets
+  - Async/defer js, css
+  - lazy loading below-the-fold image
+  - resources hint
 
 ## Basic concept
 
