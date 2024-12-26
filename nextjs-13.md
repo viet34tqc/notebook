@@ -14,6 +14,8 @@
 - <https://vercel.com/blog/understanding-react-server-components>
 - <https://medusajs.com/blog/client-server-transition-learnings-nextjs-14-server-components/>
 
+Concept: <https://saewitz.com/the-mental-model-of-server-components>
+
 TLDR
 
 - RSC reduces bundle size on the client, because the rendered Server Components are not included in the JS bundle (they never hydrate or re-render) => faster TTI
