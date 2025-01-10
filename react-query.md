@@ -2,16 +2,78 @@
 
 ## Reference
 
-<https://tsh.io/blog/react-query-tutorial/>
-<https://www.carlrippon.com/>
+- <https://tigerabrodi.blog/become-expert-in-react-query>
+- <https://tsh.io/blog/react-query-tutorial/>
+- <https://www.carlrippon.com/>
 
 ## Important terms
 
-- queries: <https://react-query.tanstack.com/guides/queries>
-- queriesKey: <https://react-query.tanstack.com/guides/query-keys>
+- querieKey: 
+  - Query keys are like dependencies in useEffect
+  - They define the unique identity of your data
+  - When they change, you get a refetch (for example: queryKey includes filter object and the the filter object changes)
+- queryFn: It's a functions returning Promises.
+
+```js
+// ❌ This doesn't work
+// You need to pass a function
+useQuery({
+  queryKey: ["todos"],
+  queryFn: Promise.resolve({ todos: [] }),
+});
+
+// ✅ This works
+useQuery({
+  queryKey: ["todos"],
+  queryFn: () => Promise.resolve({ todos: [] }),
+});
+
+// ✅ Common example
+useQuery({
+  queryKey: ["todos"],
+  queryFn: () => fetch("/api/todos").then((r) => r.json()),
+});
+```
+
 - caching: <https://react-query.tanstack.com/guides/caching>
 - staleTime: The duration until a query transitions from fresh to stale. As long as the query is fresh, data will always be read from the cache only, no network request will happen! If the query is stale (which per default is: instantly), you will still get data from the cache, but a background refetch can happen under certain conditions.
-- CacheTime: The duration until inactive queries will be removed from the cache. This defaults to 5 minutes. Queries transition to the inactive state as soon as there are no observers registered, so when all components which use that query have unmounted.
+    
+```js
+// Data becomes stale after 5 minutes
+useQuery({ staleTime: 1000 * 60 * 5 });
+```
+
+- inactive query: No components use the query
+
+```jsx
+// Component A
+function TodoList() {
+  // This query is "active" because the component is using it
+  const { data } = useQuery({
+    queryKey: ['todos'],
+    gcTime: 1000 * 60 * 5 // 5 minutes
+  })
+  return <div>{data.map(...)}</div>
+}
+
+// When TodoList unmounts (user navigates away), the query becomes "inactive"
+// If user doesn't come back to TodoList within 5 minutes (gcTime),
+// the data is removed from cache
+// If they return within 5 minutes, the cached data is still there!
+```
+
+- gcTime: The duration until inactive queries will be removed from the cache. This defaults to 5 minutes. Queries transition to the inactive state as soon as there are no observers registered, so when all components which use that query have unmounted.
+
+```js
+useQuery({
+  queryKey: ['todos'],
+  // If this query becomes inactive (no components using it),
+  // wait 10 minutes before removing it from cache
+  gcTime: 1000 * 60 * 10
+})
+```
+
+- Invalidation: Telling React Query "hey, this data might be outdated, time to fetch fresh data!
 
 ## Why do I need React Query when the browser has built-in fetch API already?
 

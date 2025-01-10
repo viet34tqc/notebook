@@ -156,16 +156,42 @@ module: {
 		},
 		{
       test: /\.css$/i,
-      use: ['style-loader', 'css-loader', 'sass-loader'],
+      use: ['style-loader', 'css-loader', 'sass-loader', 'postcss-loader'],
   	},
 	]
 }
 ```
 
-Some popular loaders:
-- sass, sass-loader: import scss file in js files
-- postcss-loader: add prefix to css using browserlist
-- css-loader and style-loader: import css files in js files
+- `postcss-loader`
+	- Transform CSS with JavaScript plugins. Allows you to use modern CSS features and automate CSS-related tasks
+	- Common use cases:
+		- Adding vendor prefixes automatically
+		- Converting modern CSS syntax for browser compatibility
+		- Minifying CSS
+		- Implementing CSS next features
+	- Requires a postcss.config.js file to define plugins
+	
+	```js
+	// postcss.config.js
+	module.exports = {
+	  plugins: [
+	    require('autoprefixer'),
+	    require('postcss-preset-env')
+	  ]
+	}
+	```
+
+- `css-loader` is like a translator that converts CSS into a language JavaScript understands
+	- Parse CSS files and convert them into JavaScript modules. Webpack's module bundler scans the JavaScript files and finds `import 'style.css'`, then it pass CSS file to `css-loaders`
+  - Interprets `@import` and `url()` statements in CSS
+	- Allows you to import CSS files directly in JavaScript
+	- Handles CSS modules and CSS scoping
+- `style-loader` is like a painter that puts the translated CSS onto the webpage
+	- Inject CSS into the DOM by creating `<style>` tags using js. The drawback of this is slow. You can use `MiniCssExtractPlugin` to extract css into separating files, which could utilize browser caching and reduce js bundle size
+	- Takes CSS that has been processed by css-loader and injects it into the HTML
+	- Dynamically adds CSS to the page at runtime
+
+The order matters: PostCSS transforms the CSS first, then css-loader processes it, and finally style-loader injects it into the page.
 
 ## Plugin
 

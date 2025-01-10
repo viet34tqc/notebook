@@ -441,6 +441,8 @@ How to prevent unnecessary re-renders
 <https://beta.reactjs.org/learn/render-and-commit>
 <https://dev.to/teo_garcia/understanding-rendering-in-react-i5i>
 
+<img src="https://i.imgur.com/7W6SqA9.png" />
+
 3 phases:
 
 - Trigger a render: there are two reasons for a component to render
