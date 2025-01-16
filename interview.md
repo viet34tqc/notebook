@@ -1704,8 +1704,15 @@ Object.defineProperty(obj, 'flameWarTopic', {
 - can be used with built-in `String`, `Array`, array-like objects (e.g., arguments or `NodeList`), `TypedArray`, `Map`, `Set`
 - cannot be used with simple Object
 
-## Difference between `async, await` and `promise`
+## Difference between `:focus` and `:focus-visible`
 
+- `:focus`: triggered when element receives focus, regardless of how it was focused (mouse, keyboard, or programmatically).
+- `:focus-visible`: 
+  - triggered when element receives focus, and the browser determines that focus should be visibly indicated (typically via keyboard or assistive technology).
+  - When you click on an button, browser doesn't think this element needs focus indication => won't display focus style
+  - When you click on an input, `:focus-visible` is still triggered because it helps users see where they are typing or interacting
+
+## Difference between `async, await` and `promise`
 They are both used to handle asynchronous tasks. The difference is `promise` involves chaining `.then` and `.catch` methods, whereas `Async` `Await` uses a `try-catch` block that looks more like synchronous code. So, it's easier to read code with `async` and `await`
 
 `Promise`:
