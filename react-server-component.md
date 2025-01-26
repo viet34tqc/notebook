@@ -1,60 +1,61 @@
-# React Server Component
+# React server component
 
-<https://www.mux.com/blog/what-are-react-server-components>
+## References
 
-## Why Server-side rendering is not enough
+- <https://focusreactive.com/breaking-down-next-js-14>
+- Concept: <https://demystifying-rsc.vercel.app/> and [official documentaion](https://nextjs.org/docs/getting-started/react-essentials)
+- Caching: <https://www.youtube.com/watch?v=VBlSe8tvg4U>
 
-<https://vercel.com/blog/understanding-react-server-components>
+## What do React Server Components do?
 
-- To fetch data, traditional client side react app requires more round trip because the fetching data has to be put into `useEffect` which only run after UI rendering
-- It goes the same with Server-side rendering if your pre-rendered component requires another data fetching. For example, in your pre-rendered blog, you need to fetch the comments for that blog page. The only thing SSR does is to make initial page load faster.
-- All JavaScript must download from the server before the client can be hydrated with it, even if it's streamed to the browser asynchronously (using `Suspense`). As app complexity increases, so does the amount of code the user downloads.
-- All hydration has to complete on the client before anything can be interacted with.
+React Server Components are executed in server in order to generate flight (payload) data, and then it is sent to the client to build and update the Virtual DOM.
 
-## RSC comes to rescue
+To do this, React serialize the React element tree on server executed components and send that serialized string to client. On client, this payload will be deserialized
 
-RSC will take care the fetching data and leave the interaction for client-side component. And your app can ship both RSCs and client-side components together, which saves save a lot of code for fetching data compared to traditional client rendering or SSR.
+## Why RSC
 
-Fetching data on the server offers more benefits:
+- <https://www.mux.com/blog/what-are-react-server-components>
+- <https://www.joshwcomeau.com/react/server-components/>
+- <https://www.webscope.io/blog/so-why-server-components>
+- <https://vercel.com/blog/understanding-react-server-components>
+- <https://medusajs.com/blog/client-server-transition-learnings-nextjs-14-server-components/>
 
-- Access to backend data is more securely
-- Prevent client-side data fetching waterfalls
-- We can send less JavaScript to the client, leading to smaller bundle sizes and less work during hydration.
+Concept: <https://saewitz.com/the-mental-model-of-server-components>
 
-## Tradeoff
+TLDR
 
-- Can't use things related to client (hooks, local storage)
-- Can't use CSS-in-JS
+- RSC reduces bundle size on the client, because the rendered Server Components are not included in the JS bundle (they never hydrate or re-render) => faster TTI
+- Decreasing data fetching time because the code is often deployed on the same VPS with DB
+- Reduce the number of client request and prevent client-side data fetching waterfalls. If we fetching in the client components, it will lead to a data fetching waterfall
+- Better for security, we can hide the API keys and other secret keys from client
+
+Server components **fetch the data and render entirely on the server**, and the resulting HTML is streamed into client-side component. This process eliminates the need for client-side re-rendering, thereby improving performance.
+
+By moving the majority of your application code to the server, RSCs help to prevent client-side data fetching waterfalls, where requests stack up against each other and have to be resolved in serial before the user can continue. Server-side fetches have a much smaller overhead, as they don't block the whole client and they resolve much more quickly.
+
+When an RSC needs to be re-rendered, due to state change, it refreshes on the server and seamlessly merges into the existing DOM without a hard refresh. As a result, the client state is preserved even as parts of the view are updated from the server.
+
+## When Should You Use RSCs?
+
+- If I have a highly interactive app, use Client Components.
+- On the other hand, if I had a lot of DB access and complex logic, I might offload that to the server by doing it on a Server Component.
+
+## Server component and client component
+
+- A Server Component runs exclusively on the server. This code will not re-run on the user's device; the code won't even be included in the JavaScript bundle
+- A Client Component is a component that runs on both the server and client. It is pre-rendered on server and hydrated on client. Every React component you've ever written in 'traditional' (pre-RSC) React is a Client Component. It's a new name for an old thing.
+
+## Streaming
+
+When streaming, you can send UI in small chunks from server to client, without needing to wait until all of your data has been loaded
+
+On a page, each component can be considered a chunk. Static components (e.g. layout, product information) that don't rely on data can be pre-rendered at build time and sent first, then React can start hydration earlier.
+
+Components that require data fetching (e.g. reviews, related products) can be sent in the same server request after their data has been fetched. This is done by wrapping the components that require dynamic data within `<Suspense>` boundaries and providing a fallback. As the user views the page, the server streams in the dynamic data, replacing the static fallbacks.
 
 ## Server actions
 
-What if you need to fetch data on the server in response to a user’s action on the client (like a form submission)? 
-
-The client can send data to the server, and the server can do its fetching or whatever, and stream the response back to the client just like it streamed that initial data. This two-way communication is called server actions.
-
-## How do you make a Server Component a child of a Client Component?
-
-In normal flow, you can import client component inside server component but the reverse is not allowed.
-
-To use Server component inside client component, pass Server Components as children or props instead of importing them
-
-To do this properly, we have to go up a level to the nearest Server Component — in this case, ServerPage — and do our work there.
-
-```tsx
-import ClientComponent from './ClientComponent.js'
-import ServerComponentB from './ServerComponentB.js'
-
-/** 
-  * The first way to mix Client and Server Components
-  * is to pass a Server Component to a Client Component
-  * as a child.
-  */
-function ServerComponentA() {
-  return (
-    <ClientComponent>
-      <ServerComponentB />
-    </ClientComponent>
-  )
-}
-```
-
+- define a server action
+  - server action accepts a `formData` as param
+  - Then you can send POST request to the server and `revalidatePath`
+- In client form, add the server action to the `action` attribute of form

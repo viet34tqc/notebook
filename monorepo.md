@@ -12,20 +12,22 @@ Going from multi to monorepo is a matter of moving all your projects into a sing
 
 ## Benefits
 
-- Simple dependancy management: all dependancies are sharing and hosted in the same repo
+- Code sharing: all dependancies are sharing and hosted in the same repo. For example: admin dashboard and client app using the same component library packages, shared types between server and client (**Most important**)
+- Single source of truth: one version of every dependency means there are not versioning conflicts and no dependency hell 
 - Consistency: all the packages will be enforced to use the same code standards
 - Visibility: everyone are informed of any updates in all packages => better collaboration
-- Single source of truth: one version of every dependency means there are not versioning conflicts and no dependency hell
-
-## When to use
-
-When a project has a core package surrounded with various add-ons; this is for example the case for Babel.
-
-When you need to publish multiple packages and want to avoid your contributors having to open PRs on many separate repositories whenever they want to make a change. This is for example the case for Jest.
 
 ## Drawbacks
 
 - Hard to maintain when the codebase grows
+
+## When to use
+
+- When a project has a core package surrounded with various add-ons; this is for example the case for Babel.
+
+## When not to use
+
+- When you need to limit the access control based on the specific roles. For example, in the monorepo, there is a private package and only some members of the team can get access to it
 
 ## How
 

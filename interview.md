@@ -248,7 +248,7 @@ That's because when the outer component re-renders, it clears the previous outpu
 ## Why react use immutability?
 
 - Keep previous versions of the state, and reuse them later
-- Create pure components. Immutable data can determine if changes have been made, which helps to *determine when a component requires re-rerendering*. If we mutate the state as object or array directly, React still sees that object or array as the same one because JS compares objects and arrays by reference, not value.
+- Create pure components. Immutable data can detect if changes have been made, which helps to *determine when a component requires re-rerendering*. If we mutate the state as object or array directly, React still sees that object or array as the same one because JS compares objects and arrays by reference, not value.
 
 To detect a state change, React shallowly compares the old and new value state (similar to '==='). If you mutate the data (object and array) directly (using `Array.push` for example), React won't detect the change in state => won't re-render
 
@@ -311,25 +311,21 @@ const a = Test(123) // a is number
 
 ## Controlled vs uncontrolled component
 
-<https://phuoc.ng/collection/this-vs-that/controlled-vs-uncontrolled-components/>
+- <https://phuoc.ng/collection/this-vs-that/controlled-vs-uncontrolled-components/>
+- <https://www.jameskerr.blog/posts/partially-controlled-react-components/>
 
 - Controlled component: the state of the component is managed by React state. When a user interacts with the component, its state changes and React will re-render the component with the new state
-- Uncontrolled input: the state of the component is managed by the DOM. When a user interacts with the component, the DOM updates the state directly, bypassing React
+- Uncontrolled component: the state of the component is managed by the DOM. When a user interacts with the component, the DOM updates the state of component directly, bypassing React
 
 ## `useEffect` and `useLayoutEffect`
 
 <https://phuoc.ng/collection/this-vs-that/react-use-effect-vs-react-use-layout-effect/>
 
-The key difference between `useEffect` and `useLayoutEffect` is their timing. `useEffect` runs after the component has rendered, while `useLayoutEffect` runs before the browser paints
+The key difference between `useEffect` and `useLayoutEffect` is their timing. `useEffect` runs after the browser paint, while `useLayoutEffect` runs before the browser paints (after the rendering is done and React has updated the DOM)
+
+`useEffect` runs after paint because most types of effect shouldn't block the browser from updating the screen
 
 It's worth noting that `useLayoutEffect` runs synchronously, which means it can potentially slow down the browser painting if it takes too long to execute. In general, only use `useLayoutEffect` when you need to measure or modify something in the DOM before the browser painting
-
-## Controlled and uncontrolled component
-
-<https://www.jameskerr.blog/posts/partially-controlled-react-components/>
-
-- Uncontrolled components manage changes within themselves, internally.
-- Controlled components have their changes managed for them, from the outside, externally.
 
 ## What is Temporary Dead Zone
 
@@ -438,8 +434,8 @@ How to prevent unnecessary re-renders
 
 ## How React rendered UI
 
-<https://beta.reactjs.org/learn/render-and-commit>
-<https://dev.to/teo_garcia/understanding-rendering-in-react-i5i>
+- <https://beta.reactjs.org/learn/render-and-commit>
+- <https://dev.to/teo_garcia/understanding-rendering-in-react-i5i>
 
 <img src="https://i.imgur.com/7W6SqA9.png" />
 
@@ -449,11 +445,12 @@ How to prevent unnecessary re-renders
   - Initial render: calling `ReactDOM.render` to render the root component. This is the initial render
   - Re-render: the component's states has been updated via event, etc...
 - Render: React calls your components to figure out what should be on the screen.
-  - During the initial render, React will create the DOM nodes.
+  - During the initial render, React generates the virtual DOM for all the elements
   - During the re-render, React will compare the previous Virtual DOM with the current Virtual DOM side by side, line by line [https://www.youtube.com/watch?v=za2FZ8QCE18&ab_channel=FrontStart](https://www.youtube.com/watch?v=za2FZ8QCE18&ab_channel=FrontStart). It won't do anything with that information until the next phase, the commit phase.
 - Commit: React commit changes to the DOM
-  - For the initial render, React will use `appendChild` DOM API to put all the DOM nodes it has created on the screen
+  - For the initial render, React inserts the real DOM nodes from virtual DOM nodes into the document.
   - For re-renders, **React only changes the DOM nodes if there is a difference between renders**. If a component re-renders, it only changes the updated DOMs (that could contains updated data), the other DOMs in that component are still the same
+- After rendering is done and React updated the DOM, the browser will repaint the screen. This process is also known as 'browser rendering'
 
 ## How React update UI
 
@@ -909,8 +906,6 @@ To catch that, we need to use `await`
 })();
 ```
 
-`try...catch` cannot also catch error in the setTimeout because
-
 ## Difference between `throw Error()` and `reject(new Error())`
 
 <https://catchjs.com/Docs/AsyncAwait>
@@ -1136,10 +1131,18 @@ Cách logout jwt
 - Trong các API được authen, khi có request đến, check token có nằm trong blacklist hay không, nếu có thì coi như unauthorize.
 - Bài toán đặt ra là lưu blacklist ở đâu để việc đọc token đảm bảo được về mặt hiệu suất khi mà tần số gọi API dày đặc như vậy? Câu trả lời là lưu trong redis. Mặc khác vì jwt token nó có thời hạn sống ngắn, nên hoàn toàn có thể clean up dữ liệu, xoá các token đã thực sự hết hạn trong redis.
 
+## Why use zustand over redux
+
+- Zustand has minimal boilerplate
+  - Define a store with just a single function.
+  - No need for actions, reducers, or middleware setup.
+- has a much smaller bundle size
+- has built-in support for middleware like logging or persisting state.
+
 ## Debounce và throttle
 
-<https://www.youtube.com/watch?v=LZb_Bv81vQs>
-<https://www.kaidohussar.dev/posts/debounce-vs-throttle>
+- <https://www.youtube.com/watch?v=LZb_Bv81vQs>
+- <https://www.kaidohussar.dev/posts/debounce-vs-throttle>
 
 - Debounce: gọi 1 hàm nào đó sau 1 khoảng delay. VD: Có 1 input. Input này có 1 event handler cho sự kiện onChange. Nếu áp dụng debounce, event handler này sẽ chỉ chạy khi:
   - Hết thời gian delay
@@ -1166,7 +1169,7 @@ async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 - <https://www.showwcase.com/show/36421/what-is-pnpm-and-why-you-should-use-it>
 
 - Utilizes a shared dependency mechanism that allows different projects to use the same copy of a package. Packages are stored centrally in a single content-addressable store on your machine and are hard-linked from this storage => you only ever download a package ONCE and require less disk space
-- Installation times are expedited
+- Installation times are faster
 
 ## `npm install` and `npm ci`
 
@@ -1188,7 +1191,7 @@ Version 1.100.100 10.10.10
 
 Thay đổi:
 
-- MAJOR: often refet to 'breaking change', which means the big update and can be incompatible with older version.
+- MAJOR: often refers to 'breaking change', which means the big update and can be incompatible with older version.
 - MINOR: add more functions and compatible with the APIs of current version.
 - PATCH: fix bugs
 
@@ -1261,7 +1264,7 @@ const date = new Date(Date.UTC(2012, 11, 20, 3, 0, 0));
 
 ### Get data from Date instance
 
-After creating date instance, we use `Intl.DateTimeFormat` to display Date as string
+After creating date instance, we use `Intl.DateTimeFormat` to display Date with the format that is passed in
 
 ```js
 const date = new Date(Date.UTC(2012, 11, 20, 3, 0, 0));
@@ -1317,7 +1320,24 @@ console.log( config.language ) // ['VN']
 `Number.isNaN(value)` check if the `value` is numeric and not a number.
 `isNaN(value)` check if the `value` is not a number
 
-## Animation có những thuộc tính gì
+## Animation properties
+
+name, delay, duration, iteration count, play state, easing
+
+- Best practice when write CSS animation
+  - The name of the animation should be at the end
+  - Animation duration first, then delay, for example: `0.8s infinite ease alternate spinner`
+- At minimum, you only need to specify animation name and duration
+- Using `alternate` as direction to alternate between foward and reverse direction, create a back-end-forth effect
+
+## Animation vs transtion
+
+- Animation has multiple steps, while transtion only has 3 step which is start and end
+- Looping: Animation can loop
+- Direction: Animation can go fowared, backward and altenate between two while transtion only go in one direction
+- Play state: animation can be paused
+
+- Not all properties can be transitioned, for example: 'background'. In this case, you can apply background to pseudo-element and transition its opacity
 
 ## Hiểu thế nào về responsive web design
 
@@ -1392,7 +1412,12 @@ const [[firstKey, firstValue]] = myMap
 const copied = new Map(myMap);
 ```
 
+### `Map()` and `Weakmap()`
+
 <https://phuoc.ng/collection/this-vs-that/map-vs-weak-map/>
+
+- `Weakmap()` only allows key as `object`
+- The key of `Weakmap()` can be garbage collected when it comes to the key as object
 
 `Weakmap` tương tự như `Map` nhưng key của Weakmap có thể được gabage collected nếu không có tham chiếu nào đến nó => tránh hiện tượng memory leak.
 
@@ -1446,11 +1471,11 @@ Khác origin:
   <li>To reach the host, it first needs to translate the human readable host into an IP number, and it does this by doing a DNS lookup on the host</li>
   <li>Then a socket needs to be opened from the user's computer to that IP number, on the port specified (most often port 80)</li>
   <li>When a connection is open, the HTTP request is sent to the server</li>
-  <li>server host forwards the request to the web server (most often Apache) configured to listen on the specified port
-  The server inspects the request (most often only the path), and launches the server plugin needed to handle the request (corresponding to the server language you use, PHP, Java, .NET, Python?)</li>
+  <li>server host forwards the request to the web server configured to listen on the specified port
+  <li>The server inspects the request (most often only the path), and launches the server plugin needed to handle the request (corresponding to the server language you use, PHP, Java, .NET, Python?)</li>
   <li>The plugin gets access to the full request, and starts to prepare a HTTP response.</li>
   <li>To construct the response, a database is (most likely) accessed.</li>
-  Data from the database, together with other information the plugin decides to add, is combined into HTML.</li>
+  <li>Data from the database, together with other information the plugin decides to add, is combined into HTML.</li>
   <li>The plugin combines that data with some meta data (in the form of HTTP headers), and sends the HTTP response back to the browser.</li>
   <li>The browser receives the response, and parses the HTML in the response</li>
   <li>A DOM tree is built with HTML</li>
@@ -1488,8 +1513,9 @@ myInnerFunc();
 
 ## Primitive và Reference type
 
-<https://daveceddia.com/javascript-references/>
-<https://www.youtube.com/watch?v=RLBqJpK1hro>
+- <https://daveceddia.com/javascript-references/>
+- <https://www.youtube.com/watch?v=RLBqJpK1hro>
+
 Khi khai báo 1 biến, giá trị của biến đấy được bỏ vào trong 1 cái box, và biến trỏ vào box đó.
 
 Primitive type: string, number, boolean, undefined, null, Symbol
@@ -1558,8 +1584,8 @@ RestAPI should be stateless. It means client and server doesn't need to store in
 
 ## Pass by value and pass by reference
 
-<https://www.aleksandrhovhannisyan.com/blog/javascript-pass-by-reference/#what-is-pass-by-value>
-<https://www.30secondsofcode.org/js/s/pass-by-reference-or-pass-by-value>
+- <https://www.aleksandrhovhannisyan.com/blog/javascript-pass-by-reference/#what-is-pass-by-value>
+- <https://www.30secondsofcode.org/js/s/pass-by-reference-or-pass-by-value>
 
 - Passing by value is about copying. When an argument is passed by value, the formal parameter receives a copy of the argument's value (argument is the variable that passed to function when the function is called)
 - In pass by reference, param would be an alias for argument, which means param values change will lead to change in argument value. But JS always **pass by value** (both primitive and non-primitive values) and doesn't pass by reference.
@@ -1741,18 +1767,25 @@ const delay = (ms: number) => new Promise( res => setTimeout(res, ms, 'some valu
 
 ## `onChange` và `onInput` khi sử dụng cho input
 
-`onChange` chỉ chạy khi mà user ra khỏi (`blur`) input đó
-`onInput` không chỉ chạy như `onChange` mà còn chạy khi gõ ('keystroke') hoặc paste
+- `onChange` 
+  - Triggered: When the value of an input element changes and then blurs (for <input type="text">) or immediately (for <input type="checkbox"> or <select>). (**NOTE**: `onChange` in React behaves like `onInput`)
+  - Use Case: When you care about the final value, not intermediate keystrokes for input text
+- `onInput`
+  - Triggered: Immediately as the user types or changes the input's value or on paste
+  - Use Case: When you need real-time feedback (e.g., live search, character counters)
 
 ## `import` and `export`
 
-### `export`### `export`lt export duy nhất. Khi import ta chỉ cần viết `import ChildComponent from './abc.js'`
-  - `export * from` hay còn gọi là re-export: `export {default} from './abc.js'`. Kĩ thuật này được sử dụng để gom các export từ các child component và export lại 1 lần nữa.  `*` ở đây là 1 object, chứa tất cả các export từ `./abc.js`, kể cả export thường lẫn export default. `{default}` là object destructure. `export * from` tương đương với `import * from` kết hợp với `export *`. Khi có nhiều child component cần re-export thì mình có thể viết như sau
+### `export`
 
-  ```js
-  export {default as a} from './a.js' // tương đương với import {default as a} from './a.js' và export a
-  export {default as c} from './c.js'
-  ```
+chỉ có 1 default export duy nhất. Khi import ta chỉ cần viết `import ChildComponent from './abc.js'`
+
+`export * from` hay còn gọi là re-export: `export {default} from './abc.js'`. Kĩ thuật này được sử dụng để gom các export từ các child component và export lại 1 lần nữa.  `*` ở đây là 1 object, chứa tất cả các export từ `./abc.js`, kể cả export thường lẫn export default. `{default}` là object destructure. `export * from` tương đương với `import * from` kết hợp với `export *`. Khi có nhiều child component cần re-export thì mình có thể viết như sau
+
+```js
+export {default as a} from './a.js' // tương đương với import {default as a} from './a.js' và export a
+export {default as c} from './c.js'
+```
 
 ### `import`
 
@@ -1793,13 +1826,13 @@ console.log(info);
 - DOMContentLoaded: the time for loading HTML before starting to load the content. The event does not wait for images, subframes or even stylesheets to be completely loaded. The only target is for the Document to be loaded
 - Load: when all the resources are loaded ( resources are parsed and get acknowledged off before DOMContentLoaded)
 - Speed Index: shows how quickly the contents of a page are visibly populated.
-- Time to first byte (TTFB): the time it takes the browsers to start receiving the first byte of a request. It includes four components:DNS lookup, TCP connection, SSL connection, HTTP request time. How to improve: 
+- Time to first byte (TTFB): the time it takes the browsers to start receiving the first byte of a request. It includes four components: DNS lookup, TCP connection, SSL connection, HTTP request time. How to improve: 
   - Caching
   - Avoids redirect
   - Use CDN
   - Reduce queries
 - First paint (FP): Time for the first pixel to render on the screen after user navigates to web page
-- First Contentful Paint(FCP): the moment when the first element from the DOM appears in the browser. Element here includes text, images, non-white canvas, or scalable vector graphics (SVG). How to improve: 
+- First Contentful Paint (FCP): the moment when the first element from the DOM appears in the browser. Element here includes text, images, non-white canvas, or scalable vector graphics (SVG). How to improve: 
   - Eliminate render-blocking resources
   - Minify CSS and JS
   - Remove unused CSS, unused JavaScript
@@ -2093,8 +2126,8 @@ Chỉnh padding cho section hero:
 
 ## Build URL with params
 
-<https://www.valentinog.com/blog/url/>
-<https://www.builder.io/blog/new-url>
+- <https://www.valentinog.com/blog/url/>
+- <https://www.builder.io/blog/new-url>
 
 ```js
 const url = new URL('https://builder.io/api/v2/content')
@@ -2252,7 +2285,7 @@ paragraph.children;   // HTMLCollection: [HTMLElement]
 
 Element:
 
-- `clientHeight`: height + padding of element. `document.documentElement.clientHeight` returns the viewport height
+- `clientHeight`: height of visible content + padding. `document.documentElement.clientHeight` returns the viewport height
 - `offsetHeight`: height + padding + border of element
 - `getBoundingClientRect()`: return the position of the element that is relative to the **current** viewport. The viewport is the area that is being viewed. So the returned value of `getBoundingClientRect()` may vary depending on the place we are viewing, normally when you scroll down the `top` and `bottom` will be decreased
 
@@ -2260,8 +2293,9 @@ Scroll:
 
 - `scrollY`: `window.scrollY` returns how long the scrollbar has scrolled
 - `scrollTop`: returns how long the element has scrolled
-- `scrollHeight`: returns height + padding + content not visible of element . 
-  - `document.documentElement.scrollHeight` returns the height of the whole document. `scrollHeight` > `clientHeight`
+- `scrollHeight`: returns height + padding + content of element (content is visible or not) 
+  - `document.documentElement.scrollHeight` returns the height of the whole document.
+  - `scrollHeight` = `clientHeight` if no scroll
   - Determine if an element has been totally scrolled: `Math.abs(element.scrollHeight - element.clientHeight - element.scrollTop) <= 1` => `element.scrollHeight ~ element.clientHeight + element.scrollTop`
 
 Mouse event:

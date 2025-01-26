@@ -347,6 +347,8 @@ There are 3 scopes where you can apply your guard: route handler, controller and
 
 `Guard` often needs `strategy` to implement
 
+Strategy sits after pipes and before controller.
+
 What `strategy`'s `validation` method returns is pass to the request body
 
 For example:
@@ -365,42 +367,90 @@ In NestJS, we often use Passport for authentication. Basically, what it does are
 
 - Authenticate user's credentials (like username/password, JWT)
 - Issue JWT token
-- Attach user information in the next request (`Guard` sits in front of route handler, then what we return from `validation` method in strategy is returned for the next request if it pass the guard) for further use
+- Attach user information in the next request (`Guard` sits in front of route handler, then what we return from `validate()` method in strategy is returned for the next request if it pass the guard) for further use
+- In case there is a custom `handleRequest` in the `guard`, the returned value from `handleRequest` is passed to the Request
+  - Default Implementation (No Custom handleRequest): `validate → result → req.user.`
+  - Custom handleRequest: `validate → result → handleRequest → custom result → req.user.`
 
-When using Passport with NestJs, we need to create a strategy, then we pass it to `AuthGuard` from `Passport`. For example, if we need to implement an authentication mechanism using Jwt and Passport, first, we need to create `JwtStrategy` that extends `PassportStrategy`
+### Install packages
+
+First, we need to install these packages: `@nestjs/jwt`
+If you are using Passport, install these additional packages: `@nestjs/passport`, `passport`, `passport-jwt`
+
+### Create strategy
+
+When using Passport with NestJs, we need to create a strategy. This `JwtStrategy` extends `PassportStrategy`
+
+The purpose of JWTStrategy:
+
+- Defines the logic for extracting and validating the JWT.
+- Parses the token (e.g., from the Authorization header), verifies its signature, checks for expiration, and decodes the payload.
+- The `validate` method is executed after the token is validated, but before access to the protected resource is granted, allowing you to fetch user details or perform additional checks.
+- If the token is valid, the returned value of `validate` method is attached to the `Request` Object `req`.
 
 ```ts
+// jwt.strategy.ts
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 @Injectable()
+// This is equivalent to `export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {`
+// We use 'jwt' name in the AuthGuard
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
+    // Passport automatically verifies the token (e.g., signature and expiration) using the secretOrKey and other configurations provided in the super call of the strategy.
     super({
+      // Request need to have a `Bearer` header with JWT value
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: 'abc123',
     });
   }
 
+  // The payload includes jwt payload (such as username, email...) and other jwt information (iat, exp)
   validate(payload: any) {
-    // The payload includes jwt payload (such as username, email...) and other jwt information (iat, exp)
+    // We can simply return the payload
     return payload;
-  }
+
+    // Or do some validation before returning
+    // Step 1: Perform user validation
+    const user = await this.usersService.findOne(payload.email);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    // Step 2: Attach data to the request
+    return {
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      }
+    };
 }
 ```
 
-Add this `JwtStrategy` to `providers`
+Add this `JwtStrategy` to `providers` of `auth.module.ts`
 
-Then we will attach it to `AuthGuard` from `Passport`. When put a bearer jwt token in the request header, `AuthGuard` calls `JwtStrategy` validation method. For best practice, we will create a `JwtGuard`. 
+### Create JWTAUthGuard
+
+Then we create `JWTAuthGuard` imported from `Passport`.
+
+What `JWTAuthGuard` does: 
+
+- A guard that uses the `JwtStrategy` to protect routes.
+- By default, it invokes Passport's `authenticate()` method with the `jwt` strategy under the hood
+- Ensures only requests with a valid token (validated by `JwtStrategy`) can access protected endpoints.
 
 ```ts
+// jwtAuth.guard.ts
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 
 @Injectable()
+// 'jwt' is the default name of the strategy we defined above, we can change 
 export class JwtAuthGuard extends AuthGuard('jwt') {
   canActivate(
     context: ExecutionContext,
@@ -409,6 +459,40 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 }
 ```
+
+When we have the strategy and the guard, we can use the guard to protect the route we want
+
+Example: 
+
+```ts
+@UseGuards(JwtAuthGuard)
+@Get('protected')
+getProtectedResource(@Request() req) {
+  return req.user; // User info populated by validation method in JwtStrategy
+}
+```
+
+In guard, we can define a `handleRequest` method when you need extra checks, error handling, or to modify the returned value from validation. It will override the value from `validate` method from strategy 
+
+```ts
+// When you apply the JwtAuthGuard at the controller function it will call the handleRequest function 
+handleRequest(err: any, user: any) {
+  if (err || !user) {
+    throw err || new UnauthorizedException();
+  }
+
+  // If user, return user to the controller
+  if (user.artistId) {
+    return user;
+  }
+  // Else, throw error, preventing the user from accessing the route this guard protects
+  throw err || new UnauthorizedException();
+}
+```
+
+Best Practice
+- Use the default behavior when no additional logic is needed beyond what `validate` provides.
+- Override handleRequest when you need extra checks, error handling, or to modify the returned user object.
 
 ## Middleware and interceptors
 

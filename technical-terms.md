@@ -13,7 +13,12 @@ The current request need to complete to let other requests continue.
 
 ## Serialization
 
-The process whereby an object or data structure is translated into a more suitable format for transfering over a network. This is an appropriate place for transforming and sanitizing data before sending it in request or response. For example, sensitive data like password should be excluded from the response. 
+Serialization is the process of converting an object into a format that can be easily stored, transmitted, or reconstructed later. The serialized format can be a binary format, JSON, XML, or another structured format.
+
+Why is Serialization Needed?
+
+- Persistence: Save objects to a file or database.
+- Communication: Send data over a network (e.g., API requests, distributed systems).
 
 In JavaScript, for example, you can serialize an object to a JSON string by calling the function JSON.stringify().
 
@@ -294,15 +299,15 @@ Compare with API:
 <https://www.aleksandrhovhannisyan.com/blog/javascript-pass-by-reference/#object-references-are-pointers>
 'Object references' in JavaScript are really pointers. A pointer is a variable that instead of directly storing a primitive value like an int, bool, float, or char, it stores the memory address where some data lives
 
-## RESTful API:
+## REST and RESTful API:
 
-It is the api that conforms to the constraints of REST architecture. Basically it helps client interact with server to exchange information via HTTP methods (GET, POST, PUT, DELETE)
+REST is a set of architectural constraints. 
 
-REST is a set of architectural constraints. In order for an API to be considered RESTful, it has to conform to these criteria:
+RESTful API is the api that conforms to the constraints of REST architecture. Basically it helps two systems (mostly client and server) to exchange information via HTTP methods (GET, POST, PUT, DELETE). The constraints are:
 
-- A client-server architecture made up of clients, servers, and resources, with requests managed through HTTP.
-- Stateless client-server communication, meaning no client information is stored between get requests and each request is separate and unconnected.
-- Data within a response to a request must be labeled as cacheable or non-cacheable.
+- Uses HTTP methods correctly (GET for reading, POST for creating, etc.)
+- Stateless: no client information is stored between get requests and each request is separate and unconnected.
+- Caching: Data within a response to a request must be labeled as cacheable or non-cacheable.
 
 ## Hydration (Rehydration)
 
@@ -361,7 +366,7 @@ However, if you access https://google.com, Google will not be able to read the c
   - `SameSite=Strict`: cross-site request is not allowed, the request must be originates from the destination domain.
   - `SameSite=Lax` (default): cross-site request is allowed, but only if both of the following conditions are met:
     -  The request resulted from a top-level navigation which changes the URL in your address bar., such as you click on the domain on google search result. Resources that are loaded by iframe, img tags, and script tags do not change the URL in the address bar so none of them cause TOP LEVEL navigation.
-    -  The request uses `GET` method
+    -  The request uses `GET` method. SameSite=Lax cookies will only be sent on cross-site requests if the request uses a safe HTTP method
   - `SameSite=None`: cookies are always sent, regardless of whether you're in a same-site or cross-site scenario. You can do POST, GET requests on another domain to your website and the cookies are sent along
 - `domain`: server tells browser which domains are allowed to access a cookie server, default to the exact domain that set the cookie. That means 'test.abc.com' cannot access cookies on 'abc.com', the same goes for 'test2.abc.com'. (Note that you still see the cookie from main domain in the browser dev tool, however you won't get access to them). So if your backend is hosted on 'abc.xyz.com' (so the default domain of the cookies will be '123.abc.com') and your client is hosted on another subdomain, like 'def.abc.com', the cookies are set in response header but they aren't existed on client site and won't be included in the next request to the server. In this case, your cookie's `domain` attribute should be something like 'abc.com' 
 - `path`: server tells browser which path are allowed to access and send a cookie to server. A cookie with the path attribute as Path=/store would only be accessible on the path /store and its subpaths /store/cart, /store/gadgets
@@ -545,8 +550,7 @@ How to prevent:
 
 - Create CSRF token. 
   - When user request for the first time, server send this CSRF token as a cookie to user.
-  - On the client, get CSRF from cookie and insert CSRF token in the submit form as the hidden input. When user send the next request, on server-side, we compare the CSRF token in cookies and in the submitted form.
-  - Or attach the CSRF token in the request header when you submit
+  - On the client, get CSRF from cookie and insert CSRF token in the submit form as the hidden input. When user send the next request, on server-side, we compare the CSRF token in cookies and in the submitted form (both from client). Besides inserting in the submit form, you can also attach the CSRF token in the request header when you submit
   - If a user is tricked into submitting a request on an attacker's website, the request will fail because the attacker's site cannot generate a valid CSRF token, which will cause the server to invalidate the request.
 - Using cookie with `SameSite` flag set to `Lax` or `Strict`
 - USing CSP: `<meta http-equiv="Content-Security-Policy" content="default-src 'self'">`

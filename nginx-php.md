@@ -137,3 +137,6 @@ sudo certbot --nginx
 # Test renew certificate
 sudo certbot renew --dry-run
 ```
+
+List certificates: `certbot certificates`
+To delete certbot: `sudo certbot delete --cert-name $mydomain`
