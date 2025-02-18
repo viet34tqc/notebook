@@ -6,7 +6,7 @@
 
 Dependency Inversion Principle (DIP) says that high-level modules should not import anything from low-level modules, both should depend on abstractions. What this means, is that any high level module, which naturally could be dependent on implementation details of modules it uses, shouldn't have that dependency.
 
-The high and low-level modules, should be written in a way so they both can be used without knowing any details about the other module's internal implementation. Each module should be replaceable with an alternative implementation of it as long as the interface to it stays the same.
+The high and low-level modules should be used without knowing any details about the other module's internal implementation. Each module should be replaceable with an alternative implementation but the interface they use stays the same.
 
 ## Inversion of Control
 
@@ -14,11 +14,14 @@ Inversion of Control (IoC) is a principle used to address the dependency inversi
 
 Why: the module itself only has to import and use the dependency, it never has to create the dependency from scratch or manage it in any way.
 
-## Dependancy injection
+## Dependency injection
 
 <https://blog.codeminer42.com/di-with-some-context/>
 
-Dependancy injection is a common way to implement IoC. It allows you to inject variables, objects, or services into your code rather than hard-coding or instantiating them within your code directly, remove hardcoded dependancy between module in an application. The aim of this technique is to make our code more flexible and scalable
+Dependancy injection is a common way to implement IoC. 
+
+- Dependencies (variables, objects, or services) are injected (provided) into your code (classes) from the outside. 
+- Dependencies are not hard-coded or instantiated within your code (classes) directly
 
 So what's hardcoded dependancy? Hardcode dependancy means class A is tightly coupled to class B or method B, class B/method B is initiated and called inside a method of class A. There are some issue with this:
 
@@ -27,48 +30,86 @@ So what's hardcoded dependancy? Hardcode dependancy means class A is tightly cou
 
 Here is an example:
 
-```ts
-class Counter {
-  public state: number = 0;
-  
-  public increase(): void {
-    this.state += 1;
-    console.log(`State increased. Current state is ${this.state}.`);
-  }
-  
-  public decrease(): void {
-    this.state -= 1;
-    console.log(`State decreased. Current state is ${this.state}.`;
-  }
-}
-```
-
-Logging in the methods is coupled to `console.log`. In case we want to use another log method, we need to change in all methods and that's not ideal. Here is the code using DIP
+1. Define an abstraction (interface):
 
 ```ts
-interface Logger {
+// ILogger.ts
+export interface ILogger {
   log(message: string): void;
 }
+```
 
-class Counter {
-  constructor(private logger: Logger) {}
-  
-  public state: number = 0;
-  
-  public increase(): void {
-    this.state += 1;
-    this.logger.log(`State increased. Current state is ${this.state}.`);
+2. Define implementations of the interface:
+
+```ts
+// ConsoleLogger.ts
+import { ILogger } from './ILogger';
+
+export class ConsoleLogger implements ILogger {
+  log(message: string): void {
+    console.log(message);
   }
-  
-  public decrease(): void {
-    this.state -= 1;
-    this.logger.log(`State increased. Current state is ${this.state}.`);
+}
+
+// FileLogger.ts 
+import { ILogger } from './ILogger';
+
+export class FileLogger implements ILogger {
+  log(message: string): void {
+    console.log(`(Pretending to log to a file): ${message}`);
   }
 }
 ```
 
-- <https://dev.to/itshugo/applying-design-patterns-in-react-strategy-pattern-enn>
-- axios: we can create an axiosInstance, then use it everywhere in the project like: `axiosInstance.get()` and `axiosInstance.post()`. That should be fine if we use axios for this project. But in the future, we might want to replace axios with other library or using fetch, then we will need to remove all `axiosInstance` code. For best practice, we will use a `httpClient` class to handle APIs request. If we use other library just change the code in `httpClient` class
+3. Use Dependency Injection to supply the dependency:
+
+```ts
+// UserService.ts
+import { ILogger } from './ILogger';
+
+export class UserService {
+  // Dependency is injected via the constructor.
+  constructor(private logger: ILogger) {}
+
+  createUser(userName: string): void {
+    // Some logic to create a user...
+    this.logger.log(`User ${userName} created.`);
+  }
+}
+```
+
+4. Implementation
+
+```ts
+import { UserService } from './UserService';
+import { ConsoleLogger } from './ConsoleLogger';
+// Or you could use FileLogger:
+// import { FileLogger } from './FileLogger';
+
+// Create the dependency
+const logger = new ConsoleLogger();
+
+// Inject the dependency into the UserService
+const userService = new UserService(logger);
+
+// Use the service
+userService.createUser('Alice');
+```
+
+- Dependency Inversion:
+The UserService depends on the abstraction ILogger instead of a concrete logger. This means you can switch out ConsoleLogger for FileLogger (or any other implementation) without modifying UserService.
+- Dependency Injection:
+The UserService receives its dependency (an ILogger instance) via its constructor. This is a form of dependency injection (specifically, constructor injection). The responsibility of creating the concrete logger instance is moved outside of UserService, making it easier to test and maintain.
+
+## What are the benefits of using dependency injection?
+
+- Easier to maintain code and reusable code
+- Making testing easier: you can use tools such as Storybook to preview your individual components and easily inject in mock services/objects (potentially without doing real API calls for example).
+- Clear of separtion of concern
+
+## Difficulties with dependency injection
+
+- Complexity: If you use data fetching libraries (such as tanstack query, RTK Query etc) then injecting in your provided objects/services can be quite complex.
 
 ## Dependancy injection in React
 
@@ -84,12 +125,10 @@ Remember that the aim of using DI is to avoid tightly coupled between components
 - configuration or environment variables. You can use DI to inject in variables - not just services/functions
 - logging - useful to have a injected in logger which could send the data to your logging service
 
-## What are the benefits of using dependency injection?
+**Examples**:
 
-- Easier to maintain code and reusable code
-- Making testing easier: you can use tools such as Storybook to preview your individual components and easily inject in mock services/objects (potentially without doing real API calls for example).
-- Clear of separtion of concern
-
-## Difficulties with dependency injection
-
-- Complexity: If you use data fetching libraries (such as tanstack query, RTK Query etc) then injecting in your provided objects/services can be quite complex.
+- Your component has multiple child components (for example, card header, card footer...). You can
+  - Using composition
+  - Pass child components via props of parent component
+- <https://dev.to/itshugo/applying-design-patterns-in-react-strategy-pattern-enn>
+- axios: we can create an axiosInstance, then use it everywhere in the project like: `axiosInstance.get()` and `axiosInstance.post()`. That should be fine if we use axios for this project. But in the future, we might want to replace axios with other library or using fetch, then we will need to remove all `axiosInstance` code. For best practice, we will use a `httpClient` class to handle APIs request. If we use other library just change the code in `httpClient` class

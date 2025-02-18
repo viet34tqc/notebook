@@ -2,6 +2,7 @@
 
 ## References
 
+- <https://tigerabrodi.blog/why-is-react-server-components-actually-beneficial-full-history>
 - <https://focusreactive.com/breaking-down-next-js-14>
 - Concept: <https://demystifying-rsc.vercel.app/> and [official documentaion](https://nextjs.org/docs/getting-started/react-essentials)
 - Caching: <https://www.youtube.com/watch?v=VBlSe8tvg4U>
@@ -11,6 +12,8 @@
 React Server Components are executed in server in order to generate flight (payload) data, and then it is sent to the client to build and update the Virtual DOM.
 
 To do this, React serialize the React element tree on server executed components and send that serialized string to client. On client, this payload will be deserialized
+
+When you build your React application with server components enabled, the server component code is bundled separately. This server bundle is deployed to your server environment and is used exclusively there, meaning that the final client bundle that runs in the browser does not include any server component code.
 
 ## Why RSC
 

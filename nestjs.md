@@ -365,12 +365,17 @@ Let's say we have a login strategy by JWT
 
 In NestJS, we often use Passport for authentication. Basically, what it does are:
 
-- Authenticate user's credentials (like username/password, JWT)
-- Issue JWT token
+- Passport applies the strategy to verify the credentials or token by extracting and validating jwt
 - Attach user information in the next request (`Guard` sits in front of route handler, then what we return from `validate()` method in strategy is returned for the next request if it pass the guard) for further use
 - In case there is a custom `handleRequest` in the `guard`, the returned value from `handleRequest` is passed to the Request
   - Default Implementation (No Custom handleRequest): `validate → result → req.user.`
   - Custom handleRequest: `validate → result → handleRequest → custom result → req.user.`
+
+Example Workflow with Passport and JWT
+
+- Login: The user logs in and receives a signed JWT.
+- Protected Routes: The client sends the JWT in the Authorization header for protected API endpoints.
+- Token Validation: The passport-jwt strategy validates the token, extracts user information, and attaches it to the request object.
 
 ### Install packages
 
@@ -379,9 +384,11 @@ If you are using Passport, install these additional packages: `@nestjs/passport`
 
 ### Create strategy
 
-When using Passport with NestJs, we need to create a strategy. This `JwtStrategy` extends `PassportStrategy`
+When using Passport with NestJs, we need to create a strategy. There are lots of strategy: passport-jwt strategy, passport-http-bearer strategy. In this case, we need to use jwt strategy. 
 
-The purpose of JWTStrategy:
+Create `JwtStrategy` and this `JwtStrategy` extends `PassportStrategy`
+
+The purpose of `JwtStrategy`:
 
 - Defines the logic for extracting and validating the JWT.
 - Parses the token (e.g., from the Authorization header), verifies its signature, checks for expiration, and decodes the payload.
@@ -396,6 +403,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 
 @Injectable()
 // This is equivalent to `export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {`
+// 'jwt' is the default name of `Strategy` from 'passport-jwt'
 // We use 'jwt' name in the AuthGuard
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
@@ -491,6 +499,7 @@ handleRequest(err: any, user: any) {
 ```
 
 Best Practice
+
 - Use the default behavior when no additional logic is needed beyond what `validate` provides.
 - Override handleRequest when you need extra checks, error handling, or to modify the returned user object.
 

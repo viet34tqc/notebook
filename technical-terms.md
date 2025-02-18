@@ -255,8 +255,8 @@ Is the sequence of steps the browser takes before performing the initial render 
 The browser needs to wait for some critical resources to download before it can complete the initial render. These resources include:
 
 - Part of the HTML.
-- Render-blocking CSS in the <head> element.
-- Render-blocking JavaScript in the <head> element.
+- Render-blocking CSS via `<link>` tag in the `<head>` tag.
+- Render-blocking JavaScript in the `<head>` tag that are not async or deferred.
 
 Importantly, for the initial render, the browser will not typically wait for:
 
@@ -376,7 +376,8 @@ However, if you access https://google.com, Google will not be able to read the c
 
 ## Tree-shaking
 
-<https://dev.to/dianjuar/importing-modules-in-javascript-are-we-doing-it-right-nc>
+- <https://www.youtube.com/watch?v=ylhbyqkpnsc>
+- <https://dev.to/dianjuar/importing-modules-in-javascript-are-we-doing-it-right-nc>
 
 Is the term for removing unused code before bundling. This process prevents having dead code in the final bundle and make it lighter
 

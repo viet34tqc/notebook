@@ -68,7 +68,6 @@ function Input({ name, onChange }) {
     ); 
 };
 ```
-  
 
 ## Conditionally swap component
 

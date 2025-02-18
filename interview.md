@@ -1068,10 +1068,11 @@ It tells React to keep the current UI interactive while preparing the new state 
 Màn thường: 1 CSS pixel tương đương 1 điểm ảnh vật lý
 Màn retina: 1 CSS pixel tương đương 4 điểm ảnh vật lý
 
-## CDN là gì
+## What is CDN
 
-<https://viblo.asia/p/cdn-la-gi-huong-dan-tich-hop-cdn-vao-he-thong-voi-cloudflare-gGJ59rRpKX2>
-CDN (Content Delivery Network) tạm dịch là mạng phân phối nội dung. Đó là một mạng lưới máy chủ (caching server), được bố trí phân tán theo khu vực địa lý, với nhiệm vụ chính là phân phối nội dung tĩnh tới người dùng nhanh nhất có thể.
+The primary purpose of any CDN (Content Delivery Network) is to reduce latency and deliver content to the end user as quickly as possible.
+
+A CDN provider will have several servers in different geographical locations. Those servers can store a copy of your static resources and send them to the user when the browser requests them.
 
 ## Headless website
 
