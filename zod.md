@@ -43,6 +43,8 @@ z.object({
 
 ## `refine`
 
+<https://wasp-lang.dev/blog/2025/01/22/advanced-react-hook-form-zod-shadcn>
+
 Allow us to do custom validation to enhance Zod validation
 
 ```js
