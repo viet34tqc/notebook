@@ -24,7 +24,7 @@ In JavaScript, for example, you can serialize an object to a JSON string by call
 
 ## Escaping data
 
-Escaping output is the process of securing output data by converting unwanted character like '<', '>' to its escape sequence. This process helps secure your data prior to rendering it for the end user. If output data has HTML, it will convert to `&amp; or &lt;`
+Escaping output is the process of securing output data by replacing special HTML characters with HTML Entities. This process helps secure your data prior to rendering it for the end user. If output data has HTML, it will convert to `&amp; or &lt;`
 
 ## Sanitizing data
 
@@ -549,10 +549,43 @@ People who click this misrepresented form will send the POST request without the
 
 How to prevent: 
 
-- Create CSRF token. 
-  - When user request for the first time, server send this CSRF token as a cookie to user.
-  - On the client, get CSRF from cookie and insert CSRF token in the submit form as the hidden input. When user send the next request, on server-side, we compare the CSRF token in cookies and in the submitted form (both from client). Besides inserting in the submit form, you can also attach the CSRF token in the request header when you submit
-  - If a user is tricked into submitting a request on an attacker's website, the request will fail because the attacker's site cannot generate a valid CSRF token, which will cause the server to invalidate the request.
+- Create CSRF token. There are two main ways to handle CSRF tokens:
+
+1. Stateless Approach (No Server-Side Storage)
+
+- The server does not store the CSRF token.
+- Instead, the token is sent to the client (in a cookie) and the client must send it back in requests.
+- The server just verifies that the token in the request matches the one in the cookie.
+
+- Pros:
+  - No need for server-side storage, making it scalable for stateless backends.
+  - Works well in load-balanced or distributed systems (since each request is independent).
+- Cons:
+  - If an attacker can steal the CSRF cookie (e.g., via XSS), they can perform CSRF attacks.
+  - Mitigation: Use SameSite cookies, HTTP-only cookies, and secure headers (CSP, CORS, etc.).
+
+Here is the implementation:
+
+  - When the user logs in, the server generates a CSRF token and sends it as a cookie along with the login response.
+  - If the user is already logged in (e.g., from a previous session) and visits the site again or just refresh the page, they might not go through the login process. Then the frontend may need to request a new CSRF token by sending an API call like `GET /csrf-token`. The server generates a CSRF token and sends it as a cookie to the user.
+  - On the client side:
+    - The CSRF token is read from the cookie.
+    - It is then included in the request by either:
+      - Inserting it as a hidden input field in a form submission.
+      - Attaching it as a header (e.g., X-CSRF-Token) when making an API request.
+  - When the user submits the next request (e.g., a form submission or API request), the server:
+    - Extracts the CSRF token from the cookie.
+    - Compares it with the token sent in the request (from the form or header).
+      - If they match, the request is allowed.
+      - If they don't match (or are missing), the request is rejected.
+  - If a logged in user is tricked into submitting a request on an attacker's website, the request will fail because the attacker's site cannot generate a valid CSRF token, which will cause the server to invalidate the request. There is only one risk is that your website got XSS attack, and attacker can access the cookie on your site
+  
+2. Stateful Approach (Server Stores CSRF Tokens) 🔒
+
+- The server stores the CSRF token in a database, session, or cache (e.g., Redis).
+- The client still sends the CSRF token with requests.
+- The server retrieves the stored token and compares it with the incoming request.
+
 - Using cookie with `SameSite` flag set to `Lax` or `Strict`
 - USing CSP: `<meta http-equiv="Content-Security-Policy" content="default-src 'self'">`
 
