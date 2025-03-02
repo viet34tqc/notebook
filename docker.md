@@ -408,9 +408,13 @@ volumes:
     name: nest-prisma-docker-db
 ```
 
-After create docker-compose file, run this command: `docker compose up -d`
+After create docker-compose file, run this command: `docker compose up -d`. This command Starts your services in detached mode (running in the background) and build the images if they don't exist. Otherwise, it uses existing images
 
-**Wait for db run first**:
+You can also use `docker compose up -d --build` to forces a rebuild of the images regardless of whether an image already exists. It ensures that any changes in your Dockerfile or build context are incorporated into the new image.
+
+Using --build is particularly useful when you've updated your code or Dockerfile and want to make sure your containers are running the latest version.
+
+### Wait for db run first
 
 App can run already while db needs time to set up => we need to wait for db run first before running app
 
@@ -433,6 +437,35 @@ mysql:
       timeout: 5s
       retries: 20
 ```
+
+## ENTRYPOINT
+
+The purpose of
+
+```Dockerfile
+ENTRYPOINT ["./entrypoint.sh"]
+```
+
+is to set entrypoint.sh as the entry point for the container. This means when the container starts, it will always execute `entrypoint.sh` first before running any command specified in CMD or provided at runtime.
+
+Why Use ENTRYPOINT?
+
+1. Ensures a Script Runs Before Anything Else
+  - `entrypoint.sh` can be used to prepare the environment before the main process starts, such as:
+    - Replacing environment variables in configuration files
+    - Running database migrations
+    - Checking for required services (e.g., waiting for a database to be ready)
+2. Allows Custom Commands While Keeping the Default Behavior
+If you define:
+
+```
+ENTRYPOINT ["./entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+  - The container will always execute entrypoint.sh first.
+  - After entrypoint.sh finishes, it will run nginx -g 'daemon off;' (from CMD).
+  - You can override CMD at runtime, but ENTRYPOINT will still execute first.
 
 ## Optimize docker image size
 

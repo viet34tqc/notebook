@@ -142,7 +142,11 @@ new ModuleFederationPlugin({
 new ModuleFederationPlugin({
   name: 'host',
   remotes: {
-    remoteAppContainer: 'remoteApp@http://localhost:3001/remoteEntry.js', // remoateAppContainer is like the alias of the remote container
+    // remoteAppContainer is like the alias of the remote container.
+    // remoteApp is the 'name' the remote container
+    // Basically, in the host app, when it read the remoteEntry.js file, there will be a global variable named `remoteApp`
+    // You can read this line as: Go to fetch remoteApp's remoteEntry file and name it as remoteAppContainer
+    remoteAppContainer: 'remoteApp@http://localhost:3001/remoteEntry.js', 
   },
   shared: {
     react: { singleton: true, requiredVersion: '^18.0.0' },
@@ -154,7 +158,7 @@ new ModuleFederationPlugin({
 - singleton: true → Ensures only one instance of React is used across all apps.
 - requiredVersion → Ensures a compatible version is used.
 
-Then inside host app, we import the module like this: `import remoteAppContainer/Button`
+Then inside host app, we import the module like this: `import remoteAppContainer/Button`. You can think of other remote container as a package and `remoteAppContainer` is the name of the package. Inside remote container, there are lots of exported modules. In this example, the module is `Button`.
 
 #### Dynamic loading
 
