@@ -200,7 +200,8 @@ A thread is a single unit of execution within a process. There might be multiple
 
 ## I/O operation
 
-<https://medium.com/@tkachenko.hello/node-js-is-not-single-threaded-1383594dbd17>
+- <https://medium.com/@tkachenko.hello/node-js-is-not-single-threaded-1383594dbd17>
+- <https://www.youtube.com/watch?v=os7KcmJvtN4>
 
 In Node.js, I/O often refers to reading/writing data to the disk or doing network operations. Network operations get external information into your application, or send data from your application out to something else
 
@@ -209,8 +210,14 @@ Instead of using V8 engine to handle I/O operation, NodeJs use `libuv` for async
 This is what happens when we call an I/O operation:
 
 - The Node.js interpreter scans the code and puts every operation into the call stack;
-- Node.js sequentially executes operations in the call stack. However, for I/O operations, Node.js sends them to **Event Demultiplexer** (libuv) in a non-blocking way. This approach ensures that the I/O operation does not block the thread, allowing other operations to be executed concurrently.
-- The Event Demultiplexer identifies the source of the I/O operation and registers the operation in the **Tasks Queue**
+- Node.js sequentially executes operations in the call stack. However, for I/O operations, Node.js sends them to libuv in a non-blocking way. This approach ensures that the I/O operation does not block the thread, allowing other operations to be executed concurrently.
+
+if it's the network request, it simply waits for its response. If it's files operation, libuv offloads the tasks to the its internal worker thread and wait for it to complete. Once the task is done, libuv sends it back to the event loop.
+
+Under the hood of livub: 
+
+- **Event Demultiplexer** is the first place to receive the I/0 operation
+- The Event Demultiplexer then hands off the tasks to the **Tasks Queue**
 - The Thread Pool continuously monitors the Tasks Queue for new tasks
 - When a new task is placed in the Tasks Queue, the Thread Pool reacts by handling it with one of the pre-defined threads asynchronously. By default, there are 4 threads
 - When the I/O operation completes, Thread Pool signals and sends I/O result and associated I/O callback to the event queue

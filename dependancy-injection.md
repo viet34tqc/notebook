@@ -16,9 +16,10 @@ Why: the module itself only has to import and use the dependency, it never has t
 
 ## Dependency injection
 
-<https://blog.codeminer42.com/di-with-some-context/>
+- <https://blog.codeminer42.com/di-with-some-context/>
+- <https://4markdown.com/dependency-injection-does-not-need-to-be-complex/>
 
-Dependancy injection is a common way to implement IoC. 
+Dependancy injection is a common way to implement IoC. It's a technique where:
 
 - Dependencies (variables, objects, or services) are injected (provided) into your code (classes) from the outside. 
 - Dependencies are not hard-coded or instantiated within your code (classes) directly
