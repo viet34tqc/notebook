@@ -865,10 +865,8 @@ const promise2 = new Promise(res => {
 
 ## Can `catch` in `try...catch` catch errors using `throw Error()` or `reject()` in Promise
 
-**UPDATE**: I've tried in the latest version of chrome and firefox and it works 
-
-<https://catchjs.com/Docs/AsyncAwait>
-<https://javascript.info/try-catch>
+- <https://catchjs.com/Docs/AsyncAwait>
+- <https://javascript.info/try-catch>
 
 No.
 If we `throw` an error in Promise or using `setTimeout`, `try...catch` cannot catch the error. Because the callback in promise and `setTimeout` is executed later in different call stack, when `try...catch` is already done.
@@ -1432,17 +1430,21 @@ const copied = new Map(myMap);
 
 ## CORS
 
-CORS (Cross-Origin Resource Sharing) is a security feature in web browsers that controls how resources (like APIs or files) can be requested from a different domain than the one where your web page is running.
+CORS (Cross-Origin Resource Sharing) is a security feature of **browsers** (not server, not Postman) that restricts JavaScript running in a web page from making requests to a different domain unless the server allows it.
 
 **Why is CORS needed?**
 
-By default, browsers block requests to a different origin (domain, protocol, or port) for security reasons. This is called the Same-Origin Policy. CORS allows servers to explicitly permit requests from trusted origins by adding specific HTTP headers.
+By default, browsers block requests to a different origin (domain, protocol, or port) for security reasons. This is called the Same-Origin Policy. CORS allows servers to permit requests from trusted origins by adding specific HTTP headers.
 
-If client app at `https://myapp.com` tries to fetch data from `https://api.external.com`, server at `https://api.external.com` must include CORS headers (`Access-Control-Allow-Origin: https://myapp.com`)
+If client app at `https://myapp.com` tries to fetch data from `https://api.external.com`, 
 
-Cùng origin: cùng scheme, domain và port
+- The client sends an `origin` header to tell the server where the request is coming from. This `origin` header might not be included if the the request is from server, postman or the client is on the same origin with the server
+- server at `https://api.external.com` must include CORS header (`Access-Control-Allow-Origin: https://myapp.com`) in the response to browser to say that the origin is permitted.
+- The browser checks this response and decides if the response can be accessed by JavaScript.
 
-- Cùng scheme và cùng domain
+Same origin: same scheme, domain and port
+
+- same scheme and same domain
 
 <http://example.com/app1/index.html>
 <http://example.com/app2/index.html>
@@ -1452,13 +1454,13 @@ Cùng origin: cùng scheme, domain và port
 <http://Example.com:80>
 <http://example.com>
 
-Khác origin:
+Different origin:
 
-- Khác schemes
+- Different schemes
 <http://example.com/app1>
 <https://example.com/app2>
 
-Để server có thể cho phép client gửi cross-origin request, server đó phải set giá trị cho 1 header có tên là `Access-Control-Allow-Origin` và giá trị đó là origin của client.
+- Different port: localhost:3000 and localhost:4000
 
 ## Rendering a web page
 
