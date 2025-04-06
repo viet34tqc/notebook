@@ -1445,21 +1445,17 @@ If client app at `https://myapp.com` tries to fetch data from `https://api.exter
 Same origin: same scheme, domain and port
 
 - same scheme and same domain
-
-<http://example.com/app1/index.html>
-<http://example.com/app2/index.html>
-
+  - <http://example.com/app1/index.html>
+  - <http://example.com/app2/index.html>
 - Port 80 by default
-
-<http://Example.com:80>
-<http://example.com>
+  - <http://Example.com:80>
+  - <http://example.com>
 
 Different origin:
 
 - Different schemes
-<http://example.com/app1>
-<https://example.com/app2>
-
+  - <http://example.com/app1>
+  - <https://example.com/app2>
 - Different port: localhost:3000 and localhost:4000
 
 ## Rendering a web page
