@@ -1941,15 +1941,28 @@ It stores functions and variables in the memory before executing any code (creat
 `Object.freeze()` không cho phép thêm, sửa, xóa properties. Tuy nhiên, `Object.freeze()` chỉ shallowly freeze, nếu properties là 1 object khác thì vẫn có thể sửa được
 `Object.seal()` không cho phép thêm, xóa, nhưng vẫn cho sửa existing properties
 
-## `useMemo` và `useCallback`. Có thể chuyển từ `useMemo` sang `useCallback` được không
+## `useMemo`, `useCallback` and `React.memo`
 
-- <https://kentcdodds.com/blog/usememo-and-usecallback>
+<https://cekrem.github.io/posts/react-memo-when-it-helps-when-it-hurts/>
 
-`useCallback` thường được dùng cho các event handler và event handler này là 1 prop của 1 child component và child component này dùng `React.memo`.
-Mục đích dùng `React.memo` là child component không bị re-render khi parent component re-render. Tuy nhiên, nếu props của child component bị thay đổi thì nó vẫn bị render lại. Props đấy ở đây có thể là 1 event handler. Vì thế việc dùng `useCallback` ở đây là để child component hoàn toàn không bị re-render khi parent component re-render
+Use `React.memo` when:
 
-Chuyển đổi giữa `useMemo` và `useCallback`
-`useCallback(fn, deps)` tương đương với `useMemo(() => fn, deps)`.
+- You have a pure functional component that renders the same result given the same props
+- It renders often with the same props
+- It's computationally expensive to render
+- You've verified through profiling that it's a performance bottleneck
+
+Use `useMemo` when:
+
+- You have an expensive calculation that doesn't need to be recalculated on every render
+- You need to maintain a stable reference to an object or array that's passed to a memoized component
+- You've measured and confirmed the calculation is actually expensive
+
+Use `useCallback` when: 
+
+- You're passing callbacks to optimized child components that rely on reference equality
+- The callback is a dependency in a useEffect hook
+- You need to maintain a stable function reference for event handlers in memoized components
 
 ## Check client or server side
 
@@ -2008,7 +2021,7 @@ const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-schem
 
 <https://zellwk.com/blog/understanding-color-scheme/>
 
-`color-scheme` tells the browser to render **user-agent stylesheets** (the built-in stylesheets of each browser) according to the user’s preferred color scheme (which is set in their operating system).
+`color-scheme` tells the browser to render **user-agent stylesheets** (the built-in stylesheets of each browser) according to the user's preferred color scheme (which is set in their operating system).
 
 ## `.lock` file
 
