@@ -108,3 +108,15 @@ const ParentComponent = () => {
   )
 }
 ```
+
+## Improve INP
+
+<https://vercel.com/blog/improving-interaction-to-next-paint-with-react-18-and-suspense>
+
+- Break long task: you can take hydration off the main thread and make it non-blocking, simply by creating a Suspense boundary. By this way, the UI stays responseive.
+- Using CSS instead of JavaScript for animations, since a separate thread handles CSS, called the browser's compositor thread. Some CSS properties, such as transforms, can also use the GPU for rendering.
+- Throttling or debouncing events—especially ones driven by scrolling—that may be called repeatedly by user input.
+- Reducing your DOM size, to avoid having the browser recalculate too many elements on each render.
+- Related to the above, inline SVGs can be especially troublesome if you have too many or if they end up in your client-side JS bundle (for example, by inlining them in JSX). You may need reference them in an <img> tag or look into alternate ways of rendering them, such as keeping them in React Server Components.
+- In the case of a complex application, using web workers to arbitrarily execute JavaScript on separate threads, keeping the main thread open for user input.
+- Lazy loading images, fonts, or scripts, which Next.js can automatically do for you.
