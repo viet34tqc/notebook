@@ -452,17 +452,21 @@ How to prevent unnecessary re-renders
   - For re-renders, **React only changes the DOM nodes if there is a difference between renders**. If a component re-renders, it only changes the updated DOMs (that could contains updated data), the other DOMs in that component are still the same
 - After rendering is done and React updated the DOM, the browser will repaint the screen. This process is also known as 'browser rendering'
 
-## How React update UI
+## Reconciliation. How React update UI
 
-<https://www.youtube.com/watch?v=7YhdqIR2Yzo>
+- <https://cekrem.github.io/posts/react-reconciliation-deep-dive/>
+- <https://www.youtube.com/watch?v=7YhdqIR2Yzo>
 
 By a process called reconciliation
 
 All React does is create a tree of elements (React elements are object that is the result of calling `React.createElement`). This tree of elements is called `Virtual DOM` and is kept in the memory.
 
-Once virtual DOM has updated, React compares the entire virtual DOM with a virtual DOM snapshot that was taken right before the update.
-It only finds the elements that has changed. If there are a lot of updates, React can batch them (collect the updates) for efficency.
-Then React syncs the virtual DOM with the real DOM (this process is commit)
+When React needs to update the UI (after state changes or a re-render):
+
+- Creates a new element tree by calling your components
+- Compares it with the previous tree
+- It only finds the elements that has changed. If there are a lot of updates, React can batch them (collect the updates) for efficency.
+- React syncs this tree with the real DOM (this process is commit)
 
 ## React bailing out of updating states
 
@@ -645,6 +649,8 @@ Using `index` as `key` is a good idea:
   
 - When your list is static, we won't do anything on it
 - When the data of the list is changed on every render and you are not modifying the list, eg: pagination
+
+Outside list, we use `key` for toggling 2 element with the same type
 
 ## How to approach a design
 

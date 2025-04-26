@@ -62,3 +62,28 @@ Components that require data fetching (e.g. reviews, related products) can be se
   - server action accepts a `formData` as param
   - Then you can send POST request to the server and `revalidatePath`
 - In client form, add the server action to the `action` attribute of form
+
+## 'use server', 'use client'
+
+- `use server`: mark server action as exported from server and be callable from FE. FE sees them as async functions that call the backend via HTTP.
+- `use client`: exports client functions to the server. Under the hood, the backend code sees them as references like '/src/frontend.js#LikeButton'. They can be rendered as JSX tags and will ultimately turn into `<script>` tags. (You can optionally pre-run those scripts on the server to get their initial HTML.)
+
+```
+<!-- Optional: Initial HTML -->
+<button class="liked">
+  8 Likes
+</button>
+ 
+<!-- Interactivity -->
+<script src="./frontend.js"></script>
+<script>
+  const output = LikeButton({
+    postId: 42,
+    likeCount: 8,
+    isLiked: true
+  });
+  // ...
+</script>
+```
+
+These directives express the network gap within your module system. They let you describe a client/server application as a single program slit into two environments.

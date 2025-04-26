@@ -179,6 +179,21 @@ export default [
 ]
 ```
 
+Here is the setup for nextJs 15
+
+```js
+import { FlatCompat } from '@eslint/eslintrc'
+const compat = new FlatCompat({
+  // import.meta.dirname is available after Node.js v20.11.0
+  baseDirectory: import.meta.dirname,
+})
+const eslintConfig = [
+  ...compat.config({ extends: ['next/core-web-vitals', 'next/typescript', 'prettier'] }),
+]
+
+export default eslintConfig
+```
+
 ## Prettier
 
 How does Prettier compare to ESLint/TSLint/stylelint, etc.?
@@ -197,13 +212,13 @@ Those rules are handled by ESLint. Prettier does nothing to help with those kind
 
 To install Prettier:
 
-`yarn add -D prettier eslint-config-prettier`
+`pnpm add -D prettier eslint-config-prettier`
 
 - `eslint-config-prettier`: Turns off all rules that are unnecessary or might conflict with Prettier, that could be formatting-related ESLint rules. 
 
 Some other tutorials tell you to use `eslint-plugin-prettier`, but according to <https://stackoverflow.com/questions/44690308/whats-the-difference-between-prettier-eslint-eslint-plugin-prettier-and-eslint/44690309#44690309>[this] and <https://prettier.io/docs/en/integrating-with-linters.html>[this], that prettier plugin takes care the linting as well by adding prettier rules to eslint, meanwhile we should let prettier do the formatting only.
 
-To use prettier alongside with eslint you need to change the extends object (Implemented as above)
+To use `prettier` alongside with `eslint` you need to change the extends object (Implemented as above)
 
 ```json
 {
@@ -288,7 +303,7 @@ Do something with the staged files only. Combining `lint-staged` with `husky` al
 
 ```js
 const config = {
-  '*.{js,jsx,ts,tsx}': ['pnpm lint', 'pnpm format', 'git add .'], // If your `pnpm lint` command also fixed some bug, we should staged all the fixed file by using `git add .` 
+  '*.{js,jsx,ts,tsx}': ['pnpm lint', 'pnpm format'], 
 }
 export default config
 ```

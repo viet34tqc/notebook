@@ -154,36 +154,6 @@ RUN chmod +x /setup.sh
 CMD ["/setup.sh"]
 ```
 
-### How host connect to container, port mapping, host port, container port, and
-
-- Host machine connects to container
-
-By default, Docker uses `bridge` network, that means the port in container isn't exposed to the host and we cannot access the container using container's port and host's domain or ip. For example, let's say the container's port is 80 and domain of host is localhost, we cannot connect to the container via 'http://localhost:80'. 
-
-Of course, we can use `host` network to make the container port the same as host port, then we can access the container via their port directly without mapping. However, using port mapping brings offers many benefits:
-
-- Isolation: By nature, containers are designed to be isolated from the host system. If you want to access a web server inside a Docker container from your browser, you should map the container's web server port to a port on the host
-- Avoid port conflicts: If the default port used by the service inside the container is already in use on the host, you can map it to a different port on the host.
-- Run multiple container that has the same container port: we might have 2 web services that runs on port 3000. To access them all, we need to map their port to 2 different host port
-
-### How containers connects to each other
-
-Unlike the situation where host machine connects to container, in Docker environment, 2 containers have to use container name to connect to each other directly. Docker sets up a internal DNS system where service names in the `docker-compose` file can be used as hostname
-
-Let's say we have 3 services: client (port: 5173), server (port: 3000) and redis (port: 6379). Client needs to connect to server and server needs to connect to redis. 
-The client-side code runs in the browser on host machine, not inside a Docker container. So when it makes requests to `localhost:3000`, it's using your host machine's networking, not Docker's internal networking. Client can also connect to redis using 'localhost:6379' if it wants
-
-However, 'server' and 'redis' are isolated and can only communicate with each other using their service names (like `server:3000` or `redis:6379` within the Docker network).
-
-Here's a simplified view of what's happening:
-
-- Browser on Host -> localhost:3000 -> Docker Port Mapping -> Server Container
-- Server Container -> redis:6379 -> Redis Container (within Docker network)
-
-If you were running your client in a Docker container (instead of serving it via nginx and accessing it through the browser), and you wanted it to connect to the server container, you would indeed use server:3000 in your client code.
-
-**NOTE**: if service A connects to multiple ports in service B, you need to expose all of them. For example, you backend service has 2 port: 3000 for Rest API and 8000 for Websocket, you need to expose both 3000 and 8000 in `docker-compose` file.
-
 ### How to build and run a Dockerfile
 
 - First you need to build the image by running: `docker build -t ${docker_image_name} .` (`.` means the current directory). To find your images, run `docker images`
@@ -253,6 +223,38 @@ COPY . .
 
 // Other commands...
 ```
+
+## Docker networking
+
+### How host connect to container, port mapping, host port, container port
+
+- Host machine connects to container
+
+By default, Docker uses `bridge` network, that means the port in container isn't exposed to the host and we cannot access the container using container's port and host's domain or ip. For example, let's say the container's port is 80 and domain of host is localhost, we cannot connect to the container via 'http://localhost:80'. 
+
+Of course, we can use `host` network to make the container port the same as host port, then we can access the container via their port directly without mapping. However, using port mapping brings offers many benefits:
+
+- Isolation: By nature, containers are designed to be isolated from the host system. If you want to access a web server inside a Docker container from your browser, you should map the container's web server port to a port on the host
+- Avoid port conflicts: If the default port used by the service inside the container is already in use on the host, you can map it to a different port on the host.
+- Run multiple container that has the same container port: we might have 2 web services that runs on port 3000. To access them all, we need to map their port to 2 different host port
+
+### How containers connects to each other
+
+Unlike the situation where host machine connects to container, in Docker environment, containers use **container name** to connect to each other directly. Docker sets up a internal DNS system where service names in the `docker-compose` file can be used as hostname
+
+Let's say we have 3 services: client (port: 5173), server (port: 3000) and redis (port: 6379). Client needs to connect to server and server needs to connect to redis. 
+The client-side code runs in the browser on host machine, not inside a Docker container. So when it makes requests to `localhost:3000`, it's using your host machine's networking, not Docker's internal networking. Client can also connect to redis using 'localhost:6379' if it wants
+
+However, 'server' and 'redis' are isolated and can only communicate with each other using their service names (like `server:3000` or `redis:6379` within the Docker network).
+
+Here's a simplified view of what's happening:
+
+- Browser on Host runs `localhost:3000` -> Docker Port Mapping -> Server Container
+- Server Container runs `redis:6379` -> Redis Container (within Docker network)
+
+If you were running your client in a Docker container (instead of serving it via nginx and accessing it through the browser), and you wanted it to connect to the server container, you would indeed use server:3000 in your client code.
+
+**NOTE**: if service A connects to multiple ports in service B, you need to expose all of them. For example, you backend service has 2 port: 3000 for Rest API and 8000 for Websocket, you need to expose both 3000 and 8000 in `docker-compose` file.
 
 ## Common commands
 
@@ -466,9 +468,58 @@ CMD ["nginx", "-g", "daemon off;"]
   - The container will always execute entrypoint.sh first.
   - After entrypoint.sh finishes, it will run nginx -g 'daemon off;' (from CMD).
   - You can override CMD at runtime, but ENTRYPOINT will still execute first.
+  
+## Multi-statge build
+
+<https://adventofdocker.com/posts/day-13-multistage-builds/>
+
+```bash
+# Build stage - compiles the application
+FROM node:lts AS base
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Runtime stage - serves the static files
+FROM nginx:mainline-alpine-slim AS runtime
+COPY --from=base ./app/dist /usr/share/nginx/html # Copy app/dist folder from base stage into /usr/share/nginx/html
+EXPOSE 80
+```
+
+- The build stage uses Node.js to install dependencies and build the application
+- The runtime stage uses a lightweight nginx image to serve only the built static files
+
+Another example:
+
+```bash
+# Build stage
+FROM golang:latest AS builder
+
+WORKDIR /app
+COPY . .
+
+RUN go build -o main . # Build from current directory which is /app and the output file's name is main
+
+# Final stage
+FROM alpine:3.18 # We are using the Linux alpine image which is much smaller
+
+WORKDIR /app
+COPY --from=builder /app/main .
+
+EXPOSE 8080
+CMD ["./main"]
+```
+
+
+Benefits of Multistage Builds:
+
+- Smaller Image Size: Final images contain only what's necessary to run the application. It can use smaller image to run the app
+- Better Security: Fewer components mean a smaller attack surface
+- Faster Deployments: Smaller images are faster to push and pull
+- Clean Separation: Build-time dependencies are completely separated from runtime
 
 ## Optimize docker image size
 
 <https://github.com/webuild-community/advent-of-frontend/blob/main/2022/day-23.md>
-
-- Remove devDependencies bằng cách build multi-stage
