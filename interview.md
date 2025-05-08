@@ -683,6 +683,7 @@ Client components render both on client and server. Components would be run firs
 ## Return a promise inside `fetch` = `await`
 
 Return a promise here is equal to `await wait(1000)`
+
 ```js
 wait(1000)
   .then(() => {
@@ -850,11 +851,14 @@ The difference happens when the `success` callback returns a **rejected promise*
 `then(f,f)`: `error` callback is not invoked
 `then(f).catch(f)`: error callback is invoked
 
-## Loop with promises
+## Loop with promises and `async/await`
 
-Using `async/await`
+<https://chatgpt.com/c/681c698e-40f8-8010-a6e5-ca465ffd3733>
+
+Using `async/await` with `for...of` loop. In this code, there are two phases: promises run and promises resolved. Promises run immediately. For resolving promises, we can wait/consume each of them or we can wait/consume both of them
 
 ```js
+// Both promises run simultaneously
 const promise1 = new Promise(res => {
   setTimeout(res, 1000, 'first');
 });
@@ -862,12 +866,44 @@ const promise2 = new Promise(res => {
   setTimeout(res, 2000, 'second');
 });
 
+// You can also use common `for` loop
 (async () => {
   for (const item of [promise1, promise2]) {
     console.log(await item);
   }
 })();
+
+// This behaves the same as for loop
+// Total time: 2s
+(async () => {
+  // we are not awaiting for the promise to start, we are awaiting the result of promise sequentially,
+  // We wait for promise1 to resolve first and then promise2 
+  // When we define the promises above, they start immediately 
+  const result1 = await promise1;
+  const result2 = await promise2;
+
+  console.log(result1);
+  console.log(result2);
+})();
+
+// Concurrenly. That means Promise.all waits for them at the same time but not true parallelism (no threads), just overlapping asynchronous execution.
+(async () => {
+  const results = await Promise.all([promise1, promise2]);
+  for (const result of results) {
+    console.log(result);
+  }
+})();
 ```
+
+**NOTE**: If you use `forEach` loop, it doesn't wait for the inner async function to complete. It starts all iterations immediately, and any `await` inside is effectively ignored in terms of sequencing. This results in the data potentially being out of order when logged to the console.
+
+In short, If your promises are already running, then Promise.all([...]) and sequential await will both resolve concurrently, taking the time of the slowest promise. The differences are:
+
+| Behavior                    | `Promise.all`                | Sequential `await`                  |
+| --------------------------- | ---------------------------- | ----------------------------------- |
+| Shorter syntax              | ✅                            | ❌                                   |
+| Fails fast on any rejection | ✅ (stops on first error)     | ❌ (waits for each)                  |
+| Error tracing per step      | ❌ (need try/catch per index) | ✅ (easier with per-await try/catch) |
 
 ## Can `catch` in `try...catch` catch errors using `throw Error()` or `reject()` in Promise
 
@@ -1744,6 +1780,7 @@ Object.defineProperty(obj, 'flameWarTopic', {
   - When you click on an input, `:focus-visible` is still triggered because it helps users see where they are typing or interacting
 
 ## Difference between `async, await` and `promise`
+
 They are both used to handle asynchronous tasks. The difference is `promise` involves chaining `.then` and `.catch` methods, whereas `Async` `Await` uses a `try-catch` block that looks more like synchronous code. So, it's easier to read code with `async` and `await`
 
 `Promise`:

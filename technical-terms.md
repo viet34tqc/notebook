@@ -280,12 +280,16 @@ Importantly, for the initial render, the browser will not typically wait for:
 
 Concurrent programming is about dealing with a lot of things at once, while parallel programming is about doing a lot of things at once. For example:
 
-- Concurrency: 2 lines of customers ordering food from a single cashier (lines take turns ordering).
-- Parallelism: 2 lines of customers ordering food at the same time from 2 cashiers.
+- Concurrency: 
+  - 2 lines of customers ordering food from a single cashier (lines take turns ordering).
+  - A single chef cooks multiple dishes — switching back and forth. Dishes are "in progress" together, but only one is actively cooking at a time.
+- Parallelism: 
+  - 2 lines of customers ordering food at the same time from 2 cashiers.
+  - Several chefs cook different dishes at the same time — all dishes progress simultaneously.
 
-Let's take `Promise.all()` as example. It stacks the promises function in the appropriate queue and running them concurrently. All promises execute almost at the same time, but not in parallel. `Promise.all` waits for each result, then resolving with all the promises results.
+Let's take `Promise.all()` as example.
 
-In conclusion, in concurrent execution, promises run one after another but don't have to wait for previous ones to end. They are independent and make progress at the same time. In contrast, parallel execution runs promises at the exact same time in separate processes. This allows them to progress completely separately at their own speed.
+Promises starts at the same time but JavaScript uses a single-threaded event loop — so only one task is pushed to the call stack others may be waiting (e.g., I/O).
 
 ## Prefetch and preload
 
