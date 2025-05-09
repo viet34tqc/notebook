@@ -58,25 +58,18 @@ As you can see from the example above, the newest commits on `branch A` has the 
 - Do not use rebase on shared branch on remote repository (ex: *master*). You should use rebase only for cleaning up your local work (like your *feature* branch) then merge it into shared team branch
 - Regularly fetch and rebase your local branches to stay up-to-date with the main branch. Conflicts become messy! Rebase early and often.
 
-Command:
-
-```bash
-git checkout feature
-git pull --rebase master
-```
-
 Git workflow
 
-```bash	
-git checkout {remote target branch}
+```bash
+git checkout master
 git pull
-git checkout {my feature branch}
-git rebase {remote target branch}
+
+git checkout feature
+git rebase master
+git push --force-with-lease
 ```
 
 <https://www.youtube.com/watch?v=vQgcl8VouLU>
-
-Rebase `feature` onto the tip of `master` then merge `feature` into `master`
 
 ### How to write commit
 
