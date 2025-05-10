@@ -65,8 +65,12 @@ Components that require data fetching (e.g. reviews, related products) can be se
 
 ## 'use server', 'use client'
 
-- `use server`: mark server action as exported from server and be callable from FE. FE sees them as async functions that call the backend via HTTP.
-- `use client`: exports client functions to the server. Under the hood, the backend code sees them as references like '/src/frontend.js#LikeButton'. They can be rendered as JSX tags and will ultimately turn into `<script>` tags. (You can optionally pre-run those scripts on the server to get their initial HTML.)
+<https://overreacted.io/functional-html>
+
+- `use server`: 
+  - mark server action as exported from server and be callable from FE. FE sees them as async functions that call the backend via HTTP.
+  - It says: when you try to serialize this function, turn it into a Server Reference—an address that the client can use to call this function
+- `use client`: exports client functions to the server. Under the hood, the backend code sees them as references like '/src/frontend.js#LikeButton'. BE doesn't get the real function, just a reference to the function. Then the client functions can be rendered as JSX tags and will ultimately turn into `<script>` tags. (You can optionally pre-run those scripts on the server to get their initial HTML.)
 
 ```
 <!-- Optional: Initial HTML -->

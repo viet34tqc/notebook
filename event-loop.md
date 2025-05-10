@@ -28,9 +28,13 @@ Javascript is single-threaded, it can only execute one statement at a time.
  - the timer runs for a period of time that equals to the second arguments then the callback functions is passed to the **macrotask** queue. So the delay is not the time the callback is pushed into the callstack, it's the time it's pushed into task queue
  - remove `setTimeout`
 - If `fetch` exists, the operation of `fetch` is handled by Web API. It creates a promise object which by default is pending with `undefined` result. It also initiates a background network request that is handled by browser. When server returns some data, it passes that data to the callback in `then` and moves it to the **microtask** queue.
-- If `promise` exists
-  - The body of promise is run immediately, like we are calling a normal function 
-  - when `promise` resolves by running `resolve` or `reject`, the callback we pass to `then` or `catch` or `finally()` is pushed to **microtask** queue. If the promise is not resolved or rejected => the promise will be in pending status forever and callback of then will never be run.
+- If `promise` exists: <https://www.deepintodev.com/blog/how-promises-work-in-javascript>
+  - The body of promise is run immediately, like we are calling a normal function. `Promise Object` is created.
+  - when `promise` resolves or reject by running `resolve` or `reject` (immediately or in a setTimeout)
+    - It changes the `PromiseState` (`fullfilled` or `rejected`) and `PromiseResult` property of Promise object
+    - If we have `then`: `then` is added to the callstack. It is executed to create a `Promise Reaction Record` with the handler as the callback inside `then`
+    - Now, the promise is resolved, the callback we pass to `then` or `catch` or `finally()` is pushed to **microtask** queue. If the promise is not resolved or rejected => the promise will be in pending status forever and callback of then will never be run. So, **Only when the promise is resolved**, the callbacks are pushed to microtask queue
+  - `.then` can also be called first, because we put the `resolve` in a `setTimeout`. In this case, when resolve is called later, the callback of `then` is queued.
 - If we execute `async` function, 
   - it runs like normal function, that means its body are push into call stack
   - If `await` exists inside `async`,

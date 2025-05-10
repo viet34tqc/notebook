@@ -512,7 +512,6 @@ EXPOSE 8080
 CMD ["./main"]
 ```
 
-
 Benefits of Multistage Builds:
 
 - Smaller Image Size: Final images contain only what's necessary to run the application. It can use smaller image to run the app
@@ -520,6 +519,24 @@ Benefits of Multistage Builds:
 - Faster Deployments: Smaller images are faster to push and pull
 - Clean Separation: Build-time dependencies are completely separated from runtime
 
-## Optimize docker image size
+## Best practices for performance and security
 
-<https://github.com/webuild-community/advent-of-frontend/blob/main/2022/day-23.md>
+- Optimize docker image size: <https://github.com/webuild-community/advent-of-frontend/blob/main/2022/day-23.md>
+- Set memory limit and cpu limits: https://adventofdocker.com/posts/day-19-limiting-resources/
+  - Always set memory limits in production
+  - Use CPU limits when sharing hosts
+  - Test your app with limits before deployment
+- Set non-root user in the Dockerfile
+
+```bash
+# Create a new user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+# Switch to that user
+USER appuser
+
+# Make sure directories have correct permissions
+RUN chown -R appuser /app
+```
+
+- Limit resources: Limit the impact of a DoS attack by setting resource limits, like memory and CPU <https://adventofdocker.com/posts/day-19-limiting-resources/>

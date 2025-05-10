@@ -450,7 +450,16 @@ How to prevent unnecessary re-renders
 - Commit: React commit changes to the DOM
   - For the initial render, React inserts the real DOM nodes from virtual DOM nodes into the document.
   - For re-renders, **React only changes the DOM nodes if there is a difference between renders**. If a component re-renders, it only changes the updated DOMs (that could contains updated data), the other DOMs in that component are still the same
+  - React also runs effects (useEffect, useLayoutEffect) in this phase
 - After rendering is done and React updated the DOM, the browser will repaint the screen. This process is also known as 'browser rendering'
+
+## React fiber tree
+
+<https://frontendmasters.com/blog/react-internals-which-useeffect-runs-first/>
+
+- Internally, React uses a tree-like data structure called fiber tree to represent the component hierarchy and track updates.
+- Each node in this tree is called a fiber node. 
+- Every time there is a state update, React will construct a new fiber tree and compare against the old tree internally.
 
 ## Reconciliation. How React update UI
 
@@ -459,7 +468,7 @@ How to prevent unnecessary re-renders
 
 By a process called reconciliation
 
-All React does is create a tree of elements (React elements are object that is the result of calling `React.createElement`). This tree of elements is called `Virtual DOM` and is kept in the memory.
+All React does is create a tree of elements (React elements are object that is the result of calling `React.createElement`). This technique is commonly known as "Virtual DOM". However, it's more accurate to think of it as a tree
 
 When React needs to update the UI (after state changes or a re-render):
 
