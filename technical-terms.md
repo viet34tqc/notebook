@@ -109,7 +109,7 @@ First, the browser runs 3 steps:
   - This is triggered again when visual parts of the page are updated without affecting the layout, such as changing background color or updating text color.
 - `Composite`: The browser then combines the painted layers to produce the final image displayed on the screen.
   
-When we change a layout-related property (width, height, margin), we trigger the pixel pipeline. This is a series of steps that the browser's rendering engine performs to show the actual changes on the screen.
+When we change a layout-related property (width, height, margin), we trigger reflows which triggers repaint and maybe composite as well. This is called pixel pipeline
 
 Reflows can be heavy on the CPU as they involve complex algorithms for processing CSS rules and determining element alignment and constraints within the page's layout.
 
@@ -278,7 +278,7 @@ Importantly, for the initial render, the browser will not typically wait for:
 - <https://www.leohuynh.dev/blog/does-promise-all-run-in-parallel-or-sequential/>
 - <https://stackoverflow.com/a/59586421>
 
-Concurrent programming is about dealing with a lot of things at once, while parallel programming is about doing a lot of things at once. For example:
+Concurrent programming is about dealing with multiple tasks at once and switching between them according to priority, while parallel programming is about doing multiple task at once. For example:
 
 - Concurrency: 
   - 2 lines of customers ordering food from a single cashier (lines take turns ordering).
@@ -290,6 +290,8 @@ Concurrent programming is about dealing with a lot of things at once, while para
 Let's take `Promise.all()` as example.
 
 Promises starts at the same time but JavaScript uses a single-threaded event loop — so only one task is pushed to the call stack others may be waiting (e.g., I/O).
+
+In React, concurrent can partiallly render a tree without committing the result and does not block the main thread. We can use `useDeferredValue` to defer updating the value ultil all high-priority work has finished. Or we can put all the expensive rendering part inside a `startTransition`
 
 ## Prefetch and preload
 

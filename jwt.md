@@ -1,5 +1,6 @@
 # JWT
 
+- <https://www.youtube.com/watch?v=fyTxwIa-1U0>
 - <https://duthanhduoc.com/blog/p3-giai-ngo-authentication-jwt>
 - <https://www.youtube.com/watch?v=67mezK3NzpU&t=2493s>
 
@@ -54,9 +55,12 @@ JWT only encoded data, not encrypted data. So, the encoded data can be reversed.
 - Access Token: An access token is a short-lived token created by the server, stored on the client, and attached to HTTP requests when the client sends a request to the server. It helps the server authenticate the client.
 - Refresh Token: A refresh token has a longer lifespan such as 1 week, 1 month, or 1 year..., is stored in the server's database and on the client, and is used to generate a new access token whenever the access token expires.
 
+**Why does refresh token has longer lifespan than access token, even if we get new pair keys either way?** That's because you have more time to refresh. Even if the user leaves the app open for 20–30 minutes, they can still refresh later without logging in again.
+
 A Refresh Token is a different token generated simultaneously with an Access Token. The Refresh Token has a longer validity period than the Access Token, 
 
-- The authentication flow with Access Token and Refresh Token will be updated as follows:
+The authentication flow with Access Token and Refresh Token will be updated as follows:
+
 - The client sends a request to the protected resource on the server. If the client is not authenticated, the server returns a 401 Authorization error. The client then sends their username and password to the server.
 - The server verifies the provided credentials against the user database. If the credentials match, the server generates two different JWTs: an Access Token and a Refresh Token, containing a payload such as user_id (or another identifier for the user). The Access Token has a short lifespan (around 5 minutes). The Refresh Token has a longer lifespan (about 1 year). The Refresh Token will be stored in the database, while the Access Token will not.
 - The server returns the Access Token and Refresh Token to the client.

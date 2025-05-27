@@ -4,7 +4,7 @@
 
 ## Client-side rendering (Plain React.js app)
 
-All the rendering happens in the browser (client)
+All the rendering happens in the browser (client). It loads a single HTML page and dynamically updates the content as the user interacts with the app, without requiring a full page reload.
 
 - Initial Load: App is not rendered
 - Browser parse HTML and JS loaded

@@ -104,6 +104,11 @@ Tool check accessibility:
 - Code
 - Try to pass the unit test
 
+## `npm` and `npx`
+
+- `npm` is used to install the node packages
+- `npx` is used to run a package without installing it
+
 ## Compare SPA and NextJS. Why use NextJS over SPA
 
 - Faster initial page load: it can pre-render the content on server side without waiting for bundling process like in SPA
@@ -711,27 +716,22 @@ Mỗi khi render 1 component nào đó, props object của component đó sẽ �
 
 ## Why use Vite over CRA, why it's fast
 
+- <https://www.explainthis.io/en/swe/what-is-vite>
 - <https://semaphoreci.com/blog/vite>
 - <https://www.youtube.com/watch?v=M_edImKoEt8>
 
-CRA use webpack for bundling. Webpack bundles the entire application code before it can be served. With a large codebase, it takes more time to spin up the development server and reflecting the changes made takes a long time.
-
-Unlike CRA, Vite does not build your entire application before serving, instead, it builds the application on demand using native ESM.
-
-Benefits of using native ESM
-
-- There is no need for bundling. They are understood directly by browser
-- Native EMS is on-demand by nature. Based on the browser request, Vite transforms and serves source code on demand. If the module is not needed for some screen, it is not processed.
-
-Vite divides the application modules into two categories: dependencies and source code.
-
-- Dependencies: Plain JavaScript that will not change much during development (e.g. component libraries such as MUI).
-  - Vite pre-bundles these dependencies using `esbuild`, which is 10-100x faster than JavaScript-based bundlers.
-  - Pre-bundling ensures that each dependency maps to only one HTTP request, avoiding HTTP overhead and network congestion.
+1. Fast Development Server Startup:
+CRA use webpack for bundling. Webpack bundles the entire application code before it can be served. Vite splits code into dependencies and source code. 
+  - Dependencies are pre-bundled quickly using `esbuild` which is 10-100x faster than JavaScript-based bundlers
+    - Pre-bundling ensures that each dependency maps to only one HTTP request, avoiding HTTP overhead and network congestion.
+  - while source code is served on demand via native ESM. 
   - As dependencies do not change, they can also be cached and we can skip pre-bundling.
-- Source code: JSX, CSS, Vue/React and other components that require conversion. Vite serves source code using `native ESM`.
-
-Dependency pre-bundling only applies in development mode, and uses esbuild to convert dependencies to ESM. In production builds, @rollup/plugin-commonjs is used instead.
+2. Faster Updates During Development:
+Instead of rebuilding the entire bundle when you edit code, Vite uses native ESM to update only the necessary part. This makes Hot Module Replacement (HMR) fast and efficient, even for large apps.
+  - Native ESM are understood directly by browser. So there is no need for bundling.
+  - Native EMS is on-demand by nature. Based on the browser request, Vite transforms and serves source code on demand. If the module is not needed for some screen, it is not processed.
+3. Optimized Production Builds:
+Though native ESM is great in development, production apps still need bundling for performance. Vite use rollup to handle tree-shaking, code splitting, and lazy loading automatically to ensure fast and optimized production builds.
 
 ## What is side effect
 
@@ -996,7 +996,9 @@ For normal function:
 
 For arrow function:
 
-`this` value in arrow function will ignore all the rules above and be the context of its surrounding scope at the time it is created (closest parent function). Arrow function will try to resolve `this` inside it lexically just like any other variable and ask the Outer function - Do you have a `this`? And Outer Function will reply YES and gives inner function its own context to this
+<https://piccalil.li/blog/javascript-what-is-this/>
+
+`this` value in arrow function will ignore all the rules above and be the context of its surrounding scope at the time it is created (closest parent function or the `globalThis` if it's the method of a class. `globalThis` is `window` and `undefined` in strictMode). Arrow function will try to resolve `this` inside it lexically just like any other variable and ask the Outer function - Do you have a `this`? And Outer Function will reply YES and gives inner function its own context to this
 
 ```js
 function outer() {
@@ -1157,7 +1159,9 @@ setTimeout(
 
 ## Cơ chế làm việc của session và JWT
 
-<https://viblo.asia/p/cach-trien-khai-refreshtoken-va-freshtoken-p1-dung-luu-tat-ca-phien-cua-nguoi-dung-3Q75wN23lWb>
+- <https://www.youtube.com/watch?v=fyTxwIa-1U0>
+- <https://viblo.asia/p/cach-trien-khai-refreshtoken-va-freshtoken-p1-dung-luu-tat-ca-phien-cua-nguoi-dung-3Q75wN23lWb>
+
 
 - Session
 
@@ -1513,6 +1517,8 @@ Different origin:
 
 - <https://abhisaha.com/blog/exploring-browser-rendering-process>
 - <https://blogs.halodoc.io/how-does-a-browser-actually-work/>
+
+<img src="https://i.imgur.com/nJFhIZc.png" />
 
 <ol>
   <li>You type an URL into address bar in your preferred browser.</li>

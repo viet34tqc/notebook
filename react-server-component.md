@@ -2,6 +2,7 @@
 
 ## References
 
+- <https://react.gg/visualized#slot-pattern>
 - <https://tigerabrodi.blog/why-is-react-server-components-actually-beneficial-full-history>
 - <https://focusreactive.com/breaking-down-next-js-14>
 - Concept: <https://demystifying-rsc.vercel.app/> and [official documentaion](https://nextjs.org/docs/getting-started/react-essentials)
