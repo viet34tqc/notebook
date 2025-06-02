@@ -444,7 +444,22 @@ How to prevent unnecessary re-renders
 
 <img src="https://i.imgur.com/7W6SqA9.png" />
 
-3 phases:
+Before rendering, React will read the JSX code and convert it into React elements:
+
+- When you write JSX in your React application, such as `<Calculator />`. Tools like Babel transpile JSX into `React.createElement`. For example, `<Calculator />` translates to `React.createElement(Calculator, {}, null)`.
+- Then Transpiler continues to executes `createElement` to React elements. These are lightweight JavaScript objects that describe what should be rendered. For example:
+
+```js
+const element = {
+  type: Calculator,
+  props: {},
+  $$typeof: Symbol.for('react.element'), // Identifies it as a React element
+};
+```
+
+At this stage, no function component (e.g., Calculator) is called. The React element is a "description" of the component.
+
+And only by now, React starts rendering all your components. There are 3 phases:
 
 - Trigger a render: there are two reasons for a component to render
   - Initial render: calling `ReactDOM.render` to render the root component. This is the initial render
