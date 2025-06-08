@@ -625,7 +625,9 @@ Selectively construct type from other type
 - `Extract<Type, Keys>`: return type extracted from `Type`: <https://i.imgur.com/gVCRZQ6.png>, it's kind of like `Pick` but Type in `Pick` is object and `Type` in `Extract` is Union
 - `Exclude<Type, Keys>`: return type by excluding from `Type` all union member from `Keys`, it's kind of like `Omit`
 
-## infer
+## `infer`
+
+The `infer` keyword in TypeScript **is often used within conditional types** to **extract and "infer" a type variable from another type**. This is useful when you want to capture a type that is part of another complex type without explicitly passing it.
 
 Let's say we have multiple function and we don't know which returned type of each function => we can create a type helper function like this
 

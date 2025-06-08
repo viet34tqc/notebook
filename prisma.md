@@ -47,6 +47,14 @@ As its name suggests, it migrate your model into your db. Put another word, when
 
 When you update your model, remember to `npx prisma migrate` to make your db in sync with your models. It will generate a `migration.sql`, update database schema and re-generate prisma client
 
+**BEST PRACTICE**
+When you have a change in your schema, avoid `npx prisma db push`. 
+
+- Create a migration: `npx prisma migrate dev --name add-new-feature`
+- Apply migration: `npx prisma migrate deploy`
+
+This way, you never accidentally lose data.
+
 ### Prisma client
 
 Prisma client provides JS methods for CRUD. First, you need to install `@prisma/client` as dependancy (not devDependencies). After you change your data model, you 'll need to manually re-generate prisma client to update it using `npx prisma generate` (not needed if you run `prisma migrate` already like above)
