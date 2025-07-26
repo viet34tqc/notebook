@@ -331,9 +331,9 @@ RESTful API is the api that conforms to the constraints of REST architecture. Ba
 - <https://www.youtube.com/watch?v=ZKH3DLT4BKw&ab_channel=AddyOsmani>
 - <https://thanhle.blog/blog/server-side-rendering-voi-hydration-lang-phi-tai-nguyen-nhu-the-nao>
 
-Hydration is the process of turning static SSR html into dynamic client-side (CSR) html. It uses client-side JavaScript to render every component again and attach generated event listeners to the already existing DOM (from SSR HTML)
+Hydration is the process of turning static SSR html into dynamic client-side (CSR) html. It uses client-side JavaScript to attach generated event listeners to the already existing DOM (from SSR HTML) and also render every components again
 
-It also compares the mounted DOM with the DOM nodes already on the page, and tries to fit the two together. If not there will be an error like this: "Expected server HTML to contain a matching <div> inside a <nav>" (only happens on development mode but you are warning because this is bug). This process can also be called *reconciliation*
+Then it compares the mounted DOM with the DOM nodes already on the page, and tries to fit the two together. If not there will be an error like this: "Expected server HTML to contain a matching <div> inside a <nav>" (only happens on development mode but you are warning because this is bug). This process can also be called *reconciliation*
 
 ## Deploying:
 

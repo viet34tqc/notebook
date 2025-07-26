@@ -10,9 +10,9 @@ The high and low-level modules should be used without knowing any details about 
 
 ## Inversion of Control
 
-Inversion of Control (IoC) is a principle used to address the dependency inversion problem. It states that dependencies of a module should be provided by an external entity or framework. 
+Inversion of Control (IoC) is a principle used to address the dependency inversion problem. It states that dependencies of a module should be provided by an external entity or framework. To put it simply, Ioc helps reduce the coupling between class A and B; class A just uses class B.
 
-Why: the module itself only has to import and use the dependency, it never has to create the dependency from scratch or manage it in any way.
+Why: the module itself only has to import and use the dependency, it never has to create the dependency from scratch or manage it in any way. One of the ways to implement IoC is using dependency injection (DI).
 
 ## Dependency injection
 

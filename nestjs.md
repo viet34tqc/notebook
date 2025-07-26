@@ -1,5 +1,9 @@
 # Nest Framework
 
+## Reference
+
+- <https://www.freecodecamp.org/news/the-nestjs-handbook-learn-to-use-nest-with-code-examples>
+
 ## Why use
 
 - Modular architechture => easier to organize your code and reuse code
@@ -44,7 +48,10 @@ In other words, **`@Injectable()` allows class to be injected in other class and
 
 Normally, for each route, `Controller` will invoke a `Service` method to perform the logic. A `Service` is a `Provider`, which can be injectable. 
 
-In order to inject a service into a controller, we have to add that service to the `providers` array of the module. 
+In order to inject a service into a controller, we have to: 
+
+- Add that service to the `providers` array of the module. 
+- Use the decorator `@Injectable()` at the top of the service. All the injectable class must be added into `providers` array of that module. 
 
 ```ts
 // cats.module.ts
@@ -61,9 +68,12 @@ export class CatsController {
 
 The pattern that we using above with Service is called `Dependancy Injection`. Without DI, in the Controller class, we have to intiate the Service class first => code is cumbersome
 
-In NestJS, if we want to inject a service into another service, we need to use the decorator `@Injectable()` at the top of the service. All the injectable class must be added into `providers` array of that module. 
 
-There are other ways to implement DI in NestJS
+### How DI Works in NestJS
+
+When your application boots, Nest builds a module-based IoC container. Each `@Injectable()` provider is registered in with a token (by default, its class). Nest collects metadata from decorators `(@Injectable()`, `@Controller()`) and builds a graph of providers. When you call `NestFactory.create(AppModule)`, it resolves that graph and wires everything together. When a class declares a dependency in its constructor, Nest looks up that token and injects the matching instance.
+
+There are 3 ways to implement DI in NestJS
 
 - using `useClass`.
 
@@ -84,8 +94,7 @@ export class CatsController {
 }
 ```
 
-- using value provider: The `useValue` syntax is useful for injecting a constant value, putting an external library
-into the Nest container, or replacing a real implementation with a mock object. 
+- using value provider: The `useValue` syntax is useful for injecting a constant value, putting an external library into the Nest container, or replacing a real implementation with a mock object. 
 
 ```ts
 const mockSongsService = {
@@ -131,7 +140,6 @@ export class ConfigController {
 }
 ```
 
-
 ## Flows
 
 <https://i.stack.imgur.com/2lFhd.jpg>
@@ -148,26 +156,20 @@ createUser(@Body userData: CreateUserDto)
 
 ## Pipes
 
-NestsJs use pipes for validation and transform data
+When the user send requests to `Controller`, you might want to validate or transform the data before it reaches the controller. This step is called `Pipe`. `Pipe` provides many methods via 2 packages: `class-validator` and `class-transformer`, which you need to install to use pipe in NestJS. 
+
+- Transformation: Convert input data (for example, a string "123") into the desired type (number 123).
+- Validation: Check that incoming data meets certain rules and throw an exception (usually a BadRequestException) if it doesn’t.
+
+By default, pipes run after middleware and before guards/interceptors, for each decorated parameter (`@Body()`, `@Param()`, and so on).
 
 <img src="https://i.imgur.com/MTuZ1An.png">
 
-When the user send requests to `Controller`, you might want to validate or transform the data before it reaches the controller. This step is called `Pipe`. `Pipe` provides many methods via 2 packages: `class-validator` and `class-transformer`, which you need to install to use pipe in NestJS. 
+### Validation
 
-Here, we are using `class-validator` to validate the data of the DTO
+There are some ways to apply validation pipe:
 
-```ts
-import {IsString, IsInt} from 'class-validator';
-export class CreateUserDTO {
-  @IsString()
-  name: string
-
-  @IsInt()
-  age: number
-}
-```
-
-Then, we apply the validation using `ValidationPipe` class
+Firtst, we apply the validation using `ValidationPipe` class
 
 ```ts
 @UsePipes(new ValidationPipe())
@@ -195,7 +197,22 @@ async function bootstrap() {
 }
 ```
 
-We can also transform the data before sending request. We have two type of transform: auto transformation and explicit transformation
+And now, we use `class-validator` to validate the data of the DTO. By doing this, any DTO annotated with validation decorators will be checked before your handler runs:
+
+```ts
+import {IsString, IsInt} from 'class-validator';
+export class CreateUserDTO {
+  @IsString()
+  name: string
+
+  @IsInt()
+  age: number
+}
+```
+
+### Transformation
+
+We can also transform the data before sending request. We have two type of transform: `auto transformation` and `explicit transformation`
 
 Here is auto transformation. The payload will be transform automatically into the types that matches the DTO. For example, if the `age` in the payload is string, it will be converted into number, according to the `CreateUserDTO` above
 
@@ -232,7 +249,6 @@ findOne(
   return 'This action returns a user';
 }
 ```
-
 
 ## Common Decorators
 
@@ -311,7 +327,7 @@ export class UserNotFoundException extends HttpException {
 
 ## Guards
 
-It's like interceptor and sits before route handler to determine if a request can be handled by the route handler or not
+It's like `middleware` and sits before route handler (`controller`) to determine if a request can be handled by the route handler or not. The difference between `guard` and `middleware` is `guard` has access to `ExecutionContext`, so they can know which `controller` they are guarding
 
 **Use cases**: Authorization, use to protect private route
 
@@ -349,33 +365,42 @@ There are 3 scopes where you can apply your guard: route handler, controller and
 
 Strategy sits after pipes and before controller.
 
-What `strategy`'s `validation` method returns is pass to the request body
+What `strategy`'s `validation` method returns is passed to the request body. More details in the code below
 
 For example:
 
 Let's say we have a login strategy by JWT
 
-- From strategy, we extract the payload from token, then we query the user in db using the data in payload
-- Strategy has a name, ex: 'jwt'. We create a `guard` using that strategy name
-- In controller, if the protected route use the `guard` created above, it will includes the data we return from `strategy` in the request body.
+- From `strategy`, we extract the payload from token, then we query the user in db using the data in payload
+- `Strategy` should has a name, ex: 'jwt'. We create a `guard` using that strategy name
+- In controller, if the protected route use the `guard` created above and the `canActive` in the guard returns true, it will include the data we return from `strategy` in the request body.
 - We can also use a custom decorator to extract the data we want to send to the service
 - We pass that data to the service and implement our business
 
 ## Authentication
 
-In NestJS, we often use Passport for authentication. Basically, what it does are:
+In NestJS, we often use `Passport` for authentication. Basically, what it does are:
 
-- Passport applies the strategy to verify the credentials or token by extracting and validating jwt
-- Attach user information in the next request (`Guard` sits in front of route handler, then what we return from `validate()` method in strategy is returned for the next request if it pass the guard) for further use
+- Applies the `strategy` to verify the credentials or token by extracting and validating jwt
+- Attach user information in the next request (`Guard` sits in front of route handler, then what we return from `validate()` method in `strategy` is passed to the `req` if it passes the guard for further use
 - In case there is a custom `handleRequest` in the `guard`, the returned value from `handleRequest` is passed to the Request
-  - Default Implementation (No Custom handleRequest): `validate → result → req.user.`
-  - Custom handleRequest: `validate → result → handleRequest → custom result → req.user.`
+  - Default Implementation (no custom `handleRequest`): `validate() → result → req.user.`
+  - Custom handleRequest: `validate() → result → handleRequest() → custom result → req.user.`
 
-Example Workflow with Passport and JWT
+### Workflow with Passport and JWT
 
 - Login: The user logs in and receives a signed JWT.
-- Protected Routes: The client sends the JWT in the Authorization header for protected API endpoints.
-- Token Validation: The passport-jwt strategy validates the token, extracts user information, and attaches it to the request object.
+- Protected Routes: The client sends the JWT in the Authorization header for protected API endpoints. Before it reaches the controller's handler, it meets `JwtAuthGuard` first
+- Guard Invokes Strategy: The `JwtAuthGuard` uses Passport's `authenticate()` to invoke the `JwtStrategy`.
+- Token Validation:
+  - The `JwtStrategy` extends `PassportStrategy` to check the token (e.g., from the Authorization header), verifies its signature, and decodes its payload.
+  - The `validate` method in JwtStrategy is called after successful token verification.
+- Request User is Set: The validate method returns the user object (or any data you specify), which is attached to req.user.
+- Route Handler Executes:
+  - If the guard and strategy succeed, the request proceeds to the route handler.
+  - Inside the handler, you can access the authenticated user via req.user.
+
+**So what we need to do is create a `JwtAuthGuard` and `JwtStrategy`**
 
 ### Install packages
 
@@ -501,7 +526,41 @@ handleRequest(err: any, user: any) {
 Best Practice
 
 - Use the default behavior when no additional logic is needed beyond what `validate` provides.
-- Override handleRequest when you need extra checks, error handling, or to modify the returned user object.
+- Override `handleRequest` when you need extra checks, error handling, or to modify the returned user object.
+
+### Import stategy and passport module
+
+We need to tell nestjs about the passport by importing `PassportModule` and then tell it what strategy it uses by adding JwtStrategy to the Provider
+
+```ts
+import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { UsersModule } from 'src/users/users.module';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { JwtStrategy } from './strategies/jwt.strategy';
+
+@Module({
+  providers: [AuthService, JwtStrategy],
+  imports: [
+    UsersModule,
+    PassportModule,
+    // To use ConfigService in JwtModule, we need to use registerAsync()
+    JwtModule.registerAsync({
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('jwtSecret'),
+        signOptions: { expiresIn: '1d' },
+      }),
+      inject: [ConfigService],
+    }),
+  ],
+  controllers: [AuthController],
+})
+export class AuthModule {}
+
+```
 
 ## Middleware and interceptors
 

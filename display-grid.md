@@ -25,7 +25,8 @@ fr-based columns are flexible, and so the column won't shrink below its minimum 
 The returned value depends on the the leftover space. If the leftover space is enough, it returns max value, otherwise min value
 
 - static value `minmax(100px, 200px)`: by default, if there is space, this returns `200px`, otherwise `100px` is the value (not less than 100px)
-- dynamic value `minmax(100px, 1fr)`: 1fr is calculated first, the static value is `100px`. If 1fr value is bigger than 100px, then it returns 1fr
+- dynamic value `minmax(100px, 1fr)`: `1fr` is calculated first, the static value is `100px`. If `1fr` value is bigger than 100px, then it returns 1fr
+- `minmax(0, 1fr)` still sizes the columns at 1fr, but allows it to shrink in width below what auto would be, meaning using overflow will actually work.
 
 ## `grid-auto-rows` and `grid-auto-columns`
 

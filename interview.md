@@ -1,11 +1,5 @@
 # Interview
 
-<https://itnext.io/frontend-interview-cheatsheet-that-helped-me-to-get-offer-on-amazon-and-linkedin-cba9584e33c7#21a5>
-
-## Coding Interview Project
-
-<https://jantu.hashnode.dev/how-to-implement-infinite-scrolling-with-reactjs>
-
 ## Why frontend first
 
 - It's easier to start with, you can see your result immediately on the browser
@@ -121,7 +115,6 @@ Tool check accessibility:
 
 - Like other JS frameworks, you can break your app into components that can be reuseable
 - It's declarative, we can describe how UI should look like by JS state. In vanilla JS, you need to handle both the state logic and UI interaction
-- It's faster by using Virtual DOM. Virtual DOM is just objects, React update the real DOM via virtual DOM.
 
 ## Why use virtual DOM in React
 
@@ -664,7 +657,7 @@ Implementing security for a website involves multiple layers, from client-side p
 - <https://www.youtube.com/watch?v=za2FZ8QCE18&ab_channel=FrontStart>
 - <https://tigerabrodi.blog/key-optimization-in-react>
 
-React uses `key` to keep track of which items have changed, are added, or are removed. If the key of item retains between re-renders, React will just re-use the component instead of re-creating it from scratch => better perfomance.
+React uses `key` to keep track of which items have changed, are added, or are removed. If the key of item retains between re-renders, React will just re-use the component instead of re-creating it from scratch => avoiding unnecessary DOM updates => better perfomance.
 
 Let's say you have a list of items. Under the hood, React converts the items into React elements with the same type. Without `key`, there is no way to distinguish them. When we have an unique key for each item, React can differentiate and also track them when they get deleted, added or re-ordered.
 
@@ -682,6 +675,76 @@ Using `index` as `key` is a good idea:
 Outside list, we use `key` for toggling 2 element with the same type
 
 ## How to approach a design
+
+## Docker bind mount and docker volume
+
+<https://www.youtube.com/watch?v=keINzeYs_lc>
+
+- Bind mount:
+  - syntax: `docker run -v [host_path]:[container_path]` 
+  - mount/synchronize a file/folder on your host with a file/folder inside container. Changes made in the container => changes on the host, and vice versa.
+- Docker volume:
+  - syntax: `docker run -v [volume_name]:[container_path]` (If you just use `-v [container_path]`, Docker will create an anonymous volume.)
+  - Create a volume (folder) inside container and it's also synchronize with a folder on the host. Folder on host is managed by Docker and stored in a special part of the host filesystem (usually under /var/lib/docker/volumes on Linux).
+  - If container is deleted, the volume saved in the host persists
+
+Conclusion: Both bind mount and volume synchronize a folder between the container and the host. The key difference is that with a bind mount, the host path is manually specified and not managed by Docker. In contrast, a volume is managed entirely by Docker, including its storage location.
+
+## How `zustand` manage re-render
+
+Let's you have a Zustand store with a `tasks` and `users`. `tasks` can be an array or object and Component A are reading `tasks` from store. When `users` changes => store changes => all components consume store can be re-render or not
+
+**What zustand does is compare the previous returned value from the hook with the next returned value from the hook to determine if the consumer should re-render or not**
+
+1. `Scenario 1`: Returning a single value. No `useShallow`
+
+```js
+const tasks = useTasksStore(state => state.tasks)
+```
+
+- Zustand uses `Object.is(prev, next)` by default
+- So it checks: `prevTasks === nextTasks`
+- Re-renders only when tasks reference changes. Otherwise, it doesn't re-render
+
+2. `Scenario 2`: Returning a single value which has been derived. No `useShallow`
+
+```js
+const keys = useTasksStore(state => Object.keys(state.tasks));
+```
+
+Now, each call to `Object.keys()` returns a new array instance, even if the keys haven't changed. The previous keys and the next keys has different reference. Zustand compare by `Object.is`: `Object.is(prevKeys, nextKeys)` => returns `false` => re-render
+
+3. `Scenario 3`: Returning an object without `useShallow`
+
+```js
+const { tasks, setTasks } = useTasksStore(state => ({
+  tasks: state.tasks,
+  setTasks: state.setTasks,
+}))
+```
+
+Zustand compares: `Object.is({ tasks: prevTasks, setTasks: prevSetTasks }, { tasks: nextTasks, setTasks: nextSetTasks })`. Two difference ref like above => returns `false` => re-render
+
+4. `Scenario 4`: Returning an object with `useShallow`
+
+```js
+const { tasks, setTasks } = useTasksStore(
+  useShallow(state => ({ tasks: state.tasks, setTasks: state.setTasks }))
+)
+```
+
+Zustand compares: `shallow({ tasks: prevTasks, setTasks: prevSetTasks }, { tasks: nextTasks, setTasks: nextSetTasks })`.
+
+`shallow` only top-level keys of returned object, which means
+
+```js
+prevTasks === nextTasks
+prevSetTasks === nextSetTasks
+```
+
+It doesn't compare the property of the `tasks`, so `tasks` is object or array doesn't matter. **And because `tasks` isn't mutated => `prevTasks` and `nextTasks` stored in the store are the same reference: `shallow` returns `true`**. So if we want to update the tasks, we need to return the new ref of tasks (using `map()`, `filter()`), then the component using `tasks` is re-render
+
+One note about the doc in zustand: <https://zustand.docs.pmnd.rs/apis/shallow#comparing-objects-returns-false-even-if-they-are-identical.>. In this example, `shallow` is comparing two nested object with identical properties. But in our example, `tasks` is in the stored and it stays the same if it's not mutated => its reference statys the same
 
 ## The problem with `Array.prototyp.includes()`
 
@@ -797,6 +860,13 @@ HTML tags are name of HTML elements
 
 - `map` is used to transform each element of an array. It returns an array without changing original array
 - `forEach` is used to run a function for each element. For example, we have a variable and we want to sum each element with that var. `forEach` returns undefined
+
+## `1fr 1fr` vs `auto auto` vs `50% 50%` in grid layout
+
+<https://frontendmasters.com/blog/1fr-1fr-vs-auto-auto-vs-50-50/>
+
+- `50% 50%` will make the layout overflow if we add gap. In this case, the total width of children and gap will bigger than the container. The others don't overflow.
+- When the content of the column is bigger than 50% (for example, an image), the image will break through the column. Meanwhile, `1fr` grows to contain the iamge
 
 ## Explain the difference between Flexbox and CSS Grid. When would you use any of these? What are their strengths and weaknesses?
 

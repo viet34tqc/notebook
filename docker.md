@@ -95,6 +95,13 @@ dist
 *.md
 ```
 
+## `COPY`
+
+The copying source is the build content, which is the directory you specify when you run docker build or the `build/context` field in docker-compose file.
+
+- `RUN` runs once during docker build, nothing happens at runtime. If you have `RUN pnpm dev` inside Dockerfile, it will run forever and you cannot start the container
+- `CMD` doesn't run during build, but runs when the container starts.
+
 ### `ARG`, `ENV` in Dockerfile
 
 [https://vsupalov.com/docker-arg-env-variable-guide/](https://vsupalov.com/docker-arg-env-variable-guide/)
@@ -440,7 +447,16 @@ mysql:
       retries: 20
 ```
 
-## ENTRYPOINT
+## How to run something when container starts
+
+<https://chatgpt.com/c/67c4353f-0ac0-8010-aaeb-f1bf584c28a7>
+
+## CMD
+
+- Define a simple default behavior like starting a server.
+- Can overridden by `command:` in docker-compose or `docker run` CLI.
+
+### ENTRYPOINT
 
 The purpose of
 
@@ -468,6 +484,25 @@ CMD ["nginx", "-g", "daemon off;"]
   - The container will always execute entrypoint.sh first.
   - After entrypoint.sh finishes, it will run nginx -g 'daemon off;' (from CMD).
   - You can override CMD at runtime, but ENTRYPOINT will still execute first.
+3. Makes your commands more clean and can be reuseable across container
+
+ENTRYPOINT can not be overridden by CMD, but can be overridden by `entrypoint:` or `--entrypoint`. 
+
+### `command:` in docker-compose.yml
+
+```
+services:
+  app:
+    command: ["npm", "test"]
+```
+
+- Overrides CMD in Dockerfile at runtime.
+
+### `--entrypoint` in `docker run` (CLI only)
+
+`docker run --entrypoint "sh" my-image -c "echo Hello"`
+
+- This has the highest precedence.
   
 ## Multi-statge build
 
