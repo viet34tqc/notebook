@@ -295,9 +295,28 @@ Update code
 - Re-build lại docker image: phải xóa docker image cũ đi rồi build lại cái mới dùng lệnh `docker build -t` ở trên
 - Stop và remove container hiện tại: dùng lệnh `docker rm -f <the-container-id>` hoặc dùng Dashboard
 
+## Bind mount
+
+<https://www.youtube.com/watch?v=u1q8AyNMxd4>
+
+Bind mounts expose a file or directory on host machine to the container. That means the file or directory will be synchronized between host and container.
+
+```bash
+docker run -v HOST_PATH:CONTAINER_PATH
+```
+
+Why:
+
+- For development, where you want you code in host and container exactly the same
+
+Drawbacks:
+
+- Permission and ownership issue: when a folder is owned by root and you try to delete it on your host machine, you got error
+- node_modules in JS project can contains native codes. That means some npm packages use Node.js native addons and they run differently on OS. So if you run npm install on host machine and bind mount node_modules to Linux container and vice versa => it wont work => 
+
 ## Docker volume
 
-To Synchronize files between host and docker container
+To persist the application data
 
 Why: If your container has the feature to store user data in database, this data will be gone when you start another container from the same image. To make it persist, we use docker volume to store our data because docker volume is separated from docker container. This docker volume is store on host machine. If you are using Docker desktop, its location is `\\wsl$\docker-desktop-data\data\docker\volumes` (<https://stackoverflow.com/questions/43181654/locating-data-volumes-in-docker-desktop-windows>)
 
@@ -312,8 +331,24 @@ docker volume create todo-db
 
 # Run the container using volume
 # `todo-db` is the name of volume
-# `etc/todos` is where container store the db, we set this location in the code
+# `etc/todos` is where container store the db
 docker run -dp 3000:3000 -v todo-db:/etc/todos getting-started
+```
+
+Or via docker compose:
+
+```bash
+service:
+    db:
+        image: postgres
+        volumes:
+          - type: volume
+            name: db
+            target: /var/lib/postgresql/data
+        # Or shorter version
+        volumes: ['db':/var/lib/postgresql/data]
+volumes:
+    db
 ```
 
 ## How Docker works
@@ -451,7 +486,7 @@ mysql:
 
 <https://chatgpt.com/c/67c4353f-0ac0-8010-aaeb-f1bf584c28a7>
 
-## CMD
+### CMD
 
 - Define a simple default behavior like starting a server.
 - Can overridden by `command:` in docker-compose or `docker run` CLI.

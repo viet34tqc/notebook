@@ -2,6 +2,7 @@
 
 ## References
 
+- <https://chatgpt.com/c/68962210-fca0-8321-94de-a69157649d31>
 - <https://www.youtube.com/watch?v=eiC58R16hb8>
 - <https://www.lydiahallie.com/blog/promise-execution>
 - <https://blog.xnim.me/event-loop-and-render-queue>
@@ -40,6 +41,7 @@ Javascript is single-threaded, it can only execute one statement at a time.
   - If `await` exists inside `async`,
     - run the promise that we are awaiting 
     - the rest of function body is pushed to **microtask** queue, only if the function we are awaiting is resolved or rejected. In this example: `await asyncFunc(); console.log(2)`, `console.log(2)` is pushed to `microtask` queue
+- Another different between **microtask** and **macrotask** is Microtasks (like .then(...), queueMicrotask) run before rendering. It wont let browser do the painting until the entire micro tasks are done: **<https://chatgpt.com/c/68962210-fca0-8321-94de-a69157649d31>**. (When the we yield to the browser, we pause the current js task and tell the browser to take a break from executing js and do other thinks like paiting...)
 
 ```ts
 const wait = () =>

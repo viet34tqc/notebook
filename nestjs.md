@@ -140,11 +140,83 @@ export class ConfigController {
 }
 ```
 
-## Flows
+### Decorators
 
-<https://i.stack.imgur.com/2lFhd.jpg>
+There are 4 main kinds of decorators in NestJs:
 
-We often define services in modules as `providers`. In services, we will inject other services
+- Class decorators: define the purpose or behavior of classes. For example  `@Controller()` (Marks a class as a controller), `@Injectable()` (Marks a class as a provider and injectable)...
+- Method decorators: Used to handle HTTP routes or apply guards/middleware to individual endpoints. For example: `@Get(), @Post(), @Put()`, `@UseGuards()`...
+- Parameter decorators: Used to extract specific data from the request, like body, params, query. For example: `@Req()`, `@Param()`, `@Query`... or `@CustomDecorator()`
+- Property Decorators: Used for dependency injection or metadata on class properties. For example: `@Inject()` (Injects a provider manually), `@Optional()`...
+
+How to create custom decorator:
+
+- Class Decorator (e.g., `@Loggable()`): Attach metadata or logic to a class (e.g., a controller or service)
+
+```ts
+export function Loggable(): ClassDecorator {
+  return (target) => {
+    Reflect.defineMetadata('loggable', true, target);
+  };
+}
+
+// Usage
+@Loggable()
+@Injectable()
+export class UsersService {
+  getUsers() { return ['A', 'B']; }
+}
+```
+
+- Method Decorator (e.g., `@ResponseMessage()`): Add metadata to route handlers (often used with interceptors)
+
+```ts
+// response-message.decorator.ts
+import { SetMetadata } from '@nestjs/common';
+
+export const RESPONSE_MESSAGE_KEY = 'response_message';
+
+export const ResponseMessage = (message: string) =>
+  SetMetadata(RESPONSE_MESSAGE_KEY, message);
+
+// Usage. We will use an inteceptor to retrieve the metadata
+@Get('profile')
+@ResponseMessage('User profile fetched successfully')
+getProfile() {
+  return { name: 'John' };
+}
+```
+
+- Parameter Decorator (e.g., @User(): Extract data from the request and inject into the route handler
+
+```ts
+// user.decorator.ts
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+
+export const User = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest();
+    return request.user;
+  },
+);
+
+// Usage
+@Get('me')
+getProfile(@User() user: any) {
+  return user;
+}
+```
+
+## Arguments in route handler of controller
+
+In route handler, you can access the **request** via built-in or custom **Parameter decorators** above
+
+## Life cycle
+
+- <https://i.stack.imgur.com/2lFhd.jpg>
+- <https://postimg.cc/TyD1Y7Gx/53ad204b>
+
+Middleware -> Guard -> interceptor -> pipe -> route handler -> interceptor -> Exception filter
 
 ## Data transfer object
 
@@ -152,13 +224,23 @@ DTO - Data transfer object is basically a schema and defines how the data is sen
 
 ```ts
 createUser(@Body userData: CreateUserDto)
+
+class CreateUserDto {
+  @IsString()
+  name: string
+}
 ```
+
+### Why use `class` over TS's types
+
+- `type` is only compile-time: When your app is running (in Node.js), this type no longer exists => No runtime validation, no transformation, no decoration
+- `class` exists at run time and supports decorator. The payload we send in the request is running at run time and by using `class`, you can validate or transform the payload before sending to the route handler (like `@IsString`, `@Transform`, etc.).  
 
 ## Pipes
 
-When the user send requests to `Controller`, you might want to validate or transform the data before it reaches the controller. This step is called `Pipe`. `Pipe` provides many methods via 2 packages: `class-validator` and `class-transformer`, which you need to install to use pipe in NestJS. 
+When the user send requests to `Controller`, you might want to validate or transform the payload before it reaches the controller. This step is called `Pipe`. `Pipe` provides many methods via 2 packages: `class-validator` and `class-transformer`, which you need to install to use pipe in NestJS. 
 
-- Transformation: Convert input data (for example, a string "123") into the desired type (number 123).
+- Transformation: Convert payload (for example, a string "123") into the desired type (number 123).
 - Validation: Check that incoming data meets certain rules and throw an exception (usually a BadRequestException) if it doesn’t.
 
 By default, pipes run after middleware and before guards/interceptors, for each decorated parameter (`@Body()`, `@Param()`, and so on).
@@ -169,7 +251,17 @@ By default, pipes run after middleware and before guards/interceptors, for each 
 
 There are some ways to apply validation pipe:
 
-Firtst, we apply the validation using `ValidationPipe` class
+Firstly, we can apply the validation pipe globally in `main.ts`
+
+```ts
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
+  await app.listen(3000);
+}
+```
+
+Or, we apply the validation using `ValidationPipe` class
 
 ```ts
 @UsePipes(new ValidationPipe())
@@ -187,16 +279,6 @@ async create(
   this.catsService.create(createCatDto);
 ```
 
-Lastly, we can apply the validation pipe globally in main.ts
-
-```ts
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
-  await app.listen(3000);
-}
-```
-
 And now, we use `class-validator` to validate the data of the DTO. By doing this, any DTO annotated with validation decorators will be checked before your handler runs:
 
 ```ts
@@ -212,9 +294,41 @@ export class CreateUserDTO {
 
 ### Transformation
 
-We can also transform the data before sending request. We have two type of transform: `auto transformation` and `explicit transformation`
+In nestjs, we might want to transfrom or mutate the payload before we send it the route handler. For example:
 
-Here is auto transformation. The payload will be transform automatically into the types that matches the DTO. For example, if the `age` in the payload is string, it will be converted into number, according to the `CreateUserDTO` above
+```ts
+export class CreateUserDto {
+  @IsString()
+  @Transform(({ value }) => value.trim())
+  username: string;
+}
+```
+
+Here's what happens:
+
+1. NestJS receives a request body:
+
+```ts
+{
+  "username": "   viet   "
+}
+```
+
+2. Nest uses class-transformer to:
+ - Convert the plain payload to an instance of `CreateUserDto`. By doing this, you can use decorators (`Transform()`) to transform value (or using `class` methods)
+ - Apply the `@Transform` to trim the string
+3. Then it runs validation (via `class-validator`) to check `@IsString`
+4. Inside your controller, you receive a CreateUserDto instance with the trimmed username
+
+We have two type of transform: `auto transformation` and `explicit transformation`
+
+Here is `auto transformation`. The payload will be transform automatically into the types that matches the DTO. For example, if the `age` in the payload is string, it will be converted into number, according to the `CreateUserDTO` above
+
+Apply globally in `main.ts`
+
+`app.useGlobalPipes(new ValidationPipe({ transform: true }));`
+
+Or apply for each route
 
 ```ts
 @Post()
@@ -386,12 +500,20 @@ In NestJS, we often use `Passport` for authentication. Basically, what it does a
 - In case there is a custom `handleRequest` in the `guard`, the returned value from `handleRequest` is passed to the Request
   - Default Implementation (no custom `handleRequest`): `validate() → result → req.user.`
   - Custom handleRequest: `validate() → result → handleRequest() → custom result → req.user.`
+  
+So the order is:
+
+1. `JwtAuthGuard.canActivate()`
+2. triggers `JwtStrategy.validate()`
+3. result passed into `JwtAuthGuard.handleRequest()`
+4. attaches user to request
+5. controller runs
 
 ### Workflow with Passport and JWT
 
 - Login: The user logs in and receives a signed JWT.
 - Protected Routes: The client sends the JWT in the Authorization header for protected API endpoints. Before it reaches the controller's handler, it meets `JwtAuthGuard` first
-- Guard Invokes Strategy: The `JwtAuthGuard` uses Passport's `authenticate()` to invoke the `JwtStrategy`.
+- Guard Invokes Strategy: The `JwtAuthGuard` invoke `canActivate` function first, which calls Passport's `authenticate()` under the hood to invoke the `JwtStrategy`.
 - Token Validation:
   - The `JwtStrategy` extends `PassportStrategy` to check the token (e.g., from the Authorization header), verifies its signature, and decodes its payload.
   - The `validate` method in JwtStrategy is called after successful token verification.
@@ -569,6 +691,118 @@ export class AuthModule {}
 
 The execution order is:
 Browser -> Middleware -> Interceptors -> Route Handler -> Interceptors -> Exception Filter (if exception is thrown)
+
+## Interceptors
+
+Use cases:
+
+- Modify the request before it comes to router handler and the data from response before it comes to client
+
+Example of transforming returned data
+
+```ts
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+} from '@nestjs/common';
+import { Observable, map } from 'rxjs';
+
+export interface Response<T> {
+  statusCode: number;
+  data: T;
+}
+
+@Injectable()
+export class TransformDataInterceptor<T>
+  implements NestInterceptor<T, Response<T>>
+{
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<Response<T>> {
+    return next.handle().pipe(
+      map((data: T) => ({
+        statusCode: context.switchToHttp().getResponse<Response<T>>()
+          .statusCode,
+        data,
+      })),
+    );
+  }
+}
+```
+
+We can also apply it for router handler or controller or globally. In this case, we apply it globally
+
+```ts
+// main.ts
+app.useGlobalInterceptors(new TransformDataInterceptor());
+```
+
+The response from the server will be in the following format:
+
+```json
+{
+  "statusCode": 200,
+  "data": T
+}
+```
+
+## Metadata
+
+Use case: Define and add it to a route. `Interceptors` or `decorator` will retrieve this metadata from the route
+
+Let's say we want to add a messsage in the response data to a route handler
+
+1. Define metadata (often define it in the `decorator` or `interceptor` using it)
+
+```ts
+export const RESPONSE_MESSAGE_KEY = 'responseMessage';
+// This is the metadata
+export const ResponseMessage = (message: string) =>
+  SetMetadata(RESPONSE_MESSAGE_KEY, message);
+```
+
+2. Apply it to a route handler
+
+```ts
+@Get()
+@ResponseMessage('Get all companies successfully')
+findAll()
+```
+
+3. Extract the metadata
+
+In this case, we retrieve it in the `interceptor` using reflector
+
+```ts
+export class TransformDataInterceptor<T>
+  implements NestInterceptor<T, Response<T>>
+{
+  constructor(private reflector: Reflector) {}
+
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<Response<T>> {
+    return next.handle().pipe(
+      map((data: T) => ({
+        statusCode: context.switchToHttp().getResponse<Response<T>>()
+          .statusCode,
+        message:
+          this.reflector.get<string>(
+            RESPONSE_MESSAGE_KEY,
+            context.getHandler(),
+          ) || '',
+        data,
+      })),
+    );
+  }
+}
+```
+
+We have to pass the reflector from `app.get(Reflector)`: `app.useGlobalInterceptors(new TransformDataInterceptor(app.get(Reflector)))`
 
 ## Websockets
 

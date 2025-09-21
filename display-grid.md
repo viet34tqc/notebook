@@ -19,8 +19,9 @@ fr-based columns are flexible, and so the column won't shrink below its minimum 
 
 ## `minmax(min, max)`
 
-<https://ishadeed.com/article/css-grid-minmax/>
-<https://www.hongkiat.com/blog/css-grid-layout-minmax/>
+- <https://css-tricks.com/almanac/functions/m/minmax/>
+- <https://ishadeed.com/article/css-grid-minmax/>
+- <https://www.hongkiat.com/blog/css-grid-layout-minmax/>
 
 The returned value depends on the the leftover space. If the leftover space is enough, it returns max value, otherwise min value
 

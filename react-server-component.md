@@ -12,7 +12,7 @@
 
 React Server Components are executed in server in order to generate flight (payload) data, and then it is sent to the client to build and update the Virtual DOM.
 
-To do this, React serialize the React element tree on server executed components and send that serialized string to client. On client, this payload will be deserialized
+To do this, React serialize the React components on server as a JSON-alike format named React Server component payload send that serialized string to client. On client, this payload will be deserialized
 
 When you build your React application with server components enabled, the server component code is bundled separately. This server bundle is deployed to your server environment and is used exclusively there, meaning that the final client bundle that runs in the browser does not include any server component code.
 
@@ -44,6 +44,11 @@ When an RSC needs to be re-rendered, due to state change, it refreshes on the se
 - If I have a highly interactive app, use Client Components.
 - On the other hand, if I had a lot of DB access and complex logic, I might offload that to the server by doing it on a Server Component.
 
+## Limitation
+
+- Cannot use browser api, cannot access to `window`
+- Cannot use interactive features, like `click`
+
 ## Server component and client component
 
 - A Server Component runs exclusively on the server. This code will not re-run on the user's device; the code won't even be included in the JavaScript bundle
@@ -56,6 +61,15 @@ When streaming, you can send UI in small chunks from server to client, without n
 On a page, each component can be considered a chunk. Static components (e.g. layout, product information) that don't rely on data can be pre-rendered at build time and sent first, then React can start hydration earlier.
 
 Components that require data fetching (e.g. reviews, related products) can be sent in the same server request after their data has been fetched. This is done by wrapping the components that require dynamic data within `<Suspense>` boundaries and providing a fallback. As the user views the page, the server streams in the dynamic data, replacing the static fallbacks.
+
+## Flow of React Server component
+
+- Browser request -> server receives it.
+- Server runs RSCs -> fetches data, builds component tree.
+- React generates RSC payload -> JSON-like description.
+- Browser receives payload -> reconstructs tree, loads client components. Besides payload, browser also get html shell, css, js bundle for client component for hydrating, react or nextjs client runtime code. 
+- Hydration & Streaming -> UI becomes interactive.
+- Subsequent updates -> only changed RSCs fetched and merged.
 
 ## Server actions
 

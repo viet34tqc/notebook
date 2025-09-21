@@ -685,7 +685,7 @@ Outside list, we use `key` for toggling 2 element with the same type
   - mount/synchronize a file/folder on your host with a file/folder inside container. Changes made in the container => changes on the host, and vice versa.
 - Docker volume:
   - syntax: `docker run -v [volume_name]:[container_path]` (If you just use `-v [container_path]`, Docker will create an anonymous volume.)
-  - Create a volume (folder) inside container and it's also synchronize with a folder on the host. Folder on host is managed by Docker and stored in a special part of the host filesystem (usually under /var/lib/docker/volumes on Linux).
+  - Create a volume (folder) inside container and it also synchronizes with a folder on the host. However, folder on host is managed by Docker and stored in a special part of the host filesystem (usually under /var/lib/docker/volumes on Linux).
   - If container is deleted, the volume saved in the host persists
 
 Conclusion: Both bind mount and volume synchronize a folder between the container and the host. The key difference is that with a bind mount, the host path is manually specified and not managed by Docker. In contrast, a volume is managed entirely by Docker, including its storage location.
@@ -1164,10 +1164,13 @@ person.wrapper()()(); // return person
 
 ## Concurrent mode in React
 
+- <https://certificates.dev/blog/react-concurrent-features-an-overview>
 - <https://3perf.com/talks/react-concurrency/>
 - <https://vercel.com/blog/how-react-18-improves-application-performance>
 
 Help to build components that render concurrently without blocking the user interface.
+
+Before concurrent rendering, React worked synchronously. When you triggered an update, React would block the main thread until the entire component tree was re-rendered. This could cause janky interactions—typing might feel sluggish if expensive components were rendering simultaneously.
 
 Using concurrent features, React can pause and resume the rendering of components based on external events such as user interaction. When the user started interacting with ComponentTwo, React paused the current rendering, prioritized and render ComponentTwo, after which it resumed rendering ComponentOne (using Suspense)
 
