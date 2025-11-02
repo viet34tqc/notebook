@@ -3,9 +3,14 @@
 <https://punits.dev/jargon-free-intros/>
 <https://thanhle.blog/blog/thuat-ngu-trong-frontend-optimization>
 
-## Transpile
+## Transpilation and compilation
 
-Convert the code so that older browser can also run it.
+- Transpilation
+  - converting code written in one high-level language (or syntax version) into another high-level language or syntax version.
+  - Examples: TypeScript => JavaScript, SASS => CSS
+- Compilation
+  - converting high-level source code (like C, Java, or Go) into low-level machine code or bytecode that a computer or virtual machine can execute directly
+  - Examples: C => machine code (.exe)
 
 ## Waterfall
 

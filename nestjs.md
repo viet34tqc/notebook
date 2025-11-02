@@ -44,6 +44,14 @@ Most of the code we will be using in NestJs is within providers. Provider is sim
 
 In other words, **`@Injectable()` allows class to be injected in other class and also to inject other class into it**
 
+Provider are often added into `providers` array module
+
+classes listed in the providers array can be injected into each other, and this is a key feature of NestJS's dependency injection system. Here's how it works:
+
+- Automatic Injection: When you add a class to the providers array, NestJS creates and manages an instance of that class and makes it available for injection into other classes.
+- Circular Dependencies: Be cautious of circular dependencies (where Class A depends on Class B, and Class B depends on Class A). While NestJS can handle these with some additional configuration, it's generally better to refactor to avoid them.
+- Scope: By default, providers are singletons within their module, meaning the same instance will be injected wherever the provider is requested.
+
 ### Services
 
 Normally, for each route, `Controller` will invoke a `Service` method to perform the logic. A `Service` is a `Provider`, which can be injectable. 
@@ -67,7 +75,6 @@ export class CatsController {
 ```
 
 The pattern that we using above with Service is called `Dependancy Injection`. Without DI, in the Controller class, we have to intiate the Service class first => code is cumbersome
-
 
 ### How DI Works in NestJS
 
