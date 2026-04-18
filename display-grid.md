@@ -75,3 +75,14 @@ When we use `display: grid`, the container is divided into cells which contain g
 - `place-items`:
   - shorthand for `align-items` and `justify-items`
   - align the items within its cell
+
+## `subgrid`
+
+- <https://www.joshwcomeau.com/css/subgrid/>
+
+Subgrid lets a child grid inherit the row/column size of its parent grid. The child and parent share the same grid lines. Its like when you use subgrid on the child element, the elements in that child are like flatted
+
+There are two ways to define grid lines, from parent or from children
+
+- Define an explicit number of rows using grid-template-rows on the parent (a top-down approach).
+- Leave grid-template-rows set to the default value of auto, which will allow the grid structure to be dynamically derived from the children (a bottom-up approach).

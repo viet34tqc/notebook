@@ -16,6 +16,68 @@ It could lead to infinite loop. Update the state like this is the same as callin
 
 When we use props as initial state, that state won't react to props update. The reason is because `useState` called only once when the component mounts.
 
+## Avoid Prop Name Conflicts
+
+```ts
+// ❌ Bad - conflicts with HTML title attribute
+export type CardProps = React.ComponentProps<'div'> & {
+  title: string; // This conflicts with the HTML title attribute
+};
+
+// ✅ Good - use a different name
+export type CardProps = React.ComponentProps<'div'> & {
+  heading: string;
+};
+```
+
+## Use CSS variables for dynamic values - Instead of generating classes dynamically, use CSS variables
+
+```tsx
+// Good
+<div
+  className="bg-[var(--color)]"
+  style={{ '--color': dynamicColor } as React.CSSProperties}
+/>
+
+// Avoid
+<div className={`bg-[${dynamicColor}]`} />
+```
+
+## Data attribute with Taildwind
+
+<https://www.components.build/data-attributes#styling-with-tailwind>
+
+```tsx
+<Dialog
+  className={cn(
+    // Base styles
+    'rounded-lg border p-4',
+    // State-based styles
+    'data-[state=open]:animate-in data-[state=open]:fade-in',
+    'data-[state=closed]:animate-out data-[state=closed]:fade-out',
+    // Multiple attributes
+    'data-[state=open][data-side=top]:slide-in-from-top-2'
+  )}
+/>
+
+// For commonly-used states, you can extend Tailwind's configuration:
+module.exports = {
+  theme: {
+    extend: {
+      data: {
+        open: 'state="open"',
+        closed: 'state="closed"',
+        active: 'state="active"',
+      }
+    }
+  }
+}
+
+// Now you can use shorthand:
+<Dialog className="data-open:opacity-100 data-closed:opacity-0" />
+```
+
+
 ## Stop passing setter function to child component
 
 <https://matanbobi.dev/posts/stop-passing-setter-functions-to-components>

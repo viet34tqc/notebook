@@ -7,10 +7,25 @@
 	- `INTERCEPT`: the result must match both queries, like `AND` condition
 	- `UNION`: the result matches either two queries, like `OR` condition. The result is the combination of both queries
 	- `EXCEPT`: the result matches first query, but not the second query.
+	
+## `case`, `when`, `end`
+
+It creates another columns in the results
+
+```sql
+select age,
+case 
+	when age < 30 then 'young'
+	when age > 30 then 'old'
+end as bracket
+from employee_demographics ed;
+```
+
+will create a column named `bracket`, the value is 'young' or 'old'
 
 ## `group by`
 
-Bản chất câu lệnh `group by`: nếu trong data trả về có các giá trị trùng lặp thì mình có thể nhóm dữ liệu theo giá trị đó (group by), ví dụ như trùng id.
+Bản chất câu lệnh `group by`: nếu trong data trả về có các giá trị trùng lặp thì mình có thể nhóm dữ liệu theo giá trị đó (group by), ví dụ như trùng id. Ngắn gọn hơn là gom nhiều dòng thành 1 dòng
 
 Đối tượng thứ 2 trong câu lệnh `select` sử dụng `group by` bắt buộc phải phải sử dụng aggregate function (`sum`, `count`). Hình dung câu lệnh group by như sau
 
@@ -48,13 +63,103 @@ Giá trị `value` trong bảng `table` sẽ được gom lại theo id vào chu
 
 Mình cũng có thể đếm số lần xuất hiện của id bằng câu lệnh: `select id, count(id) from table group by id`
 
+## Window functions
+
+https://chatgpt.com/g/g-p-69be503815ac81918141f2fe0917ac2e-sql/c/69be1f88-97b0-8321-91f5-521d2c3e19e8
+
+Tất cả các hàm window functions đều có nguyên tắc chung là giữ nguyên data của row, nhưng cho phép đọc dữ liệu từ các row khác
+
+### `PARTITION BY`
+
+PARTITION BY không trả về gì cả
+Nó chỉ chia dữ liệu thành từng nhóm nhỏ (window)
+Rồi mỗi dòng sẽ tính toán bên trong nhóm của nó. 
+
+Có thể hiểu `PARTITION BY` như 1 sub query có sử dụng `GROUP BY`
+
+Data trả về cũng tương tự `GROUP BY` nhưng row được giữ nguyên
+
+GROUP BY			PARTITION BY
+Gộp dòng			Không gộp
+Mất chi tiết		Giữ nguyên
+1 nhóm → 1 dòng		1 nhóm → nhiều dòng
+
+```sql
+SELECT department_id, SUM(salary)
+FROM employee_salary
+GROUP BY department_id;
+```
+
+Mỗi phòng 1 dòng
+Không còn biết ai là ai
+
+```sql
+SELECT 
+  first_name,
+  department_id,
+  salary,
+  SUM(salary) OVER (PARTITION BY department_id)
+FROM employee_salary;
+```
+
+Vẫn từng người
+Nhưng có thêm “tổng của phòng”
+
+**Sự khác biệt giữa: SUM(salary) OVER (PARTITION BY department_id) AS total_dept_salary và SUM(salary) OVER (PARTITION BY department_id order by salary) AS total_dept_salary**
+
+Khi bạn thêm ORDER BY, database ngầm hiểu:
+
+"tính từ đầu → tới dòng hiện tại"
+
+Tức là:
+
+Không có ORDER BY
+→ window = toàn bộ partition
+Có ORDER BY
+→ window = từ đầu đến current row
+
+
+### `RANK()` – trả về thứ hạng, có nhảy số
+
+`RANK() OVER (ORDER BY salary DESC)`
+
+| name   | salary | rank |
+| ------ | ------ | ---- |
+| Chris  | 90000  | 1    |
+| Leslie | 75000  | 2    |
+| Ron    | 70000  | 3    |
+| Ben    | 70000  | 3    |
+| Tom    | 50000  | 5    |
+
+
+### `LAG()` – trả về giá trị của dòng trước đó
+
+`LAG(salary) OVER (ORDER BY salary)`
+
+| name  | salary | lag_salary |
+| ----- | ------ | ---------- |
+| Andy  | 20000  | NULL       |
+| April | 25000  | 20000      |
+| Tom   | 50000  | 25000      |
+| Jerry | 50000  | 50000      |
+
 ## `having` và `where`
 
 Trong câu lệnh sql dùng với aggregate function và `group by`, `where` dùng để lọc data truyền vào aggregate function còn `having` lọc data đầu ra của aggregate function
 
+## The order
+
+If sql statement includes `where`, `group by`, `having`, `order by`, `select`, `from`, then the order is
+
+`from` => `group by` => `having` => `where` => `select` => `order by`
+
+You can only `select` if the data is ready. So `from` => `group by` => `having` => `where` runs first. `group by` => `having` => `where` are like filter for the raw data from `from`. Then you can `select`. After you `select`, you can `order by`
+
 ## VIEW
 
 This is like a table that stores the result of a query, then from where we can make another query
+
+You can think of it like a subquery but for readibility
 
 3 types of VIEW
 
@@ -82,8 +187,7 @@ CREATE TEMPORARY VIEW 'avg_book_ratings' AS (
 SELECT "year", "rating" from "avg_book_ratings" GROUP BY year
 ```
 
-
-- CTE: stands for common table expression, only exists for each query
+- `CTE`: stands for common table expression, only exists for each query
 
 ```sql
 WITH 'avg_book_ratings' AS (

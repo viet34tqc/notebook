@@ -194,6 +194,80 @@ const eslintConfig = [
 export default eslintConfig
 ```
 
+#### `eslint` with ts
+
+Eslint by default only runs for js file. It need `typescript-eslint` package which includes a parser to run ts file.
+
+- `eslint` only looks into the tsconfigpath defined in `tsconfigRootDir` in the `eslint.config.js` file. So you should define all the files you need to lint in the `include` of tsconfig.
+- Define the path correctly in the `eslint.config.js` file. The path should be relative to the root of the project, not the current directory.
+
+```ts
+{
+  files: ['packages/**/src/**/*.ts', 'packages/**/tests/**/*.ts'],
+  rules: {
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/restrict-template-expressions': [
+      'error',
+      { allowNumber: true, allowBoolean: true },
+    ],
+  },
+},
+```
+
+- Eslint config and tsconfig file. Your ESLint files patterns and tsconfig include patterns need to match. **ESLint → @typescript-eslint/parser → TypeScript compiler → uses `include` to decide which files are part of the type system**.
+- `tseslint.configs.strictTypeChecked` will try to lint all the files: '.js', '.ts', '.mjs', etc. So if you need to lint them, you have to add them to the include of tsconfig
+
+ESLint finds a file to lint
+    ↓
+Checks: "Does this file match my 'files' pattern?"
+    ↓ YES
+Applies strict type checking rules
+    ↓
+Needs type information, so asks TypeScript parser
+    ↓
+TypeScript parser looks for nearest `tsconfig.json` file (due to `projectService: true`). For example, if the file is in `packages/ui/src/routes.ts`, it will look upward from the file's location, ex: 'packages/ui/tsconfig.json' => 'root/tsconfig.json'
+    ↓
+Finds subpackage tsconfig → extends root tsconfig
+    ↓
+Checks: "Is this file in the 'include' pattern?"
+    ↓ YES → Provides type info to ESLint
+    ↓ NO  → Error: "was not found by the project"
+
+Here is a basic config between eslint and ts
+
+```ts
+import eslint from '@eslint/js'
+import tseslint from 'typescript-eslint'
+
+export default tseslint.config(
+  eslint.configs.recommended,
+  tseslint.configs.strictTypeChecked,
+  {
+    languageOptions: {
+      parserOptions: {
+        pprojectService: true, // tells @typescript-eslint/parser to create and reuse a TypeScript project service, instead of manually parsing tsconfig.json for every file.
+        tsconfigRootDir: process.cwd(), // This is just the “base directory” for resolving paths in parserOptions.project. When projectService true, it doesnt matter
+      },
+    },
+  },
+  {
+    files: ['packages/**/src/**/*.ts', 'packages/**/tests/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/restrict-template-expressions': [
+        'error',
+        { allowNumber: true, allowBoolean: true },
+      ],
+    },
+  },
+  {
+    ignores: ['**/assets/**/*', '**/dist/**/*'],
+  },
+)
+
+```
+
+
 ## Prettier
 
 How does Prettier compare to ESLint/TSLint/stylelint, etc.?

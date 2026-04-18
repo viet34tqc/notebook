@@ -42,6 +42,7 @@ Javascript is single-threaded, it can only execute one statement at a time.
     - run the promise that we are awaiting 
     - the rest of function body is pushed to **microtask** queue, only if the function we are awaiting is resolved or rejected. In this example: `await asyncFunc(); console.log(2)`, `console.log(2)` is pushed to `microtask` queue
 - Another different between **microtask** and **macrotask** is Microtasks (like .then(...), queueMicrotask) run before rendering. It wont let browser do the painting until the entire micro tasks are done: **<https://chatgpt.com/c/68962210-fca0-8321-94de-a69157649d31>**. (When the we yield to the browser, we pause the current js task and tell the browser to take a break from executing js and do other thinks like paiting...)
+- **Microtasks** run before the next **macrotask**, not before all **macrotasks**. The entire script file itself is treated as a macrotask in both Node.js and the browser. (https://chatgpt.com/c/693b84d4-f2a8-8320-bb1a-a9cb510d015f)
 
 ```ts
 const wait = () =>

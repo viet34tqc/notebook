@@ -216,6 +216,42 @@ To copy an oject in JS, we have some types of copy
   console.log(shallowClone);
   ```
 
+## Shallow comparision and deep comparision
+
+- <https://chatgpt.com/c/699a85b5-7d04-8322-a43e-c75f91930691>
+
+For primitive value, shallow compare and deep compare both checks the value
+
+For object and arrays:
+
+- Shallow compare will:
+  - Check reference equality: using `Object.is()` or `===` to verify if they point to the same memory address
+  - Compare number of keys: `Object.keys(objA).length === Object.keys(objB).length`
+  - Compare each top-level property
+- Deep compare do the same but compare nested value of the object
+
+```js
+function deepEqual(a, b) {
+  if (a === b) return true;
+
+  if (
+    typeof a !== "object" || a === null ||
+    typeof b !== "object" || b === null
+  ) return false;
+
+  const keysA = Object.keys(a);
+  const keysB = Object.keys(b);
+
+  if (keysA.length !== keysB.length) return false;
+
+  for (const key of keysA) {
+    if (!deepEqual(a[key], b[key])) return false;
+  }
+
+  return true;
+}
+```
+
 ## Why we shouldn't directly call React Components
 
 - <https://dev.to/igor_bykov/react-calling-functional-components-as-functions-1d3l>
@@ -242,6 +278,19 @@ That's because when the outer component re-renders, it clears the previous outpu
 - A "good component" is a component that I can easily read and understand what it does from the first glance.
 - A "good component" should have a good self-describing name. Sidebar for a component that renders sidebar is a good name. CreateIssue for a component that handles issue creation is a good name. SidebarController for a component that renders sidebar items specific for 'Issues' page is not a good name (the name indicates that the component is of some generic purpose, not specific to a particular page).
 - A "good component" doesn't do things that are irrelevant to its declared purpose. Topbar component that only renders items in the top bar and controls only topbar behaviour is a good component. Sidebar component, that controls the state of various modal dialogs is not the best component.
+
+## Immutability
+
+Immutability means that once a value is created, it cannot be changed. Instead of modifying existing data, you create new data (like in react, we copy object state to new one
+
+- Primitive Values Are Immutable
+- Objects and Arrays Are Mutable (By Default)
+
+Why Immutability Matters
+
+- Predictability: No hidden side effects. Data doesn't unexpectedly change.
+- Easier Debugging: If something changes, you know a new object was created.
+- Performance Optimizations: Libraries like React rely on immutability to quickly detect changes using shallow comparison.
 
 ## Why react use immutability?
 
@@ -692,9 +741,18 @@ Conclusion: Both bind mount and volume synchronize a folder between the containe
 
 ## How `zustand` manage re-render
 
-Let's you have a Zustand store with a `tasks` and `users`. `tasks` can be an array or object and Component A are reading `tasks` from store. When `users` changes => store changes => all components consume store can be re-render or not
+**What zustand does is compare the previous returned value from the hook with the next returned value from the hook to determine if the consumer should re-render or not**. By default, Zustand use '==='. If your selector return an object or value like this
 
-**What zustand does is compare the previous returned value from the hook with the next returned value from the hook to determine if the consumer should re-render or not**
+```js
+const { bears, fish } = useStore((state) => ({
+  bears: state.bears,
+  fish: state.fish
+}))
+```
+
+Whenever store changed, even if `bears` or `fish` doesn't change, selector always returns a new object. Zustand will understand that the state changed ({} !== {}) => component re-rendered
+
+Let's you have a Zustand store with a `tasks` and `users`. `tasks` can be an array or object and Component A are reading `tasks` from store. When `users` changes => store changes => all components consume store can be re-render or not
 
 1. `Scenario 1`: Returning a single value. No `useShallow`
 
@@ -727,6 +785,8 @@ Zustand compares: `Object.is({ tasks: prevTasks, setTasks: prevSetTasks }, { tas
 
 4. `Scenario 4`: Returning an object with `useShallow`
 
+Now zustand
+
 ```js
 const { tasks, setTasks } = useTasksStore(
   useShallow(state => ({ tasks: state.tasks, setTasks: state.setTasks }))
@@ -735,14 +795,14 @@ const { tasks, setTasks } = useTasksStore(
 
 Zustand compares: `shallow({ tasks: prevTasks, setTasks: prevSetTasks }, { tasks: nextTasks, setTasks: nextSetTasks })`.
 
-`shallow` only top-level keys of returned object, which means
+`shallow` doesn't compare the whole object, it only compares top-level keys of returned object, which means
 
 ```js
 prevTasks === nextTasks
 prevSetTasks === nextSetTasks
 ```
 
-It doesn't compare the property of the `tasks`, so `tasks` is object or array doesn't matter. **And because `tasks` isn't mutated => `prevTasks` and `nextTasks` stored in the store are the same reference: `shallow` returns `true`**. So if we want to update the tasks, we need to return the new ref of tasks (using `map()`, `filter()`), then the component using `tasks` is re-render
+It doesn't compare the property of the `tasks`, so `tasks` is object or array doesn't matter. **And because `tasks` isn't mutated => `prevTasks` and `nextTasks` stored in the store are the same reference: `shallow` returns `true`**. So if we want to update the tasks, we need to return the new ref of tasks (using `map()`, `filter()`), then the component using `tasks` is re-rendered. If you mutate the tasks directly, `oldTasks` === `newTasks` => no re-render
 
 One note about the doc in zustand: <https://zustand.docs.pmnd.rs/apis/shallow#comparing-objects-returns-false-even-if-they-are-identical.>. In this example, `shallow` is comparing two nested object with identical properties. But in our example, `tasks` is in the stored and it stays the same if it's not mutated => its reference statys the same
 
@@ -1457,7 +1517,7 @@ console.log( config.language ) // ['VN']
 
 `Setter` doesn't hold any value, their purpose is to modify the properties. If your object doesn't have getter function and you call the setter function, it returns undefined
 
-## Number.isNaN() và isNan()
+## `Number.isNaN()` and `isNan()`
 
 `Number.isNaN(value)` check if the `value` is numeric and not a number.
 `isNaN(value)` check if the `value` is not a number
@@ -1478,7 +1538,6 @@ name, delay, duration, iteration count, play state, easing
 - Looping: Animation can loop
 - Direction: Animation can go fowared, backward and altenate between two while transtion only go in one direction
 - Play state: animation can be paused
-
 - Not all properties can be transitioned, for example: 'background'. In this case, you can apply background to pseudo-element and transition its opacity
 
 ## Hiểu thế nào về responsive web design
@@ -2038,7 +2097,9 @@ The critical rendering path involves the following steps:
   - If it's a script (with no `async` and `defer`), the browser has to: stop parsing, download the script, and run it. Only after that can it continue parsing, because JavaScript programs can alter the contents of a web page (HTML, in particular). And that's why JS is called parser blocking.
 - Once all the parsing is done, the browser has the Document Object Model (DOM) and Cascading Style Sheets Object Model (CSSOM). It combines the two to create the Render Tree. 
 - Next, layout (or reflow) happens to calculate the size and position of every nodes on the page. 
-- Once the layout is determined, pixels are painted to the screen. (Repaint)
+- Once the layout is determined, pixels are painted in the memory (Repaint)
+- Next is the `composite` phase, which decides which element overlapping each other in the correct order
+- Lastly, physical drawing the pixels on the screen
 
 This process's length depends on the the critical resoucres:
 
@@ -2089,7 +2150,7 @@ It stores functions and variables in the memory before executing any code (creat
 
 ## `useMemo`, `useCallback` and `React.memo`
 
-<https://cekrem.github.io/posts/react-memo-when-it-helps-when-it-hurts/>
+- <https://cekrem.github.io/posts/react-memo-when-it-helps-when-it-hurts/>
 
 Use `React.memo` when:
 
