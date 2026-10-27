@@ -380,17 +380,209 @@ However, if you access https://google.com, Google will not be able to read the c
 - <https://prateeksurana.me/blog/javascript-developer-guide-to-browser-cookies/>
 
 - `httpOnly`: prevent browser (client) from reading any cookies with the cookie API. Cookies are accessible only via server. This helps prevent XSS attacks
-- `SameSite`: (<https://andrewlock.net/understanding-samesite-cookies/>) Why we need this attribute: to prevent CSRF. By default, browsers sent cookies in every request to the domain that issued them, even if the request is cross-site which means it was triggered by an unrelated third-party website
+- `SameSite`: (<https://andrewlock.net/understanding-samesite-cookies/>) Decides to send the cookie based on where the request initialized. Why we need this attribute: to prevent CSRF. By default, browsers sent cookies in every request to the domain that issued them, even if the request is cross-site which means it was triggered by an unrelated third-party website
   - `SameSite=Strict`: cross-site request is not allowed, the request must be originates from the destination domain.
   - `SameSite=Lax` (default): cross-site request is allowed, but only the request resulted from a "top-level GET requests", that is, GET requests which change the URL in the navigation bar.  Resources that are loaded by iframe, img tags, and script tags do not change the URL in the address bar so none of them cause TOP LEVEL navigation.
     - You follow an <a> link to your site from a different domain.
     - A form embedded on another site sends data to your website using the **GET** action.
   - `SameSite=None`: cookies are always sent, regardless of whether you're in a same-site or cross-site scenario. You can do POST, GET requests on another domain to your website and the cookies are sent along
-- `domain`: server tells browser which domains are allowed to access a cookie server, default to the exact domain that set the cookie. That means 'test.abc.com' cannot access cookies on 'abc.com', the same goes for 'test2.abc.com'. (Note that you still see the cookie from main domain in the browser dev tool, however you won't get access to them). So if your backend is hosted on 'abc.xyz.com' (so the default domain of the cookies will be '123.abc.com') and your client is hosted on another subdomain, like 'def.abc.com', the cookies are set in response header but they aren't existed on client site and won't be included in the next request to the server. In this case, your cookie's `domain` attribute should be something like 'abc.com' 
+- `domain`: Decides to send the cookie based on which host the request is sent to, kind of in reverse with `SameSite`. Server tells browser which domains are allowed to access a cookie server, default to the exact domain that set the cookie. That means 'test.abc.com' cannot access cookies on 'abc.com', the same goes for 'test2.abc.com'. (Note that you still see the cookie from main domain in the browser dev tool, however you won't get access to them). So if your backend is hosted on 'abc.xyz.com' (so the default domain of the cookies will be 'abc.xyz.com') and your client is hosted on another subdomain, like 'def.abc.com', the cookies are set in response header but they aren't existed on client site and won't be included in the next request to the server. In this case, your cookie's `domain` attribute should be something like 'abc.com' 
 - `path`: server tells browser which path are allowed to access and send a cookie to server. A cookie with the path attribute as Path=/store would only be accessible on the path /store and its subpaths /store/cart, /store/gadgets
 - `expire`: default to 0, that means the cookie is treated as session cookie by default. So as long as the user has opened a browser and stuff that, will this cookie live.
 - `secure`: A cookie with the Secure attribute is only sent to the server over the secure HTTPS protocol, so the domain of client must be HTTPS. This helps in preventing Man in the Middle attacks by making the cookie inaccessible over unsecured connections
 - Expires: default to `Session`. That means when you close the browser, those cookies will be removed (this is only true if your browser doesn't set On startup as 'Continue where you left off')
+
+Having a cookie that matches the destination URL is necessary, but it does not guarantee the browser will send it. The cookie must also satisfy the request and browser rules.
+
+You can check the following steps in order. This is a troubleshooting sequence, rather than the browser’s exact internal execution order.
+
+Step 1 — Is the cookie stored and still valid?
+
+The browser must already have the cookie in its cookie jar:
+
+Never stored, deleted, or rejected → not sent.
+
+Expired according to Expires or Max-Age → not sent.
+
+If both are present, Max-Age takes priority.
+
+Step 2 — Does the destination hostname match the cookie’s scope?
+
+Assume api.example.com set the cookie:
+
+Cookie configuration
+
+Hosts eligible to receive it
+
+No Domain — host-only
+
+Only api.example.com
+
+Domain=api.example.com
+
+api.example.com and its subdomains
+
+Domain=example.com
+
+example.com and all its subdomains
+
+This step checks the request’s destination hostname. A page on app.example.com can initiate a request carrying the API’s host-only cookie when that request goes to api.example.com.
+
+Step 3 — Does the destination path match Path?
+
+Cookie attribute
+
+Matching paths
+
+Nonmatching paths
+
+Path=/
+
+Every path on the matching host
+
+—
+
+Path=/api
+
+/api, /api/users
+
+/admin, /apix
+
+If Path is omitted, the browser derives a default from the URL that set the cookie. It does not always default to /.
+
+Step 4 — Does the destination protocol satisfy Secure?
+
+A cookie with Secure is sent only over HTTPS in a normal deployed environment.
+
+Without Secure, this attribute does not prevent transmission over HTTP or HTTPS. All other conditions still apply.
+
+Step 5 — Does the request context satisfy SameSite?
+
+The browser checks the relationship between the site initiating the request and the destination site.
+
+For cookie rules, a site is determined by scheme + registrable domain:
+
+Page → destination
+
+Relationship
+
+https://app.example.com → https://api.example.com
+
+Same-site
+
+https://other.com → https://api.example.com
+
+Cross-site
+
+http://app.example.com → https://api.example.com
+
+Cross-site: different schemes
+
+Different subdomains can therefore belong to the same site.
+
+The browser then checks the cookie’s SameSite value:
+
+SameSite
+
+Same-site request
+
+Cross-site fetch
+
+Top-level GET navigation from another site, such as clicking a link
+
+Strict
+
+Allowed
+
+Blocked
+
+Blocked
+
+Lax
+
+Allowed
+
+Blocked
+
+Allowed
+
+None
+
+Allowed
+
+Allowed
+
+Allowed
+
+“Allowed” means this particular check passes. Other conditions must still pass.
+
+SameSite=None requires Secure. If SameSite is omitted, browsers generally treat it as Lax.
+
+Step 6 — If using fetch, does credentials allow cookies?
+
+This is a request option, not a cookie attribute:
+
+credentials
+
+Behavior
+
+"omit"
+
+Do not send cookies
+
+"same-origin" — default
+
+Send cookies only for same-origin requests
+
+"include"
+
+Allow cookies for cross-origin requests too
+
+An origin consists of scheme + full hostname + port. Therefore, app and API URLs on different subdomains are cross-origin, even when they are same-site.
+
+fetch("https://api.example.com/me", {
+  credentials: "include"
+});
+
+include does not override Domain, Path, Secure, or SameSite.
+
+Step 7 — Does browser policy permit the cookie?
+
+In third-party contexts, browser privacy policies may still block cookies, even with SameSite=None; Secure and credentials: "include".
+
+Applying this to your example
+
+Suppose https://api.example.com successfully stored this cookie, and it has not expired:
+
+Set-Cookie: __Host-session=abc; Secure; Path=/; HttpOnly; SameSite=Strict
+
+The page at https://app.example.com calls:
+
+fetch("https://api.example.com/me", {
+  credentials: "include"
+});
+
+Check
+
+Result
+
+API host-only cookie; destination is the API ✅
+
+/me matches Path=/ ✅
+
+Destination uses HTTPS ✅
+
+Both URLs are same-site, satisfying Strict ✅
+
+Cross-origin request explicitly uses include ✅
+
+In this ordinary browsing context, the browser attaches the cookie to the request.
+
+Two additional distinctions:
+
+HttpOnly prevents JavaScript from reading the cookie; it does not prevent the browser from attaching it to fetch requests. __Host- enforces requirements when storing the cookie: HTTPS, Secure, Path=/, and no Domain. It does not add those attributes automatically.
+
+CORS also controls whether JavaScript can access the response. A request may already have been sent with cookies when the browser blocks access to its response. If a required preflight fails, however, the actual request is not sent. A CORS error alone does not tell you whether the cookie was sent.
 
 ## Tree-shaking
 
